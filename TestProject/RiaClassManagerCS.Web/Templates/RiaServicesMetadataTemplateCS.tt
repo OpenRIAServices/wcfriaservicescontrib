@@ -1,0 +1,120 @@
+﻿<#// <copyright file="RiaServicesMetadataTemplateCS.tt" company="Colin Blair">
+//  Copyright © Colin Blair. All Rights Reserved.
+// </copyright>
+#>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Data" #>
+<#@ assembly name="System.Data.Entity" #>
+<#@ assembly name="System.Data.Entity.Design" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="System.Xml.Linq" #>
+
+<#@ import namespace="Microsoft.VisualStudio.TextTemplating" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Data.Entity.Design" #>
+<#@ import namespace="System.Data.Metadata.Edm" #>
+<#@ import namespace="System.Data.Mapping" #>
+<#@ import namespace="System.Xml" #>
+<#@ import namespace="System.Xml.Linq" #>
+
+<#+
+class RiaServicesMetadataTemplate: TextTransformation
+{
+    public static string Footer = "}";
+    public EntityType Entity = null;
+    public bool WriteHeader = false;
+    public string NamespaceName = null;
+    public override string TransformText()
+    {
+        if(WriteHeader)
+        {
+#>
+
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
+    using System.Linq;
+    using System.Web.Ria;
+    using System.Web.Ria.Data;
+    using System.Web.DomainServices;
+    using System.Data.Objects.DataClasses;
+    using System.Data;
+<#+
+            if (!string.IsNullOrEmpty(this.NamespaceName))
+            {
+#>
+namespace <#=this.NamespaceName#>
+{
+<#+
+            }  
+        }
+        this.PushIndent("    ");
+        WriteEntity();
+        this.PopIndent();
+        return this.GenerationEnvironment.ToString();
+    }
+    private void WriteEntity()
+    {
+#>
+#region "<#= CreateEntitySetName(Entity.Name) #>"
+[MetadataType(typeof(<#= Entity.Name #>Metadata))]
+public partial class <#= Entity.Name #>
+{
+}
+		
+public static partial class <#= Entity.Name #>Metadata
+{
+<#+
+        this.PushIndent("    ");
+        foreach (EdmProperty currentProperty in Entity.Properties)
+        {            
+            WriteProperty(currentProperty);            
+        }
+        this.PopIndent();
+#>
+}
+#endregion
+<#+
+}
+    private void WriteProperty(EdmProperty currentProperty)
+    {
+        string currentPropertyType = currentProperty.TypeUsage.EdmType.ToString().Replace("Edm.","");
+					if (currentPropertyType == "Int32")
+						currentPropertyType = "int";
+                    if (currentPropertyType == "Binary")
+                    {
+                        return; //Binary types are not currently being handled
+                    }
+#>
+
+public static <#= currentPropertyType #> <#= currentProperty.Name #>;
+
+<#+
+    }    
+     
+    private string CreateEntitySetName(string entityName)
+	{
+	    if (entityName.Substring(entityName.Length-1) == "s")
+	    {
+			return entityName + "es";
+		}
+		else if (entityName.Substring(entityName.Length-1) == "y" && entityName.Substring(entityName.Length-2) != "ay")
+		{
+			return entityName.Substring(0, entityName.Length -1) + "ies";
+		}
+		else
+		{
+			return entityName + "s";
+		}
+		
+    }
+}
+
+
+#>
+

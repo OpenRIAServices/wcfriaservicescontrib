@@ -1,0 +1,2243 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>System.Web.DomainServices</name>
+    </assembly>
+    <members>
+        <member name="T:System.Web.Ria.Data.DomainIdentifierAttribute">
+            <summary>
+            A tagging attribute used to categorize a Type as being of a particular domain.
+            </summary>
+            <remarks>This attribute will move through the metadata pipeline, so the corresponding
+            generated types will also have this attribute. This attribute also allows for specification 
+            of a <see cref="P:System.Web.Ria.Data.DomainIdentifierAttribute.CodeProcessor"/> which will be used during generation of client types.
+            </remarks>
+            <seealso cref="P:System.Web.Ria.Data.DomainIdentifierAttribute.CodeProcessor"/>
+        </member>
+        <member name="M:System.Web.Ria.Data.DomainIdentifierAttribute.#ctor(System.String)">
+            <summary>
+            Constructor that accepts the domain identifier name.
+            </summary>
+            <param name="name">Name of the domain identifier. This string has no framework-level semantics.  It is entirely
+            up to the application developer to decide what constitutes uniqueness or whether it is case-sensitive.
+            It cannot be null or empty.</param>
+        </member>
+        <member name="P:System.Web.Ria.Data.DomainIdentifierAttribute.Name">
+            <summary>
+            Gets the name of the domain identifier.
+            </summary>
+        </member>
+        <member name="P:System.Web.Ria.Data.DomainIdentifierAttribute.CodeProcessor">
+            <summary>
+            Gets or sets the <see cref="P:System.Web.Ria.Data.DomainIdentifierAttribute.CodeProcessor"/> type
+            </summary>
+        </member>
+        <member name="T:System.Web.Ria.Data.DomainServiceException">
+            <summary>
+            This exception indicates that an unrecoverable error has occurred 
+            during the execution of a domain operation. When this exception is 
+            thrown by the domain service, the processing of the domain operations
+            stops. This exception is propagated back to the client regardless of 
+            the server CustomErrors configuration. This exception can be used by 
+            server code to report non-sensitive error information back to the client.
+            </summary>
+        </member>
+        <member name="M:System.Web.Ria.Data.DomainServiceException.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:System.Web.Ria.Data.DomainServiceException.#ctor(System.String)">
+            <summary>
+            Constructor that accepts a localized exception message
+            </summary>
+            <param name="message">The localized exception message</param>
+        </member>
+        <member name="M:System.Web.Ria.Data.DomainServiceException.#ctor(System.Int32,System.String)">
+            <summary>
+            Constructor that accepts a custom error code and localized exception message
+            </summary>
+            <param name="errorCode">The custom error code for the exception</param>
+            <param name="message">The localized exception message</param>
+        </member>
+        <member name="M:System.Web.Ria.Data.DomainServiceException.#ctor(System.String,System.Exception)">
+            <summary>
+            Constructor that accepts a localized exception message and an inner exception
+            </summary>
+            <param name="message">The localized exception message</param>
+            <param name="innerException">The inner exception</param>
+        </member>
+        <member name="M:System.Web.Ria.Data.DomainServiceException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Constructor that takes serialization info
+            </summary>
+            <param name="info">The serialization info</param>
+            <param name="context">The streaming context used for serialization</param>
+        </member>
+        <member name="M:System.Web.Ria.Data.DomainServiceException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            ISerializable implementation
+            </summary>
+            <param name="info">The serialization info</param>
+            <param name="context">The streaming context used for serialization</param>
+        </member>
+        <member name="P:System.Web.Ria.Data.DomainServiceException.ErrorCode">
+            <summary>
+            Gets or sets the custom error code for this exception. Can be any user
+            defined value.
+            </summary>
+        </member>
+        <member name="T:System.Web.Ria.Data.ExternalAttribute">
+            <summary>
+            When applied to an entity association member, this attribute indicates that the framework should not
+            create a corresponding EntityList in the generated client-side code output.  Consumers of the
+            client-side property will need to add a DomainContext reference to the appropriate DomainContext
+            containing the external entity type.
+            </summary>
+        </member>
+        <member name="M:System.Web.Ria.Data.ValidationUtilities.CreateValidationContext(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">
+            <summary>
+            Creates a new <see cref="T:System.ComponentModel.DataAnnotations.ValidationContext"/> for the current object instance.
+            </summary>
+            <param name="instance">The object instance being validated.</param>
+            <param name="parentContext">Optional context to inherit from.  May be null.</param>
+            <returns>A new validation context.</returns>
+        </member>
+        <member name="M:System.Web.Ria.Data.ValidationUtilities.TryValidateMethodCall(System.Reflection.MethodInfo,System.ComponentModel.DataAnnotations.ValidationContext,System.Object[],System.Collections.Generic.ICollection{System.ComponentModel.DataAnnotations.ValidationResult})">
+            <summary>
+            Determines whether it is valid to call the specified method.
+            </summary>
+            <remarks>
+            This method evaluates all <see cref="T:System.ComponentModel.DataAnnotations.ValidationAttribute"/>s associated with the method and its parameters.  Any failure returns <c>false</c>.
+            </remarks>
+            <param name="method">The method to be called</param>
+            <param name="validationContext">Describes the method being tested</param>
+            <param name="parameters">The parameter values to be passed to the method.  They will be validated.</param>
+            <param name="validationResults">Optional collection to receive validation results for failed validations.</param>
+            <returns><c>true</c> if the method is valid.</returns>
+        </member>
+        <member name="M:System.Web.Ria.Data.ValidationUtilities.TryValidateMethodCall(System.Object,System.String,System.ComponentModel.DataAnnotations.ValidationContext,System.Object[],System.Collections.Generic.ICollection{System.ComponentModel.DataAnnotations.ValidationResult})">
+            <summary>
+            Determines whether it is valid to call the specified method.
+            </summary>
+            <remarks>
+            This method evaluates all <see cref="T:System.ComponentModel.DataAnnotations.ValidationAttribute"/>s associated with the method and its parameters.  Any failure returns <c>false</c>.
+            </remarks>
+            <param name="instance">The object instance containing the method</param>
+            <param name="methodName">The name of the method to be called</param>
+            <param name="validationContext">Describes the method being tested</param>
+            <param name="parameters">The parameter values to be passed to the method.  They will be validated.</param>
+            <param name="validationResults">Optional collection to receive validation results for failed validations.</param>
+            <returns><c>true</c> if the method is valid.</returns>
+        </member>
+        <member name="M:System.Web.Ria.Data.ValidationUtilities.ValidateMethodCall(System.Object,System.String,System.ComponentModel.DataAnnotations.ValidationContext,System.Object[])">
+            <summary>
+            Throws a <see cref="T:System.ComponentModel.DataAnnotations.ValidationException"/> if it is not valid to call the specified method.
+            </summary>
+            <remarks>This method evaluates all the <see cref="T:System.ComponentModel.DataAnnotations.ValidationAttribute"/>s associated with the
+            method and its parameters. Any failure will cause the exception to be thrown.
+            </remarks>
+            <param name="instance">Object instance on which the method will be called.</param>
+            <param name="methodName">The name of the method to be called</param>
+            <param name="validationContext">Describes the method being called.</param>
+            <param name="parameters">The parameter values to be passed to the method.  They will be validated.</param>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="instance"/> is null</exception>
+            <exception cref="T:System.ArgumentException">When <paramref name="instance"/> doesn't match the <see cref="P:System.ComponentModel.DataAnnotations.ValidationContext.ObjectInstance"/> on <paramref name="validationContext"/></exception>
+            <exception cref="T:System.ComponentModel.DataAnnotations.ValidationException"> When it is not valid to call the specified method</exception>
+        </member>
+        <member name="M:System.Web.Ria.Data.ValidationUtilities.GetMethod(System.Object,System.String,System.Object[])">
+            <summary>
+            Internal helper method for getting a method from an object instance that matches
+            the specified parameters.
+            </summary>
+            <param name="instance">Object instance on which the method will be called</param>
+            <param name="methodName">The name of the method to be called</param>
+            <param name="parameters">The parameter values to be passed to the method</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Web.Ria.Data.ValidationUtilities.IsBindable(System.Reflection.MethodInfo,System.Object[])">
+            <summary>
+            Checks whether the specified set of parameters can be passed to the specified method.
+            </summary>
+            <param name="method">The method to validate the set of parameters against.</param>
+            <param name="parameters">The set of parameters to check.</param>
+            <returns><c>true</c> if the set of parameters can be passed to the specified method.</returns>
+        </member>
+        <member name="M:System.Web.Ria.Data.ValidationUtilities.GetDisplayAttribute(System.Reflection.ICustomAttributeProvider)">
+            <summary>
+            Gets the DisplayAttribute that applies to a method, parameter, property, etc.
+            </summary>
+            <param name="member"></param>
+            <returns>A <see cref="T:System.ComponentModel.DataAnnotations.DisplayAttribute"/> found or <c>null</c> if none is found</returns>
+        </member>
+        <member name="M:System.Windows.Ria.Linq.Utility.IsNullableType(System.Type)">
+            <summary>
+            Returns <c>true</c> if the given type is a <see cref="T:System.Nullable"/>
+            </summary>
+            <param name="type">The type to test</param>
+            <returns><c>true</c> if the given type is a nullable type</returns>
+        </member>
+        <member name="M:System.Windows.Ria.Linq.Utility.GetNonNullableType(System.Type)">
+            <summary>
+            If the given type is <see cref="T:System.Nullable"/>, returns the element type,
+            otherwise simply returns the input type
+            </summary>
+            <param name="type">The type to test that may or may not be Nullable</param>
+            <returns>Either the input type or, if it was Nullable, its element type</returns>
+        </member>
+        <member name="M:System.Windows.Ria.Linq.Utility.IsPredefinedType(System.Type)">
+            <summary>
+            Returns <c>true</c> if the given type is a primitive type or one
+            of our standard acceptable simple types, such as <see cref="T:System.String"/>,
+            <see cref="T:System.Guid"/>, or one of our standard generic types whose generic
+            argument is primitive or simple (e.g. Nullable, IEnumerable).
+            </summary>
+            <param name="type">The type to test</param>
+            <returns><c>true</c> if the type is a primitive or standard acceptable types</returns>
+        </member>
+        <member name="M:System.Windows.Ria.Linq.Utility.IsPredefinedListType(System.Type)">
+            <summary>
+            Returns <c>true</c> if the given type is <see cref="T:System.Collections.Generic.IEnumerable`1"/> or an <see cref="T:System.Collections.IList"/> type, 
+            and is either an interface, an array, or has a default constructor.
+            </summary>
+            <param name="type">The type to test</param>
+            <returns><c>true</c> if the type is a primitive or standard acceptable types</returns>
+        </member>
+        <member name="M:System.Windows.Ria.Linq.Utility.IsPredefinedSimpleType(System.Type)">
+            <summary>
+            Returns <c>true</c> if the given type is either primitive or one of our
+            standard acceptable simple types, such as <see cref="T:System.String"/>,
+            <see cref="T:System.Guid"/>, etc
+            </summary>
+            <param name="type">The type to test</param>
+            <returns><c>true</c> if the type is a primitive or standard acceptable types</returns>
+        </member>
+        <member name="M:System.Windows.Ria.Linq.Utility.IsPredefinedGenericType(System.Type)">
+            <summary>
+            Returns <c>true</c> if the given type is one of our well-known generic types,
+            such as <see cref="T:System.Nullable"/> or <see cref="T:System.Collections.IEnumerable"/>
+            </summary>
+            <param name="type">The type to test</param>
+            <returns><c>true</c> if the type is one of our predefined generic types</returns>
+        </member>
+        <member name="M:System.Windows.Ria.Linq.Utility.GetElementType(System.Type)">
+            <summary>
+            Returns the underlying element type starting from a given type.
+            </summary>
+            <remarks>
+            Simple types simply return the input type.
+            If the given type is an array, this method returns the array's
+            element type.
+            If the type is a generic type of <see cref="T:System.Collections.IEnumerable"/>, 
+            or <see cref="T:System.Nullable"/>, this method returns the element
+            type of the generic parameter
+            </remarks>
+            <param name="type"></param>
+            <returns>The underlying element type starting from the given type</returns>
+        </member>
+        <member name="M:System.Windows.Ria.Linq.Utility.ConvertValue(System.Type,System.Object)">
+            <summary>
+            Convert the specified value to the desired type.
+            </summary>
+            <remarks>we need this because json serializer does not specify
+            type information for fields when sending across the wire. When 
+            transmitting some types or specific values of some types 
+            (e.g. byte), the deserializer thinks the values are Int32 
+            instead of what they should be. So on the server side, we need 
+            to try to convert them back to the expected types to see if such
+            conversions are supported.
+            </remarks>
+            <param name="type">type to convert value to</param>
+            <param name="rawValue">raw value to convert</param>
+            <returns>object with specified value and type</returns>
+        </member>
+        <member name="M:System.Windows.Ria.Linq.Utility.ConvertValue(System.Type,System.Object,System.Boolean)">
+            <summary>
+            Convert the specified value to the desired type.
+            </summary>
+            <remarks>we need this because json serializer does not specify
+            type information for fields when sending across the wire. When 
+            transmitting some types or specific values of some types 
+            (e.g. byte), the deserializer thinks the values are Int32 
+            instead of what they should be. So on the server side, we need 
+            to try to convert them back to the expected types to see if such
+            conversions are supported.
+            </remarks>
+            <param name="type">type to convert value to</param>
+            <param name="rawValue">raw value to convert</param>
+            <param name="isQueryStringValue">Whether the value is a value coming from a query string.</param>
+            <returns>object with specified value and type</returns>
+        </member>
+        <member name="M:System.Windows.Ria.Linq.Utility.IsByVal(System.Reflection.ParameterInfo)">
+            <summary>
+            Checks whether a parameter expects a value to be passed by-value.
+            </summary>
+            <param name="parameterInfo">The parameter to check.</param>
+            <returns>True if the parameter expects a by-value value.</returns>
+        </member>
+        <member name="M:System.Windows.Ria.Linq.Utility.IsSerializableDataMember(System.ComponentModel.PropertyDescriptor,System.Boolean)">
+            <summary>
+            Returns true if the specified property is a data member that should be serialized
+            </summary>
+            <param name="propertyDescriptor">The property to inspect</param>
+            <param name="isEntity">True if the specified property is defined on an Entity</param>
+            <returns>true if the specified property is a data member that should be serialized</returns>
+        </member>
+        <member name="T:System.Web.Ria.Data.AssociatedEntities">
+            <summary>
+            Represents a collection of changeset Ids for an Entity association
+            </summary>
+        </member>
+        <member name="P:System.Web.Ria.Data.AssociatedEntities.Name">
+            <summary>
+            Name of the association member
+            </summary>
+        </member>
+        <member name="P:System.Web.Ria.Data.AssociatedEntities.Ids">
+            <summary>
+            Collection of Ids for the associated entities
+            </summary>
+        </member>
+        <member name="T:System.Web.Ria.Data.OperationError">
+            <summary>
+            The data contract of an error that has occurred 
+            during the execution of an operation on the server.
+            This is sent back along with the domain operation 
+            result(s) to the client.
+            </summary>
+        </member>
+        <member name="M:System.Web.Ria.Data.OperationError.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:System.Web.Ria.Data.OperationError.#ctor(System.String,System.String)">
+            <summary>
+            Constructor accepting an optional localized error message
+            </summary>
+            <param name="message">The localized error message</param>
+            <param name="sourceMemberName">The name of the member the error originated from.</param>
+        </member>
+        <member name="M:System.Web.Ria.Data.OperationError.#ctor(System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Constructor accepting an optional localized error message and and collection 
+            of the names of the members the error originated from.
+            </summary>
+            <param name="message">The localized message</param>
+            <param name="sourceMemberNames">A collection of the names of the members the error originated from.</param>
+        </member>
+        <member name="M:System.Web.Ria.Data.OperationError.#ctor(System.String,System.Int32,System.String,System.String)">
+            <summary>
+            Constructor accepting an optional localized error message, error code, stack trace,
+            and name of the member the error originated from.
+            </summary>
+            <param name="message">The localized error message</param>
+            <param name="errorCode">The custom error code</param>
+            <param name="stackTrace">The error stack trace</param>
+            <param name="sourceMemberName">The name of the member the error originated from.</param>
+        </member>
+        <member name="M:System.Web.Ria.Data.OperationError.#ctor(System.String,System.Int32,System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Constructor accepting an optional localized error message, error code, stack trace,
+            and collection of the names of the members the error originated from.
+            </summary>
+            <param name="message">The localized error message</param>
+            <param name="errorCode">The custom error code</param>
+            <param name="stackTrace">The error stack trace</param>
+            <param name="sourceMemberNames">A collection of the names of the members the error originated from.</param>
+        </member>
+        <member name="M:System.Web.Ria.Data.OperationError.GetHashCode">
+            <summary>
+            Returns the hash code for this object.
+            </summary>
+            <returns>The hash code for this object.</returns>
+        </member>
+        <member name="M:System.Web.Ria.Data.OperationError.System#IEquatable{System#Web#Ria#Data#OperationError}#Equals(System.Web.Ria.Data.OperationError)">
+            <summary>
+            Test the current instance against the specified instance for equality
+            </summary>
+            <param name="other">The OperationError to compare to</param>
+            <returns>True if the instances are equal, false otherwise</returns>
+        </member>
+        <member name="P:System.Web.Ria.Data.OperationError.Message">
+            <summary>
+            Gets or sets the error message
+            </summary>
+        </member>
+        <member name="P:System.Web.Ria.Data.OperationError.ErrorCode">
+            <summary>
+            Gets or sets custom error code
+            </summary>
+        </member>
+        <member name="P:System.Web.Ria.Data.OperationError.StackTrace">
+            <summary>
+            Gets or sets the stack trace of the error
+            </summary>
+        </member>
+        <member name="P:System.Web.Ria.Data.OperationError.SourceMemberNames">
+            <summary>
+            Gets or sets the names of the members the error originated from.
+            </summary>
+        </member>
+        <member name="T:System.Web.Ria.Data.SharedAttribute">
+            <summary>
+            Attribute used to mark types, fields or properties as shared.
+            </summary>
+            <remarks>
+            Types, fields or properties marked with this attribute will not be created in the generated code
+            since this attribute indicates they are already included in the compiled code.
+            </remarks>
+        </member>
+        <member name="T:System.Web.Ria.Data.CodeProcessor">
+            <summary>
+            Base class for all <see cref="T:System.Web.Ria.Data.CodeProcessor"/> implementations. By associating a <see cref="T:System.Web.Ria.Data.CodeProcessor"/> Type
+            with a <see cref="T:System.Web.DomainServices.DomainService"/> Type via the <see cref="T:System.Web.Ria.Data.DomainIdentifierAttribute"/>, codegen for the service
+            Type can be customized.
+            </summary>
+        </member>
+        <member name="F:System.Web.Ria.Data.CodeProcessor._codeDomProvider">
+            <summary>
+            Private reference to the <see cref="P:System.Web.Ria.Data.CodeProcessor.CodeDomProvider"/> used during <see cref="T:System.Web.DomainServices.DomainService"/> code generation.
+            </summary>
+        </member>
+        <member name="M:System.Web.Ria.Data.CodeProcessor.#ctor(System.CodeDom.Compiler.CodeDomProvider)">
+            <summary>
+            Default constructor.
+            </summary>
+            <param name="codeDomProvider">The <see cref="P:System.Web.Ria.Data.CodeProcessor.CodeDomProvider"/> used during <see cref="T:System.Web.DomainServices.DomainService"/> code generation.</param>
+        </member>
+        <member name="M:System.Web.Ria.Data.CodeProcessor.ProcessGeneratedCode(System.Web.DomainServices.DomainServiceDescription,System.CodeDom.CodeCompileUnit,System.Collections.Generic.IDictionary{System.Type,System.CodeDom.CodeTypeDeclaration})">
+            <summary>
+            Invoked after code generation of the current <see cref="T:System.Web.DomainServices.DomainService"/> has completed, allowing for post processing of the <see cref="T:System.CodeDom.CodeCompileUnit"/>.
+            </summary>
+            <param name="domainServiceDescription">The <see cref="T:System.Web.DomainServices.DomainServiceDescription"/> describing the <see cref="T:System.Web.DomainServices.DomainService"/> currently being examined.</param>
+            <param name="codeCompileUnit">The <see cref="T:System.CodeDom.CodeCompileUnit"/> that the <see cref="T:System.Web.DomainServices.DomainService"/> client code is being generated into.</param>
+            <param name="typeMapping">A dictionary mapping <see cref="T:System.Web.DomainServices.DomainService"/> and related entity types to their corresponding <see cref="T:System.CodeDom.CodeTypeDeclaration"/>s.</param>
+        </member>
+        <member name="P:System.Web.Ria.Data.CodeProcessor.CodeDomProvider">
+            <summary>
+            The <see cref="P:System.Web.Ria.Data.CodeProcessor.CodeDomProvider"/> used during <see cref="T:System.Web.DomainServices.DomainService"/> code generation.
+            </summary>
+        </member>
+        <member name="T:System.Web.DomainServices.ChangeSet">
+            <summary>
+            Represents a set of changes to be processed by a <see cref="T:System.Web.DomainServices.DomainService"/>
+            </summary>
+        </member>
+        <member name="M:System.Web.DomainServices.ChangeSet.#ctor(System.Collections.Generic.IEnumerable{System.Web.DomainServices.EntityOperation})">
+            <summary>
+            Public constructor
+            </summary>
+            <param name="entityOperations">The set of <see cref="T:System.Web.DomainServices.EntityOperation"/>s this <see cref="T:System.Web.DomainServices.ChangeSet"/>
+            represents</param>
+        </member>
+        <member name="P:System.Web.DomainServices.ChangeSet.EntityOperations">
+            <summary>
+            Gets the set of <see cref="T:System.Web.DomainServices.EntityOperation"/>s this <see cref="T:System.Web.DomainServices.ChangeSet"/> represents
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.ChangeSet.HasErrors">
+            <summary>
+            Gets a value indicating whether any of the <see cref="T:System.Web.DomainServices.EntityOperation"/>s has an error.
+            </summary>
+        </member>
+        <member name="T:System.Web.DomainServices.DomainOperationType">
+            <summary>
+            The type of domain operation that is being executed.
+            </summary>
+        </member>
+        <member name="F:System.Web.DomainServices.DomainOperationType.Query">
+            <summary>
+            Indicates a query is being executed.
+            </summary>
+        </member>
+        <member name="F:System.Web.DomainServices.DomainOperationType.Submit">
+            <summary>
+            Indicates a submit is being executed.
+            </summary>
+        </member>
+        <member name="F:System.Web.DomainServices.DomainOperationType.ServiceOperation">
+            <summary>
+            Indicates a service operation is being invoked.
+            </summary>
+        </member>
+        <member name="T:System.Web.DomainServices.IDomainServiceSerializationHelper">
+            <summary>
+            Provides a serialization helper interface for <see cref="T:System.Web.DomainServices.DomainService"/>.
+            </summary>
+        </member>
+        <member name="M:System.Web.DomainServices.IDomainServiceSerializationHelper.GetSerializableProperties(System.Type)">
+            <summary>
+            Called during the result serialization process, this method returns the base set of properties
+            that are candidates for serialization. Note that the collection returned may be filtered further
+            by the framework.
+            </summary>
+            <param name="objectType">The type of the object being serialized</param>
+            <returns>The base set of properties that are candidates for serialization</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.IDomainServiceSerializationHelper.OnSerializingObject(System.Object,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Called after an object has been serialized, this method can modify the serialized state as required.
+            </summary>
+            <param name="target">The object being serialized</param>
+            <param name="state">The serialized state of the object</param>
+        </member>
+        <member name="M:System.Web.DomainServices.IDomainServiceSerializationHelper.OnDeserializingObject(System.Object,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Called after an object has been deserialized, this method can modify the deserialized state as required.
+            </summary>
+            <param name="target">The object being deserialized</param>
+            <param name="state">The state used to deserialize the object</param>
+        </member>
+        <member name="T:System.Web.DomainServices.IgnoreOperationAttribute">
+            <summary>
+            Attribute applied to a <see cref="T:System.Web.DomainServices.DomainService"/> method to indicate that code generators should not infer 
+            a method as a domain operation.
+            </summary>
+        </member>
+        <member name="T:System.Web.DomainServices.ResolveAttribute">
+            <summary>
+            Attribute applied to a <see cref="T:System.Web.DomainServices.DomainService"/> method to indicate that it is a resolve method.
+            </summary>
+        </member>
+        <member name="M:System.Web.DomainServices.ResolveAttribute.#ctor">
+            <summary>
+            Public constructor
+            </summary>
+        </member>
+        <member name="T:System.Web.DomainServices.InsertAttribute">
+            <summary>
+            Attribute applied to a <see cref="T:System.Web.DomainServices.DomainService"/> method to indicate that it is an insert method.
+            </summary>
+        </member>
+        <member name="T:System.Web.DomainServices.CustomAttribute">
+            <summary>
+            Attribute applied to a <see cref="T:System.Web.DomainServices.DomainService"/> method to indicate that it is a custom method.
+            </summary>
+        </member>
+        <member name="T:System.Web.DomainServices.ServiceOperationAttribute">
+            <summary>
+            Attribute applied to a <see cref="T:System.Web.DomainServices.DomainService"/> method to indicate that it is a service operation.
+            </summary>
+        </member>
+        <member name="T:System.Web.DomainServices.DeleteAttribute">
+            <summary>
+            Attribute applied to a <see cref="T:System.Web.DomainServices.DomainService"/> method to indicate that it is a delete method.
+            </summary>
+        </member>
+        <member name="T:System.Web.DomainServices.UpdateAttribute">
+            <summary>
+            Attribute applied to a <see cref="T:System.Web.DomainServices.DomainService"/> method to indicate that it is an update method.
+            </summary>
+        </member>
+        <member name="T:System.Web.DomainServices.QueryAttribute">
+            <summary>
+            Attribute applied to a <see cref="T:System.Web.DomainServices.DomainService"/> method to indicate that it is a query method.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.QueryAttribute.IsComposable">
+            <summary>
+            Gets or sets a value indicating whether the query method allows query composition.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.QueryAttribute.PreserveName">
+            <summary>
+            Gets or sets a value indicating whether the query method's name should be preserved by code generators.
+            </summary>
+        </member>
+        <member name="T:System.Web.DomainServices.RequiresRolesAttribute">
+            <summary>
+            Identifies the roles required to invoke a <see cref="T:System.Web.DomainServices.DomainOperationEntry"/>.
+            </summary>
+            <remarks>
+            This attribute is used to specify the roles required to invoke a domain operation.
+            The type containing the domain operation may also be marked with this attribute and
+            its permission requirements will be applied to all domain operations within.
+            </remarks>
+        </member>
+        <member name="T:System.Web.DomainServices.AuthorizationAttribute">
+            <summary>
+            Identifies the permissions required to invoke a <see cref="T:System.Web.DomainServices.DomainOperationEntry"/>.
+            </summary>
+            <seealso cref="T:System.Web.DomainServices.RequiresAuthenticationAttribute"/>
+            <seealso cref="T:System.Web.DomainServices.RequiresRolesAttribute"/>
+        </member>
+        <member name="M:System.Web.DomainServices.AuthorizationAttribute.Authorize(System.Security.Principal.IPrincipal)">
+            <summary>
+            Determines whether the current <see cref="T:System.Security.Principal.IPrincipal"/> has the required permissions to invoke a <see cref="T:System.Web.DomainServices.DomainOperationEntry"/>.
+            </summary>
+            <param name="principal">The current <see cref="T:System.Security.Principal.IPrincipal"/>.</param>
+            <returns>A Boolean indicating whether or not the <paramref name="principal"/> has the required permissions.</returns>
+        </member>
+        <member name="F:System.Web.DomainServices.RequiresRolesAttribute._roles">
+            <summary>
+            The roles to which the current user must belong before the specified <see cref="T:System.Web.DomainServices.DomainOperationEntry"/> may be invoked.
+            </summary>
+        </member>
+        <member name="M:System.Web.DomainServices.RequiresRolesAttribute.#ctor(System.String)">
+            <summary>
+            Public constructor.
+            </summary>
+            <param name="role">The role to which the current user must belong before the <see cref="T:System.Web.DomainServices.DomainOperationEntry"/> may be invoked.</param>
+        </member>
+        <member name="M:System.Web.DomainServices.RequiresRolesAttribute.#ctor(System.String[])">
+            <summary>
+            Public constructor.
+            </summary>
+            <param name="roles">The roles to which the current user must belong before the <see cref="T:System.Web.DomainServices.DomainOperationEntry"/> may be invoked.</param>
+        </member>
+        <member name="M:System.Web.DomainServices.RequiresRolesAttribute.Authorize(System.Security.Principal.IPrincipal)">
+            <summary>
+            Determines whether the current <see cref="T:System.Security.Principal.IPrincipal"/> has appropriate permissions to invoke a <see cref="T:System.Web.DomainServices.DomainOperationEntry"/>.
+            </summary>
+            <param name="principal">The current <see cref="T:System.Security.Principal.IPrincipal"/>.</param>
+            <returns>A Boolean indicating whether or not the <paramref name="principal"/> has the required permissions.</returns>
+        </member>
+        <member name="P:System.Web.DomainServices.RequiresRolesAttribute.Roles">
+            <summary>
+            Gets the roles required for authorization.
+            </summary>
+        </member>
+        <member name="T:System.Web.DomainServices.RequiresAuthenticationAttribute">
+            <summary>
+            Identifies the authentication requirements needed to invoke a <see cref="T:System.Web.DomainServices.DomainOperationEntry"/>.
+            </summary>
+            <remarks>
+            This attribute is used to specify the permissions required to invoke a domain operation.
+            The type containing the domain operation may also be marked with this attribute and its
+            permission requirements will be applied to all domain operations within.
+            </remarks>
+        </member>
+        <member name="M:System.Web.DomainServices.RequiresAuthenticationAttribute.Authorize(System.Security.Principal.IPrincipal)">
+            <summary>
+            Determines whether the current <see cref="T:System.Security.Principal.IPrincipal"/> meets the authentication requirements needed to invoke a <see cref="T:System.Web.DomainServices.DomainOperationEntry"/>.
+            </summary>
+            <param name="principal">The current <see cref="T:System.Security.Principal.IPrincipal"/>.</param>
+            <returns>A Boolean indicating whether or not the <paramref name="principal"/> is authorized.</returns>
+        </member>
+        <member name="T:System.Web.DomainServices.DomainOperationEntry">
+            <summary>
+            Represents a domain operation method within a DomainService
+            </summary>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainOperationEntry.#ctor(System.Reflection.MethodInfo,System.Web.DomainServices.DomainOperation)">
+            <summary>
+            Creates an instance of a <see cref="T:System.Web.DomainServices.DomainOperationEntry"/>.
+            </summary>
+            <param name="methodInfo">The MethodInfo representing the reflected method.</param>
+            <param name="operation">The type of operation this method performs.</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainOperationEntry.#ctor(System.Reflection.MethodInfo,System.Web.DomainServices.DomainOperation,System.Boolean,System.Boolean)">
+            <summary>
+            Creates an instance of a <see cref="T:System.Web.DomainServices.DomainOperationEntry"/>.
+            </summary>
+            <param name="methodInfo">The MethodInfo representing the reflected method.</param>
+            <param name="operation">The type of operation this method performs.</param>
+            <param name="isComposable">Indicates whether the query method allows query composition. Only applicable to query methods.</param>
+            <param name="preserveName">Indicates whether the query method's name should be preserved by code generators. Only applicable to query methods.</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainOperationEntry.GetParameters">
+            <summary>
+            Gets the parameters that a caller effectively needs to pass in. An optional out-count parameter 
+            is excluded from this array.
+            </summary>
+            <returns>An array of parameters that a caller needs to supply a value for.</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainOperationEntry.Invoke(System.Object,System.Object[])">
+            <summary>
+            Invokes this <see cref="T:System.Web.DomainServices.DomainOperationEntry"/>.
+            </summary>
+            <param name="target">The instance on which we should invoke this method.</param>
+            <param name="parameters">The parameters to pass to the method.</param>
+            <returns>The return value of the invoked method.</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainOperationEntry.Invoke(System.Object,System.Object[],System.Int32@)">
+            <summary>
+            Invokes this <see cref="T:System.Web.DomainServices.DomainOperationEntry"/>.
+            </summary>
+            <param name="target">The instance on which we should invoke this method.</param>
+            <param name="parameters">The parameters to pass to the method.</param>
+            <param name="totalCount">The total number of rows for the input query without any paging applied to it.</param>
+            <returns>The return value of the invoked method.</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainOperationEntry.ValidatePermissions(System.Web.DomainServices.DomainServiceContext)">
+            <summary>
+            Validates whether the <see cref="T:System.Security.Principal.IPrincipal"/> in the current <see cref="T:System.Web.DomainServices.DomainServiceContext"/> has sufficient
+            authorization to invoke this <see cref="T:System.Web.DomainServices.DomainOperationEntry"/>.
+            </summary>
+            <param name="context">The <see cref="T:System.Web.DomainServices.DomainServiceContext"/> the method will be invoked under.</param>
+            <remarks>
+            This method will use the <see cref="T:System.Web.DomainServices.AuthorizationAttribute"/> associated with this <see cref="T:System.Web.DomainServices.DomainOperationEntry"/> as well
+            as any <see cref="T:System.Web.DomainServices.AuthorizationAttribute"/> on the <see cref="T:System.Web.DomainServices.DomainService"/> itself  to determine the permissions 
+            necessary to invoke the current <see cref="T:System.Web.DomainServices.DomainOperationEntry"/>. If these attributes are not present, no permissions are required.
+            </remarks>
+            <exception cref="T:System.InvalidOperationException"> is thrown if there are insufficient privileges to invoke the current DomainOperationEntry.
+            </exception>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainOperationEntry.SetPermissionAttributes">
+            <summary>
+            Examines self for [Authorization] attributes and stores results.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.DomainOperationEntry.MethodInfo">
+            <summary>
+            Gets the MethodInfo of the underlying domain operation entry.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.DomainOperationEntry.Operation">
+            <summary>
+            Gets the type of domain operation implemented by the method.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.DomainOperationEntry.IsComposable">
+            <summary>
+            Gets a value indicating whether the query method allows query composition. Only applicable to query methods.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.DomainOperationEntry.PreserveName">
+            <summary>
+            Gets a value indicating whether the method's name should be preserved by code generators.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.DomainOperationEntry.AssociatedType">
+            <summary>
+            Returns the associated Type this DomainOperation operates on. For query methods
+            this will be the element type of the return type, and for all other methods,
+            this will be the Type of the first method parameter.
+            </summary>
+        </member>
+        <member name="T:System.Web.DomainServices.DomainOperationException">
+            <summary>
+            This exception indicates that a recoverable error has occurred 
+            during the execution of a domain operation. When this exception
+            is thrown by the domain service, the processing of the domain
+            operations continues and the exception info is propagated back
+            to the client regardless of the CustomErrors configuration. This
+            exception can be used by server code to report non-sensitive error
+            information back to the client.
+            </summary>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainOperationException.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainOperationException.#ctor(System.String)">
+            <summary>
+            Constructor that accepts only a localized exception message
+            </summary>
+            <param name="message">The localized exception message</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainOperationException.#ctor(System.Int32,System.String)">
+            <summary>
+            Constructor that accepts a custom error code and localized exception message
+            </summary>
+            <param name="errorCode">The custom error code for the exception</param>
+            <param name="message">The localized exception message</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainOperationException.#ctor(System.String,System.Exception)">
+            <summary>
+            Constructor that accepts a localized exception message and an inner exception
+            </summary>
+            <param name="message">The localized exception message</param>
+            <param name="innerException">The inner exception</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainOperationException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Constructor that takes serialization info
+            </summary>
+            <param name="info">The serialization info</param>
+            <param name="context">The streaming context used for serialization</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainOperationException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            ISerializable implementation
+            </summary>
+            <param name="info">The serialization info</param>
+            <param name="context">The streaming context used for serialization</param>
+        </member>
+        <member name="P:System.Web.DomainServices.DomainOperationException.ErrorCode">
+            <summary>
+            Gets or sets the custom error code for this exception. Can be any user
+            defined value.
+            </summary>
+        </member>
+        <member name="T:System.Web.DomainServices.DomainOperation">
+            <summary>
+            Enumeration of the types of operations a <see cref="T:System.Web.DomainServices.DomainService"/> can perform.
+            </summary>
+        </member>
+        <member name="F:System.Web.DomainServices.DomainOperation.Query">
+            <summary>
+            Indicates a query operation
+            </summary>
+        </member>
+        <member name="F:System.Web.DomainServices.DomainOperation.Insert">
+            <summary>
+            Indicates an operation that inserts new data
+            </summary>
+        </member>
+        <member name="F:System.Web.DomainServices.DomainOperation.Update">
+            <summary>
+            Indicates an operation that updates existing data
+            </summary>
+        </member>
+        <member name="F:System.Web.DomainServices.DomainOperation.Delete">
+            <summary>
+            Indicates an operation that deletes existing data
+            </summary>
+        </member>
+        <member name="F:System.Web.DomainServices.DomainOperation.Custom">
+            <summary>
+            Indicates a custom domain operation that is executed in a deferred manner
+            </summary>
+        </member>
+        <member name="F:System.Web.DomainServices.DomainOperation.ServiceOperation">
+            <summary>
+            Indicates a custom domain operation that is executed immediately upon invocation
+            </summary>
+        </member>
+        <member name="F:System.Web.DomainServices.DomainOperation.Resolve">
+            <summary>
+            Indicates an operation that resolves submit conflicts
+            </summary>
+        </member>
+        <member name="T:System.Web.DomainServices.DomainServiceContext">
+            <summary>
+            Represents the execution environment for the operations
+            performed by a <see cref="T:System.Web.DomainServices.DomainService"/>.
+            </summary>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceContext.#ctor(System.IServiceProvider,System.Web.DomainServices.DomainOperationType)">
+            <summary>
+            Public constructor.
+            </summary>
+            <param name="serviceProvider">A service provider.</param>
+            <param name="operationType">The type of operation that is being executed.</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceContext.GetService(System.Type)">
+            <summary>
+            See <see cref="M:System.IServiceProvider.GetService(System.Type)"/>.
+            When the <see cref="P:System.Web.DomainServices.DomainServiceContext.ServiceContainer"/> is in use, it will be used
+            first to retrieve the requested service.  If the <see cref="P:System.Web.DomainServices.DomainServiceContext.ServiceContainer"/>
+            is not being used or it cannot resolve the service, then the
+            <see cref="T:System.IServiceProvider"/> provided to this <see cref="T:System.Web.DomainServices.DomainServiceContext"/>
+            will be queried for the service type.
+            </summary>
+            <param name="serviceType">The type of the service needed.</param>
+            <returns>An instance of that service or null if it is not available.</returns>
+        </member>
+        <member name="P:System.Web.DomainServices.DomainServiceContext.OperationType">
+            <summary>
+            Gets the type of operation that is being executed.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.DomainServiceContext.User">
+            <summary>
+            The user for this context instance.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.DomainServiceContext.ServiceContainer">
+            <summary>
+            A <see cref="T:System.ComponentModel.Design.IServiceContainer"/> that can be used for adding,
+            removing, and getting services during a domain service invocation. <see cref="M:System.Web.DomainServices.DomainServiceContext.GetService(System.Type)"/>
+            will query into this container as well as the <see cref="T:System.IServiceProvider"/>
+            specified in the constructor.
+            </summary>
+            <remarks>
+            If the <see cref="T:System.IServiceProvider"/> specified to the constructor implements
+            <see cref="T:System.ComponentModel.Design.IServiceContainer"/>, then it will be used as the
+            <see cref="P:System.Web.DomainServices.DomainServiceContext.ServiceContainer"/>, otherwise an empty container will be initialized.
+            </remarks>
+        </member>
+        <member name="T:System.Web.DomainServices.DomainServiceContext.DomainServiceContextServiceContainer">
+            <summary>
+            Private implementation of <see cref="T:System.ComponentModel.Design.IServiceContainer"/> to act
+            as a default service container on <see cref="T:System.Web.DomainServices.DomainServiceContext"/>.
+            </summary>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceContext.DomainServiceContextServiceContainer.#ctor">
+            <summary>
+            Constructs a new service container that does not have a parent container
+            </summary>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceContext.DomainServiceContextServiceContainer.#ctor(System.ComponentModel.Design.IServiceContainer)">
+            <summary>
+            Contstructs a new service container that has a parent container, making this container
+            a wrapper around the parent container.  Calls to <c>AddService</c> and <c>RemoveService</c>
+            will promote to the parent container by default, unless <paramref name="promote"/> is
+            specified as <c>false</c> on those calls.
+            </summary>
+            <param name="parentContainer">The parent container to wrap into this container.</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceContext.DomainServiceContextServiceContainer.AddService(System.Type,System.ComponentModel.Design.ServiceCreatorCallback,System.Boolean)">
+            <summary>
+            Adds the specified service to the service container.
+            </summary>
+            <param name="serviceType">The type of service to add.</param>
+            <param name="callback">A callback object that is used to create the service. This allows a service to be declared as available, but delays the creation of the object until the service is requested.</param>
+            <param name="promote"><value>true</value> to promote this request to any parent service containers; otherwise, <value>false</value>. </param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceContext.DomainServiceContextServiceContainer.AddService(System.Type,System.ComponentModel.Design.ServiceCreatorCallback)">
+            <summary>
+            Adds the specified service to the service container.
+            </summary>
+            <param name="serviceType">The type of service to add.</param>
+            <param name="callback">A callback object that is used to create the service. This allows a service to be declared as available, but delays the creation of the object until the service is requested.</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceContext.DomainServiceContextServiceContainer.AddService(System.Type,System.Object,System.Boolean)">
+            <summary>
+            Adds the specified service to the service container.
+            </summary>
+            <param name="serviceType">The type of service to add.</param>
+            <param name="serviceInstance">An instance of the service type to add. This object must implement or inherit from the type indicated by the <paramref name="serviceType"/> parameter.</param>
+            <param name="promote"><value>true</value> to promote this request to any parent service containers; otherwise, <value>false</value>. </param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceContext.DomainServiceContextServiceContainer.AddService(System.Type,System.Object)">
+            <summary>
+            Adds the specified service to the service container.
+            </summary>
+            <param name="serviceType">The type of service to add.</param>
+            <param name="serviceInstance">An instance of the service type to add. This object must implement or inherit from the type indicated by the <paramref name="serviceType"/> parameter.</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceContext.DomainServiceContextServiceContainer.RemoveService(System.Type,System.Boolean)">
+            <summary>
+            Removes the specified service type from the service container.
+            </summary>
+            <param name="serviceType">The type of service to remove.</param>
+            <param name="promote"><value>true</value> to promote this request to any parent service containers; otherwise, <value>false</value>. </param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceContext.DomainServiceContextServiceContainer.RemoveService(System.Type)">
+            <summary>
+            Removes the specified service type from the service container.
+            </summary>
+            <param name="serviceType">The type of service to remove.</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceContext.DomainServiceContextServiceContainer.GetService(System.Type)">
+            <summary>
+            See <see cref="M:System.IServiceProvider.GetService(System.Type)"/>.
+            </summary>
+            <param name="serviceType">The type of the service needed.</param>
+            <returns>An instance of that service or null if it is not available.</returns>
+        </member>
+        <member name="T:System.Web.DomainServices.DomainService">
+            <summary>
+            Base class for all <see cref="T:System.Web.DomainServices.DomainService"/>s
+            </summary>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.#ctor">
+            <summary>
+            Protected constructor
+            </summary>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.Initialize(System.Web.DomainServices.DomainServiceContext)">
+            <summary>
+            Initializes this <see cref="T:System.Web.DomainServices.DomainService"/>. Initialize must be called prior to invoking any
+            operations on the DomainService instance.
+            </summary>
+            <param name="context">The <see cref="T:System.Web.DomainServices.DomainServiceContext"/> for this <see cref="T:System.Web.DomainServices.DomainService"/>
+            instance. Overrides must call the base method.</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.EnsureInitialized">
+            <summary>
+            Throw if this service instance hasn't been initialized.
+            </summary>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.Count``1(System.Linq.IQueryable{``0})">
+            <summary>
+            Gets the number of rows in an <see cref="T:System.Linq.IQueryable`1"/>. <see cref="T:System.Web.DomainServices.DomainService"/>s should 
+            override this method to implement support for total-counts of paged result-sets. Overrides shouldn't 
+            call the base method.
+            </summary>
+            <typeparam name="T">The element Type of the query.</typeparam>
+            <param name="query">The query for which the count should be returned.</param>
+            <returns>The total number of rows if total-counts are supported; -1 if it's not.</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.Dispose">
+            <summary>
+            Dispose this <see cref="T:System.Web.DomainServices.DomainService"/>
+            </summary>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.Dispose(System.Boolean)">
+            <summary>
+            Dispose this <see cref="T:System.Web.DomainServices.DomainService"/>
+            </summary>
+            <param name="disposing">True if we're currently disposing</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.Query(System.Web.DomainServices.QueryDescription,System.Int32@)">
+            <summary>
+            Performs the query operation indicated by the specified <see cref="T:System.Web.DomainServices.QueryDescription"/>
+            and returns the results.
+            </summary>
+            <param name="queryDescription">The description of the query to perform</param>
+            <param name="totalCount">Returns the total number of rows based on the specified query, but without 
+            any paging applied to it.</param>
+            <returns>The query results</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.Invoke(System.Web.DomainServices.DomainOperationEntry,System.Object[],System.Collections.Generic.ICollection{System.Web.Ria.Data.OperationError})">
+            <summary>
+            Invokes the specified service operation.
+            </summary>
+            <param name="serviceOperation">The service operation to invoke.</param>
+            <param name="parameters">The parameters to pass to the method.</param>
+            <param name="validationErrors">A collection to which any validation errors will be added.</param>
+            <returns>The return value of the invocation.</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.Submit(System.Web.DomainServices.ChangeSet)">
+            <summary>
+            Performs the operations indicated by the specified <see cref="T:System.Web.DomainServices.ChangeSet"/> by invoking
+            the corresponding domain operations for each.
+            </summary>
+            <param name="changeSet">The changeset to submit</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.AuthorizeChangeSet(System.Web.DomainServices.ChangeSet)">
+            <summary>
+            Verifies the user is authorized to submit the specified changeset.
+            </summary>
+            <param name="changeSet">The changeset to authorize.</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.ValidateChangeSet(System.Web.DomainServices.ChangeSet)">
+            <summary>
+            This method validates the entire <see cref="T:System.Web.DomainServices.ChangeSet"/> prior to calling <see cref="M:System.Web.DomainServices.DomainService.ExecuteChangeSet(System.Web.DomainServices.ChangeSet)"/>.
+            Any errors should be set on the individual <see cref="T:System.Web.DomainServices.EntityOperation"/>s in the changeset.
+            </summary>
+            <param name="changeSet">The changeset to validate</param>
+            <returns>True if all operations in the changeset passed validation, false otherwise</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.ExecuteChangeSet(System.Web.DomainServices.ChangeSet)">
+            <summary>
+            This method invokes the <see cref="T:System.Web.DomainServices.DomainOperationEntry"/> for each operation in the changeset.
+            </summary>
+            <param name="changeSet">The changeset to execute.</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.ResolveChangeSet(System.Web.DomainServices.ChangeSet)">
+            <summary>
+            This method is called to resolve concurrency conflicts if one or more operations in the changeset resulted in conflicts.
+            If this DomainService has Resolve methods for the entity types in conflict, this method will invoke the resolve
+            method for each. If all conflicts were resolved, this method will attempt a single resubmit. Override this method
+            to implement different resolve strategies, for example, attempting multiple resubmits.
+            </summary>
+            <param name="changeSet">The changeset being processed</param>
+            <returns>Returns true if all conflicts were successfully resolved and the resubmit succeeded, false otherwise</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.Resolve(System.Object,System.Object,System.Object,System.Web.DomainServices.ResolveOption)">
+            <summary>
+            This method resolves the conflicts for a single entity. The base implementation performs no resolution and
+            returns false. Override this method to support data source specific conflict resolution.
+            </summary>
+            <param name="current">The entity with the current values</param>
+            <param name="original">The entity with the original values</param>
+            <param name="store">The entity with current store values</param>
+            <param name="resolveOption"><see cref="T:System.Web.DomainServices.ResolveOption"/> to use to resolve the conflicts</param>
+            <returns>True if the conflicts were successfully resolved, false otherwise</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.PersistChangeSet(System.Web.DomainServices.ChangeSet)">
+            <summary>
+            This method is called to finalize changes after all the operations in the specified changeset
+            have been invoked. This method should commit the changes as necessary to the data source.
+            Any errors should be set on the individual <see cref="T:System.Web.DomainServices.EntityOperation"/>s in the changeset.
+            </summary>
+            <param name="changeSet">The changeset to persist</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.GetSerializableProperties(System.Type)">
+            <summary>
+            Called during the result serialization process, this method returns the base set of properties
+            that are candidates for serialization. The base implementation returns all public properties.
+            Derived classes can override to perform any additional filtering. Note that this list 
+            may be filtered further by the framework.
+            </summary>
+            <param name="objectType">The type of the object being serialized</param>
+            <returns>The base set of properties that are candidates for serialization</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.OnSerializingObject(System.Object,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Called after an object has been serialized, this method can be overridden to modify the serialized
+            state as required.
+            </summary>
+            <param name="target">The object being serialized</param>
+            <param name="state">The serialized state of the object</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.OnDeserializingObject(System.Object,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Called after an object has been deserialized, this method can be overridden to modify the deserialized
+            state as required.
+            </summary>
+            <param name="target">The object being deserialized</param>
+            <param name="state">The state used to deserialize the object</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.ValidateMethodPermissions(System.Web.DomainServices.DomainOperationEntry)">
+            <summary>
+            Validate the permissions for the specified method. If the authorization check
+            fails, an <see cref="T:System.UnauthorizedAccessException"/> will be thrown.
+            </summary>
+            <param name="method">The method to validate</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.InvokeDomainOperationEntry(System.Web.DomainServices.DomainOperationEntry,System.Object[],System.Web.DomainServices.EntityOperation)">
+            <summary>
+            Invokes the given domain operation entry. If a non-recoverable exception
+            is encountered during the invocation, the exception is
+            re-thrown. Otherwise, the error is appended to the operation's
+            errors list.
+            </summary>
+            <param name="domainOperationEntry">domain operation entry to invoke</param>
+            <param name="parameters">parameters to invoke domain operation entry with</param>
+            <param name="operation">the EntityOperation object associated with the domain operation entry for logging errors (if any)</param>
+            <returns>the result of the domain operation entry</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.ConvertMethodParameters(System.Web.DomainServices.DomainOperationEntry,System.Object[])">
+            <summary>
+            Process parameter values and attempt to convert them to the types 
+            defined by the method signature. On successful completion, the
+            <paramref name="parameterValues"/> collection will contain the 
+            the converted values.
+            </summary>
+            <param name="method"><see cref="T:System.Web.DomainServices.DomainOperationEntry"/> that defines the 
+            expected parameter types</param>
+            <param name="parameterValues">raw parameter values</param>
+            <exception cref="T:System.InvalidOperationException">is thrown if the number 
+            of parameter values provided does not match the number of method 
+            parameter arguments</exception>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.ValidateOperations(System.Collections.Generic.IEnumerable{System.Web.DomainServices.EntityOperation})">
+            <summary>
+            Performs object, method and property validation and set any recoverable
+            errors encountered on the given <see cref="T:System.Web.DomainServices.EntityOperation"/> list
+            </summary>
+            <param name="operations">list of operations to validate</param>
+            <returns>true if all the operations in the specified list are valid</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.ValidateMethodCall(System.Reflection.MethodInfo,System.ComponentModel.DataAnnotations.ValidationContext,System.Object[],System.Collections.Generic.ICollection{System.ComponentModel.DataAnnotations.ValidationResult})">
+            <summary>
+            Validates a method call.
+            </summary>
+            <param name="method">The object instance containing the values to validate against.</param>
+            <param name="validationContext">The context describing the method to invoke.</param>
+            <param name="parameters">The parameters to pass to the method.</param>
+            <param name="validationResults">The collection to which we can append validation results.</param>
+            <returns>True if the parameters are valid.</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.GetDomainMethodParams(System.Web.DomainServices.EntityOperation)">
+            <summary>
+            Returns the parameters array to invoke domain method 
+            with on the server. This is formed by using the 
+            operation Entity as the first argument, and then
+            the rest of the invocation parameters from the client.
+            </summary>
+            <param name="operation"><see cref="T:System.Web.DomainServices.EntityOperation"/> object containing domain method invocation parameters</param>
+            <returns>array of domain method call parameters</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.ValidateReadOnlyProperties(System.Object,System.Object,System.Collections.Generic.List{System.ComponentModel.DataAnnotations.ValidationResult})">
+            <summary>
+            Validates that none of the read-only properties have changed.
+            </summary>
+            <param name="currentEntity">The current entity.</param>
+            <param name="originalEntity">The original entity.</param>
+            <param name="validationErrors">The list of validation errors to append new validation errors to.</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.System#Web#DomainServices#IDomainServiceSerializationHelper#GetSerializableProperties(System.Type)">
+            <summary>
+            Called during the result serialization process, this method returns the base set of properties
+            that are candidates for serialization. The base implementation returns all public properties.
+            Derived classes can override to perform any additional filtering. Note that this list 
+            will be filtered further by the framework, for example to respect [Exclude] attributes, [DataMember] 
+            attributes if <paramref name="objectType"/> is a DataContract, etc.
+            </summary>
+            <param name="objectType">The type of the object being serialized</param>
+            <returns>The base set of properties that are candidates for serialization</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.System#Web#DomainServices#IDomainServiceSerializationHelper#OnSerializingObject(System.Object,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Called after an object has been serialized, this method can be overridden to modify the serialized
+            state as required.
+            </summary>
+            <param name="target">The object being serialized</param>
+            <param name="state">The serialized state of the object</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.System#Web#DomainServices#IDomainServiceSerializationHelper#OnDeserializingObject(System.Object,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Called after an object has been deserialized, this method can be overridden to modify the deserialized
+            state as required.
+            </summary>
+            <param name="target">The object being deserialized</param>
+            <param name="state">The state used to deserialize the object</param>
+        </member>
+        <member name="P:System.Web.DomainServices.DomainService.Factory">
+            <summary>
+            Gets or sets the <see cref="T:System.Web.DomainServices.IDomainServiceFactory"/> used to create new <see cref="T:System.Web.DomainServices.DomainService"/> instances.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.DomainService.Description">
+            <summary>
+            Gets the <see cref="T:System.Web.DomainServices.DomainServiceDescription"/> for this <see cref="T:System.Web.DomainServices.DomainService"/>
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.DomainService.UsesUtcDateTimes">
+            <summary>
+            Gets a value indicating whether DateTimes returned by this DomainService should be
+            interpreted as DateTimeKind.Utc. If false is returned, the framework will perform 
+            auto conversions of DateTimes during serialization/deserialization, treating DateTimes 
+            with DateTimeKind.Unspecified as DateTimeKind.Local on serialization, and converting 
+            all DateTimes back to DateTimeKind.Local on deserialization. If true is returned, no 
+            conversions will be performed by the framework. The default is true.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.DomainService.ServiceContext">
+            <summary>
+            Gets the active <see cref="T:System.Web.DomainServices.DomainServiceContext"/> for this <see cref="T:System.Web.DomainServices.DomainService"/>
+            </summary>
+        </member>
+        <member name="T:System.Web.DomainServices.DomainService.DefaultDomainServiceFactory">
+            <summary>
+            Default <see cref="T:System.Web.DomainServices.IDomainServiceFactory"/> implementation.
+            </summary>
+        </member>
+        <member name="T:System.Web.DomainServices.IDomainServiceFactory">
+            <summary>
+            Provides an interface for <see cref="T:System.Web.DomainServices.DomainService"/> factory implementations.
+            </summary>
+        </member>
+        <member name="M:System.Web.DomainServices.IDomainServiceFactory.CreateDomainService(System.Type,System.Web.DomainServices.DomainServiceContext)">
+            <summary>
+            Creates a new <see cref="T:System.Web.DomainServices.DomainService"/> instance.
+            </summary>
+            <param name="domainServiceType">The <see cref="T:System.Type"/> of <see cref="T:System.Web.DomainServices.DomainService"/> to create.</param>
+            <param name="context">The current <see cref="T:System.Web.DomainServices.DomainServiceContext"/>.</param>
+            <returns>A <see cref="T:System.Web.DomainServices.DomainService"/> instance.</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.IDomainServiceFactory.ReleaseDomainService(System.Web.DomainServices.DomainService)">
+            <summary>
+            Releases an existing <see cref="T:System.Web.DomainServices.DomainService"/> instance.
+            </summary>
+            <param name="domainService">The <see cref="T:System.Web.DomainServices.DomainService"/> instance to release.</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.DefaultDomainServiceFactory.CreateDomainService(System.Type,System.Web.DomainServices.DomainServiceContext)">
+            <summary>
+            Creates a new <see cref="T:System.Web.DomainServices.DomainService"/> instance.
+            </summary>
+            <param name="domainServiceType">The <see cref="T:System.Type"/> of <see cref="T:System.Web.DomainServices.DomainService"/> to create.</param>
+            <param name="context">The current <see cref="T:System.Web.DomainServices.DomainServiceContext"/>.</param>
+            <returns>A <see cref="T:System.Web.DomainServices.DomainService"/> instance.</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainService.DefaultDomainServiceFactory.ReleaseDomainService(System.Web.DomainServices.DomainService)">
+            <summary>
+            Releases an existing <see cref="T:System.Web.DomainServices.DomainService"/> instance.
+            </summary>
+            <param name="domainService">A <see cref="T:System.Web.DomainServices.DomainService"/> instance to release.</param>
+        </member>
+        <member name="T:System.Web.DomainServices.DomainServiceDescription">
+            <summary>
+            This class encapsulates information about a <see cref="T:System.Web.DomainServices.DomainService"/>
+            </summary>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceDescription.GetDescriptionInternal(System.Object,System.Boolean)">
+            <summary>
+            Internal implementation for GetDescription.
+            </summary>
+            <param name="domainServiceTypeOrInstance">Either a DomainService instance or Type.</param>
+            <param name="isDesignTime"><c>true</c> means we only need metadata and do not necessarily need to connect</param>
+            <returns>description for the given domain service type or instance</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceDescription.TryGetDomainOperation(System.Reflection.MethodInfo,System.Web.DomainServices.DomainOperationEntry@)">
+            <summary>
+            Tries to create a domain operation entry for the specified method, if the specified method represents 
+            a domain operation.
+            </summary>
+            <remarks>Domain operations are either explicitly marked with attributes, or they follow a naming/signature convention.</remarks>
+            <param name="methodInfo">The method that may be representing a domain operation.</param>
+            <param name="method">The created domain operation entry, if any.</param>
+            <returns>True if a domain operation entry was created; false otherwise.</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceDescription.TryGetImplicitDomainOperation(System.Reflection.MethodInfo,System.Web.DomainServices.DomainOperationEntry@)">
+            <summary>
+            Tries to create a domain operation entry for the specified method, if the specified method represents 
+            a domain operation and follows the convention for domain operations.
+            </summary>
+            <param name="methodInfo">The method that may be representing a domain operation.</param>
+            <param name="method">The created domain operation entry, if any.</param>
+            <returns>True if a domain operation entry was created; false otherwise.</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceDescription.RegisterCustomTypeDescriptors(System.Type,System.Web.DomainServices.DomainServiceDescription,System.Type)">
+            <summary>
+            Register any custom TypeDescriptionProviders requested via the MetadomainServiceAttribute 
+            applied to the DomainService Type for the specified entity type
+            </summary>
+            <param name="domainServiceType">The Type of the DomainService</param>
+            <param name="domainServiceDescription">The DomainServiceDescription for the service</param>
+            <param name="entityType">The entity type for which we should register the custom descriptors</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceDescription.GetDescription(System.Type,System.Boolean)">
+            <summary>
+            Returns the <see cref="T:System.Web.DomainServices.DomainServiceDescription"/> for the specified <see cref="T:System.Web.DomainServices.DomainService"/> Type.
+            Note that if you have a <see cref="T:System.Web.DomainServices.DomainService"/> instance the overload taking the
+            instance is preferable.
+            </summary>
+            <param name="domainServiceType">type of domain service to get description for</param>
+            <param name="isDesignTime"><c>true</c> means we only need metadata and do not necessarily need to connect</param>
+            <returns>description for the specified domain service type</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceDescription.GetDescription(System.Web.DomainServices.DomainService,System.Boolean)">
+            <summary>
+            Returns the <see cref="T:System.Web.DomainServices.DomainServiceDescription"/> for the specified <see cref="T:System.Web.DomainServices.DomainService"/> instance.
+            Note that if you have a <see cref="T:System.Web.DomainServices.DomainService"/> instance this overload is preferable.
+            </summary>
+            <param name="domainService">type of domain service to get description for</param>
+            <param name="isDesignTime"><c>true</c> means we only need metadata and do not necessarily need to connect</param>
+            <returns>the DomainServiceDescription for the specified instance</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceDescription.AddEntityType(System.Type)">
+            <summary>
+            Recursively add the specified entity and all entities in its Include graph
+            to our list of all entities, and register an associated metadata type descriptor
+            for each.
+            </summary>
+            <param name="entityType">type of entity to add</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceDescription.ValidateMemberIncludes">
+            <summary>
+            For all types exposed by this provider, validate all the Includes for each entity type
+            </summary>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceDescription.IsValidEntityType(System.Type,System.String@)">
+            <summary>
+            Determines whether a given type may be used as an entity type.
+            </summary>
+            <param name="type">The type to test</param>
+            <param name="errorMessage">If this method returns <c>false</c>, the error message</param>
+            <returns><c>true</c> if the type can legally be used as an entity</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceDescription.ValidateMemberProjection(System.ComponentModel.PropertyDescriptor,System.Web.DomainServices.IncludeAttribute)">
+            <summary>
+            Validate the specified member projection
+            </summary>
+            <param name="pd">The property the member projection is applied to</param>
+            <param name="memberProjection">The member projection</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceDescription.AddQueryOrSubmitMethod(System.Web.DomainServices.DomainOperationEntry)">
+            <summary>
+            Add a Query or Submit method to this domain service.
+            </summary>
+            <param name="method"><see cref="T:System.Web.DomainServices.DomainOperationEntry"/> for the method to be added</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceDescription.TryAddEntityType(System.Type)">
+            <summary>
+            Tries to add the specified type as an entity.
+            </summary>
+            <param name="type">The type to add.</param>
+            <returns><value>true</value> if the type could be added as an entity.</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceDescription.AddDomainMethod(System.Web.DomainServices.DomainOperationEntry)">
+            <summary>
+            Add a domain method to this domain service. The first param is assumed to be the entity,
+            all other params should be one of the predefined types
+            </summary>
+            <param name="method">the domain method to be added</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceDescription.AddServiceOperation(System.Web.DomainServices.DomainOperationEntry)">
+            <summary>
+            Add a service operation to this domain service. All params have to be either of one of the
+            predefined types, or of an entity type defined on the provider.
+            </summary>
+            <param name="method">the service operationto be added</param>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceDescription.IsEntityOrPredefinedType(System.Type)">
+            <summary>
+            Checks if the given type is an entity type defined on the associated domain service, or one of the predefined types
+            </summary>
+            <param name="type">type to check</param>
+            <returns>true if the given type is an entity type or one of the predefined types</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceDescription.GetQueryMethod(System.String)">
+            <summary>
+            Returns the <see cref="T:System.Web.DomainServices.DomainService"/> query method of the specified name
+            </summary>
+            <param name="methodName">The name of the method</param>
+            <returns>DomainOperationEntry for the specified method name</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceDescription.GetServiceOperation(System.String)">
+            <summary>
+            Returns the <see cref="T:System.Web.DomainServices.DomainService"/> service operation of the specified name
+            </summary>
+            <param name="operationName">The name of the operation</param>
+            <returns>DomainOperationEntry for the specified operation name</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceDescription.GetCustomMethod(System.Type,System.String)">
+            <summary>
+            Returns the <see cref="T:System.Web.DomainServices.DomainService"/> custom method of the specified name associated with a given entity type
+            </summary>
+            <param name="entityType">entity type the custom method is associated with</param>
+            <param name="methodName">name of the custom method</param>
+            <returns>DomainOperationEntry for the custom method if found, null otherwise</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceDescription.GetCustomMethods(System.Type)">
+            <summary>
+            Returns the collection of custom methods defined for the given entity type on the corresponding <see cref="T:System.Web.DomainServices.DomainService"/>
+            </summary>
+            <param name="entityType">The entity type associated with the custom methods that are to be retrieved</param>
+            <returns>The collection of custom methods defined for the given entity type</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceDescription.GetSubmitMethod(System.Type,System.Web.DomainServices.DomainOperation)">
+            <summary>
+            Gets the submit method for the specified entity type and <see cref="T:System.Web.DomainServices.DomainOperation"/>
+            </summary>
+            <param name="entityType">The entity type</param>
+            <param name="operation">The <see cref="T:System.Web.DomainServices.DomainOperation"/> type to get the method for. Must be
+            Insert, Update, Delete or Resolve.</param>
+            <returns>The method if it exists, otherwise null</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.DomainServiceDescription.GetEntityType(System.Type)">
+            <summary>
+            For the specified type, this method returns the corresponding
+            Type exposed by the DomainService, taking inheritance into account.
+            </summary>
+            <remarks>Any serialization or other framework operations operating on
+            entity Types should call into this method to get the correct Type
+            definition to operate on.</remarks>
+            <param name="entityType">The Type of the object.</param>
+            <returns>The corresponding entity type exposed by the DomainService, or null
+            if the specified type is not an entity Type.</returns>
+        </member>
+        <member name="P:System.Web.DomainServices.DomainServiceDescription.DomainServiceType">
+            <summary>
+            Gets the Type of the <see cref="T:System.Web.DomainServices.DomainService"/>
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.DomainServiceDescription.EntityTypes">
+            <summary>
+            Gets the Entity types exposed by the <see cref="T:System.Web.DomainServices.DomainService"/>
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.DomainServiceDescription.DomainOperationEntries">
+            <summary>
+            Gets the collection of <see cref="P:System.Web.DomainServices.DomainServiceDescription.DomainOperationEntries"/> for the DomainService
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.DomainServiceDescription.IsDesignTime">
+            <summary>
+            Gets a value indicating whether we need only metadata (not necessarily an open connection)
+            </summary>
+        </member>
+        <member name="T:System.Linq.Dynamic.DefaultQueryResolver">
+            <summary>
+            Default query resolver
+            </summary>
+        </member>
+        <member name="T:System.Linq.Dynamic.QueryResolver">
+            <summary>
+            Defines a set of methods that can participate in query deserialization.
+            </summary>
+        </member>
+        <member name="M:System.Linq.Dynamic.QueryResolver.ResolveMember(System.Type,System.String,System.Linq.Expressions.Expression)">
+            <summary>
+            Called to attempt to resolve unresolved member references during query deserialization.
+            </summary>
+            <param name="type">The Type the member is expected on.</param>
+            <param name="member">The member name.</param>
+            <param name="instance">The instance to form the MemberExpression on.</param>
+            <returns>A MemberExpression if the member can be resolved, null otherwise.</returns>
+        </member>
+        <member name="M:System.Linq.Dynamic.DefaultQueryResolver.ResolveMember(System.Type,System.String,System.Linq.Expressions.Expression)">
+            <summary>
+            Called to attempt to resolve unresolved member references during query deserialization.
+            </summary>
+            <param name="type">The Type the member is expected on.</param>
+            <param name="member">The member name.</param>
+            <param name="instance">The instance to form the MemberExpression on.</param>
+            <returns>A MemberExpression if the member can be resolved, null otherwise.</returns>
+        </member>
+        <member name="T:System.Web.DomainServices.EntityOperation">
+            <summary>
+            Represents a domain operation to be performed on an entity.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.EntityOperation.HasError">
+            <summary>
+            Gets a value indicating whether the entity operation contains errors, validation errors or conflicts.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.EntityOperation.Entity">
+            <summary>
+            Gets or sets the <see cref="P:System.Web.DomainServices.EntityOperation.Entity"/> being operated on
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.EntityOperation.Id">
+            <summary>
+            Gets or sets the client ID for the entity
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.EntityOperation.Operation">
+            <summary>
+            Gets or sets the <see cref="T:System.Web.DomainServices.DomainOperation"/> to be performed on the entity
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.EntityOperation.OperationData">
+            <summary>
+            Gets or sets additional operation data for use by domain methods.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.EntityOperation.OperationName">
+            <summary>
+            Gets or sets the name of the operation. This is only used by domain methods.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.EntityOperation.DomainOperationEntry">
+            <summary>
+            Gets or sets the <see cref="P:System.Web.DomainServices.EntityOperation.DomainOperationEntry"/> for the operation.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.EntityOperation.OriginalEntity">
+            <summary>
+            Gets or sets the original state of the entity being operated on
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.EntityOperation.StoreEntity">
+            <summary>
+            Gets or sets the state of the entity in the store
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.EntityOperation.Errors">
+            <summary>
+            Gets or sets the errors encountered during the execution of the operation. 
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.EntityOperation.ValidationErrors">
+            <summary>
+            Gets or sets the validation errors encountered during the processing of the operation. 
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.EntityOperation.ConflictMembers">
+            <summary>
+            Gets or sets the collection of members in conflict. The StoreEntity property
+            contains the current store value for each property.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.EntityOperation.IsDeleteConflict">
+            <summary>
+            Gets or sets whether the conflict is a delete conflict.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.EntityOperation.Associations">
+            <summary>
+            Gets or sets the collection of entity IDs representing the entities for
+            each association
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.EntityOperation.OriginalAssociations">
+            <summary>
+            Gets or sets the collection of entity IDs representing the entities for
+            each association of the OriginalEntity
+            </summary>
+        </member>
+        <member name="T:System.Web.DomainServices.ExcludeAttribute">
+            <summary>
+            Indicates that an entity member should not exist in the code generated 
+            client view of the entity, and that the value should never be sent to
+            the client.
+            </summary>
+        </member>
+        <member name="T:System.Web.DomainServices.IncludeAttribute">
+            <summary>
+            When applied to an entity association, this attribute indicates that the framework should follow
+            the association when non-null during serialization to send associated objects to the client.
+            This attribute can also be used to specify member projections.
+            </summary>
+        </member>
+        <member name="M:System.Web.DomainServices.IncludeAttribute.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:System.Web.DomainServices.IncludeAttribute.#ctor(System.String,System.String)">
+            <summary>
+            Constructor used to specify a member projection.
+            </summary>
+            <param name="path">Dotted path specifying the navigation path from the member this attribute
+            is applied to, to the member to be projected. The projected member must be a scalar.</param>
+            <param name="memberName">The member name that will be code generated for the projected member.</param>
+        </member>
+        <member name="M:System.Web.DomainServices.IncludeAttribute.IsAttributeValid(System.String@)">
+            <summary>
+            Determines whether the current attribute instance is properly formed
+            </summary>
+            <param name="errorMessage">Error message returned to describe problem (null if no problem)</param>
+            <returns><c>true</c> means it's valid</returns>
+        </member>
+        <member name="M:System.Web.DomainServices.IncludeAttribute.ThrowIfAttributeNotValid">
+            <summary>
+            Throws InvalidOperationException is anything is wrong with the attribute
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.IncludeAttribute.IsProjection">
+            <summary>
+            Gets a value indicating whether this attribute specifies a member projection
+            </summary>
+            <exception cref="T:System.InvalidOperationException"> is thrown if the current attribute is invalid.</exception>
+        </member>
+        <member name="P:System.Web.DomainServices.IncludeAttribute.Path">
+            <summary>
+            Gets the member projection path
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.IncludeAttribute.MemberName">
+            <summary>
+            Gets the name of the destination member for the projection 
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.IncludeAttribute.TypeId">
+            <summary>
+            Gets a unique identifier for this attribute.
+            </summary>
+        </member>
+        <member name="T:System.Web.DomainServices.MetadataProviderAttribute">
+            <summary>
+            Apply this attribute to a <see cref="T:System.Web.DomainServices.DomainService"/> to specify one or more custom <see cref="T:System.ComponentModel.TypeDescriptionProvider"/> Types
+            that should be registered for all entity types exposed by the <see cref="T:System.Web.DomainServices.DomainService"/>.
+            </summary>
+        </member>
+        <member name="M:System.Web.DomainServices.MetadataProviderAttribute.#ctor(System.Type)">
+            <summary>
+            Public constructor
+            </summary>
+            <param name="typeDescriptionProviderType">Type of the custom TypeDescriptionProvider that should be registered.
+            Must derive from TypeDescriptionProvider.</param>
+        </member>
+        <member name="P:System.Web.DomainServices.MetadataProviderAttribute.TypeDescriptionProviderType">
+            <summary>
+            Gets the Type of the TypeDescriptionProvider
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.MetadataProviderAttribute.TypeId">
+            <summary>
+            Gets a unique identifier for this attribute.
+            </summary>
+        </member>
+        <member name="T:System.Web.DomainServices.QueryDescription">
+            <summary>
+            Represents a query operation to be processed by a <see cref="T:System.Web.DomainServices.DomainService"/>
+            </summary>
+        </member>
+        <member name="M:System.Web.DomainServices.QueryDescription.#ctor(System.Web.DomainServices.DomainOperationEntry)">
+            <summary>
+            Public constructor
+            </summary>
+            <param name="domainOperationEntry">The query operation to be processed</param>
+        </member>
+        <member name="M:System.Web.DomainServices.QueryDescription.#ctor(System.Web.DomainServices.DomainOperationEntry,System.Collections.ObjectModel.ReadOnlyCollection{System.Object})">
+            <summary>
+            Public constructor
+            </summary>
+            <param name="domainOperationEntry">The query operation to be processed</param>
+            <param name="parameterValues">Parameter values for the method if it requires any</param>
+        </member>
+        <member name="M:System.Web.DomainServices.QueryDescription.#ctor(System.Web.DomainServices.DomainOperationEntry,System.Collections.ObjectModel.ReadOnlyCollection{System.Object},System.Collections.ObjectModel.ReadOnlyCollection{System.Web.DomainServices.QueryPart})">
+            <summary>
+            Public constructor
+            </summary>
+            <param name="domainOperationEntry">The query operation to be processed</param>
+            <param name="parameterValues">Parameter values for the method if it requires any</param>
+            <param name="queryParts">Ordered list of query operators to apply to the query results</param>
+        </member>
+        <member name="P:System.Web.DomainServices.QueryDescription.Method">
+            <summary>
+            Gets the query operation to be processed
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.QueryDescription.ParameterValues">
+            <summary>
+            Gets the parameter values for the method if it requires any
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.QueryDescription.QueryParts">
+            <summary>
+            Gets the query operators to apply to the query results
+            </summary>
+        </member>
+        <member name="T:System.Web.DomainServices.QueryPart">
+            <summary>
+            Represents a single query operator to be applied to a query
+            </summary>
+        </member>
+        <member name="M:System.Web.DomainServices.QueryPart.#ctor(System.String,System.String)">
+            <summary>
+            Public constructor
+            </summary>
+            <param name="queryOperator">The query operator</param>
+            <param name="expression">The query expression</param>
+        </member>
+        <member name="M:System.Web.DomainServices.QueryPart.ToString">
+            <summary>
+            Returns a string representation of this <see cref="T:System.Web.DomainServices.QueryPart"/>
+            </summary>
+            <returns>The string representation of this <see cref="T:System.Web.DomainServices.QueryPart"/></returns>
+        </member>
+        <member name="P:System.Web.DomainServices.QueryPart.QueryOperator">
+            <summary>
+            Gets the query operator. Must be one of the supported operators : "where", "orderby", "skip", or "take".
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.QueryPart.Expression">
+            <summary>
+            Gets the query expression.
+            </summary>
+        </member>
+        <member name="T:System.Web.DomainServices.ResolveOption">
+            <summary>
+            Enumeration of conflict resolution policies
+            </summary>
+        </member>
+        <member name="F:System.Web.DomainServices.ResolveOption.KeepCurrentValues">
+            <summary>
+            Retain the current values, overwriting any store values in conflict.
+            </summary>
+        </member>
+        <member name="F:System.Web.DomainServices.ResolveOption.KeepChanges">
+            <summary>
+            Merge the current store values into the current values, retaining any
+            updated values, but overwriting any unmodified values.
+            </summary>
+        </member>
+        <member name="F:System.Web.DomainServices.ResolveOption.OverwriteCurrentValues">
+            <summary>
+            Discard the current values including any updated values, replacing them
+            with the current store values.
+            </summary>
+        </member>
+        <member name="T:System.Web.DomainServices.Resource">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.DataService_MethodNotComposable">
+            <summary>
+              Looks up a localized string similar to DomainOperationEntry &apos;{0}&apos; doesn&apos;t support query composition.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.DomainOperationEntry_Access_Denied">
+            <summary>
+              Looks up a localized string similar to Access denied to DomainOperationEntry &apos;{0}&apos;..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.DomainOperationEntry_ArgumentCannotBeNullOrEmpty">
+            <summary>
+              Looks up a localized string similar to The argument &apos;{0}&apos; cannot be null or empty.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.DomainOperationEntryOverload_NotSupported">
+            <summary>
+              Looks up a localized string similar to An overload of the method &apos;{0}&apos; was already defined. DomainOperationEntry overloads are not supported.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.DomainService_AlreadyInitialized">
+            <summary>
+              Looks up a localized string similar to This DomainService has already been initialized..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.DomainService_DuplicateCUDMethod">
+            <summary>
+              Looks up a localized string similar to The domain operation entry named &apos;{0}&apos; provides redundant functionality. Another method named &apos;{1}&apos; already exists..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.DomainService_Factory_InvalidDomainServiceType">
+            <summary>
+              Looks up a localized string similar to Type &apos;{0}&apos; is not a valid DomainService type..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.DomainService_InvalidDomainOperationEntry">
+            <summary>
+              Looks up a localized string similar to This DomainService does not support operation &apos;{0}&apos; for entity &apos;{1}&apos;.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.DomainService_InvalidInheritance">
+            <summary>
+              Looks up a localized string similar to Type &apos;{0}&apos; is a direct or indirect subclass of Type &apos;{1}&apos;. DomainServices cannot return a Type that is a subclass of another Type returned from the same DomainService..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.DomainService_InvalidMetadomainServiceConstructor">
+            <summary>
+              Looks up a localized string similar to The TypeDescriptionProvider &apos;{0}&apos; specified does not provide a public constructor of one of the supported signatures..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.DomainService_InvalidMetadomainServiceType">
+            <summary>
+              Looks up a localized string similar to Invalid TypeDescriptionProvider &apos;{0}&apos; specified. TypeDescriptionProvider Types registered as metadata providers must derive from TypeDescriptionProvider, must be non-abstract, and cannot be generic Type definitions..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.DomainService_NotInitialized">
+            <summary>
+              Looks up a localized string similar to This DomainService has not been initialized..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.DomainServiceContextServiceContainer_ItemAlreadyExists">
+            <summary>
+              Looks up a localized string similar to A service of type &apos;{0}&apos; already exists in the container..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.Entity_Property_Is_ReadOnly">
+            <summary>
+              Looks up a localized string similar to The &apos;{0}&apos; property is read-only but was changed by the client..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.EntityTypes_Cannot_Be_Abstract">
+            <summary>
+              Looks up a localized string similar to Entity types cannot be abstract..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.EntityTypes_Cannot_Be_Collections">
+            <summary>
+              Looks up a localized string similar to Entity types cannot be a collection type..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.EntityTypes_Cannot_Be_Generic">
+            <summary>
+              Looks up a localized string similar to Entity types cannot be generic..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.EntityTypes_Cannot_Be_Nullable">
+            <summary>
+              Looks up a localized string similar to Entity types cannot be nullable..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.EntityTypes_Cannot_Be_Primitives">
+            <summary>
+              Looks up a localized string similar to Entity types cannot be a primitive type or a simple type like string or Guid..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.EntityTypes_Must_Be_Public">
+            <summary>
+              Looks up a localized string similar to Entity types must be public..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.EntityTypes_Must_Have_Default_Constructor">
+            <summary>
+              Looks up a localized string similar to Entity types must have a default constructor..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.FailedToConvertValue">
+            <summary>
+              Looks up a localized string similar to Failed to convert value of type &apos;{0}&apos; to type &apos;{1}&apos;.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.IncorrectParameterType">
+            <summary>
+              Looks up a localized string similar to Incorrect parameter type &apos;{0}&apos; for parameter &apos;{1}&apos;. Expected type is &apos;{2}&apos;..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.Invalid_Entity_Property">
+            <summary>
+              Looks up a localized string similar to Entity &apos;{0}&apos; has a property &apos;{1}&apos; with an unsupported type..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.Invalid_Entity_Type">
+            <summary>
+              Looks up a localized string similar to Type &apos;{0}&apos; is not a valid entity type.  {1}.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.Invalid_Include_Invalid_Entity">
+            <summary>
+              Looks up a localized string similar to The property &apos;{0}&apos; in entity type &apos;{1}&apos; cannot be marked with the IncludeAttribute because &apos;{2}&apos; is not a valid entity type.  {3}.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.Invalid_Method">
+            <summary>
+              Looks up a localized string similar to The type &apos;{0}&apos; does not contain a public method named &apos;{1}&apos;..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.InvalidCUDMethod_ParamMustBeEntity">
+            <summary>
+              Looks up a localized string similar to Parameter &apos;{1}&apos; of domain operation entry &apos;{0}&apos; must be an entity type..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.InvalidDomainMethod_FirstParamMustBeEntity">
+            <summary>
+              Looks up a localized string similar to The first parameter &apos;{1}&apos; of a domain method &apos;{0}&apos; must be an entity type.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.InvalidDomainMethod_MethodCannotBeParameterless">
+            <summary>
+              Looks up a localized string similar to Domain methods must contain at least one parameter.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.InvalidDomainOperationEntry_NonQueryMustReturnVoid">
+            <summary>
+              Looks up a localized string similar to DomainOperationEntry &apos;{0}&apos; does not represent a Query operation so it must not return a value..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.InvalidDomainOperationEntry_ParamMustBeByVal">
+            <summary>
+              Looks up a localized string similar to Parameter &apos;{1}&apos; of domain operation entry &apos;{0}&apos; should be by-value..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.InvalidDomainOperationEntry_ParamMustBeSimple">
+            <summary>
+              Looks up a localized string similar to Parameter &apos;{1}&apos; of domain operation entry &apos;{0}&apos; must be one of the predefined serializable types..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.InvalidDomainOperationEntry_ParamTypeMustBeEntity">
+            <summary>
+              Looks up a localized string similar to The type(s) of parameter(s) used in domain operation entry &apos;{0}&apos; should be used in one of the Query methods.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.InvalidDomainOperationEntry_QueryOperationsMustBeEnumerableOfT">
+            <summary>
+              Looks up a localized string similar to DomainOperationEntry &apos;{0}&apos; represents a Query operation but doesn&apos;t have an return type that implements IEnumerable of T..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.InvalidExternal_NonAssociationMember">
+            <summary>
+              Looks up a localized string similar to Invalid External specification for member &apos;{0}.{1}&apos;. ExternalAttribute can only be specified on members with the AssociationAttribute applied..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.InvalidInclude_NonAssociationMember">
+            <summary>
+              Looks up a localized string similar to Invalid Include specification for member &apos;{0}.{1}&apos;. Non-projection includes can only be specified on members with the AssociationAttribute applied..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.InvalidInsertMethod_IncorrectParameterLength">
+            <summary>
+              Looks up a localized string similar to Domain operation entry &apos;{0}&apos; must take exactly one parameter.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.InvalidMemberProjection_EmptyMemberName">
+            <summary>
+              Looks up a localized string similar to Invalid member projection specification : member name cannot be empty.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.InvalidMemberProjection_EmptyPath">
+            <summary>
+              Looks up a localized string similar to Invalid member projection specification : path cannot be empty.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.InvalidMemberProjection_InvalidProjectedType">
+            <summary>
+              Looks up a localized string similar to Invalid member projection specification : The type of member &apos;{0}.{1}&apos; projected from member &apos;{2}.{3}&apos; is not one of the predefined serializable types.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.InvalidMemberProjection_Path">
+            <summary>
+              Looks up a localized string similar to Invalid member projection specification : Projection path &apos;{0}&apos; is invalid for member &apos;{1}.{2}&apos;.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.InvalidOperationExceptionType">
+            <summary>
+              Looks up a localized string similar to The specified exception type &apos;{0}&apos; is not one of the expected types.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.InvalidResolveMethod_IncorrectParameterLength">
+            <summary>
+              Looks up a localized string similar to Domain operation entry &apos;{0}&apos; must take exactly four parameters.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.InvalidResolveMethod_InvalidParameterTypes">
+            <summary>
+              Looks up a localized string similar to Resolve method named &apos;{0}&apos; does not conform to the required signature. The first three parameters must be of the same entity type. The last parameter must be of Boolean type..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.InvalidResolveMethod_ReturnTypeMustBeBool">
+            <summary>
+              Looks up a localized string similar to Resolve method named &apos;{0}&apos; must have a Boolean return type..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.InvalidResolveMethod_UpdateOrDeleteNotDefined">
+            <summary>
+              Looks up a localized string similar to The type &apos;{0}&apos; used in domain operation entry &apos;{1}&apos; must be associated with at least an Update method or a Delete method..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.InvalidServiceOperation_TypeMustBeEntityOrSimple">
+            <summary>
+              Looks up a localized string similar to Service operation named &apos;{0}&apos; does not conform to the required signature. Both return and parameter types must be an entity type or one of the predefined serializable types..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.InvalidUpdateOrDeleteMethod_IncorrectParameterLength">
+            <summary>
+              Looks up a localized string similar to Domain operation entry &apos;{0}&apos; must take either one or two parameters.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.InvalidUpdateOrDeleteMethod_ParameterTypesMustMatch">
+            <summary>
+              Looks up a localized string similar to The parameters in domain operation entry &apos;{0}&apos; must be of the same type.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.Method_Parameter_Count_Wrong">
+            <summary>
+              Looks up a localized string similar to Method &apos;{0}&apos; requires {1} parameters..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.Query_InvalidOperator">
+            <summary>
+              Looks up a localized string similar to Invalid query operator &apos;{0}&apos;.
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.RequiresRolesAttribute_MustSpecifyRole">
+            <summary>
+              Looks up a localized string similar to One or more roles must be specified..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.ValidationUtilities_AmbiguousMatch">
+            <summary>
+              Looks up a localized string similar to Ambiguous match for method &apos;{0}&apos;..
+            </summary>
+        </member>
+        <member name="P:System.Web.DomainServices.Resource.ValidationUtilities_MethodNotFound">
+            <summary>
+              Looks up a localized string similar to Method &apos;{0}&apos; accepting {1} parameter(s) could not be found..
+            </summary>
+        </member>
+        <member name="T:System.Linq.Dynamic.QueryComposer.PostProcessor">
+            <summary>
+            Any expression tree transformations required after query parsing and composition
+            are performed externally to the actual query parser.
+            </summary>
+        </member>
+        <member name="T:System.Windows.Ria.Linq.Resource">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.AmbiguousConstructorInvocation">
+            <summary>
+              Looks up a localized string similar to Ambiguous invocation of &apos;{0}&apos; constructor.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.AmbiguousIndexerInvocation">
+            <summary>
+              Looks up a localized string similar to Ambiguous invocation of indexer in type &apos;{0}&apos;.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.AmbiguousMethodInvocation">
+            <summary>
+              Looks up a localized string similar to Ambiguous invocation of method &apos;{0}&apos; in type &apos;{1}&apos;.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.ArgsIncompatibleWithLambda">
+            <summary>
+              Looks up a localized string similar to Argument list incompatible with lambda expression.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.BothTypesConvertToOther">
+            <summary>
+              Looks up a localized string similar to Both of the types &apos;{0}&apos; and &apos;{1}&apos; convert to the other.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.CannotConvertValue">
+            <summary>
+              Looks up a localized string similar to A value of type &apos;{0}&apos; cannot be converted to type &apos;{1}&apos;.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.CannotIndexMultiDimArray">
+            <summary>
+              Looks up a localized string similar to Indexing of multi-dimensional arrays is not supported.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.CloseBracketOrCommaExpected">
+            <summary>
+              Looks up a localized string similar to &apos;]&apos; or &apos;,&apos; expected.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.CloseParenOrCommaExpected">
+            <summary>
+              Looks up a localized string similar to &apos;)&apos; or &apos;,&apos; expected.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.CloseParenOrOperatorExpected">
+            <summary>
+              Looks up a localized string similar to &apos;)&apos; or operator expected.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.ColonExpected">
+            <summary>
+              Looks up a localized string similar to &apos;:&apos; expected.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.DigitExpected">
+            <summary>
+              Looks up a localized string similar to Digit expected.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.DotOrOpenParenExpected">
+            <summary>
+              Looks up a localized string similar to &apos;.&apos; or &apos;(&apos; expected.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.DuplicateIdentifier">
+            <summary>
+              Looks up a localized string similar to The identifier &apos;{0}&apos; was defined more than once.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.ExpressionExpected">
+            <summary>
+              Looks up a localized string similar to Expression expected.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.ExpressionTypeMismatch">
+            <summary>
+              Looks up a localized string similar to Expression of type &apos;{0}&apos; expected.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.FailedToConvertValue">
+            <summary>
+              Looks up a localized string similar to Failed to convert value of type &apos;{0}&apos; to type &apos;{1}&apos;.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.FirstExprMustBeBool">
+            <summary>
+              Looks up a localized string similar to The first expression must be of type &apos;Boolean&apos;.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.IdentifierExpected">
+            <summary>
+              Looks up a localized string similar to Identifier expected.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.IifRequiresThreeArgs">
+            <summary>
+              Looks up a localized string similar to The &apos;iif&apos; function requires three arguments.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.IncompatibleOperand">
+            <summary>
+              Looks up a localized string similar to Operator &apos;{0}&apos; incompatible with operand type &apos;{1}&apos;.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.IncompatibleOperands">
+            <summary>
+              Looks up a localized string similar to Operator &apos;{0}&apos; incompatible with operand types &apos;{1}&apos; and &apos;{2}&apos;.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.InvalidCharacter">
+            <summary>
+              Looks up a localized string similar to Syntax error &apos;{0}&apos;.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.InvalidCharacterLiteral">
+            <summary>
+              Looks up a localized string similar to Character literal must contain exactly one character.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.InvalidIndex">
+            <summary>
+              Looks up a localized string similar to Array index must be an integer expression.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.InvalidIntegerLiteral">
+            <summary>
+              Looks up a localized string similar to Invalid integer literal &apos;{0}&apos;.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.InvalidRealLiteral">
+            <summary>
+              Looks up a localized string similar to Invalid real literal &apos;{0}&apos;.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.MethodIsVoid">
+            <summary>
+              Looks up a localized string similar to Method &apos;{0}&apos; in type &apos;{1}&apos; does not return a value.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.MethodsAreInaccessible">
+            <summary>
+              Looks up a localized string similar to Methods on type &apos;{0}&apos; are not accessible.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.MissingAsClause">
+            <summary>
+              Looks up a localized string similar to Expression is missing a try-cast clause.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.NeitherTypeConvertsToOther">
+            <summary>
+              Looks up a localized string similar to Neither of the types &apos;{0}&apos; and &apos;{1}&apos; converts to the other.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.NoApplicableAggregate">
+            <summary>
+              Looks up a localized string similar to No applicable aggregate method &apos;{0}&apos; exists.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.NoApplicableIndexer">
+            <summary>
+              Looks up a localized string similar to No applicable indexer exists in type &apos;{0}&apos;.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.NoApplicableMethod">
+            <summary>
+              Looks up a localized string similar to No applicable method &apos;{0}&apos; exists in type &apos;{1}&apos;.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.NoItInScope">
+            <summary>
+              Looks up a localized string similar to No &apos;it&apos; is in scope.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.NoMatchingConstructor">
+            <summary>
+              Looks up a localized string similar to No matching constructor in type &apos;{0}&apos;.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.OpenBracketExpected">
+            <summary>
+              Looks up a localized string similar to &apos;[&apos; expected.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.OpenParenExpected">
+            <summary>
+              Looks up a localized string similar to &apos;(&apos; expected.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.ParseExceptionFormat">
+            <summary>
+              Looks up a localized string similar to {0} (at index {1}).
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.SyntaxError">
+            <summary>
+              Looks up a localized string similar to Syntax error.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.TokenExpected">
+            <summary>
+              Looks up a localized string similar to {0} expected.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.TypeHasNoNullableForm">
+            <summary>
+              Looks up a localized string similar to Type &apos;{0}&apos; has no nullable form.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.UnknownIdentifier">
+            <summary>
+              Looks up a localized string similar to Unknown identifier &apos;{0}&apos;.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.UnknownPropertyOrField">
+            <summary>
+              Looks up a localized string similar to No property or field &apos;{0}&apos; exists in type &apos;{1}&apos;.
+            </summary>
+        </member>
+        <member name="P:System.Windows.Ria.Linq.Resource.UnterminatedStringLiteral">
+            <summary>
+              Looks up a localized string similar to Unterminated string literal.
+            </summary>
+        </member>
+    </members>
+</doc>

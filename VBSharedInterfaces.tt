@@ -1,0 +1,23 @@
+﻿<#@ template language="C#v3.5" hostspecific="True"#>
+<#@ output extension=".VB" #>
+
+<#// <copyright file="RiaServicesCodeGenerator.tt" company="Colin Blair">
+//  Copyright © Colin Blair. All Rights Reserved.
+// </copyright>
+#>
+<#
+    RiaServicesCodeGenerator codeGenerator = new RiaServicesCodeGenerator();
+    codeGenerator.NamespaceName = "";
+    codeGenerator.EdmxFilePath = "Model.edmx";
+    string[] wireupInterfaceEntityList = { "*" }; 
+    codeGenerator.WireUpInterfaceEntityList = new List<string>(wireupInterfaceEntityList);
+    codeGenerator.OutputType = OutputTypes.SharedInterfaces;
+    StartGeneration(codeGenerator);
+#>
+
+<#@ include file="Templates\RiaServicesMetadataTemplateVB.tt" #>
+<#@ include file="Templates\RiaServicesBOTemplateVB.tt" #>
+<#@ include file="Templates\RiaServicesSharedInterfaceTemplateVB.tt" #>
+<#@ include file="Templates\RiaServicesCodeGenerator.tt" #>
+
+

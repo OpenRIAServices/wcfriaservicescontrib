@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RiaClassManagerCS", "RiaClassManagerCS\RiaClassManagerCS.csproj", "{6B30ED14-FDEB-4F06-8784-12B0D13F50E3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EAF385B0-9F35-47F0-A7B1-193875C7D6E1} = {EAF385B0-9F35-47F0-A7B1-193875C7D6E1}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RiaClassManagerCS.Web", "RiaClassManagerCS.Web\RiaClassManagerCS.Web.csproj", "{EAF385B0-9F35-47F0-A7B1-193875C7D6E1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6B30ED14-FDEB-4F06-8784-12B0D13F50E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B30ED14-FDEB-4F06-8784-12B0D13F50E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B30ED14-FDEB-4F06-8784-12B0D13F50E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B30ED14-FDEB-4F06-8784-12B0D13F50E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAF385B0-9F35-47F0-A7B1-193875C7D6E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAF385B0-9F35-47F0-A7B1-193875C7D6E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAF385B0-9F35-47F0-A7B1-193875C7D6E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAF385B0-9F35-47F0-A7B1-193875C7D6E1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

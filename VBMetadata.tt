@@ -1,0 +1,19 @@
+﻿<#@ template language="C#v3.5" hostspecific="True"#>
+<#@ output extension=".vb" #>
+
+
+<#
+    RiaServicesCodeGenerator codeGenerator = new RiaServicesCodeGenerator();
+    codeGenerator.NamespaceName = "";
+    codeGenerator.ClassName = "ModelMetadata";
+    codeGenerator.EntityContainerName = "ModelEntities";
+    codeGenerator.EdmxFilePath = "Model.edmx";
+    codeGenerator.OutputType = OutputTypes.Metadata;
+    StartGeneration(codeGenerator);
+#>
+
+<#@ include file="Templates\RiaServicesMetadataTemplateVB.tt" #>
+<#@ include file="Templates\RiaServicesBOTemplateVB.tt" #>
+<#@ include file="Templates\RiaServicesSharedInterfaceTemplateVB.tt" #>
+<#@ include file="Templates\RiaServicesCodeGenerator.tt" #>
+

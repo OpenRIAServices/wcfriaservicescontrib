@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="RiaClassManagerCS.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation">
+    <Grid x:Name="LayoutRoot" Background="{StaticResource ApplicationBackgroundColorBrush}">
+
+        <Grid Style="{StaticResource NavigationContainerStyle}">
+
+            <Border Style="{StaticResource NavigationBorderStyle}">
+            
+                <StackPanel Style="{StaticResource NavigationPanelStyle}">
+
+                    <Button Click="NavButton_Click" Tag="/Views/HomePage.xaml" Content="home" 
+                            Style="{StaticResource PageLinkStyle}"/>
+                    <Button Click="NavButton_Click" Tag="/Views/AboutPage.xaml" Content="about" 
+                            Style="{StaticResource PageLinkStyle}"/>
+                
+                </StackPanel>
+            
+            </Border>
+            
+            <Border Style="{StaticResource BrandingBorderStyle}">
+            
+                <StackPanel Style="{StaticResource BrandingPanelStyle}">
+
+                    <TextBlock Text="your." Style="{StaticResource BrandingTextNormalStyle}"/>
+                    <TextBlock Text="application." Style="{StaticResource BrandingTextHighlightStyle}"/>
+                    <TextBlock Text="name" Style="{StaticResource BrandingTextNormalStyle}"/>
+
+                </StackPanel>
+                
+            </Border>
+            
+        </Grid>
+
+        <Border Style="{StaticResource FrameContainerStyle}">
+
+            <Border Style="{StaticResource FrameInnerBorderStyle}">
+
+                <navigation:Frame x:Name="Frame" Source="/Views/HomePage.xaml"
+                                  HorizontalContentAlignment="Stretch"
+                                  VerticalContentAlignment="Stretch"
+                                  Padding="15,10,15,10"
+                                  Background="White"/>
+
+            </Border>
+
+        </Border>
+
+    </Grid>
+</UserControl>

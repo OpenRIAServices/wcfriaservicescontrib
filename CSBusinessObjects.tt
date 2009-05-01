@@ -1,0 +1,19 @@
+﻿<#@ template language="C#v3.5" hostspecific="True"#>
+<#@ output extension=".cs" #>
+
+
+<#
+    RiaServicesCodeGenerator codeGenerator = new RiaServicesCodeGenerator();
+    codeGenerator.NamespaceName = "";
+    codeGenerator.ClassName = "ModelBusinessObjects";
+    codeGenerator.EntityContainerName = "ModelEntities";
+    codeGenerator.EdmxFilePath = "Model.edmx";
+    codeGenerator.OutputType = OutputTypes.BusinessObject;
+    StartGeneration(codeGenerator);
+#>
+
+<#@ include file="Templates\RiaServicesMetadataTemplateCS.tt" #>
+<#@ include file="Templates\RiaServicesBOTemplateCS.tt" #>
+<#@ include file="Templates\RiaServicesSharedInterfaceTemplateCS.tt" #>
+<#@ include file="Templates\RiaServicesCodeGenerator.tt" #>
+
