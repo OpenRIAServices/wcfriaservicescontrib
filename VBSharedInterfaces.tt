@@ -9,7 +9,9 @@
     LoadAssembly(@"C:\Program Files\Microsoft SDKs\RIA Services\v1.0\Libraries\Server\System.Web.DomainServices.dll");
     LoadAssembly(@"C:\Program Files\Microsoft SDKs\RIA Services\v1.0\Libraries\Server\System.Web.DomainServices.Providers.dll");
     RiaServicesCodeGenerator codeGenerator = new RiaServicesCodeGenerator();
-    codeGenerator.NamespaceName = "";
+    codeGenerator.AssemblyPath = @"bin\.dll"
+    codeGenerator.SourceNamespaceName = "";
+    codeGenerator.TargetNamespaceName = "";
     codeGenerator.EdmxFilePath = "Model.edmx";
     string[] wireupInterfaceEntityList = { "*" }; 
     codeGenerator.WireUpInterfaceEntityList = new List<string>(wireupInterfaceEntityList);
