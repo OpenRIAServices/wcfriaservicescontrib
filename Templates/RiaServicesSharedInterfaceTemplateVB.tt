@@ -1,7 +1,4 @@
-﻿<#// <copyright file="RiaServicesMetadataTemplateVB.tt" company="Colin Blair">
-//  Copyright © Colin Blair. All Rights Reserved.
-// </copyright>
-#>
+﻿
 <#@ assembly name="System.Core" #>
 <#@ assembly name="System.Data" #>
 <#@ assembly name="System.Data.Entity" #>
@@ -20,13 +17,17 @@
 <#@ import namespace="System.Data.Mapping" #>
 <#@ import namespace="System.Xml" #>
 <#@ import namespace="System.Xml.Linq" #>
+<#@ import namespace="System.CodeDom.Compiler" #>
+<#@ import namespace="System.CodeDom" #>
 <#+
 class RiaServicesSharedInterfaceTemplate: TextTransformation
 {
     public static string Footer = "End Namespace";
     public EntityType Entity = null;
     public bool WriteHeader = false;
-    public string NamespaceName = null;
+    public string TargetNamespaceName = null;
+    public string SourceNamespaceName = null;
+    public Assembly SourceAssembly = null;
     public bool WireUp = false;
     
     public override string TransformText()
@@ -39,9 +40,9 @@ Option Strict On
 Imports System
 Imports System.Web.Ria.Data
 <#+
-  if (!string.IsNullOrEmpty(this.NamespaceName))
+  if (!string.IsNullOrEmpty(this.TargetNamespaceName))
 #>
-Namespace <#= this.NamespaceName#>
+Namespace <#= this.TargetNamespaceName#>
 <#+
         }
         this.PushIndent("    ");
@@ -68,9 +69,9 @@ Inherits I<#= Entity.BaseType.Name #>
 <#+
     }
         this.PushIndent("    ");
-        foreach (EdmProperty currentProperty in Entity.Properties)
-        {            
-            WriteProperty(currentProperty, Entity.BaseType);            
+        foreach (PropertyInfo currentProperty in GetEntityProperties(SourceAssembly, SourceNamespaceName + "." + Entity.Name))
+        {
+            WriteProperty(currentProperty, Entity.BaseType);
         }
         this.PopIndent();
 #>
@@ -83,7 +84,8 @@ Public Partial Class <#= Entity.Name #>
     Implements I<#= Entity.Name #>
     <#+
         this.PushIndent("    ");
-        foreach (EdmProperty currentProperty in Entity.Properties)
+
+        foreach (PropertyInfo currentProperty in GetEntityProperties(SourceAssembly, SourceNamespaceName + "." + Entity.Name))
         {            
             WriteInterfaceProperty(currentProperty, Entity.Name);            
         }
@@ -97,72 +99,27 @@ End Class
 #End Region
 <#+
 }
-    private void WriteProperty(EdmProperty currentProperty, EdmType baseType)
+    private void WriteProperty(PropertyInfo currentProperty, EdmType baseType)
     {
         if (IsPropertyImplementedByBaseClass(baseType, currentProperty.Name))
             return;
-        string currentPropertyType = currentProperty.TypeUsage.EdmType.ToString().Replace("Edm.","");
-
-					if (currentPropertyType == "Int32")
-						currentPropertyType = "Integer";
-                    if (currentPropertyType == "Int16")
-                        currentPropertyType = "Short";
-                    if (currentPropertyType == "Int64")
-                        currentPropertyType = "Long";
-                    if (currentPropertyType == "UInt16")
-                        currentPropertyType = "UShort";
-                    if (currentPropertyType == "UInt32")
-                        currentPropertyType = "UInteger";
-                    if (currentPropertyType == "UInt64")
-                        currentPropertyType = "ULong";
-                    if ("DateTime|Date|Byte|SByte|Short|Integer|Long|UShort|UInteger|ULong|Single|Double|Boolean|Char|Decimal".Contains(currentPropertyType) && currentProperty.Nullable)
-                        currentPropertyType = currentPropertyType + "?";
-                    if (currentPropertyType == "Binary")
-                    {
-                        return; //Binary types are not currently being handled
-                    }
+        CodeTypeReferenceExpression type = new CodeTypeReferenceExpression(currentProperty.PropertyType);
+        CodeDomProvider provider = Microsoft.VisualBasic.VBCodeProvider.CreateProvider("VB");
+        StringWriter writer = new StringWriter();
+        provider.GenerateCodeFromExpression(type, writer, new CodeGeneratorOptions());
                     
 #>
-Property <#= currentProperty.Name #> As <#= currentPropertyType #>
+Property <#= currentProperty.Name #> As <#= writer.ToString() #>
 <#+
     }    
     
-        private void WriteInterfaceProperty(EdmProperty currentProperty, string entityName)
+        private void WriteInterfaceProperty(PropertyInfo currentProperty, string entityName)
     {
-        string currentPropertyType = currentProperty.TypeUsage.EdmType.ToString().Replace("Edm.","");
-
-					if (currentPropertyType == "Int32")
-						currentPropertyType = "int";
-                    if (currentPropertyType == "Int16")
-                        currentPropertyType = "short";
-                    if (currentPropertyType == "Int64")
-                        currentPropertyType = "long";
-                    if (currentPropertyType == "UInt16")
-                        currentPropertyType = "ushort";
-                    if (currentPropertyType == "UInt32")
-                        currentPropertyType = "uint";
-                    if (currentPropertyType == "UInt64")
-                        currentPropertyType = "ulong";
-                    if (currentPropertyType == "Byte")
-                        currentPropertyType = "byte";
-                    if (currentPropertyType == "SByte")
-                        currentPropertyType = "sbyte";
-                    if (currentPropertyType == "Single")
-                        currentPropertyType = "float";
-                    if (currentPropertyType == "Double")
-                        currentPropertyType = "double";
-                    if (currentPropertyType == "Boolean")
-                        currentPropertyType = "bool";        
-                    if (currentPropertyType == "Char")
-                        currentPropertyType = "char";        
-                    if (currentPropertyType == "Decimal")
-                        currentPropertyType = "decimal";
-                    if ("DateTime|Date|byte|sbyte|short|int|long|ushort|uint|ulong|float|double|bool|char|decimal".Contains(currentPropertyType) && currentProperty.Nullable)
-                        currentPropertyType = currentPropertyType + "?";
-                    if (currentPropertyType == "Binary")
-                    {
-                        return; //Binary types are not currently being handled
-                    }
+    CodeTypeReferenceExpression type = new CodeTypeReferenceExpression(currentProperty.PropertyType);
+        CodeDomProvider provider = Microsoft.VisualBasic.VBCodeProvider.CreateProvider("VB");
+        StringWriter writer = new StringWriter();
+        provider.GenerateCodeFromExpression(type, writer, new CodeGeneratorOptions());
+        String currentPropertyType = writer.ToString();
 #>
 
 Private Property Interface<#= currentProperty.Name #> As <#= currentPropertyType #> Implements I<#=entityName#>.<#= currentProperty.Name #>

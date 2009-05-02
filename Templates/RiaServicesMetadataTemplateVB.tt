@@ -1,7 +1,4 @@
-﻿<#// <copyright file="RiaServicesMetadataTemplateVB.tt" company="Colin Blair">
-//  Copyright © Colin Blair. All Rights Reserved.
-// </copyright>
-#>
+﻿
 <#@ assembly name="System.Core" #>
 <#@ assembly name="System.Data" #>
 <#@ assembly name="System.Data.Entity" #>
@@ -20,13 +17,17 @@
 <#@ import namespace="System.Data.Mapping" #>
 <#@ import namespace="System.Xml" #>
 <#@ import namespace="System.Xml.Linq" #>
+<#@ import namespace="System.CodeDom.Compiler" #>
+<#@ import namespace="System.CodeDom" #>
 <#+
 class RiaServicesMetadataTemplate: TextTransformation
 {
     public static string Footer = "End Namespace";
     public EntityType Entity = null;
     public bool WriteHeader = false;
-    public string NamespaceName = null;
+    public string TargetNamespaceName =null;
+    public string SourceNamespaceName = null;
+    public Assembly SourceAssembly { get; set; }
     
     public override string TransformText()
     {
@@ -46,9 +47,9 @@ Imports System.Web.DomainServices
 Imports System.Data.Objects.DataClasses
 Imports System.Data
 <#+
-  if (!string.IsNullOrEmpty(this.NamespaceName))
+  if (!string.IsNullOrEmpty(this.TargetNamespaceName))
 #>
-Namespace <#= this.NamespaceName#>
+Namespace <#= this.TargetNamespaceName#>
 <#+
         }
         this.PushIndent("    ");
@@ -69,7 +70,7 @@ Partial Public NotInheritable Class <#= Entity.Name #>Metadata
     End Sub
 <#+
         this.PushIndent("    ");
-        foreach (EdmProperty currentProperty in Entity.Properties)
+        foreach (PropertyInfo currentProperty in GetEntityProperties(SourceAssembly, SourceNamespaceName + "." + Entity.Name))
         {            
             WriteProperty(currentProperty);            
         }
@@ -79,18 +80,15 @@ End Class
 #End Region
 <#+
 }
-    private void WriteProperty(EdmProperty currentProperty)
+    private void WriteProperty(PropertyInfo currentProperty)
     {
-        string currentPropertyType = currentProperty.TypeUsage.EdmType.ToString().Replace("Edm.","");
-					if (currentPropertyType == "Int32")
-						currentPropertyType = "Integer";
-                    if (currentPropertyType == "Binary")
-                    {
-                        return; //Binary types are not currently being handled
-                    }
+         CodeTypeReferenceExpression type = new CodeTypeReferenceExpression(currentProperty.PropertyType);
+        CodeDomProvider provider = Microsoft.VisualBasic.VBCodeProvider.CreateProvider("VB");
+        StringWriter writer = new StringWriter();
+        provider.GenerateCodeFromExpression(type, writer, new CodeGeneratorOptions());
 #>
 
-Public Shared <#= currentProperty.Name #> As <#= currentPropertyType #> 
+Public Shared <#= currentProperty.Name #> As <#= writer.ToString() #> 
 
 <#+
     }    

@@ -1,22 +1,7 @@
-﻿<#// <copyright file="RiaServicesCodeGenerator.tt" company="Colin Blair">
-//  Copyright © Colin Blair. All Rights Reserved.
-// </copyright>#>
-<#
-
-/***************************************************************************/
-//GetConceptualMappingAndStorageReaders found at http://blogs.msdn.com/adonet/archive/2008/06/20/how-to-use-a-t4-template-for-view-generation.aspx
-//GetConceptualMappingAndStorageReaders Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
-//ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY
-//IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR
-//PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
-//
-/***************************************************************************/
-#>
+﻿
 <#
 	//
-	// TITLE: T4 template to generate Alexandrea files based on an EDMX file
+	// TITLE: T4 template to generate RIA Services files based on an EDMX file
 	//
 	// DESCRIPTION:
 	// This template uses external generators supplied by a calling template to generate files.
@@ -37,8 +22,11 @@
 <#@ import namespace="System.Data.Entity.Design" #>
 <#@ import namespace="System.Data.Metadata.Edm" #>
 <#@ import namespace="System.Data.Mapping" #>
+<#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Xml" #>
 <#@ import namespace="System.Xml.Linq" #>
+<#@ import namespace="System.Reflection" #>
+<#@ import namespace="System.Data.Objects" #>
 <#@ Import Namespace="Microsoft.VisualStudio.TextTemplating" #>
 
 	<#+
@@ -47,16 +35,39 @@
     public void StartGeneration(RiaServicesCodeGenerator codeGenerator)
     {
         codeGenerator.EdmxFilePath = Path.Combine(Path.GetDirectoryName(this.Host.TemplateFile), codeGenerator.EdmxFilePath);
+        codeGenerator.AssemblyPath = Path.Combine(Path.GetDirectoryName(this.Host.TemplateFile), codeGenerator.AssemblyPath);
         this.Write(codeGenerator.TransformText());
 
-    }   
+    }
+
+    private void LoadAssembly(string assemblyPath)
+    {
+        String tempFilePath = Path.GetTempFileName();
+        File.Copy(assemblyPath, tempFilePath, true);
+        Assembly.LoadFrom(tempFilePath);
+    }
+
+    private static List<PropertyInfo> GetEntityProperties(Assembly sourceAssembly, String entityName)
+    {
+        Type entityType;
+        entityType = FindType(sourceAssembly, entityName);
+        return (from p in entityType.GetProperties() where p.Name != "EntityKey" && p.Name != "EntityState" select p).ToList();
+    }
+    private static Type FindType(Assembly sourceAssembly, string typeFullName)
+    {
+        return (from t in sourceAssembly.GetExportedTypes()
+                where t.FullName == typeFullName
+                select t).First();
+    }
         
     public class RiaServicesCodeGenerator: TextTransformation
     {
-        public string NamespaceName = null;
+        public string TargetNamespaceName = null;
+        public string SourceNamespaceName = null;
         public string ClassName = null;
         public string ObjectType = null;
         public string EdmxFilePath = null;
+        public string AssemblyPath = null;
         public string EntityContainerName = null;
         public OutputTypes OutputType = OutputTypes.BusinessObject;
         public List<String> WireUpInterfaceEntityList { get; set; }
@@ -64,13 +75,16 @@
         {
             
 		    List<EntityType> entities;
-		    if (File.Exists(EdmxFilePath))
+            Assembly sourceAssembly;
+		    if (File.Exists(EdmxFilePath) && File.Exists(AssemblyPath))
 		    {
 			    entities = GetEntities(EdmxFilePath);
+                sourceAssembly = GetAssembly(AssemblyPath);
                 if (OutputType == OutputTypes.BusinessObject)
                 {
                     RiaServicesBOTemplate boTemplate = new RiaServicesBOTemplate();
-                    boTemplate.NamespaceName = NamespaceName;
+                    boTemplate.SourceNamespaceName = SourceNamespaceName;
+                    boTemplate.TargetNamespaceName = TargetNamespaceName;
                     boTemplate.ClassName = ClassName;
                     boTemplate.Entities = entities;
                     boTemplate.EntityContainerName = EntityContainerName;
@@ -83,12 +97,14 @@
                     {
                         RiaServicesMetadataTemplate mdTemplate = new RiaServicesMetadataTemplate();
                         mdTemplate.Entity = currentEntity;
+                        mdTemplate.SourceAssembly = sourceAssembly;
                         mdTemplate.WriteHeader = writeHeader;
                         writeHeader = false;
-                        mdTemplate.NamespaceName = NamespaceName;
+                        mdTemplate.TargetNamespaceName = TargetNamespaceName;
+                        mdTemplate.SourceNamespaceName = SourceNamespaceName;
                         this.WriteLine(mdTemplate.TransformText());
                     }
-                    if (!string.IsNullOrEmpty(this.NamespaceName))
+                    if (!string.IsNullOrEmpty(this.TargetNamespaceName))
                         this.WriteLine(RiaServicesMetadataTemplate.Footer);
                 }
                 else if (OutputType == OutputTypes.SharedInterfaces)
@@ -99,14 +115,16 @@
                         
                         RiaServicesSharedInterfaceTemplate siTemplate = new RiaServicesSharedInterfaceTemplate();
                         siTemplate.Entity = currentEntity;
+                        siTemplate.SourceAssembly = sourceAssembly;
                         if (WireUpInterfaceEntityList.Contains("*") || WireUpInterfaceEntityList.Contains(currentEntity.Name))
                             siTemplate.WireUp = true;
                         siTemplate.WriteHeader = writeHeader;
                         writeHeader = false;
-                        siTemplate.NamespaceName = NamespaceName;
+                        siTemplate.SourceNamespaceName = SourceNamespaceName;
+                        siTemplate.TargetNamespaceName = TargetNamespaceName;
                         this.WriteLine(siTemplate.TransformText());
                     }
-                    if (!string.IsNullOrEmpty(this.NamespaceName))
+                    if (!string.IsNullOrEmpty(this.TargetNamespaceName))
                         this.WriteLine(RiaServicesSharedInterfaceTemplate.Footer);
                 }
                 
@@ -153,6 +171,13 @@
 
 		    return returnCollection;
 	    }
+        private Assembly GetAssembly(string assemblyPath)
+        {
+            String tempFilePath = Path.GetTempFileName();
+                File.Copy(assemblyPath, tempFilePath, true);            
+                return Assembly.LoadFrom(tempFilePath);   
+            
+        }
     	
 	    private void GetConceptualMappingAndStorageReaders(string edmxFile, out XmlReader csdlReader, out XmlReader mslReader, out XmlReader ssdlReader)
         {

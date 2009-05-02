@@ -1,7 +1,4 @@
-﻿<#// <copyright file="RiaServicesBOTemplateVB.tt" company="Colin Blair">
-//  Copyright © Colin Blair. All Rights Reserved.
-// </copyright>
-#>
+﻿
 <#@ assembly name="System.Core" #>
 <#@ assembly name="System.Data" #>
 <#@ assembly name="System.Data.Entity" #>
@@ -24,7 +21,8 @@
 class RiaServicesBOTemplate: TextTransformation
 {
     public string ClassName = null;
-    public string NamespaceName = null;
+    public string SourceNamespaceName = null;
+    public string TargetNamespaceName = null;
     public string EntityContainerName = null;
     public List<EntityType> Entities = null;
     public override string TransformText()
@@ -43,16 +41,16 @@ Imports System.Web.DomainServices
 Imports System.Data
 Imports System.Web.DomainServices.LinqToEntities
 <#+
-  if (!string.IsNullOrEmpty(this.NamespaceName))
+  if (!string.IsNullOrEmpty(this.TargetNamespaceName))
 #>
-Namespace <#= this.NamespaceName#>
+Namespace <#= this.TargetNamespaceName#>
 
     <EnableClientAccess()> _
     Public Class <#= ClassName#> 
         Inherits LinqToEntitiesDomainService(Of <#= EntityContainerName#>)
 
 <#+
-        if (!string.IsNullOrEmpty(this.NamespaceName))
+        if (!string.IsNullOrEmpty(this.TargetNamespaceName))
             this.PushIndent("    ");
         this.PushIndent("    ");
         foreach (EntityType currentEntity in Entities)
@@ -68,7 +66,7 @@ Namespace <#= this.NamespaceName#>
         }
         this.PopIndent();
         this.WriteLine("End Class");
-        if (!string.IsNullOrEmpty(this.NamespaceName))
+        if (!string.IsNullOrEmpty(this.TargetNamespaceName))
         {
             this.PopIndent();
             this.WriteLine("End Namespace");

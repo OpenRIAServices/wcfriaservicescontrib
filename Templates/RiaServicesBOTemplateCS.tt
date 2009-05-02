@@ -1,7 +1,4 @@
-﻿<#// <copyright file="RiaServicesBOTemplateCS.tt" company="Colin Blair">
-//  Copyright © Colin Blair. All Rights Reserved.
-// </copyright>
-#>
+﻿
 
 <#@ assembly name="System.Core" #>
 <#@ assembly name="System.Data" #>
@@ -25,7 +22,8 @@
 class RiaServicesBOTemplate: TextTransformation
 {
     public string ClassName = null;
-    public string NamespaceName = null;
+    public string TargetNamespaceName = null;
+    public string SourceNamespaceName = null;
     public string EntityContainerName = null;
     public List<EntityType> Entities = null;
     public override string TransformText()
@@ -41,9 +39,9 @@ using System.Web.Ria.Data;
 using System.Web.DomainServices;
 using System.Data;
 using System.Web.DomainServices.LinqToEntities;
-<#+if (!string.IsNullOrEmpty(this.NamespaceName))
+<#+if (!string.IsNullOrEmpty(this.TargetNamespaceName))
 {#>
-namespace <#= this.NamespaceName#>
+namespace <#= this.TargetNamespaceName#>
 {
 <#+
   }
@@ -52,7 +50,7 @@ namespace <#= this.NamespaceName#>
     public class <#= ClassName#> : LinqToEntitiesDomainService<<#= EntityContainerName#>>
     {
 <#+
-        if (!string.IsNullOrEmpty(this.NamespaceName))
+        if (!string.IsNullOrEmpty(this.TargetNamespaceName))
             this.PushIndent("    ");
         this.PushIndent("    ");
         foreach (EntityType currentEntity in Entities)
@@ -66,7 +64,7 @@ namespace <#= this.NamespaceName#>
                 WriteEntity(currentEntity.Name, CreateEntitySetName(currentEntity.Name), CreateEntitySetName(currentEntity.Name), false);
             }
         }
-        if (!string.IsNullOrEmpty(this.NamespaceName))
+        if (!string.IsNullOrEmpty(this.TargetNamespaceName))
         {
             this.PopIndent();
             this.WriteLine("}");
