@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Windows.Ria;
+using System.ServiceModel.DomainServices.Client;
 
 namespace RiaServicesContrib.Extensions
 {

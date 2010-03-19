@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("RiaServicesContrib")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("State of Illinois")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("RiaServicesContrib")]
-[assembly: AssemblyCopyright("Copyright © State of Illinois 2009")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
