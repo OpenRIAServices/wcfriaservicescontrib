@@ -29,9 +29,12 @@ namespace RiaServicesContrib.Extensions
             return returnDictionary;
         }
 
-                public static void ApplyState(this Entity entity, IDictionary<string, object> originalState, IDictionary<string, object> modifiedState)
+        public static void ApplyState(this Entity entity, IDictionary<string, object> originalState, IDictionary<string, object> modifiedState)
         {
-        
+            
+            StreamingContext dummy = new StreamingContext();
+            //Call OnDeserializing to temporarily disable validation
+            entity.OnDeserializing(dummy);
             if (entity.EntityState != EntityState.New && originalState == null)
                 throw new InvalidOperationException("Entity must be in New state if no originalState was supplied.");
             PropertyInfo[] dataMembers = GetDataMembers(entity);
@@ -44,6 +47,8 @@ namespace RiaServicesContrib.Extensions
             {
                 ApplyState(entity, modifiedState, dataMembers);
             }
+            //Call OnDeserializaed to enable validation
+            entity.OnDeserialized(dummy);
 
         }
 
@@ -59,7 +64,7 @@ namespace RiaServicesContrib.Extensions
             {
                 identityCache.Add(currentEntity.GetIdentity(), currentEntity);
             }
-            
+
             foreach (EntityStateSet currentStateSet in stateSet)
             {
                 T existingEntity;
@@ -93,15 +98,15 @@ namespace RiaServicesContrib.Extensions
         public static IEnumerable<T> ToEntities<T>(this IList<EntityStateSet> stateSet) where T : Entity, new()
         {
             List<T> returnList = new List<T>();
-            
+
             foreach (EntityStateSet currentStateSet in stateSet)
-            {   
-                    T newEntity = new T();
-                    if (currentStateSet.ModifiedState == null)
-                        newEntity.ApplyState(currentStateSet.OriginalState, null);
-                    else
-                        newEntity.ApplyState(currentStateSet.ModifiedState, null);
-                    returnList.Add(newEntity);
+            {
+                T newEntity = new T();
+                if (currentStateSet.ModifiedState == null)
+                    newEntity.ApplyState(currentStateSet.OriginalState, null);
+                else
+                    newEntity.ApplyState(currentStateSet.ModifiedState, null);
+                returnList.Add(newEntity);
             }
             return returnList;
         }
@@ -113,7 +118,7 @@ namespace RiaServicesContrib.Extensions
             foreach (Entity currentEntity in collection)
             {
                 EntityStateSet newStateSet = new EntityStateSet();
-                
+
                 if (currentEntity.HasChanges)
                 {
                     newStateSet.OriginalKey = currentEntity.GetOriginal().GetIdentity();
@@ -123,7 +128,7 @@ namespace RiaServicesContrib.Extensions
                 }
                 else
                     newStateSet.OriginalKey = currentEntity.GetIdentity();
-                
+
                 if (currentEntity.EntityState == EntityState.New)
                 {
                     newStateSet.ModifiedState = currentEntity.ExtractState(ExtractType.ModifiedState);
@@ -134,7 +139,7 @@ namespace RiaServicesContrib.Extensions
                     if (currentEntity.HasChanges)
                         newStateSet.ModifiedState = currentEntity.ExtractState(ExtractType.ModifiedState);
                 }
-                
+
                 newStateSet.IsDelete = currentEntity.EntityState == EntityState.Deleted;
                 stateList.Add(newStateSet);
             }
