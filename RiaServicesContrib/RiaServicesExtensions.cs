@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.ServiceModel.DomainServices.Client;
+using System.Collections.ObjectModel;
 
 namespace RiaServicesContrib.Extensions
 {
@@ -52,19 +53,18 @@ namespace RiaServicesContrib.Extensions
 
         }
 
-        public static void Import<T>(this EntitySet<T> collection, IList<EntityStateSet> stateSet) where T : Entity, new()
+        public static IEnumerable<T> Import<T>(this EntitySet<T> collection, IList<EntityStateSet> stateSet) where T : Entity, new()
         {
-            collection.Import(stateSet, LoadBehavior.RefreshCurrent);
+            return collection.Import(stateSet, LoadBehavior.RefreshCurrent);
         }
-
-        public static void Import<T>(this EntitySet<T> collection, IList<EntityStateSet> stateSet, LoadBehavior loadBehavior) where T : Entity, new()
+        public static IEnumerable<T> Import<T>(this EntitySet<T> collection, IList<EntityStateSet> stateSet, LoadBehavior loadBehavior) where T : Entity, new()
         {
+            List<T> loadedEntities = new List<T>();
             Dictionary<object, T> identityCache = new Dictionary<object, T>();
             foreach (T currentEntity in collection)
             {
                 identityCache.Add(currentEntity.GetIdentity(), currentEntity);
             }
-
             foreach (EntityStateSet currentStateSet in stateSet)
             {
                 T existingEntity;
@@ -84,16 +84,23 @@ namespace RiaServicesContrib.Extensions
                         collection.Attach(newEntity);
                         collection.Remove(newEntity);
                     }
+                    else
+                        loadedEntities.Add(newEntity);
                 }
                 else if (loadBehavior == LoadBehavior.RefreshCurrent)
                 {
                     if (currentStateSet.IsDelete)
                         collection.Remove(existingEntity);
                     else
+                    {
                         existingEntity.ApplyState(currentStateSet.OriginalState, currentStateSet.ModifiedState);
+                        loadedEntities.Add(existingEntity);
+                    }
                 }
             }
+            return new ReadOnlyCollection<T>(loadedEntities);
         }
+
 
         public static IEnumerable<T> ToEntities<T>(this IList<EntityStateSet> stateSet) where T : Entity, new()
         {
@@ -160,7 +167,7 @@ namespace RiaServicesContrib.Extensions
 
         private static PropertyInfo[] GetDataMembers(Entity entity)
         {
-            BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+            BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.Instance;
             var qry = from p in entity.GetType().GetProperties(bindingAttr)
                       where p.GetCustomAttributes(typeof(DataMemberAttribute), true).Length > 0
                       && p.GetSetMethod() != null

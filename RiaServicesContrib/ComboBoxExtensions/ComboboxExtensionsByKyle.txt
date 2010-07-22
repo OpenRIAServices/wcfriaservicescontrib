@@ -1,0 +1,2 @@
+﻿The ComboboxExtensions were written by Kyle McClellan and were documented at http://blogs.msdn.com/b/kylemc/archive/2010/06/18/combobox-sample-for-ria-services.aspx
+Copied into RIA Services Contrib by license (MS-PL) and by permission.

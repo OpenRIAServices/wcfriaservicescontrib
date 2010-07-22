@@ -82,8 +82,12 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ComboBoxExtensions\ComboBox.cs" />
+    <Compile Include="ComboBoxExtensions\ComboBoxDataSource.cs" />
     <Compile Include="EntityStateSet.cs" />
     <Compile Include="ExtractType.cs" />
+    <Compile Include="ComboBoxExtensions\Parameter.cs" />
+    <Compile Include="ComboBoxExtensions\ParameterCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RiaServicesExtensions.cs" />
   </ItemGroup>
@@ -111,6 +115,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ComboBoxExtensions\ComboboxExtensionsByKyle.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
