@@ -55,7 +55,7 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Base.cs" />
+    <Compile Include="EntityGraph.cs" />
     <Compile Include="Clone.cs" />
     <Compile Include="EntityChangeSet.cs" />
     <Compile Include="EntityGraphChangeSet.cs" />

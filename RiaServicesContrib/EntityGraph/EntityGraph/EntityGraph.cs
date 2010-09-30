@@ -45,9 +45,8 @@ namespace RIA.EntityGraph
         }
 
         /// <summary>
-        /// CCC Extension method that implementes a generic traversal over an entity graph (defined by 
-        /// associations marked with an entity graph attibute of type 'GraphType' and with name 'entityGraphName') and applies 
-        /// 'action' to each visited node.
+        /// Method that implementes a generic traversal over an entity graph (defined by 
+        /// associations marked with an entity graph attibute and applies 'action' to each visited node.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="GraphType"></typeparam>
