@@ -48,10 +48,6 @@ namespace RIA.EntityGraph
         /// Method that implementes a generic traversal over an entity graph (defined by 
         /// associations marked with an entity graph attibute and applies 'action' to each visited node.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="GraphType"></typeparam>
-        /// <param name="entity"></param>
-        /// <param name="entityGraphName">Only entity graphs with given name are considered</param>
         /// <param name="action"></param>
         /// <returns></returns>
         public TEntity GraphOperation(Func<Entity, Entity> action)
@@ -85,7 +81,6 @@ namespace RIA.EntityGraph
         /// which represents the actual node, a set, SingleEdges, which correspond to EntityRefs, and a
         /// a set, ListEdges, which correspond to EntityCollections. 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="entity"></param>
         /// <param name="graph"></param>
         private void GetEntityGraph(Entity entity, EntityRelationGraph<Entity> graph)
@@ -125,7 +120,6 @@ namespace RIA.EntityGraph
         /// <summary>
         /// (Re-)builds the assocacitions between the nodes of the graph.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="nodes"></param>
         /// <param name="graph"></param>
         private static void BuildEntityGraph(Dictionary<Entity, Entity> nodes, EntityRelationGraph<Entity> graph)

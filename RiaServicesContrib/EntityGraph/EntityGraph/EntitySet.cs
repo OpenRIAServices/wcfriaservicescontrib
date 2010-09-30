@@ -6,12 +6,10 @@ namespace RIA.EntityGraph
     {
         #region DetachEntityGraph
         /// <summary>
-        /// CCC Extension method that detaches a graph of associated entities from their respective entity sets.
+        /// Method that detaches a graph of associated entities from their respective entity sets.
         /// The graph of entities is defined by associations which are marked with an entity graph attribute of type 'GraphType'.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="entitySet"></param>
-        /// <param name="entity"></param>
         public void DetachEntityGraph(EntitySet<TEntity> entitySet)
         {
             GraphOperation(e => DetachAction(e, entitySet.EntityContainer));
@@ -25,13 +23,10 @@ namespace RIA.EntityGraph
         #endregion
         #region RemoveEntityGraph
         /// <summary>
-        /// CCC Extension method that deletes a graph of associated entities from their respective entity sets.
+        /// Method that deletes a graph of associated entities from their respective entity sets.
         /// The graph of entities is defined by the 'EntityGraphAttribute' attribute.
         /// </summary>
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="entitySet"></param>
-        /// <param name="entity"></param>
         public void RemoveEntityGraph(EntitySet<TEntity> entitySet)
         {
             GraphOperation(e => RemoveAction(e, entitySet.EntityContainer));

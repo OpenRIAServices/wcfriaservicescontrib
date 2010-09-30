@@ -10,11 +10,9 @@ namespace RIA.EntityGraph
     public partial class EntityGraph<TEntity> where TEntity : Entity
     {
         /// <summary>
-        /// CCC extension method that clones an entity and, recursively, all its associations that are marked with 
+        /// Method that clones an entity and, recursively, all its associations that are marked with 
         /// the 'EntityGraphAttribute' attribute
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="entity"></param>
         /// <returns></returns>
         public TEntity Clone() 
         {
