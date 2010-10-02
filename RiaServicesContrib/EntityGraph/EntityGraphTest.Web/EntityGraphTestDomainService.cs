@@ -19,11 +19,11 @@ namespace EntityGraphTest.Web
         [Association("BSet", "Id", "Id")]
         public List<B> BSet { get; set; }
 
-        [EntityGraph]
+        [EntityGraph("MyGraph")]
         [Include]
         [Association("AB", "Id", "Id")]
         public B B { get; set; }
-        [EntityGraph]
+        [EntityGraph("MyGraph")]
         [Include]
         [Association("AD", "Id", "Id", IsForeignKey = true)]
         public D D { get; set; }
@@ -36,11 +36,11 @@ namespace EntityGraphTest.Web
         [DataMember]
         public string name { get; set; }
 
-        [EntityGraph]
+        [EntityGraph("MyGraph")]
         [Include]
         [Association("AB", "Id", "Id", IsForeignKey = true)]
         public A A { get; set; }
-        [EntityGraph]
+        [EntityGraph("MyGraph")]
         [Include]
         [Association("BC", "Id", "Id")]
         public C C { get; set; }
@@ -53,11 +53,11 @@ namespace EntityGraphTest.Web
         [DataMember]
         public string name { get; set; }
 
-        [EntityGraph]
+        [EntityGraph("MyGraph")]
         [Include]
         [Association("BC", "Id", "Id", IsForeignKey = true)]
         public B B { get; set; }
-        [EntityGraph]
+        [EntityGraph("MyGraph")]
         [Include]
         [Association("CD", "Id", "Id")]
         public D D { get; set; }
@@ -70,11 +70,11 @@ namespace EntityGraphTest.Web
         [DataMember]
         public string name { get; set; }
 
-        [EntityGraph]
+        [EntityGraph("MyGraph")]
         [Include]
         [Association("CD", "Id", "Id", IsForeignKey = true)]
         public C C { get; set; }
-        [EntityGraph]
+        [EntityGraph("MyGraph")]
         [Include]
         [Association("AD", "Id", "Id")]
         public A A { get; set; }
