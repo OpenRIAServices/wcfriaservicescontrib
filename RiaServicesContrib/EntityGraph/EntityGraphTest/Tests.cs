@@ -15,8 +15,7 @@ namespace EntityGraphTest
         private C c;
         private D d;
         [TestInitialize]
-        public void TestSetup()
-        {
+        public void TestSetup() {
             a = new A { name = "A" };
             b = new B { name = "B" };
             c = new C { name = "C" };
@@ -29,14 +28,12 @@ namespace EntityGraphTest
 
         }
         [TestMethod]
-        public void CreateEntityGraphTest()
-        {
+        public void CreateEntityGraphTest() {
             EntityGraph<A> gr = a.EntityGraph();
             Assert.AreEqual(4, gr.Count(), "Graph contains unexpected number of elements");
         }
         [TestMethod]
-        public void INotifyPropertyChangedTest()
-        {
+        public void INotifyPropertyChangedTest() {
             bool propertyChangedHandlerVisited = false;
 
             EntityGraph<A> gr = a.EntityGraph();
@@ -49,8 +46,7 @@ namespace EntityGraphTest
         }
 
         [TestMethod]
-        public void ICollectionChangedTest()
-        {
+        public void ICollectionChangedTest() {
             bool collectionChangedHandlerVisited = false;
             EntityGraph<A> gr = a.EntityGraph();
             gr.CollectionChanged += (sender, args) =>
@@ -61,28 +57,27 @@ namespace EntityGraphTest
             Assert.IsTrue(collectionChangedHandlerVisited, "CollectionChanged handler not called");
         }
         [TestMethod]
-        public void CloneTest()
-        {
+        public void CloneTest() {
             a.BSet.Add(new B { name = "B1" });
             A cloneOfA = a.Clone();
             Assert.AreEqual(a.EntityGraph().Count(), cloneOfA.EntityGraph().Count(), "Clone of a does not have same number of elements");
             var zip = a.EntityGraph().Zip(cloneOfA.EntityGraph(), (ea, eb) => new { ea, eb });
-            foreach (var el in zip)
+            foreach(var el in zip)
             {
                 Assert.IsTrue(el.ea.GetType() == el.eb.GetType(), "Clone is not equal");
-                if (el.ea is A)
+                if(el.ea is A)
                 {
                     Assert.IsTrue(((A)el.ea).name == ((A)el.eb).name);
                 }
-                if (el.ea is B)
+                if(el.ea is B)
                 {
                     Assert.IsTrue(((B)el.ea).name == ((B)el.eb).name);
                 }
-                if (el.ea is C)
+                if(el.ea is C)
                 {
                     Assert.IsTrue(((C)el.ea).name == ((C)el.eb).name);
                 }
-                if (el.ea is D)
+                if(el.ea is D)
                 {
                     Assert.IsTrue(((D)el.ea).name == ((D)el.eb).name);
                 }
@@ -90,29 +85,28 @@ namespace EntityGraphTest
         }
 
         [TestMethod]
-        public void CloneNamedGraphTest()
-        {
+        public void CloneNamedGraphTest() {
             a.BSet.Add(new B { name = "B1" });
             A cloneOfA = a.Clone("MyGraph");
             Assert.IsTrue(a.EntityGraph().Count() == cloneOfA.EntityGraph().Count() + 1, "Clone of a does the correct number of elements");
             Assert.IsTrue(cloneOfA.BSet.Count() == 0);
             var zip = a.EntityGraph().Zip(cloneOfA.EntityGraph(), (ea, eb) => new { ea, eb });
-            foreach (var el in zip)
+            foreach(var el in zip)
             {
                 Assert.AreEqual(el.ea.GetType(), el.eb.GetType(), "Clone is not equal");
-                if (el.ea is A)
+                if(el.ea is A)
                 {
                     Assert.IsTrue(((A)el.ea).name == ((A)el.eb).name);
                 }
-                if (el.ea is B)
+                if(el.ea is B)
                 {
                     Assert.IsTrue(((B)el.ea).name == ((B)el.eb).name);
                 }
-                if (el.ea is C)
+                if(el.ea is C)
                 {
                     Assert.IsTrue(((C)el.ea).name == ((C)el.eb).name);
                 }
-                if (el.ea is D)
+                if(el.ea is D)
                 {
                     Assert.IsTrue(((D)el.ea).name == ((D)el.eb).name);
                 }
@@ -121,8 +115,7 @@ namespace EntityGraphTest
 
         [Asynchronous]
         [TestMethod]
-        public void ChangeSetTest()
-        {
+        public void ChangeSetTest() {
             EntityGraphTestDomainContext ctx = new EntityGraphTestDomainContext();
             LoadOperation<B> loadOp = ctx.Load(ctx.GetBSetQuery());
             EnqueueConditional(() => loadOp.IsComplete);
@@ -148,8 +141,7 @@ namespace EntityGraphTest
             EnqueueTestComplete();
         }
         [TestMethod]
-        public void DetachTest()
-        {
+        public void DetachTest() {
             EntityGraph<A> gr = a.EntityGraph();
             EntityGraphTestDomainContext ctx = new EntityGraphTestDomainContext();
             a.BSet.Add(new B());
@@ -162,8 +154,7 @@ namespace EntityGraphTest
         }
         [Asynchronous]
         [TestMethod]
-        public void RemoveTest()
-        {
+        public void RemoveTest() {
             EntityGraphTestDomainContext ctx = new EntityGraphTestDomainContext();
             LoadOperation<B> loadOp = ctx.Load(ctx.GetBSetQuery());
             EnqueueConditional(() => loadOp.IsComplete);
@@ -172,21 +163,20 @@ namespace EntityGraphTest
                 {
                     EntityGraph<A> gr = a.EntityGraph();
                     B existingB = ctx.Bs.Single();
+                    ctx.As.Add(a);
                     a.BSet.Add(new B());
                     a.BSet.Add(existingB);
-                    ctx.As.Add(a);
-
                     gr.RemoveEntityGraph(ctx.As);
 
                     var changeSet = ctx.EntityContainer.GetChanges();
-                    Assert.IsTrue(changeSet.AddedEntities.Count() == 0);
-                    Assert.IsTrue(changeSet.RemovedEntities.Count() == 1);
+                    Assert.IsTrue(changeSet.AddedEntities.Count() == 0, "Added entities should be zero");
+                    Assert.IsTrue(changeSet.RemovedEntities.Count() == 1, "Removed entities should be 1");
                 });
             EnqueueTestComplete();
         }
+
         [TestMethod]
-        public void IEnumerableTest()
-        {
+        public void IEnumerableTest() {
             B newB = new B();
             a.BSet.Add(newB);
             EntityGraph<A> eg = a.EntityGraph();
@@ -201,8 +191,7 @@ namespace EntityGraphTest
         }
 
         [TestMethod]
-        public void IEnumerableNamedGraphTest()
-        {
+        public void IEnumerableNamedGraphTest() {
             B newB = new B();
             a.BSet.Add(newB);
             EntityGraph<A> eg = a.EntityGraph("MyGraph");
@@ -212,6 +201,80 @@ namespace EntityGraphTest
             Assert.AreEqual(d, eg.OfType<D>().Single());
 
             Assert.IsTrue(eg.Count() == 4);
+        }
+        [TestMethod]
+        public void IEditableObjectScalarPropertyTest() {
+            string oldNameForA = a.name;
+            string oldNameForB = b.name;
+            string oldNameForC = c.name;
+            string oldNameForD = d.name;
+
+            a.EntityGraph().BeginEdit();
+            a.name = "NewNameForA";
+            b.name = "NewNameForB";
+            c.name = "NewNameForC";
+            d.name = "NewNameForD";
+            a.EntityGraph().CancelEdit();
+
+            Assert.IsTrue(a.name == oldNameForA, "Change of A's name is not correctly canceled");
+            Assert.IsTrue(b.name == oldNameForB, "Change of B's name is not correctly canceled");
+            Assert.IsTrue(c.name == oldNameForC, "Change of C's name is not correctly canceled");
+            Assert.IsTrue(d.name == oldNameForD, "Change of D's name is not correctly canceled");
+        }
+        [Asynchronous]
+        [TestMethod]
+        public void IEditableObjectAssociationSetTest() {
+            EntityGraphTestDomainContext ctx = new EntityGraphTestDomainContext();
+            LoadOperation<B> loadOp = ctx.Load(ctx.GetBSetQuery());
+            EnqueueConditional(() => loadOp.IsComplete);
+            EnqueueCallback(
+                () =>
+                {
+                    B existingB = loadOp.Entities.SingleOrDefault();
+                    a.B = existingB;
+                    var gr = a.EntityGraph();
+
+                    gr.BeginEdit();
+                    a.BSet.Add(existingB);
+                    // Adding a new entity will fail, because this will not correctly raise the proper collection changed events
+                    // I consider this a RIA bug.
+                    Assert.IsTrue(a.BSet.Count() == 1, "a.BSet has incorrect number of elements");
+                    gr.CancelEdit();
+                    Assert.IsTrue(a.BSet.Count() == 0, "a.BSet has incorrect number of elements");
+                });
+            EnqueueTestComplete();
+        }
+        [Asynchronous]
+        [TestMethod]
+        public void IEditableObjectAssociationTest() {
+            EntityGraphTestDomainContext ctx = new EntityGraphTestDomainContext();
+            LoadOperation<B> loadOp = ctx.Load(ctx.GetBSetQuery());
+            EnqueueConditional(() => loadOp.IsComplete);
+            EnqueueCallback(
+                () =>
+                {
+                    ctx.As.Add(a);
+                    B existingB = loadOp.Entities.SingleOrDefault();
+                    B newB = new B { Id = -1 };
+                    var gr = a.EntityGraph();
+
+                    a.B = existingB;
+                    gr.BeginEdit();
+                    a.B = newB;
+                    gr.CancelEdit();
+                    Assert.IsTrue(a.BId == existingB.Id); // Succeeds 
+                    Assert.IsTrue(a.B == existingB); // Succeeds
+
+                    a.B = newB;
+                    gr.BeginEdit();
+                    a.B = existingB;
+                    gr.CancelEdit();
+
+                    Assert.IsTrue(a.BId == newB.Id); // Succeeds 
+                    Assert.IsTrue(a.B != newB); // Potential RIA bug, (should be equal to newB)
+                    Assert.IsTrue(a.B == null); // Potential RIA bug, (should be equal to newB)
+                });
+            EnqueueTestComplete();
         }
     }
 }

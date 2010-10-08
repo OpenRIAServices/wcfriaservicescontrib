@@ -1,103 +1,134 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel.DomainServices.Hosting;
 using System.ServiceModel.DomainServices.Server;
+using System.Xml.Serialization;
 
 namespace EntityGraphTest.Web
 {
     public class A
     {
-        [Key]
-        [DataMember]
-        public int Id { get; set; }
-        [DataMember]
-        public string name { get; set; }
+        [EntityGraph("MyGraph")]
+        [Association("B_A", "BId", "Id", IsForeignKey = true)]
+        [XmlIgnore()]
+        public B B { get; set; }
+
+        [DataMember()]
+        public Nullable<int> BId { get; set; }
+
         [EntityGraph]
-        [Include]
-        [Association("BSet", "Id", "Id")]
+        [Association("A_B", "Id", "AId")]
+        [XmlIgnore()]
+        public List<B> BSet { get; set; }
+
+        [Association("A_D", "Id", "AId")]
+        [XmlIgnore()]
+        public List<D> DSet { get; set; }
+
+        [DataMember()]
+        [Key()]
+        public int Id { get; set; }
+
+        [DataMember()]
+        [Required()]
+        public string name { get; set; }
+    }
+
+    public class B
+    {
+        [EntityGraph]
+        [Association("A_B", "AId", "Id", IsForeignKey = true)]
+        [XmlIgnore()]
+        public A A { get; set; }
+
+        [DataMember()]
+        [RoundtripOriginal()]
+        public Nullable<int> AId { get; set; }
+
+        [Association("B_A", "Id", "BId")]
+        [XmlIgnore()]
+        public List<A> ASet { get; set; }
+
+        [EntityGraph("MyGraph")]
+        [Association("C_B", "CId", "Id", IsForeignKey = true)]
+        [XmlIgnore()]
+        public C C { get; set; }
+
+        [DataMember()]
+        public Nullable<int> CId { get; set; }
+
+        [DataMember()]
+        [Key()]
+        public int Id { get; set; }
+
+        [DataMember()]
+        public string name { get; set; }
+
+    }
+
+    public class C
+    {
+        [Association("C_B", "Id", "CId")]
+        [XmlIgnore()]
         public List<B> BSet { get; set; }
 
         [EntityGraph("MyGraph")]
-        [Include]
-        [Association("AB", "Id", "Id")]
-        public B B { get; set; }
-        [EntityGraph("MyGraph")]
-        [Include]
-        [Association("AD", "Id", "Id", IsForeignKey = true)]
+        [Association("D_C", "DId", "Id", IsForeignKey = true)]
+        [XmlIgnore()]
         public D D { get; set; }
-    }
-    public class B
-    {
-        [Key]
-        [DataMember]
-        public int Id { get; set; }
-        [DataMember]
-        public string name { get; set; }
 
-        [EntityGraph("MyGraph")]
-        [Include]
-        [Association("AB", "Id", "Id", IsForeignKey = true)]
-        public A A { get; set; }
-        [EntityGraph("MyGraph")]
-        [Include]
-        [Association("BC", "Id", "Id")]
-        public C C { get; set; }
-    }
-    public class C
-    {
-        [Key]
-        [DataMember]
-        public int Id { get; set; }
-        [DataMember]
-        public string name { get; set; }
+        [DataMember()]
+        public Nullable<int> DId { get; set; }
 
-        [EntityGraph("MyGraph")]
-        [Include]
-        [Association("BC", "Id", "Id", IsForeignKey = true)]
-        public B B { get; set; }
-        [EntityGraph("MyGraph")]
-        [Include]
-        [Association("CD", "Id", "Id")]
-        public D D { get; set; }
+        [DataMember()]
+        [Key()]
+        public int Id { get; set; }
+
+        [DataMember()]
+        [Required()]
+        public string name { get; set; }
     }
+
     public class D
     {
-        [Key]
-        [DataMember]
-        public int Id { get; set; }
-        [DataMember]
-        public string name { get; set; }
-
         [EntityGraph("MyGraph")]
-        [Include]
-        [Association("CD", "Id", "Id", IsForeignKey = true)]
-        public C C { get; set; }
-        [EntityGraph("MyGraph")]
-        [Include]
-        [Association("AD", "Id", "Id")]
+        [Association("A_D", "AId", "Id", IsForeignKey = true)]
+        [XmlIgnore()]
         public A A { get; set; }
+
+        [DataMember()]
+        public Nullable<int> AId { get; set; }
+
+        [Association("D_C", "Id", "DId")]
+        [XmlIgnore()]
+        public List<C> CSet { get; set; }
+
+        [DataMember()]
+        [Key()]
+        public int Id { get; set; }
+
+        [DataMember()]
+        public string name { get; set; }
     }
 
-
-    // Implements application logic using the CCCEntities context.
-    // TODO: Add your application logic to these methods or in additional methods.
-    // TODO: Wire up authentication (Windows/ASP.NET Forms) and uncomment the following to disable anonymous access
-    // Also consider adding roles to restrict access as appropriate.
-    // [RequiresAuthentication]
     [EnableClientAccess()]
     public partial class EntityGraphTestDomainService : DomainService
     {
         public IQueryable<A> GetASet() { return null; }
         public void InsertA(A a) { }
-        public List<B> GetBSet() { return new List<B> { new B{ Id=1} }; }
+        public void UpdateA(A a) { }
+        public List<B> GetBSet() { return new List<B> { new B { Id = 1 } }; }
         public void InsertB(B b) { }
         public void UpdateB(B b) { }
         public void DeleteB(B b) { }
         public IQueryable<C> GetCSet() { return null; }
         public void InsertC(C c) { }
+        public void UpdateC(C c) { }
         public IQueryable<D> GetDSet() { return null; }
         public void InsertD(D d) { }
+        public void UpdateD(D d) { }
     }
 }
