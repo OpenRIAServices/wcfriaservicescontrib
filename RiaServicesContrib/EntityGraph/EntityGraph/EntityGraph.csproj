@@ -62,7 +62,9 @@
     <Compile Include="EntityRelationGraph.cs" />
     <Compile Include="EntitySet.cs" />
     <Compile Include="HasChanges.cs" />
+    <Compile Include="IDisposable.cs" />
     <Compile Include="IEDitableObject.cs" />
+    <Compile Include="IEnumerable.cs" />
     <Compile Include="INotifyCollectionChanged.cs" />
     <Compile Include="INotifyPropertyChanged.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

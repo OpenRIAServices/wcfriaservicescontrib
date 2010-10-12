@@ -40,10 +40,6 @@ namespace RIA.EntityGraph
             EntityRelationGraphReset();
             switch(e.Action)
             {
-                case NotifyCollectionChangedAction.Add:
-                    if(EditStarted)
-                        ((IEditableObject)e.NewItems[0]).BeginEdit();
-                    break;
                 case NotifyCollectionChangedAction.Remove:
                     if(EditStarted)
                         ((IEditableObject)e.OldItems[0]).EndEdit();

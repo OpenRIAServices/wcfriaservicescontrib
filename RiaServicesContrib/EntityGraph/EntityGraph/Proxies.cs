@@ -1,4 +1,6 @@
 ﻿using System.ServiceModel.DomainServices.Client;
+using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace RIA.EntityGraph
 {
@@ -7,23 +9,23 @@ namespace RIA.EntityGraph
         /// <summary>
         /// Extension method that returns an entity graph object that represents the entity graph this entity is part of.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TEntity"></typeparam>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static EntityGraph<T> EntityGraph<T>(this T entity) where T : Entity
+        public static EntityGraph<TEntity> EntityGraph<TEntity>(this TEntity entity) where TEntity : Entity
         {
-            return new EntityGraph<T>(entity);
+            return new EntityGraph<TEntity>(entity);
         }
         /// <summary>
         /// Extension method that returns an entity graph object that represents the entity graph with given name this entity is part of.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TEntity"></typeparam>
         /// <param name="entity"></param>
         /// <param name="graphName"></param>
         /// <returns></returns>
-        public static EntityGraph<T> EntityGraph<T>(this T entity, string graphName) where T : Entity
+        public static EntityGraph<TEntity> EntityGraph<TEntity>(this TEntity entity, string graphName) where TEntity : Entity
         {
-            return new EntityGraph<T>(entity, graphName);
+            return new EntityGraph<TEntity>(entity, graphName);
         }
 
         /// <summary>

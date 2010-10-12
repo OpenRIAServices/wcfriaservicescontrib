@@ -98,7 +98,19 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests.cs" />
+    <Compile Include="Tests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tests\CloneTests.cs" />
+    <Compile Include="Tests\EntityChangeSetTests.cs" />
+    <Compile Include="Tests\EntityGraphTests.cs" />
+    <Compile Include="Tests\EntitySetTests.cs" />
+    <Compile Include="Tests\HasChangesTests.cs" />
+    <Compile Include="Tests\IDisposableTests.cs" />
+    <Compile Include="Tests\INotifyCollectionChangedTests.cs" />
+    <Compile Include="Tests\IEditableObjectTests.cs" />
+    <Compile Include="Tests\IEnumerableTests.cs" />
+    <Compile Include="Tests\INotifyPropertyChangedTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

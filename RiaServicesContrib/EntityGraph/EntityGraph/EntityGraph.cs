@@ -5,10 +5,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.ServiceModel.DomainServices.Client;
+using System.ComponentModel;
 
 namespace RIA.EntityGraph
 {
-    public partial class EntityGraph<TEntity> : IEnumerable<Entity>, IDisposable where TEntity : Entity
+    public partial class EntityGraph<TEntity> where TEntity : Entity
     {
         public TEntity Source { get; private set; }
         public string Name { get; private set; }
@@ -63,17 +64,6 @@ namespace RIA.EntityGraph
             BuildEntityGraph(nodeMap, EntityRelationGraph);
             return nodeMap[Source] as TEntity;
         }
-
-        public IEnumerator<Entity> GetEnumerator()
-        {
-            return EntityRelationGraph.GetEnumerator();
-        }
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
 
         /// <summary>
         /// Returns the entity graph as defined by associations that are marked with the 'EntityGraphAttribute' attribute.
@@ -181,11 +171,6 @@ namespace RIA.EntityGraph
             EntityRelationGraph = null;
             SetupNotifyPropertyChangedHandlers();
             SetupNotifyCollectionChangedHandlers();
-        }
-        public void Dispose()
-        {
-            RemoveNotifyPropertyChangedHandlers();
-            RemoveNotifyCollectionChangedHandlers();
         }
     }
 }
