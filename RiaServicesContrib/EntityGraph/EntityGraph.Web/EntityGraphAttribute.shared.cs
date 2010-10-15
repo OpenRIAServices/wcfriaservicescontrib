@@ -6,6 +6,7 @@ namespace System.ComponentModel.DataAnnotations
     /// Specifies that an association is part of a graph of related entities 
     /// that should be handled as a unit during cloning, detaching, deleting, and so on.
     /// </summary>
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple=true)]
     public class EntityGraphAttribute : Attribute
     {
         /// <summary>
