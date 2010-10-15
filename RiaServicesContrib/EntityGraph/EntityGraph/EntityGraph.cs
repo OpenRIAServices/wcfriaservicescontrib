@@ -159,7 +159,7 @@ namespace RIA.EntityGraph
         {
             BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.Instance;
             var qry = from p in obj.GetType().GetProperties(bindingAttr)
-                      where p.GetCustomAttributes(typeof(AssociationAttribute), true).Length > 0
+                      where p.IsDefined(typeof(AssociationAttribute), true)
                       select p;
             return qry.ToArray();
         }

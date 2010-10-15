@@ -43,8 +43,8 @@ namespace RIA.EntityGraph
             BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.Instance;
             var qry = from p in obj.GetType().GetProperties(bindingAttr)
                       where
-                        p.GetCustomAttributes(typeof(DataMemberAttribute), true).Length > 0
-                      && p.GetCustomAttributes(typeof(KeyAttribute), true).Length == 0
+                        p.IsDefined(typeof(DataMemberAttribute), true)
+                      && p.IsDefined(typeof(KeyAttribute), true) == false
                       && p.GetSetMethod() != null
                       select p;
             return qry.ToArray();
