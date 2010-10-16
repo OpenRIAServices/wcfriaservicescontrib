@@ -135,6 +135,27 @@ namespace RIA.EntityGraph
                         addMethod.Invoke(assocList, new object[] { newAssociationEntity });
                     }
                 }
+                // The code below is to fix an error in RIA where relationship span is not performed
+                // for newly created entities. 
+                // This means that for an association that is not included in the entity graph,
+                // the intity would include the foreing key to that entity, but since no relationshipspan
+                // takes place, the corresponding association is not bound to that entity.
+                // Below we set these association properties ourselves. We detect newly created entities by
+                // the heuristic that they don't have an origional state.
+                foreach(PropertyInfo association in GetAssociations(newEntity))
+                {
+                    if(association.PropertyType.IsSubclassOf(typeof(Entity)))
+                    {
+                        Entity e = (Entity)association.GetValue(n.Node, null);
+                        if(e != null)
+                        {
+                            if(e.GetOriginal() == null)
+                            {
+                                association.SetValue(newEntity, nodes.ContainsKey(e) ? nodes[e] : e, null);
+                            }
+                        }
+                    }
+                }
             }
         }
         /// <summary>
