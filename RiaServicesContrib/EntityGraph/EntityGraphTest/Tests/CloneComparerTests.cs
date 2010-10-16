@@ -36,6 +36,26 @@ namespace EntityGraphTest.Tests
             var cloneOfA = a.Clone();
             Assert.IsTrue(gr.IsCloneEqual(cloneOfA.EntityGraph()));
         }
+        [TestMethod]
+        public void IsCloneEqualCheckModifiedPropertyTest() {
+            var gr = a.EntityGraph();
+            var cloneOfA = a.Clone();
+            a.B.name = "test";
+            Assert.IsFalse(gr.IsCloneEqual(cloneOfA.EntityGraph()));
 
+            cloneOfA.B.name = "test";
+            Assert.IsTrue(gr.IsCloneEqual(cloneOfA.EntityGraph()));
+        }
+        [TestMethod]
+        public void IsCloneEqualCheckModifiedCollectionTest() {
+            var gr = a.EntityGraph();
+            var cloneOfA = a.Clone();
+            a.BSet.Add(new B());
+            Assert.IsFalse(gr.IsCloneEqual(cloneOfA.EntityGraph()));
+
+            // Observe that entities are checked for membe-wise equality, not for binair equality.
+            cloneOfA.BSet.Add(new B());
+            Assert.IsTrue(gr.IsCloneEqual(cloneOfA.EntityGraph()));
+        }
     }
 }
