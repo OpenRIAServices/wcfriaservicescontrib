@@ -38,7 +38,7 @@ namespace RIA.EntityGraph
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        protected static PropertyInfo[] GetDataMembers(object obj)
+        private static PropertyInfo[] GetDataMembers(object obj)
         {
             BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.Instance;
             var qry = from p in obj.GetType().GetProperties(bindingAttr)
@@ -51,4 +51,3 @@ namespace RIA.EntityGraph
         }
     }
 }
-        

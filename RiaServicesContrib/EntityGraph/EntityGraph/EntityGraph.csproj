@@ -55,10 +55,15 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CloneComparer.cs" />
+    <Compile Include="contrib\EntityStateSet.cs" />
+    <Compile Include="contrib\ExtractType.cs" />
+    <Compile Include="contrib\RiaServicesExtensions.cs" />
     <Compile Include="EntityGraph.cs" />
     <Compile Include="Clone.cs" />
     <Compile Include="EntityChangeSet.cs" />
     <Compile Include="EntityGraphChangeSet.cs" />
+    <Compile Include="EntityGraphComparer.cs" />
     <Compile Include="EntityRelationGraph.cs" />
     <Compile Include="EntitySet.cs" />
     <Compile Include="HasChanges.cs" />

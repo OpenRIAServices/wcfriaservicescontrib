@@ -16,6 +16,13 @@ namespace EntityGraphTest.Web
         [DataMember]
         public Nullable<int> BId { get; set; }
 
+        [Association("BNotInGraph_A", "BNotInGraphId", "Id", IsForeignKey = true)]
+        [XmlIgnore]
+        public B BNotInGraph { get; set; }
+
+        [DataMember]
+        public Nullable<int> BNotInGraphId { get; set; }
+        
         [EntityGraph]
         [Association("A_B", "Id", "AId")]
         [XmlIgnore]
