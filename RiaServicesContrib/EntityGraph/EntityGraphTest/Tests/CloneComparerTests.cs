@@ -7,21 +7,25 @@ namespace EntityGraphTest.Tests
     [TestClass]
     public class CloneComparerTests : EntityGraphTest
     {
+        /// <summary>
+        /// Checks that an entitygraph can never be a clone of it self
+        /// </summary>
         [TestMethod]
         public void IsCloneEqualIdentityTest() {
             var gr = a.EntityGraph();
-            Assert.IsTrue(gr.IsCloneEqual(gr));
+            Assert.IsFalse(gr.IsCloneEqual(gr));
+        }
+        [TestMethod]
+        public void IsCloneEqualNamedIdentityTest()
+        {
+            var gr = a.EntityGraph("MyGraph");
+            Assert.IsFalse(gr.IsCloneEqual(gr));
         }
         [TestMethod]
         public void IsCloneEqualSimpleCloneTest() {
             var gr = a.EntityGraph();
             var cloneOfA = a.Clone();
             Assert.IsTrue(gr.IsCloneEqual(cloneOfA.EntityGraph()));
-        }
-        [TestMethod]
-        public void IsCloneEqualNamedIdentityTest() {
-            var gr = a.EntityGraph("MyGraph");
-            Assert.IsTrue(gr.IsCloneEqual(gr));
         }
         [TestMethod]
         public void IsCloneEqualNamedCloneTest() {
