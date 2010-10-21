@@ -40,6 +40,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="System.ComponentModel.Composition, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.ComponentModel.DataAnnotations, Version=2.0.5.0, Culture=neutral, PublicKeyToken=ddd0da4d3e678217, processorArchitecture=MSIL" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -66,6 +67,16 @@
     <Compile Include="EntityGraphComparer.cs" />
     <Compile Include="EntityRelationGraph.cs" />
     <Compile Include="EntitySet.cs" />
+    <Compile Include="EntityValidator\ValidationRule.cs" />
+    <Compile Include="EntityValidator\IValidationRule.cs" />
+    <Compile Include="EntityValidator\IValidationRulesProvider.cs" />
+    <Compile Include="EntityValidator\MEFValidationRulesProvider.cs" />
+    <Compile Include="EntityValidator\ValidateMethodAttribute.cs" />
+    <Compile Include="EntityValidator\ValidationRuleDependencies.cs" />
+    <Compile Include="EntityValidator\ValidationRuleInvokeHelper.cs" />
+    <Compile Include="EntityValidator\ValidationValueChangedEventArgs.cs" />
+    <Compile Include="GraphValidationRule.cs" />
+    <Compile Include="GraphValidator.cs" />
     <Compile Include="HasChanges.cs" />
     <Compile Include="IDisposable.cs" />
     <Compile Include="IEDitableObject.cs" />
@@ -74,6 +85,10 @@
     <Compile Include="INotifyPropertyChanged.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Proxies.cs" />
+    <Compile Include="EntityValidator\ValidationEngine.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="mefcontrib\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>

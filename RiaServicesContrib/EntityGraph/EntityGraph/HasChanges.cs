@@ -10,7 +10,7 @@ namespace RIA.EntityGraph
             this.PropertyChanged += EntityGraph_PropertyChanged;
         }
 
-        void EntityGraph_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        void EntityGraph_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (sender != this)
             {

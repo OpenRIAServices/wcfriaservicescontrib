@@ -21,6 +21,7 @@ namespace RIA.EntityGraph
             this.Source = Source;
             this.Name = Name;
 
+            InitGraphValidation();
             SetupNotifyPropertyChangedHandlers();
             SetupNotifyCollectionChangedHandlers();
             SetupHasChanges();
