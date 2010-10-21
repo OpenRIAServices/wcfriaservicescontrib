@@ -79,7 +79,7 @@ namespace EntityGraphTest.Tests
             var g1 = f.EntityGraph();
             var g2 = cloneOfF.EntityGraph();
 
-            Assert.IsTrue(g1.IsCloneEqual(g2));
+            Assert.IsTrue(g1.IsCloneOf(g2));
             Assert.IsTrue(cloneOfF.ESet.Count() == 2);
         }
         /// <summary>
@@ -95,7 +95,7 @@ namespace EntityGraphTest.Tests
             var g1 = f.EntityGraph("MyGraph");
             var g2 = cloneOfF.EntityGraph();
 
-            Assert.IsTrue(g1.IsCloneEqual(g2));
+            Assert.IsTrue(g1.IsCloneOf(g2));
             Assert.IsTrue(cloneOfF.ESet.Count() == 2);
         }
         /// <summary>
@@ -111,7 +111,7 @@ namespace EntityGraphTest.Tests
             var g1 = f.EntityGraph("MyGraph2");
             var g2 = cloneOfF.EntityGraph();
 
-            Assert.IsTrue(g1.IsCloneEqual(g2));
+            Assert.IsTrue(g1.IsCloneOf(g2));
             Assert.IsTrue(cloneOfF.ESet.Count() == 0);
         }
         /// <summary>
@@ -127,7 +127,7 @@ namespace EntityGraphTest.Tests
             var g1 = e1.EntityGraph();
             var g2 = cloneOfE1.EntityGraph();
 
-            Assert.IsTrue(g1.IsCloneEqual(g2));
+            Assert.IsTrue(g1.IsCloneOf(g2));
             Assert.IsTrue(cloneOfE1.F.ESet.Count() == 2);
             Assert.IsTrue(cloneOfE1.FId != f.Id);
             Assert.IsTrue(cloneOfE1.F != f);
@@ -145,7 +145,7 @@ namespace EntityGraphTest.Tests
             var g1 = e1.EntityGraph();
             var g2 = cloneOfE1.EntityGraph();
 
-            Assert.IsFalse(g1.IsCloneEqual(g2));
+            Assert.IsFalse(g1.IsCloneOf(g2));
 
             // Check that F/FId point to the origional (non-cloned) entity f
             Assert.IsTrue(cloneOfE1.FId == f.Id);
@@ -166,7 +166,7 @@ namespace EntityGraphTest.Tests
             var g1 = g.EntityGraph();
             var g2 = cloneOfg.EntityGraph();
 
-            Assert.IsTrue(g1.IsCloneEqual(g2));
+            Assert.IsTrue(g1.IsCloneOf(g2));
 
             // Check that the m2m association to h is now an association to a clone of h
             var cloneOfH = cloneOfg.GHSet.First().H;
@@ -188,7 +188,7 @@ namespace EntityGraphTest.Tests
             var g1 = g.EntityGraph();
             var g2 = cloneOfg.EntityGraph();
 
-            Assert.IsFalse(g1.IsCloneEqual(g2));
+            Assert.IsFalse(g1.IsCloneOf(g2));
 
             // Check that the m2m association to h still exists, because h is not cloned
             var cloneOfH = cloneOfg.GHSet.First().H;
@@ -209,7 +209,7 @@ namespace EntityGraphTest.Tests
             var g1 = g.EntityGraph();
             var g2 = cloneOfg.EntityGraph();
 
-            Assert.IsFalse(g1.IsCloneEqual(g2));
+            Assert.IsFalse(g1.IsCloneOf(g2));
             Assert.IsTrue(cloneOfg.GHSet.Count() == 0);
         }
         /// <summary>

@@ -14,7 +14,7 @@ namespace RIA.EntityGraph
         /// </summary>
         /// <param name="graph"></param>
         /// <returns></returns>
-        public bool IsCloneEqual<T>(EntityGraph<T> graph) where T : Entity{
+        public bool IsCloneOf<T>(EntityGraph<T> graph) where T : Entity{
             return EntityGraphEqual(graph, (e1, e2) => e1 != e2 && MemberwiseCompare(e1, e2));
         }
 
