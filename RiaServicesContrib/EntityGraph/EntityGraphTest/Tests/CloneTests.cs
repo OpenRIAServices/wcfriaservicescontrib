@@ -173,7 +173,7 @@ namespace EntityGraphTest.Tests
             Assert.IsTrue(cloneOfH != h);
         }
         /// <summary>
-        /// Test that creates a clone of a m2m relation by cloning the join table objects, but not the
+        /// Test that creates a clone of an m2m relation by cloning the join table objects, but not the
         /// target entities.
         /// It tests that if the other end in an join table entity is _not_ part of the graph,
         /// the other end entities are be cloned and the origional values will be used.
@@ -211,6 +211,17 @@ namespace EntityGraphTest.Tests
 
             Assert.IsFalse(g1.IsCloneEqual(g2));
             Assert.IsTrue(cloneOfg.GHSet.Count() == 0);
+        }
+        /// <summary>
+        /// Test to check for a circular entity graph it doesn't matter which element is cloned. The 
+        /// result will always be an entity graph with the same entities.
+        /// </summary>
+        [TestMethod]
+        public void CircularGraphCloneTest() {
+            var g1 = a.EntityGraph();
+            var g2 = b.EntityGraph();
+            Assert.IsTrue(g1.All(n => g2.Contains(n)));
+            Assert.IsTrue(g2.All(n => g1.Contains(n)));
         }
     }
 }
