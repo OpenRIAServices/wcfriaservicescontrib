@@ -1,12 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
-using System.ServiceModel.DomainServices.Client;
-using System.Runtime.Serialization;
 
 namespace RIA.EntityGraph
 {
     public partial class EntityGraph<TEntity> : INotifyPropertyChanged
-        where TEntity : Entity
     {
         /// <summary>
         /// handler to receive property changed events.

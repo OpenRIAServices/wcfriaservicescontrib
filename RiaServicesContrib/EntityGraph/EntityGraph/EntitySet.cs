@@ -2,7 +2,7 @@
 
 namespace RIA.EntityGraph
 {
-    public partial class EntityGraph<TEntity> where TEntity : Entity
+    public partial class EntityGraph<TEntity> 
     {
         #region DetachEntityGraph
         /// <summary>

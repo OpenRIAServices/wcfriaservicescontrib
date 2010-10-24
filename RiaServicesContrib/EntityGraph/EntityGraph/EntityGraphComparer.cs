@@ -4,7 +4,7 @@ using System.ServiceModel.DomainServices.Client;
 
 namespace RIA.EntityGraph
 {
-    public partial class EntityGraph<TEntity> where TEntity : Entity
+    public partial class EntityGraph<TEntity>
     {
         /// <summary>
         /// Determines whether two entity graphs are equal using the given comparer function.

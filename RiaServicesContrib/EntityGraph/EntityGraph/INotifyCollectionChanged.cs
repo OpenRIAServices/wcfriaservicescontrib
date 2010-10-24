@@ -1,10 +1,9 @@
 ﻿using System.Collections.Specialized;
 using System.ComponentModel;
-using System.ServiceModel.DomainServices.Client;
 
 namespace RIA.EntityGraph
 {
-    public partial class EntityGraph<TEntity> : INotifyCollectionChanged where TEntity : Entity
+    public partial class EntityGraph<TEntity> : INotifyCollectionChanged 
     {
         private void SetupNotifyCollectionChangedHandlers()
         {

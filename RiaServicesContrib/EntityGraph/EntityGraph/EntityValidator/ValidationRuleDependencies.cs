@@ -8,7 +8,7 @@ namespace RIA.EntityValidator
     /// Class that makes rule dependencies look nicer
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class ValidationRuleDependencies<T> : List<Expression<Func<T, object>>>
+    public class ValidationRuleDependencies<TEntity> : List<Expression<Func<TEntity, object>>>
     {
     }
 }

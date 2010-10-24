@@ -8,9 +8,9 @@ using RIA.EntityValidator;
 
 namespace RIA.EntityGraph
 {
-    public partial class EntityGraph<TEntity> where TEntity : Entity
+    public partial class EntityGraph<TEntity>
     {
-        public ValidationEngine<EntityGraph<TEntity>, ValidationResult> Validator { get; private set; }
+        private ValidationEngine<EntityGraph<TEntity>, ValidationResult> Validator { get; set; }
 
         private void InitGraphValidation() {
             Validator = new ValidationEngine<EntityGraph<TEntity>, ValidationResult>(this);
