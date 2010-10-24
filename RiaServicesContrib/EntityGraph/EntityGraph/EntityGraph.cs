@@ -195,13 +195,26 @@ namespace RIA.EntityGraph
             return qry.ToArray();
         }
 
-        private void EntityRelationGraphReset()
+        /// <summary>
+        /// Eventhandler that is called just before the EntityRelationGraph is reset.
+        /// </summary>
+        protected EventHandler<EventArgs> EntityRelationGraphResetting;
+        /// <summary>
+        /// Eventhandler that is called right after the EntityRelationGraph is reset.
+        /// </summary>
+        protected EventHandler<EventArgs> EntityRelationGraphResetted;
+
+        protected void EntityRelationGraphReset()
         {
-            RemoveNotifyPropertyChangedHandlers();
-            RemoveNotifyCollectionChangedHandlers();
+            if(EntityRelationGraphResetting != null)
+            {
+                EntityRelationGraphResetting(this, new EventArgs());
+            }
             EntityRelationGraph = null;
-            SetupNotifyPropertyChangedHandlers();
-            SetupNotifyCollectionChangedHandlers();
+            if(EntityRelationGraphResetted != null)
+            {
+                EntityRelationGraphResetted(this, new EventArgs());
+            }
         }
     }
 }

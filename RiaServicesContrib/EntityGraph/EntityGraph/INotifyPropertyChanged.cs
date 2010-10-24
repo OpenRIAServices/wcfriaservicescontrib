@@ -13,6 +13,8 @@ namespace RIA.EntityGraph
         [Initialize]
         internal void SetupINotifyPropertyChanged()
         {
+            this.EntityRelationGraphResetting += (sender, args) => RemoveNotifyCollectionChangedHandlers();
+            this.EntityRelationGraphResetted += (sender, args) => SetupNotifyPropertyChangedHandlers();
             SetupNotifyPropertyChangedHandlers();
         }
         [Dispose]

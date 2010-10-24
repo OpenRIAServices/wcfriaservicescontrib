@@ -8,6 +8,8 @@ namespace RIA.EntityGraph
         [Initialize]
         internal void SetupINotifyCollectionChanged()
         {
+            this.EntityRelationGraphResetting += (sender, args) => RemoveNotifyCollectionChangedHandlers();
+            this.EntityRelationGraphResetted += (sender, args) => SetupNotifyCollectionChangedHandlers();
             SetupNotifyCollectionChangedHandlers();
         }
         [Dispose]
