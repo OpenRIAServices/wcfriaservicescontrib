@@ -12,12 +12,21 @@ namespace RIA.EntityGraph
     {
         private ValidationEngine<EntityGraph<TEntity>, ValidationResult> Validator { get; set; }
 
-        private void InitGraphValidation() {
+        [Initialize]
+        private void InitGraphValidation()
+        {
             Validator = new ValidationEngine<EntityGraph<TEntity>, ValidationResult>(this);
 
             Validator.ValidationResultChanged += Validator_ValidationResultChanged;
             this.PropertyChanged += Validate;
             this.CollectionChanged += Validator_CollectionChanged;
+        }
+        [Dispose]
+        internal void CleanGraphValidation()
+        {
+            Validator.ValidationResultChanged -= Validator_ValidationResultChanged;
+            this.PropertyChanged -= Validate;
+            this.CollectionChanged -= Validator_CollectionChanged;
         }
 
         private void Validator_ValidationResultChanged(object sender, ValidationResultChangedEventArgs<ValidationResult> e) {

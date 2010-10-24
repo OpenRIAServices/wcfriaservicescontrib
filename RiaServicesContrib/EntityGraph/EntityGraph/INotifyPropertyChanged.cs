@@ -10,6 +10,16 @@ namespace RIA.EntityGraph
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        [Initialize]
+        internal void SetupINotifyPropertyChanged()
+        {
+            SetupNotifyPropertyChangedHandlers();
+        }
+        [Dispose]
+        internal void DisposeINotifyPropertyChanged()
+        {
+            RemoveNotifyPropertyChangedHandlers();
+        }
         private void SetupNotifyPropertyChangedHandlers()
         {
             foreach (var node in EntityRelationGraph)

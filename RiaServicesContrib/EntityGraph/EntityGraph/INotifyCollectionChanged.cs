@@ -5,6 +5,16 @@ namespace RIA.EntityGraph
 {
     public partial class EntityGraph<TEntity> : INotifyCollectionChanged 
     {
+        [Initialize]
+        internal void SetupINotifyCollectionChanged()
+        {
+            SetupNotifyCollectionChangedHandlers();
+        }
+        [Dispose]
+        internal void DisploseINotifyCollectionChanged()
+        {
+            RemoveNotifyCollectionChangedHandlers();
+        }
         private void SetupNotifyCollectionChangedHandlers()
         {
             foreach(var node in EntityRelationGraph.Nodes)

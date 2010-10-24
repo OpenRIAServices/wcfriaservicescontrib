@@ -9,6 +9,12 @@ using System.ComponentModel;
 
 namespace RIA.EntityGraph
 {
+    internal class InitializeAttribute : Attribute
+    {
+    }
+    internal class DisposeAttribute : Attribute
+    {
+    }
     public partial class EntityGraph<TEntity> where TEntity : Entity
     {
         public TEntity Source { get; private set; }
@@ -21,10 +27,13 @@ namespace RIA.EntityGraph
             this.Source = Source;
             this.Name = Name;
 
-            InitGraphValidation();
-            SetupNotifyPropertyChangedHandlers();
-            SetupNotifyCollectionChangedHandlers();
-            SetupHasChanges();
+            var type = this.GetType();
+            var flags = BindingFlags.Instance | BindingFlags.NonPublic;
+            var constructors = type.GetMethods(flags).Where(m => m.IsDefined(typeof(InitializeAttribute), true));
+            foreach(var constructor in constructors)
+            {
+                constructor.Invoke(this, new object[] { });
+            }
         }
 
         private EntityRelationGraph<Entity> _entityRelationGraph;

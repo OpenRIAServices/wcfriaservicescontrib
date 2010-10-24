@@ -5,9 +5,15 @@ namespace RIA.EntityGraph
 {
     public partial class EntityGraph<TEntity> 
     {
-        private void SetupHasChanges()
+        [Initialize]
+        internal void SetupHasChanges()
         {
             this.PropertyChanged += EntityGraph_PropertyChanged;
+        }
+        [Dispose]
+        internal void CleanHasChanges()
+        {
+            this.PropertyChanged -= EntityGraph_PropertyChanged;
         }
 
         void EntityGraph_PropertyChanged(object sender, PropertyChangedEventArgs e)
