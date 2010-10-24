@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace RIA.EntityGraph
+namespace EntityGraph
 {
-    internal class EntityRelation<NType>
+    public class EntityRelation<NType>
     {
         public EntityRelation()
         {
@@ -16,7 +16,7 @@ namespace RIA.EntityGraph
         public Dictionary<PropertyInfo, List<NType>> ListEdges { get; set; }
     }
 
-    internal class EntityRelationGraph<NType> : IEnumerable<NType>
+    public class EntityRelationGraph<NType> : IEnumerable<NType>
     {
         public EntityRelationGraph()
         {

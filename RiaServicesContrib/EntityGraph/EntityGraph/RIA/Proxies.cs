@@ -1,8 +1,6 @@
 ﻿using System.ServiceModel.DomainServices.Client;
-using System.ComponentModel.DataAnnotations;
-using System;
 
-namespace RIA.EntityGraph
+namespace EntityGraph.RIA
 {
     public static class EntityGraphProxies
     {

@@ -5,9 +5,9 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.ServiceModel.DomainServices.Client;
 
-namespace RIA.EntityGraph
+namespace EntityGraph.RIA
 {
-    public partial class EntityGraph<TEntity> where TEntity : Entity
+    public partial class EntityGraph<TEntity> 
     {
         /// <summary>
         /// Method that clones an entity and, recursively, all its associations that are marked with 

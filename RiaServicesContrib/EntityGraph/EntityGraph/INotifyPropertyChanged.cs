@@ -1,14 +1,21 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 
-namespace RIA.EntityGraph
+namespace EntityGraph
 {
-    public partial class EntityGraph<TEntity> : INotifyPropertyChanged
+    public partial class EntityGraph<TEntity, TBase, TValidationResult> : INotifyPropertyChanged
     {
         /// <summary>
         /// handler to receive property changed events.
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
+        
+        protected void NotifyPropertyChanged(PropertyChangedEventArgs eventArgs) {
+            if(PropertyChanged != null)
+            {
+                PropertyChanged(this, eventArgs);
+            }
+        }
 
         [Initialize]
         internal void SetupINotifyPropertyChanged()
@@ -22,6 +29,7 @@ namespace RIA.EntityGraph
         {
             RemoveNotifyPropertyChangedHandlers();
         }
+
         private void SetupNotifyPropertyChangedHandlers()
         {
             foreach (var node in EntityRelationGraph)
@@ -29,6 +37,7 @@ namespace RIA.EntityGraph
                 node.PropertyChanged += node_PropertyChanged;
             }
         }
+
         private void RemoveNotifyPropertyChangedHandlers()
         {
             foreach (var node in EntityRelationGraph)

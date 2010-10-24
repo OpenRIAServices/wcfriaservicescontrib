@@ -1,44 +1,45 @@
-﻿using System;
+﻿using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.ServiceModel.DomainServices.Client;
-using System.Collections.Specialized;
 using RIA.EntityValidator;
 
-namespace RIA.EntityGraph
+namespace EntityGraph
 {
-    public partial class EntityGraph<TEntity>
+    public partial class EntityGraph<TEntity, TBase, TValidationResult>
     {
-        private ValidationEngine<EntityGraph<TEntity>, ValidationResult> Validator { get; set; }
+        private ValidationEngine<EntityGraph<TEntity, TBase, TValidationResult>, TValidationResult> Validator;
 
         [Initialize]
-        private void InitGraphValidation()
-        {
-            Validator = new ValidationEngine<EntityGraph<TEntity>, ValidationResult>(this);
-
+        internal void InitGraphValidation() {
+            Validator = new ValidationEngine<EntityGraph<TEntity, TBase, TValidationResult>, TValidationResult>(this);
             Validator.ValidationResultChanged += Validator_ValidationResultChanged;
             this.PropertyChanged += Validate;
             this.CollectionChanged += Validator_CollectionChanged;
         }
+        
         [Dispose]
         internal void CleanGraphValidation()
         {
-            Validator.ValidationResultChanged -= Validator_ValidationResultChanged;
             this.PropertyChanged -= Validate;
             this.CollectionChanged -= Validator_CollectionChanged;
         }
 
-        private void Validator_ValidationResultChanged(object sender, ValidationResultChangedEventArgs<ValidationResult> e) {
-            var rule = (GraphValidationRule<TEntity>)sender;
-            foreach(var entity in Validator.ObjectsInvolved(rule).Cast<Entity>())
+        private void Validator_ValidationResultChanged(object sender, ValidationResultChangedEventArgs<TValidationResult> e) {
+            var rule = (GraphValidationRule<TEntity, TBase, TValidationResult>)sender;
+            foreach(var entity in Validator.ObjectsInvolved(rule).Cast<TBase>())
             {
-                if(e.OldResult != ValidationResult.Success)
-                    entity.ValidationErrors.Remove(e.OldResult);
-                if(e.Result != ValidationResult.Success && entity.ValidationErrors.Contains(e.Result) == false)
-                    entity.ValidationErrors.Add(e.Result);
+                if(HasValidationResult(entity, e.OldResult))
+                    ClearValidationResult(entity, e.OldResult);
+                if(HasValidationResult(entity, e.Result) == false)
+                    SetValidationResult(entity, e.Result);
             }
         }
+
+        protected abstract bool HasValidationResult(TBase entity, TValidationResult validationResult);
+        protected abstract void ClearValidationResult(TBase entity, TValidationResult validationResult);
+        protected abstract void SetValidationResult(TBase entity, TValidationResult validationResult);
+
         private void Validator_CollectionChanged(object sender, NotifyCollectionChangedEventArgs args) {
             Validator.Refresh();
             var collection = (from n in EntityRelationGraph.Nodes

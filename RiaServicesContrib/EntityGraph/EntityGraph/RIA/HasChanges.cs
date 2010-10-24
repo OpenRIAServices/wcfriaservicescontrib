@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
-using System.ServiceModel.DomainServices.Client;
 
-namespace RIA.EntityGraph
+namespace EntityGraph.RIA
 {
     public partial class EntityGraph<TEntity> 
     {
@@ -41,7 +40,7 @@ namespace RIA.EntityGraph
                 if ((this._HasChanges != value))
                 {
                     this._HasChanges = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs("HasChanges"));
+                    NotifyPropertyChanged(new PropertyChangedEventArgs("HasChanges"));
                 }
             }
         }

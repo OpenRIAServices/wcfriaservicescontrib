@@ -1,13 +1,11 @@
 ﻿using System.Collections.Specialized;
-using System.ComponentModel;
 
-namespace RIA.EntityGraph
+namespace EntityGraph
 {
-    public partial class EntityGraph<TEntity> : INotifyCollectionChanged 
+    public partial class EntityGraph<TEntity, TBase, TValidationResult> : INotifyCollectionChanged 
     {
         [Initialize]
-        internal void SetupINotifyCollectionChanged()
-        {
+        internal void SetupINotifyCollectionChanged() {
             this.EntityRelationGraphResetting += (sender, args) => RemoveNotifyCollectionChangedHandlers();
             this.EntityRelationGraphResetted += (sender, args) => SetupNotifyCollectionChangedHandlers();
             SetupNotifyCollectionChangedHandlers();
@@ -17,6 +15,7 @@ namespace RIA.EntityGraph
         {
             RemoveNotifyCollectionChangedHandlers();
         }
+        
         private void SetupNotifyCollectionChangedHandlers()
         {
             foreach(var node in EntityRelationGraph.Nodes)
@@ -31,6 +30,7 @@ namespace RIA.EntityGraph
                 }
             }
         }
+        
         private void RemoveNotifyCollectionChangedHandlers()
         {
             foreach (var node in EntityRelationGraph.Nodes)
@@ -49,13 +49,13 @@ namespace RIA.EntityGraph
         private void collection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             EntityRelationGraphReset();
-            switch(e.Action)
-            {
-                case NotifyCollectionChangedAction.Remove:
-                    if(EditStarted)
-                        ((IEditableObject)e.OldItems[0]).EndEdit();
-                    break;
-            }
+            //switch(e.Action)
+            //{
+            //    case NotifyCollectionChangedAction.Remove:
+            //        if(EditStarted)
+            //            ((IEditableObject)e.OldItems[0]).EndEdit();
+            //        break;
+            //}
             if (CollectionChanged != null)
             {
                 CollectionChanged(sender, e);

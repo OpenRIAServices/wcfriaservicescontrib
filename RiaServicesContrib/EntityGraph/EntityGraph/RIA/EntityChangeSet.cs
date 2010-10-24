@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ServiceModel.DomainServices.Client;
 
-namespace RIA.EntityGraph
+namespace EntityGraph.RIA
 {
     public partial class EntityGraph<TEntity> where TEntity : Entity
     {

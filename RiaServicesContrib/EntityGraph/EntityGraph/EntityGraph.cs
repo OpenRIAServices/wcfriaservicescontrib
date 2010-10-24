@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.ServiceModel.DomainServices.Client;
-using System.ComponentModel;
 
-namespace RIA.EntityGraph
+namespace EntityGraph
 {
     internal class InitializeAttribute : Attribute
     {
@@ -15,7 +15,11 @@ namespace RIA.EntityGraph
     internal class DisposeAttribute : Attribute
     {
     }
-    public partial class EntityGraph<TEntity> where TEntity : Entity
+
+    public abstract partial class EntityGraph<TEntity, TBase, TValidationResult>
+        where TEntity : class, TBase
+        where TBase : class, INotifyPropertyChanged
+        where TValidationResult : class
     {
         public TEntity Source { get; private set; }
         public string Name { get; private set; }
@@ -30,20 +34,21 @@ namespace RIA.EntityGraph
             var type = this.GetType();
             var flags = BindingFlags.Instance | BindingFlags.NonPublic;
             var constructors = type.GetMethods(flags).Where(m => m.IsDefined(typeof(InitializeAttribute), true));
+
             foreach(var constructor in constructors)
             {
                 constructor.Invoke(this, new object[] { });
             }
         }
 
-        private EntityRelationGraph<Entity> _entityRelationGraph;
-        private EntityRelationGraph<Entity> EntityRelationGraph
+        private EntityRelationGraph<TBase> _entityRelationGraph;
+        protected EntityRelationGraph<TBase> EntityRelationGraph
         {
             get
             {
-                if (_entityRelationGraph == null)
+                if(_entityRelationGraph == null)
                 {
-                    _entityRelationGraph = new EntityRelationGraph<Entity>();
+                    _entityRelationGraph = new EntityRelationGraph<TBase>();
 
                     GetEntityGraph(Source, _entityRelationGraph);
                 }
@@ -56,14 +61,14 @@ namespace RIA.EntityGraph
         }
 
         /// <summary>
-        /// Method that implementes a generic traversal over an entity graph (defined by 
+        /// Method that implements a generic traversal over an entity graph (defined by 
         /// associations marked with an entity graph attibute and applies 'action' to each visited node.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public TEntity GraphOperation(Func<Entity, Entity> action)
+        public TEntity GraphOperation(Func<TBase, TBase> action)
         {
-            var nodeMap = new Dictionary<Entity, Entity>();
+            var nodeMap = new Dictionary<TBase, TBase>();
 
             nodeMap = EntityRelationGraph.Nodes.Aggregate(nodeMap, (nm, graphNode) =>
             {
@@ -83,22 +88,22 @@ namespace RIA.EntityGraph
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="graph"></param>
-        private void GetEntityGraph(Entity entity, EntityRelationGraph<Entity> graph)
+        private void GetEntityGraph(TBase entity, EntityRelationGraph<TBase> graph)
         {
-            if (graph.Nodes.Any(n => n.Node == entity))
+            if(graph.Nodes.Any(n => n.Node == entity))
                 return;
-            EntityRelation<Entity> node = new EntityRelation<Entity>() { Node = entity };
+            EntityRelation<TBase> node = new EntityRelation<TBase>() { Node = entity };
             graph.Nodes.Add(node);
 
-            foreach (PropertyInfo association in GetAssociations(entity).Where(a => HasEntityGraphAttribute(a)))
+            foreach(PropertyInfo association in GetAssociations(entity).Where(a => HasEntityGraphAttribute(a)))
             {
-                if (typeof(IEnumerable).IsAssignableFrom(association.PropertyType))
+                if(typeof(IEnumerable).IsAssignableFrom(association.PropertyType))
                 {
                     IEnumerable assocList = (IEnumerable)association.GetValue(entity, null);
-                    node.ListEdges.Add(association, new List<Entity>());
-                    foreach (Entity e in assocList)
+                    node.ListEdges.Add(association, new List<TBase>());
+                    foreach(TBase e in assocList)
                     {
-                        if (e != null)
+                        if(e != null)
                         {
                             node.ListEdges[association].Add(e);
                             GetEntityGraph(e, graph);
@@ -107,8 +112,8 @@ namespace RIA.EntityGraph
                 }
                 else
                 {
-                    Entity e = (Entity)association.GetValue(entity, null);
-                    if (e != null)
+                    TBase e = (TBase)association.GetValue(entity, null);
+                    if(e != null)
                     {
                         node.SingleEdges.Add(association, e);
                         GetEntityGraph(e, graph);
@@ -118,28 +123,28 @@ namespace RIA.EntityGraph
         }
 
         /// <summary>
-        /// (Re-)builds the assocacitions between the nodes of the graph.
+        /// (Re-)builds the associations between the nodes of the graph.
         /// </summary>
         /// <param name="nodes"></param>
         /// <param name="graph"></param>
-        private static void BuildEntityGraph(Dictionary<Entity, Entity> nodes, EntityRelationGraph<Entity> graph)
+        private static void BuildEntityGraph(Dictionary<TBase, TBase> nodes, EntityRelationGraph<TBase> graph)
         {
-            foreach (var n in graph.Nodes)
+            foreach(var n in graph.Nodes)
             {
                 var newEntity = nodes[n.Node];
-                foreach (var association in n.SingleEdges.Keys)
+                foreach(var association in n.SingleEdges.Keys)
                 {
                     var oldAssociationEntity = n.SingleEdges[association];
                     var newAssociationEntity = nodes[oldAssociationEntity];
                     association.SetValue(newEntity, newAssociationEntity, null);
                 }
-                foreach (var association in n.ListEdges.Keys)
+                foreach(var association in n.ListEdges.Keys)
                 {
                     IEnumerable assocList = (IEnumerable)association.GetValue(newEntity, null);
                     Type assocListType = assocList.GetType();
                     var addMethod = assocListType.GetMethod("Add");
 
-                    foreach (var oldAssociationEntity in n.ListEdges[association])
+                    foreach(var oldAssociationEntity in n.ListEdges[association])
                     {
                         var newAssociationEntity = nodes[oldAssociationEntity];
                         addMethod.Invoke(assocList, new object[] { newAssociationEntity });
@@ -154,12 +159,12 @@ namespace RIA.EntityGraph
                 // the heuristic that they don't have an origional state.
                 foreach(PropertyInfo association in GetAssociations(newEntity))
                 {
-                    if(association.PropertyType.IsSubclassOf(typeof(Entity)))
+                    if(association.PropertyType.IsSubclassOf(typeof(TBase)))
                     {
-                        Entity e = (Entity)association.GetValue(n.Node, null);
-                        if(e != null)
+                        TBase e = (TBase)association.GetValue(n.Node, null);
+                        if(e != null && e is Entity)
                         {
-                            if(e.GetOriginal() == null)
+                            if((e as Entity).GetOriginal() == null)
                             {
                                 association.SetValue(newEntity, nodes.ContainsKey(e) ? nodes[e] : e, null);
                             }
@@ -175,7 +180,7 @@ namespace RIA.EntityGraph
         /// <returns></returns>
         private bool HasEntityGraphAttribute(PropertyInfo propInfo)
         {
-            Func<EntityGraphAttribute, bool> match = 
+            Func<EntityGraphAttribute, bool> match =
                 entityGraph => entityGraph is EntityGraphAttribute && (Name == null || Name == entityGraph.Name);
 
             return propInfo.GetCustomAttributes(true).OfType<EntityGraphAttribute>().Any(match);
@@ -186,7 +191,7 @@ namespace RIA.EntityGraph
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        private static PropertyInfo[] GetAssociations(Entity obj)
+        private static PropertyInfo[] GetAssociations(TBase obj)
         {
             BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.Instance;
             var qry = from p in obj.GetType().GetProperties(bindingAttr)

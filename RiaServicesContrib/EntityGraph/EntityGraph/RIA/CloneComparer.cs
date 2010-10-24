@@ -4,7 +4,7 @@ using System.ServiceModel.DomainServices.Client;
 using RiaServicesContrib;
 using RiaServicesContrib.Extensions;
 
-namespace RIA.EntityGraph
+namespace EntityGraph.RIA
 {
     public partial class EntityGraph<TEntity>
     {

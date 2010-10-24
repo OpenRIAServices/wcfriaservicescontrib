@@ -3,8 +3,6 @@ using System.ServiceModel.DomainServices.Client;
 using EntityGraphTest.Web;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RIA.EntityGraph;
-using System.Collections.Specialized;
 
 namespace EntityGraphTest
 {

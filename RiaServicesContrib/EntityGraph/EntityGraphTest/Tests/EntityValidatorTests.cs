@@ -1,16 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RIA.EntityGraph;
-using RIA.EntityValidator;
+using System.ServiceModel.DomainServices.Client;
+using EntityGraph;
+using EntityGraph.RIA;
 using EntityGraphTest.Web;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RIA.EntityValidator;
 
 namespace EntityGraphTest.Tests
 {
     public class EntityValidatorTest : GraphValidationRule<A>
     {
-        public override ValidationRuleDependencies<EntityGraph<A>> Signature {
+        public override ValidationRuleDependencies<EntityGraph<A, Entity, ValidationResult>> Signature {
             get {
-                return new ValidationRuleDependencies<EntityGraph<A>>
+                return new ValidationRuleDependencies<EntityGraph<A, Entity, ValidationResult>>
                 {
                     a => a.Source.B.name,
                     a => a.Source.name

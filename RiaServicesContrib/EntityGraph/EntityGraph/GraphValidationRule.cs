@@ -1,11 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ServiceModel.DomainServices.Client;
+﻿using System.ComponentModel;
 using RIA.EntityValidator;
 
-
-namespace RIA.EntityGraph
+namespace EntityGraph
 {
-    public abstract class GraphValidationRule<TEntity> : ValidationRule<EntityGraph<TEntity>, ValidationResult> where TEntity : Entity
+    public abstract class GraphValidationRule<TEntity, TBase, TResult> : ValidationRule<EntityGraph<TEntity, TBase, TResult>, TResult>
+        where TEntity : class, TBase
+        where TBase : class, INotifyPropertyChanged
+        where TResult : class
     {
     }
 }

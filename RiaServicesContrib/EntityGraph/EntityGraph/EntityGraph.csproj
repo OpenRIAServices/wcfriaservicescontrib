@@ -56,17 +56,9 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CloneComparer.cs" />
     <Compile Include="contrib\EntityStateSet.cs" />
     <Compile Include="contrib\ExtractType.cs" />
     <Compile Include="contrib\RiaServicesExtensions.cs" />
-    <Compile Include="EntityGraph.cs" />
-    <Compile Include="Clone.cs" />
-    <Compile Include="EntityChangeSet.cs" />
-    <Compile Include="EntityGraphChangeSet.cs" />
-    <Compile Include="EntityGraphComparer.cs" />
-    <Compile Include="EntityRelationGraph.cs" />
-    <Compile Include="EntitySet.cs" />
     <Compile Include="EntityValidator\ValidationRule.cs" />
     <Compile Include="EntityValidator\IValidationRule.cs" />
     <Compile Include="EntityValidator\IValidationRulesProvider.cs" />
@@ -75,16 +67,27 @@
     <Compile Include="EntityValidator\ValidationRuleDependencies.cs" />
     <Compile Include="EntityValidator\ValidationRuleInvokeHelper.cs" />
     <Compile Include="EntityValidator\ValidationValueChangedEventArgs.cs" />
+    <Compile Include="EntityGraph.cs" />
+    <Compile Include="EntityGraphComparer.cs" />
+    <Compile Include="EntityRelationGraph.cs" />
     <Compile Include="GraphValidationRule.cs" />
     <Compile Include="GraphValidator.cs" />
-    <Compile Include="HasChanges.cs" />
     <Compile Include="IDisposable.cs" />
-    <Compile Include="IEDitableObject.cs" />
     <Compile Include="IEnumerable.cs" />
     <Compile Include="INotifyCollectionChanged.cs" />
     <Compile Include="INotifyPropertyChanged.cs" />
+    <Compile Include="RIA\Clone.cs" />
+    <Compile Include="RIA\CloneComparer.cs" />
+    <Compile Include="RIA\EntityChangeSet.cs" />
+    <Compile Include="RIA\EntityGraph.cs" />
+    <Compile Include="RIA\EntityGraphChangeSet.cs" />
+    <Compile Include="RIA\EntitySet.cs" />
+    <Compile Include="RIA\GraphValidationRule.cs" />
+    <Compile Include="RIA\GraphValidator.cs" />
+    <Compile Include="RIA\HasChanges.cs" />
+    <Compile Include="RIA\IEDitableObject.cs" />
+    <Compile Include="RIA\Proxies.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Proxies.cs" />
     <Compile Include="EntityValidator\ValidationEngine.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RIA.EntityGraph;
+﻿using EntityGraph.RIA;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace EntityGraphTest.Tests
 {

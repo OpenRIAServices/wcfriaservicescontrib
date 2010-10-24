@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using System.ServiceModel.DomainServices.Client;
+using EntityGraph.RIA;
 using EntityGraphTest.Web;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RIA.EntityGraph;
 
 namespace EntityGraphTest.Tests
 {
