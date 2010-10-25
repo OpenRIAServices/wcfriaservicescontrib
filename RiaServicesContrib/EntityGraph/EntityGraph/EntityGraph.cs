@@ -18,7 +18,7 @@ namespace EntityGraph
 
     public abstract partial class EntityGraph<TEntity, TBase, TValidationResult>
         where TEntity : class, TBase
-        where TBase : class, INotifyPropertyChanged
+        where TBase : class
         where TValidationResult : class
     {
         public TEntity Source { get; private set; }

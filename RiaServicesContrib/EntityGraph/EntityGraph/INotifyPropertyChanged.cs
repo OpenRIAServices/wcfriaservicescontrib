@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 
 namespace EntityGraph
@@ -32,15 +33,15 @@ namespace EntityGraph
 
         private void SetupNotifyPropertyChangedHandlers()
         {
-            foreach (var node in EntityRelationGraph)
+            foreach (var node in EntityRelationGraph.OfType<INotifyPropertyChanged>())
             {
-                node.PropertyChanged += node_PropertyChanged;
+                    node.PropertyChanged += node_PropertyChanged;
             }
         }
 
         private void RemoveNotifyPropertyChangedHandlers()
         {
-            foreach (var node in EntityRelationGraph)
+            foreach (var node in EntityRelationGraph.OfType<INotifyPropertyChanged>())
             {
                 node.PropertyChanged -= node_PropertyChanged;
             }
