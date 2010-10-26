@@ -24,12 +24,25 @@ namespace EntityGraph
         public TEntity Source { get; private set; }
         public string Name { get; private set; }
 
-        public EntityGraph(TEntity Source) : this(Source, null) { }
+        public EntityGraph(TEntity Source) : this(Source, default(string)) { }
 
-        public EntityGraph(TEntity Source, string Name)
+        private Func<TBase, string, IEnumerable<PropertyInfo>> GetNeighbors;
+
+        public EntityGraph(TEntity Source, string Name) 
+            : this(Source, Name, (entity, path) => GetAssociations(entity).Where(a => HasEntityGraphAttribute(a, Name)))
+        {
+        }
+        
+        public EntityGraph(TEntity Source, string[] paths)
+            : this(Source, null, (entity, path) => GetNeigborsByStringEdges(entity, paths))
+        {
+        }
+
+        private EntityGraph(TEntity Source, string Name, Func<TBase, string, IEnumerable<PropertyInfo>> GetNeighbors)
         {
             this.Source = Source;
             this.Name = Name;
+            this.GetNeighbors = GetNeighbors;
 
             var type = this.GetType();
             var flags = BindingFlags.Instance | BindingFlags.NonPublic;
@@ -49,8 +62,7 @@ namespace EntityGraph
                 if(_entityRelationGraph == null)
                 {
                     _entityRelationGraph = new EntityRelationGraph<TBase>();
-
-                    GetEntityGraph(Source, _entityRelationGraph);
+                    BuildEntityGraph(Source, _entityRelationGraph, Source.GetType().Name, GetNeighbors);
                 }
                 return _entityRelationGraph;
             }
@@ -88,14 +100,14 @@ namespace EntityGraph
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="graph"></param>
-        private void GetEntityGraph(TBase entity, EntityRelationGraph<TBase> graph)
+        private void BuildEntityGraph(TBase entity, EntityRelationGraph<TBase> graph, string path, Func<TBase,string, IEnumerable<PropertyInfo>> OutEdges)
         {
             if(graph.Nodes.Any(n => n.Node == entity))
                 return;
             EntityRelation<TBase> node = new EntityRelation<TBase>() { Node = entity };
             graph.Nodes.Add(node);
 
-            foreach(PropertyInfo association in GetAssociations(entity).Where(a => HasEntityGraphAttribute(a)))
+            foreach(PropertyInfo association in OutEdges(entity, path))
             {
                 if(typeof(IEnumerable).IsAssignableFrom(association.PropertyType))
                 {
@@ -106,7 +118,7 @@ namespace EntityGraph
                         if(e != null)
                         {
                             node.ListEdges[association].Add(e);
-                            GetEntityGraph(e, graph);
+                            BuildEntityGraph(e, graph, path + "." + association.Name, OutEdges);
                         }
                     }
                 }
@@ -116,7 +128,7 @@ namespace EntityGraph
                     if(e != null)
                     {
                         node.SingleEdges.Add(association, e);
-                        GetEntityGraph(e, graph);
+                        BuildEntityGraph(e, graph, path + "." + association.Name, OutEdges);
                     }
                 }
             }
@@ -173,12 +185,80 @@ namespace EntityGraph
                 }
             }
         }
+
+        private static IEnumerable<PropertyInfo> GetNeigborsByStringEdges(TBase entity, string[] edges)
+        {
+            List<PropertyInfo> neighbors = new List<PropertyInfo>();
+            string name = entity.GetType().Name;
+
+            foreach(var edge in edges)
+            {
+                var edgeComponents = edge.Split(new string[] { "->" }, StringSplitOptions.RemoveEmptyEntries);
+
+                if(edgeComponents.Count() != 2)
+                {
+                    Console.Error.WriteLine("Invalid edge expression: {0}", edge);
+                    continue;
+                }
+                edgeComponents[0] = edgeComponents[0].Trim();
+                edgeComponents[1] = edgeComponents[1].Trim();
+                if(edgeComponents[0] == name)                
+                {
+                    var propName = edgeComponents[1];
+                    var propInfo = entity.GetType().GetProperty(propName);
+                    if(propInfo == null)
+                    {
+                        Console.Error.WriteLine("Invalid property name '{0}' in path for entity '{1}'", propName, name); ;
+                        continue;
+                    }
+                    neighbors.Add(propInfo);
+                }
+            }
+            return neighbors;
+        }
+
+        /// <summary>
+        /// This method returns all neighbor nodes for path.Entity with given collection of paths
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="visitedPath"></param>
+        /// <param name="paths"></param>
+        /// <returns></returns>
+        private static IEnumerable<PropertyInfo> GetNeigborsByStringPaths(TBase entity, string visitedPath, string[] paths)
+        {
+            List<PropertyInfo> neighbors = new List<PropertyInfo>();
+            foreach(var path in paths)
+            {
+                var visitedPathComponents = visitedPath.Split('.');
+                var pathComponents = path.Split('.');
+                int pathComponentsCount = visitedPathComponents.Count();
+
+                if(pathComponents.Count() <= pathComponentsCount)
+                    continue;
+
+                int i = 0;
+                while(i < pathComponentsCount)
+                {
+                    if(visitedPathComponents[i] != pathComponents[i])
+                        break;
+                    i++;
+                }
+                if(i == pathComponentsCount)
+                {
+                    var propName = pathComponents[i];
+                    var propInfo = entity.GetType().GetProperty(propName);
+                    neighbors.Add(propInfo);
+                }
+            }
+            return neighbors;
+        }
+
         /// <summary>
         /// Returns true of the property has the "EntityGraphAttribute" (or a subclass), false otherwise.
         /// </summary>
         /// <param name="propInfo"></param>
         /// <returns></returns>
-        private bool HasEntityGraphAttribute(PropertyInfo propInfo)
+        private static bool HasEntityGraphAttribute(PropertyInfo propInfo, string Name)
         {
             Func<EntityGraphAttribute, bool> match =
                 entityGraph => entityGraph is EntityGraphAttribute && (Name == null || Name == entityGraph.Name);
@@ -187,7 +267,7 @@ namespace EntityGraph
         }
 
         /// <summary>
-        /// Returns an array of PropertyInfo  objects for properties which have the "AssociationAttribute"
+        /// Returns an array of PropertyInfo objects for properties which have the "AssociationAttribute"
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>

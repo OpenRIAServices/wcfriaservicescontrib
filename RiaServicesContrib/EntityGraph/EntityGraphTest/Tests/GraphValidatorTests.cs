@@ -12,7 +12,6 @@ namespace EntityGraphTest.Tests
     {
         public static bool IsValidated = false;
 
-
         public override ValidationRuleDependencies<EntityGraph<A, Entity, ValidationResult>> Signature
         {
             get {
