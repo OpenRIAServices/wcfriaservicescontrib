@@ -8,19 +8,15 @@ namespace RIA.EntityValidator
 {
     public class ValidationEngine<TEntity, TResult> where TResult : class
     {
+        private IValidationRulesProvider<TEntity, TResult> RulesProvider;
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="root">The data element for which to create this EntityValidator</param>
-        public ValidationEngine(TEntity root) {
+        public ValidationEngine(IValidationRulesProvider<TEntity, TResult> rulesProvider, TEntity root) {
             this.Root = root;
-            this.ValidatorProviders = new List<IValidationRulesProvider<TEntity, TResult>>();
-
-            // MEF doesn't support generics. Hence we explicitly add the MEFValidationRulesProvider here.
-            var provider = new MEFValidationRulesProvider<TEntity, TResult>();
-            MEFValidationRules.Catalog.Changed += (sender, args) => Refresh();
-            var container = new CompositionContainer();
-            container.ComposeParts(this, provider);
+            this.RulesProvider = rulesProvider;
+            Refresh();
         }
 
         /// <summary>
@@ -31,9 +27,10 @@ namespace RIA.EntityValidator
             {
                 validationRule.ValidationResultChanged -= validationRule_ValidationResultChanged;
             }
+
             ValidationRules.Clear();
-            var list = ValidatorProviders.ToList();
-            foreach(var validator in ValidatorProviders.SelectMany(provider => provider.GetValidators(Root)))
+            
+            foreach(var validator in RulesProvider.GetValidators(Root))
             {
                 var key = validator.Item1;
                 if(ValidationRules.ContainsKey(key) == false)
@@ -49,13 +46,6 @@ namespace RIA.EntityValidator
         }
 
         public event EventHandler<ValidationResultChangedEventArgs<TResult>> ValidationResultChanged;
-
-        /// <summary>
-        /// Collection of registered validator rule providers
-        /// </summary>
-        [ImportMany(AllowRecomposition = true)]
-        public IEnumerable<IValidationRulesProvider<TEntity, TResult>> ValidatorProviders;
-
 
         /// <summary>
         /// Returns the collection of objects that are involved in the given validation rule

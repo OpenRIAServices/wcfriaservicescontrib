@@ -12,7 +12,8 @@ namespace EntityGraph
 
         [Initialize]
         internal void InitGraphValidation() {
-            Validator = new ValidationEngine<EntityGraph<TEntity, TBase, TValidationResult>, TValidationResult>(this);
+            var rulesProvider = new MEFValidationRulesProvider<EntityGraph<TEntity, TBase, TValidationResult>, TValidationResult>();
+            Validator = new ValidationEngine<EntityGraph<TEntity, TBase, TValidationResult>, TValidationResult>(rulesProvider, this);
             Validator.ValidationResultChanged += Validator_ValidationResultChanged;
             this.PropertyChanged += Validate;
             this.CollectionChanged += Validator_CollectionChanged;

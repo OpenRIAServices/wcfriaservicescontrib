@@ -31,7 +31,6 @@ namespace RIA.EntityValidator
         }
     }
 
-    [Export]
     public class MEFValidationRulesProvider<TEntity, TResult> : 
         IValidationRulesProvider<TEntity, TResult> where TResult : class
     {
