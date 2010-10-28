@@ -11,7 +11,8 @@ namespace EntityGraph
         private ValidationEngine<EntityGraph<TEntity, TBase, TValidationResult>, TValidationResult> Validator;
 
         [Initialize]
-        internal void InitGraphValidation() {
+        internal void InitGraphValidation()
+        {
             var rulesProvider = new MEFValidationRulesProvider<EntityGraph<TEntity, TBase, TValidationResult>, TValidationResult>();
             Validator = new ValidationEngine<EntityGraph<TEntity, TBase, TValidationResult>, TValidationResult>(rulesProvider, this);
             Validator.ValidationResultChanged += Validator_ValidationResultChanged;
@@ -19,7 +20,7 @@ namespace EntityGraph
             this.CollectionChanged += Validator_CollectionChanged;
             this.ValidateAll();
         }
-        
+
         [Dispose]
         internal void CleanGraphValidation()
         {
@@ -27,7 +28,8 @@ namespace EntityGraph
             this.CollectionChanged -= Validator_CollectionChanged;
         }
 
-        private void Validator_ValidationResultChanged(object sender, ValidationResultChangedEventArgs<TValidationResult> e) {
+        private void Validator_ValidationResultChanged(object sender, ValidationResultChangedEventArgs<TValidationResult> e)
+        {
             var rule = (GraphValidationRule<TEntity, TBase, TValidationResult>)sender;
             foreach(var entity in Validator.ObjectsInvolved(rule).Cast<TBase>())
             {
@@ -42,16 +44,22 @@ namespace EntityGraph
         protected abstract void ClearValidationResult(TBase entity, TValidationResult validationResult);
         protected abstract void SetValidationResult(TBase entity, TValidationResult validationResult);
 
-        private void Validator_CollectionChanged(object sender, NotifyCollectionChangedEventArgs args) {
+        private void Validator_CollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+        {
             Validator.Refresh();
-            var collection = (from n in EntityRelationGraph.Nodes
-                              from edge in n.ListEdges
-                              where edge.Key.PropertyType == sender.GetType()
-                              select new { onwer = n.Node, propInfo = edge.Key }).SingleOrDefault();
-            Validator.Validate(collection.onwer, collection.propInfo.Name);
+            var senderType = sender.GetType();
+            var collections = (from n in EntityRelationGraph.Nodes
+                               from edge in n.ListEdges
+                               where
+                                 edge.Key.PropertyType == senderType &&
+                                 edge.Key.GetValue(n.Node, null) == sender
+                               select new { owner = n.Node, propInfo = edge.Key });
+            var collection = collections.SingleOrDefault();
+            Validator.Validate(collection.owner, collection.propInfo.Name);
         }
-        private void Validate(object sender, PropertyChangedEventArgs args) {
-            Validator.Validate(sender, args.PropertyName);           
+        private void Validate(object sender, PropertyChangedEventArgs args)
+        {
+            Validator.Validate(sender, args.PropertyName);
         }
         private void ValidateAll()
         {
