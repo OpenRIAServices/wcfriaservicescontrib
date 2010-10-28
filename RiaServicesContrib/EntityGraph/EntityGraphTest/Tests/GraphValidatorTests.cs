@@ -33,16 +33,6 @@ namespace EntityGraphTest.Tests
             else
                 this.Result = ValidationResult.Success;
         }
-        
-        public void MyValidate(EntityGraph<A> graph) {
-            IsValidated = true;
-            if(graph.Source.B.name != graph.Source.B.C.name)
-            {
-                this.Result = new ValidationResult("Invalid names");
-            }
-            else
-                this.Result = ValidationResult.Success;
-        }
     }
 
     [TestClass]
