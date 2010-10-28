@@ -59,6 +59,12 @@
     <Compile Include="contrib\EntityStateSet.cs" />
     <Compile Include="contrib\ExtractType.cs" />
     <Compile Include="contrib\RiaServicesExtensions.cs" />
+    <Compile Include="EntityValidator\ClassValidationRulesProvider.cs" />
+    <Compile Include="EntityValidator\IValidationAttribute.cs" />
+    <Compile Include="EntityValidator\RIA\EntityValidator.cs" />
+    <Compile Include="EntityValidator\RIA\RegularExpressionAttribute.cs" />
+    <Compile Include="EntityValidator\RIA\RequiredAttribute.cs" />
+    <Compile Include="EntityValidator\RIA\ValidationAttribute.cs" />
     <Compile Include="EntityValidator\ValidationRule.cs" />
     <Compile Include="EntityValidator\IValidationRule.cs" />
     <Compile Include="EntityValidator\IValidationRulesProvider.cs" />
