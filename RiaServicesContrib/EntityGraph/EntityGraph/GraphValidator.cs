@@ -17,6 +17,7 @@ namespace EntityGraph
             Validator.ValidationResultChanged += Validator_ValidationResultChanged;
             this.PropertyChanged += Validate;
             this.CollectionChanged += Validator_CollectionChanged;
+            this.ValidateAll();
         }
         
         [Dispose]
@@ -51,6 +52,10 @@ namespace EntityGraph
         }
         private void Validate(object sender, PropertyChangedEventArgs args) {
             Validator.Validate(sender, args.PropertyName);           
+        }
+        private void ValidateAll()
+        {
+            Validator.ValidateAll();
         }
     }
 }

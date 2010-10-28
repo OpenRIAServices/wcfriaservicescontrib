@@ -75,6 +75,14 @@ namespace RIA.EntityValidator
                 }
             }
         }
+        /// <summary>
+        /// Validates all registered objects/properties
+        /// </summary>
+        public void ValidateAll()
+        {
+            var rules = ValidationRules.Values.SelectMany(id => id).Distinct().ToList();
+            rules.ForEach(rule => rule.InvokeValidate(Root));
+        }
 
         private TEntity Root { get; set; }
 
