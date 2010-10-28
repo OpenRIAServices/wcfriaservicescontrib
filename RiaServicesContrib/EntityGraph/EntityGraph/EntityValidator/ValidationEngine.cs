@@ -30,7 +30,7 @@ namespace RIA.EntityValidator
 
             ValidationRules.Clear();
             
-            foreach(var validator in RulesProvider.GetValidators(Root))
+            foreach(var validator in RulesProvider.GetValidationRules(Root))
             {
                 var key = validator.Item1;
                 if(ValidationRules.ContainsKey(key) == false)
