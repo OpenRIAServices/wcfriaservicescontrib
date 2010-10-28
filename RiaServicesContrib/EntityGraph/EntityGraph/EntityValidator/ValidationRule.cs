@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 
 namespace RIA.EntityValidator
 {
+    [InheritedExport]
     public abstract class ValidationRule<TEntity, TResult> : IValidationRule<TEntity, TResult> where TResult : class
     {
         public event EventHandler<ValidationResultChangedEventArgs<TResult>> ValidationResultChanged;

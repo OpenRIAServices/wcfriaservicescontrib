@@ -8,7 +8,7 @@ namespace RIA.EntityValidator
 {
     internal static class ValidationRuleInvokeHelper<TEntity, TResult> where TResult : class
     {
-        public static void InvokeValidator(IValidationRule<TEntity, TResult> validator, TEntity entity) {
+        public static void InvokeValidator(ValidationRule<TEntity, TResult> validator, TEntity entity) {
             var signature = validator.Signature;
             var type = validator.GetType();
 

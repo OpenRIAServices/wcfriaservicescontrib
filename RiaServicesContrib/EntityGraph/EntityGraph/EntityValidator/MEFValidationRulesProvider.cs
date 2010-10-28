@@ -59,7 +59,7 @@ namespace RIA.EntityValidator
         }
 
         [ImportMany(AllowRecomposition = true)]
-        public IEnumerable<IValidationRule<TEntity, TResult>> EntityValidators { get; set; }
+        public IEnumerable<ValidationRule<TEntity, TResult>> EntityValidators { get; set; }
 
         public IEnumerable<Tuple<Tuple<object, string>, IValidationRule<TEntity, TResult>>> GetValidationRules(TEntity root) {
             foreach(var validator in EntityValidators)
