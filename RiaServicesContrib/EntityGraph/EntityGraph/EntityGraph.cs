@@ -34,7 +34,7 @@ namespace EntityGraph
         }
         
         public EntityGraph(TEntity Source, string[] paths)
-            : this(Source, null, (entity, path) => GetNeigborsByStringEdges(entity, paths))
+            : this(Source, null, (entity, path) => GetNeigborsByStringPaths(entity, path, paths))
         {
         }
 
@@ -226,6 +226,7 @@ namespace EntityGraph
         /// <returns></returns>
         private static IEnumerable<PropertyInfo> GetNeigborsByStringPaths(TBase entity, string visitedPath, string[] paths)
         {
+            var entityType = entity.GetType();
             List<PropertyInfo> neighbors = new List<PropertyInfo>();
             foreach(var path in paths)
             {
@@ -246,7 +247,12 @@ namespace EntityGraph
                 if(i == pathComponentsCount)
                 {
                     var propName = pathComponents[i];
-                    var propInfo = entity.GetType().GetProperty(propName);
+                    var propInfo = entityType.GetProperty(propName);
+                    if(propInfo == null)
+                    {
+                        Console.Error.WriteLine("Invalid property name '{0}' in path for entity '{1}'", propName, entityType.Name); ;
+                        continue;
+                    }
                     neighbors.Add(propInfo);
                 }
             }

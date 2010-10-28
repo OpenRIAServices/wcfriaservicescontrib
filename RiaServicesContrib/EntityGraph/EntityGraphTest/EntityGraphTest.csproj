@@ -116,7 +116,7 @@
     <Compile Include="Tests\IEditableObjectTests.cs" />
     <Compile Include="Tests\IEnumerableTests.cs" />
     <Compile Include="Tests\INotifyPropertyChangedTests.cs" />
-    <Compile Include="Tests\StringEdgesTests.cs" />
+    <Compile Include="Tests\StringPathsTests.cs" />
     <Compile Include="Tests\ValidationAttributeTests.cs" />
   </ItemGroup>
   <ItemGroup>
