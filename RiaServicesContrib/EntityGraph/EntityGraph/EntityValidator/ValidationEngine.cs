@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace RIA.EntityValidator
 {
-    public class ValidationEngine<TEntity, TResult> where TResult : class
+    public class ValidationEngine<TEntity, TResult> : IDisposable where TResult : class
     {
         private IValidationRulesProvider<TEntity, TResult> RulesProvider;
         /// <summary>
@@ -16,6 +16,7 @@ namespace RIA.EntityValidator
         public ValidationEngine(IValidationRulesProvider<TEntity, TResult> rulesProvider, TEntity root) {
             this.Root = root;
             this.RulesProvider = rulesProvider;
+            this.RulesProvider.ValidationRulesChanged += OnValidationRulesChanged;
             Refresh();
         }
 
@@ -94,6 +95,15 @@ namespace RIA.EntityValidator
             {
                 ValidationResultChanged(sender, e);
             }
+        }
+
+        private void OnValidationRulesChanged(object sender, ValidationRulesChangedEventArgs args)
+        {
+            Refresh();
+        }
+        public void Dispose()
+        {
+            this.RulesProvider.ValidationRulesChanged -= OnValidationRulesChanged;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
@@ -27,7 +28,8 @@ namespace RIA.EntityValidator
         /// </summary>
         /// <param name="assembly"></param>
         public static void RegisterAssembly(Assembly assembly) {
-            Catalog.Catalogs.Add(new AssemblyCatalog(assembly));
+            if(Catalog.Catalogs.OfType<AssemblyCatalog>().Any(ac => ac.Assembly == assembly) == false)
+                Catalog.Catalogs.Add(new AssemblyCatalog(assembly));
         }
     }
 
@@ -45,6 +47,15 @@ namespace RIA.EntityValidator
 
             //Fill the imports of this object
             container.ComposeParts(this);
+            MEFValidationRules.Catalog.Changed += Catalog_Changed;
+        }
+
+        void Catalog_Changed(object sender, ComposablePartCatalogChangeEventArgs e)
+        {
+            if(ValidationRulesChanged != null)
+            {
+                ValidationRulesChanged(this, new ValidationRulesChangedEventArgs());
+            }
         }
 
         [ImportMany(AllowRecomposition = true)]
@@ -103,5 +114,7 @@ namespace RIA.EntityValidator
                 return new Tuple<object, string>(GetValueFromExpression(body.Expression, arg), propertyPath.Name);
             }
         }
+
+        public event EventHandler<ValidationRulesChangedEventArgs> ValidationRulesChanged;
     }
 }
