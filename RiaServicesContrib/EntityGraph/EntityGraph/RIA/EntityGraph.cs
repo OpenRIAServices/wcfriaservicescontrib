@@ -22,5 +22,7 @@ namespace EntityGraph.RIA
         /// <param name="Source"></param>
         /// <param name="Paths"></param>
         public EntityGraph(TEntity Source, string[] Paths) : base(Source, Paths) { }
+
+        public EntityGraph(TEntity Source, EntityGraphShape<TEntity, Entity> shape) : base(Source, shape) { }
     }
 }

@@ -106,6 +106,7 @@
     <Compile Include="Tests\CloneTests.cs" />
     <Compile Include="Tests\EntityChangeSetTests.cs" />
     <Compile Include="Tests\EntityGraphComparerTests.cs" />
+    <Compile Include="Tests\EntityGraphShapeTests.cs" />
     <Compile Include="Tests\EntityGraphTests.cs" />
     <Compile Include="Tests\EntitySetTests.cs" />
     <Compile Include="Tests\EntityValidatorTests.cs" />

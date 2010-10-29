@@ -36,6 +36,10 @@ namespace EntityGraph.RIA
         {
             return new EntityGraph<TEntity>(entity, paths);
         }
+        public static EntityGraph<TEntity> EntityGraph<TEntity>(this TEntity entity, EntityGraphShape<TEntity, Entity> shape) where TEntity : Entity
+        {
+            return new EntityGraph<TEntity>(entity, shape);
+        }
 
         /// <summary>
         /// Extension method that clones the given entity and all associated entities marked with the GraphAttribute attribute. 
@@ -69,6 +73,11 @@ namespace EntityGraph.RIA
         public static TEntity Clone<TEntity>(this TEntity entity, string[] paths) where TEntity : Entity
         {
             return entity.EntityGraph(paths).Clone();
+        }
+
+        public static TEntity Clone<TEntity>(this TEntity entity, EntityGraphShape<TEntity, Entity> shape) where TEntity : Entity
+        {
+            return new EntityGraph<TEntity>(entity, shape).Clone();
         }
     }
 }

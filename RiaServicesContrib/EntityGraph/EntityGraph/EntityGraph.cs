@@ -38,6 +38,10 @@ namespace EntityGraph
         {
         }
 
+        public EntityGraph(TEntity Source, EntityGraphShape<TEntity, TBase> shape)
+            : this(Source, null, (entity, path) => shape.OutEdges(entity, path))
+        {
+        }
         private EntityGraph(TEntity Source, string Name, Func<TBase, string, IEnumerable<PropertyInfo>> GetNeighbors)
         {
             this.Source = Source;

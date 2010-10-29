@@ -59,6 +59,7 @@
     <Compile Include="contrib\EntityStateSet.cs" />
     <Compile Include="contrib\ExtractType.cs" />
     <Compile Include="contrib\RiaServicesExtensions.cs" />
+    <Compile Include="EntityGraphShape.cs" />
     <Compile Include="EntityValidator\ClassValidationRulesProvider.cs" />
     <Compile Include="EntityValidator\IValidationAttribute.cs" />
     <Compile Include="EntityValidator\RIA\EntityValidator.cs" />
