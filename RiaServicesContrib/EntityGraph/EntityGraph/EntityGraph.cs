@@ -24,9 +24,9 @@ namespace EntityGraph
         public TEntity Source { get; private set; }
         public string Name { get; private set; }
 
-        public EntityGraph(TEntity Source) : this(Source, default(string)) { }
-
         private Func<TBase, string, IEnumerable<PropertyInfo>> GetNeighbors;
+
+        public EntityGraph(TEntity Source) : this(Source, default(string)) { }
 
         public EntityGraph(TEntity Source, string Name) 
             : this(Source, Name, (entity, path) => GetAssociations(entity).Where(a => HasEntityGraphAttribute(a, Name)))
@@ -188,7 +188,6 @@ namespace EntityGraph
 
         private static IEnumerable<PropertyInfo> GetNeigborsByStringEdges(TBase entity, string[] edges)
         {
-            List<PropertyInfo> neighbors = new List<PropertyInfo>();
             string name = entity.GetType().Name;
 
             foreach(var edge in edges)
@@ -211,10 +210,9 @@ namespace EntityGraph
                         Console.Error.WriteLine("Invalid property name '{0}' in path for entity '{1}'", propName, name); ;
                         continue;
                     }
-                    neighbors.Add(propInfo);
+                    yield return propInfo;
                 }
             }
-            return neighbors;
         }
 
         /// <summary>
@@ -227,36 +225,23 @@ namespace EntityGraph
         private static IEnumerable<PropertyInfo> GetNeigborsByStringPaths(TBase entity, string visitedPath, string[] paths)
         {
             var entityType = entity.GetType();
-            List<PropertyInfo> neighbors = new List<PropertyInfo>();
-            foreach(var path in paths)
+            foreach(var path in paths.Where(p => p.StartsWith(visitedPath) && p != visitedPath))
             {
+                if(path[visitedPath.Length] != '.')
+                    continue;
                 var visitedPathComponents = visitedPath.Split('.');
-                var pathComponents = path.Split('.');
+                var pathComponents = path.Substring(visitedPath.Length + 1).Split('.');
                 int pathComponentsCount = visitedPathComponents.Count();
 
-                if(pathComponents.Count() <= pathComponentsCount)
+                var propName = pathComponents[0];
+                var propInfo = entityType.GetProperty(propName);
+                if(propInfo == null)
+                {
+                    Console.Error.WriteLine("Invalid property name '{0}' in path for entity '{1}'", propName, entityType.Name); ;
                     continue;
-
-                int i = 0;
-                while(i < pathComponentsCount)
-                {
-                    if(visitedPathComponents[i] != pathComponents[i])
-                        break;
-                    i++;
                 }
-                if(i == pathComponentsCount)
-                {
-                    var propName = pathComponents[i];
-                    var propInfo = entityType.GetProperty(propName);
-                    if(propInfo == null)
-                    {
-                        Console.Error.WriteLine("Invalid property name '{0}' in path for entity '{1}'", propName, entityType.Name); ;
-                        continue;
-                    }
-                    neighbors.Add(propInfo);
-                }
+                yield return propInfo;
             }
-            return neighbors;
         }
 
         /// <summary>
@@ -277,13 +262,13 @@ namespace EntityGraph
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        private static PropertyInfo[] GetAssociations(TBase obj)
+        private static IEnumerable<PropertyInfo> GetAssociations(TBase obj)
         {
             BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.Instance;
             var qry = from p in obj.GetType().GetProperties(bindingAttr)
                       where p.IsDefined(typeof(AssociationAttribute), true)
                       select p;
-            return qry.ToArray();
+            return qry;
         }
 
         /// <summary>

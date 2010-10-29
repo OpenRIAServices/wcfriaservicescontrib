@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace EntityGraphTest.Tests
 {
     [TestClass]
-    public class StringPathsTests : EntityGraphTest
+    public class StringEdgesTests : EntityGraphTest
     {
         [TestMethod]
         public void SimpleStringEdgesTests()
@@ -20,7 +20,7 @@ namespace EntityGraphTest.Tests
             Assert.IsTrue(gr.Contains(newB));
         }
         [TestMethod]
-        public void CloneEqualStringEdgessTests()
+        public void CloneEqualStringEdgesTests()
         {
             string[] edges = new string[] { "A.B.C.D.A", "A.BSet"};
             var clone1 = a.Clone(edges);
@@ -33,9 +33,9 @@ namespace EntityGraphTest.Tests
         }
 
         [TestMethod]
-        public void CloneNotEqualStringEdgessTests()
+        public void CloneNotEqualStringEdgesTests()
         {
-            string[] edges = new string[] { "A.B.C", "A.DSet", "A.BSet" };
+            string[] edges = new string[] { "A.B", "A.DSet", "A.BSet" };
             var clone1 = a.Clone(edges);
             var clone2 = a.Clone();
 
