@@ -8,10 +8,9 @@ namespace RIA.EntityValidator
     public class ClassValidationRulesProvider<TEntity, TResult> :
         IValidationRulesProvider<TEntity, TResult> where TResult : class
     {
-        public event EventHandler<ValidationRulesChangedEventArgs> ValidationRulesChanged;
-
-        public IEnumerable<Tuple<Tuple<object, string>, IValidationRule<TEntity, TResult>>> GetValidationRules(TEntity root)
+        Dictionary<Tuple<object, string>, List<IValidationRule<TEntity, TResult>>> IValidationRulesProvider<TEntity, TResult>.GetValidationRules(TEntity root)
         {
+            var rules = new Dictionary<Tuple<object, string>, List<IValidationRule<TEntity, TResult>>>();
             var type = root.GetType();
 
             // Sets the propertyinfo of the ValidationAttribute, such that the validation attribute knwos
@@ -26,7 +25,18 @@ namespace RIA.EntityValidator
                                    select
                                     new Tuple<Tuple<object, string>, IValidationRule<TEntity, TResult>>(
                                         new Tuple<object, string>(root, property.Name), SetPropInfo(property, validator));
-            return validatorEntries.ToList();
+            foreach(var rule in validatorEntries)
+            {
+                if(rules.ContainsKey(rule.Item1))
+                {
+                    rules[rule.Item1].Add(rule.Item2);
+                }
+                else
+                {
+                    rules.Add(rule.Item1, new List<IValidationRule<TEntity, TResult>> { rule.Item2 });
+                }
+            }
+            return rules;
         }
     }
 }

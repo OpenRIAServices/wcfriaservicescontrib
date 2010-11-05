@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -47,30 +47,30 @@ namespace RIA.EntityValidator
 
             //Fill the imports of this object
             container.ComposeParts(this);
-            MEFValidationRules.Catalog.Changed += Catalog_Changed;
-        }
-
-        void Catalog_Changed(object sender, ComposablePartCatalogChangeEventArgs e)
-        {
-            if(ValidationRulesChanged != null)
-            {
-                ValidationRulesChanged(this, new ValidationRulesChangedEventArgs());
-            }
         }
 
         [ImportMany(AllowRecomposition = true)]
         public IEnumerable<ValidationRule<TEntity, TResult>> EntityValidators { get; set; }
 
-        public IEnumerable<Tuple<Tuple<object, string>, IValidationRule<TEntity, TResult>>> GetValidationRules(TEntity root) {
+        public Dictionary<Tuple<object, string>, List<IValidationRule<TEntity, TResult>>> GetValidationRules(TEntity root) {
+            var rules = new Dictionary<Tuple<object, string>, List<IValidationRule<TEntity, TResult>>>();
+
             foreach(var validator in EntityValidators)
             {
                 var signature = validator.Signature;
                 foreach(Expression<Func<TEntity, object>> method in signature)
                 {
                     var key = ResolveDependency(method, root);
-                    yield return new Tuple<Tuple<object, string>, IValidationRule<TEntity, TResult>>(key, validator);
+                    if(rules.ContainsKey(key))
+                    {
+                        rules[key].Add(validator);
+                    }
+                    else{
+                        rules.Add(key, new List<IValidationRule<TEntity, TResult>> { validator });
+                    }
                 }
             }
+            return rules;
         }
 
         private CompositionContainer container;
@@ -114,7 +114,5 @@ namespace RIA.EntityValidator
                 return new Tuple<object, string>(GetValueFromExpression(body.Expression, arg), propertyPath.Name);
             }
         }
-
-        public event EventHandler<ValidationRulesChangedEventArgs> ValidationRulesChanged;
     }
 }

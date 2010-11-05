@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
 using System.Linq;
 
 namespace RIA.EntityValidator
 {
-    public class ValidationEngine<TEntity, TResult> : IDisposable where TResult : class
+    public class ValidationEngine<TEntity, TResult> where TResult : class
     {
         private IValidationRulesProvider<TEntity, TResult> RulesProvider;
         /// <summary>
@@ -16,7 +14,6 @@ namespace RIA.EntityValidator
         public ValidationEngine(IValidationRulesProvider<TEntity, TResult> rulesProvider, TEntity root) {
             this.Root = root;
             this.RulesProvider = rulesProvider;
-            this.RulesProvider.ValidationRulesChanged += OnValidationRulesChanged;
             Refresh();
         }
 
@@ -29,20 +26,11 @@ namespace RIA.EntityValidator
                 validationRule.ValidationResultChanged -= validationRule_ValidationResultChanged;
             }
 
-            ValidationRules.Clear();
-            
-            foreach(var validator in RulesProvider.GetValidationRules(Root))
+            ValidationRules = RulesProvider.GetValidationRules(Root);
+
+            foreach(var validationRule in ValidationRules.Values.SelectMany(rules => rules))
             {
-                var key = validator.Item1;
-                if(ValidationRules.ContainsKey(key) == false)
-                {
-                    ValidationRules.Add(key, new List<IValidationRule<TEntity, TResult>> { validator.Item2 });
-                }
-                else
-                {
-                    ValidationRules[key].Add(validator.Item2);
-                }
-                validator.Item2.ValidationResultChanged += validationRule_ValidationResultChanged;
+                validationRule.ValidationResultChanged += validationRule_ValidationResultChanged;
             }
         }
 
@@ -95,15 +83,6 @@ namespace RIA.EntityValidator
             {
                 ValidationResultChanged(sender, e);
             }
-        }
-
-        private void OnValidationRulesChanged(object sender, ValidationRulesChangedEventArgs args)
-        {
-            Refresh();
-        }
-        public void Dispose()
-        {
-            this.RulesProvider.ValidationRulesChanged -= OnValidationRulesChanged;
         }
     }
 }

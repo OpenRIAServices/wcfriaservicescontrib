@@ -3,12 +3,8 @@ using System.Collections.Generic;
 
 namespace RIA.EntityValidator
 {
-    public class ValidationRulesChangedEventArgs : EventArgs
-    {
-    }
     public interface IValidationRulesProvider<TEntity, TResult> where TResult : class
     {
-        event EventHandler<ValidationRulesChangedEventArgs> ValidationRulesChanged;
-        IEnumerable<Tuple<Tuple<object, string>, IValidationRule<TEntity, TResult>>> GetValidationRules(TEntity root);
+        Dictionary<Tuple<object, string>, List<IValidationRule<TEntity, TResult>>> GetValidationRules(TEntity root);
     }
 }
