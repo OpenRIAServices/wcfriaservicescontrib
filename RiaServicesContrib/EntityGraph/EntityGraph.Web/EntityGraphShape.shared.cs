@@ -1,135 +1,59 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Collections;
 
 namespace EntityGraph
 {
-    public static class Test
+    public class EntityGraphShape : IEnumerable<Tuple<Type, PropertyInfo>> 
     {
-        /// <summary>
-        /// Type mapper from IEnumerable&lt;<typeparamref name="T"/>> to T. Used for specifying a path in an EntityGraphShape from a collection to its elements.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <returns></returns>
-        public static T to<T>(this IEnumerable<T> list)
-        {
-            throw new NotImplementedException();
-        }
-    }
+        public delegate TTo EdgeType<in TFrom, out TTo>(TFrom from);
+        public delegate IEnumerable<TTo> EdgeEnumType<in TFrom, TTo>(TFrom from);
 
-    public class EntityGraphShape<TEntity, TBase> : List<Expression<Func<TEntity, TBase>>> where TEntity : TBase
-    {
-        public IEnumerable<Type> PathComponents(Expression<Func<TEntity, TBase>> pathExpr)
-        {
-            return PathComponents(pathExpr.Body);
-        }
-        private IEnumerable<Type> PathComponents(Expression pathExpr)
-        {
-            Expression e = pathExpr;
+        private List<Tuple<Type, PropertyInfo>> edges = new List<Tuple<Type, PropertyInfo>>();
 
-            while(pathExpr != null && pathExpr is ParameterExpression == false)
-            {
-                Type type = null;
-                if(pathExpr is UnaryExpression)
-                {
-                    var unary = pathExpr as UnaryExpression;
-                    if(unary.Operand is MemberExpression)
-                    {
-                        type = pathExpr.Type;
-                        pathExpr = ((MemberExpression)unary.Operand).Expression;
-                    }
-                }
-                else if(pathExpr is MemberExpression)
-                {
-                    type = pathExpr.Type;
-                    pathExpr = ((MemberExpression)pathExpr).Expression;
-//                    continue;
-                }
-                else if(pathExpr is MethodCallExpression)
-                {
-                    type= pathExpr.Type;
-                    pathExpr = ((MethodCallExpression)pathExpr).Arguments.SingleOrDefault();
-                    continue;
-                }
-                else
-                {
-                    throw new ArgumentException("Invalid expression encountered");
-                }
-                yield return type;
-            }
-            yield return pathExpr.Type;
-        }
-        public IEnumerable<PropertyInfo> OutEdges(TBase entity, string visitedPath)
+        public EntityGraphShape Edge<TLHS, TRHS>(Expression<EdgeType<TLHS, TRHS>> edge)
         {
-            return OutEdgesAll(entity.GetType(), visitedPath).Distinct();
+            var entityType = edge.Parameters.Single().Type;
+            if(edge.Body is MemberExpression)
+            {
+                var mexpr = (MemberExpression)edge.Body;
+                var propInfo = mexpr.Member as PropertyInfo;
+                if(entityType != null && propInfo != null)
+                    edges.Add(new Tuple<Type, PropertyInfo>(entityType, propInfo));
+            }
+            return this;
         }
-        public IEnumerable<PropertyInfo> OutEdges(Type entityType, string visitedPath)
+        // We can't use TBase as the return type of EdgeEnumType, because IEnumerable<T> is not 
+        // covariant in Silverlight!!. Therefore a second type parameter TRHS is needed.
+        public EntityGraphShape Edge<TLHS, TRHS>(Expression<EdgeEnumType<TLHS, TRHS>> edge)
         {
-            return OutEdgesAll(entityType, visitedPath).Distinct();
+            var entityType = edge.Parameters.Single().Type;
+            if(edge.Body is MemberExpression)
+            {
+                var mexpr = (MemberExpression)edge.Body;
+                var propInfo = mexpr.Member as PropertyInfo;
+                if(entityType != null && propInfo != null)
+                    edges.Add(new Tuple<Type, PropertyInfo>(entityType, propInfo));
+            }
+            return this; 
         }
-        private IEnumerable<PropertyInfo> OutEdgesAll(Type entityType, string visitedPath)
+        public IEnumerable<PropertyInfo> GetAssociations(object entity)
         {
-            string[] visitedPathComponents = visitedPath.Split('.');
-            foreach(var pathExpr in this)
-            {
-                var path = PathContinuation(entityType, visitedPath, pathExpr.Body);
-                if(path != null)
-                    yield return path;
-            }
+            var entityType = entity.GetType();
+            return this.Where(edge => edge.Item1 == entityType).Select(edge => edge.Item2).Distinct();
         }
-        private PropertyInfo PathContinuation(Type entityType, string visitedPath, Expression pathExpr)
-        {
-            var pathToVisit = GetPathComponent(visitedPath, pathExpr);
-            if(pathToVisit != null)
-            {
-                string propertyName = pathToVisit.Split('.').LastOrDefault();
-                return entityType.GetProperty(propertyName);
-            }
-            return null;
-        }
-        private string GetPathComponent(string visitedPath, Expression pathExpr)
-        {
-            MemberExpression body = null;
-            if(pathExpr is UnaryExpression)
-            {
-                var unary = pathExpr as UnaryExpression;
-                if(unary.Operand is MemberExpression)
-                    body = unary.Operand as MemberExpression;
-            }
-            else if(pathExpr is MemberExpression)
-            {
-                body = pathExpr as MemberExpression;
-            }
-            else if(pathExpr is ParameterExpression)
-            {
-                var objectExpression = pathExpr as ParameterExpression;
-                return objectExpression.Name;
-            }
-            else if(pathExpr is MethodCallExpression)
-            {
-                var objectExpression = pathExpr as MethodCallExpression;
-                var baseExpr = objectExpression.Arguments.SingleOrDefault();
-                if(baseExpr != null)
-                {
-                    return GetPathComponent(visitedPath, baseExpr);
-                }
-            }
 
-            if(body == null)
-                throw new ArgumentException("Invalid expression encountered");
-            var path = GetPathComponent(visitedPath, body.Expression);
-            if(path == null)
-                return null;
-            if(path != visitedPath && path.StartsWith(visitedPath))
-                return path;
-            var npath = path + "." + body.Member.Name;
-            if(npath.StartsWith(visitedPath) || (visitedPath.StartsWith(npath) && visitedPath[npath.Length] == '.'))
-                return npath;
-            return null;
+        public IEnumerator<Tuple<Type, PropertyInfo>> GetEnumerator()
+        {
+            return edges.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
         }
     }
 }

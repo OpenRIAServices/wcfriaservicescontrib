@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-//using System.ServiceModel.DomainServices.Client;
 
 namespace EntityGraph
 {
@@ -38,8 +37,8 @@ namespace EntityGraph
         {
         }
 
-        public EntityGraph(TEntity Source, EntityGraphShape<TEntity, TBase> shape)
-            : this(Source, null, (entity, path) => shape.OutEdges(entity, path))
+        public EntityGraph(TEntity Source, EntityGraphShape shape)
+            : this(Source, null, (entity, path) => shape.GetAssociations(entity))
         {
         }
         private EntityGraph(TEntity Source, string Name, Func<TBase, string, IEnumerable<PropertyInfo>> GetNeighbors)

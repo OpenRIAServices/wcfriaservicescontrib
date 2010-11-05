@@ -22,10 +22,9 @@ namespace EntityGraphTest.Tests
         {
             var newB = new B { name = "NewB" };
             a.BSet.Add(newB);
-            var shape = new EntityGraphShape<A, Entity>{
-                A => A.B,
-                A => A.BSet.to()
-            };
+            var shape = new EntityGraphShape()
+            .Edge<A,B>(A => A.B)
+            .Edge<A, B>(A => A.BSet);
 
             var gr = a.EntityGraph(shape);
 
@@ -36,10 +35,11 @@ namespace EntityGraphTest.Tests
         [TestMethod]
         public void CloneEqualGraphShapeTests()
         {
-            var shape = new EntityGraphShape<A, Entity>{
-                A => A.B.C.D,
-                A => A.BSet.to()
-            };
+            var shape = new EntityGraphShape()
+            .Edge<A,B>(A => A.B)
+            .Edge<B,C>(B => B.C)
+            .Edge<C,D>(C => C.D)
+            .Edge<A, B>(A => A.BSet);
 
             var clone1 = a.Clone(shape);
             var clone2 = a.Clone();
@@ -53,11 +53,10 @@ namespace EntityGraphTest.Tests
         [TestMethod]
         public void CloneNotEqualGraphShapeTests()
         {
-            var shape = new EntityGraphShape<A, Entity>{
-                A => A.B,
-                A => A.DSet.to(),
-                A => A.BSet.to()
-            };
+            var shape = new EntityGraphShape()
+            .Edge<A,B>(A => A.B)
+            .Edge<A, D>(A => A.DSet)
+            .Edge<A, B>(A => A.BSet);
 
             var clone1 = a.Clone(shape);
             var clone2 = a.Clone();
