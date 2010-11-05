@@ -1,5 +1,5 @@
 ﻿using System;
-using System.ServiceModel.DomainServices.Client;
+//using System.ServiceModel.DomainServices.Client;
 
 namespace RIA.EntityValidator
 {

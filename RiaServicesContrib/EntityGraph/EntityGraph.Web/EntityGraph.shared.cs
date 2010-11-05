@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using System.ServiceModel.DomainServices.Client;
+//using System.ServiceModel.DomainServices.Client;
 
 namespace EntityGraph
 {
@@ -166,10 +166,11 @@ namespace EntityGraph
                         addMethod.Invoke(assocList, new object[] { newAssociationEntity });
                     }
                 }
+#if SILVERLIGHT
                 // The code below is to fix an error in RIA where relationship span is not performed
                 // for newly created entities. 
                 // This means that for an association that is not included in the entity graph,
-                // the intity would include the foreing key to that entity, but since no relationshipspan
+                // the intity would include the foreing key to that entity, but since no relationship span
                 // takes place, the corresponding association is not bound to that entity.
                 // Below we set these association properties ourselves. We detect newly created entities by
                 // the heuristic that they don't have an origional state.
@@ -178,15 +179,16 @@ namespace EntityGraph
                     if(association.PropertyType.IsSubclassOf(typeof(TBase)))
                     {
                         TBase e = (TBase)association.GetValue(n.Node, null);
-                        if(e != null && e is Entity)
+                        if(e != null && e is  System.ServiceModel.DomainServices.Client.Entity)
                         {
-                            if((e as Entity).GetOriginal() == null)
+                            if((e as System.ServiceModel.DomainServices.Client.Entity).GetOriginal() == null)
                             {
                                 association.SetValue(newEntity, nodes.ContainsKey(e) ? nodes[e] : e, null);
                             }
                         }
                     }
                 }
+#endif
             }
         }
 

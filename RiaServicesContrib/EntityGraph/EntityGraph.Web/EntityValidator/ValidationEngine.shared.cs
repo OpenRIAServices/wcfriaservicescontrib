@@ -14,7 +14,6 @@ namespace RIA.EntityValidator
         public ValidationEngine(IValidationRulesProvider<TEntity, TResult> rulesProvider, TEntity root) {
             this.Root = root;
             this.RulesProvider = rulesProvider;
-            Refresh();
         }
 
         /// <summary>
@@ -75,8 +74,23 @@ namespace RIA.EntityValidator
 
         private TEntity Root { get; set; }
 
-        private Dictionary<Tuple<object, string>, List<IValidationRule<TEntity, TResult>>> ValidationRules =
-            new Dictionary<Tuple<object, string>, List<IValidationRule<TEntity, TResult>>>();
+        private Dictionary<Tuple<object, string>, List<IValidationRule<TEntity, TResult>>> _validationRules;
+        private Dictionary<Tuple<object, string>, List<IValidationRule<TEntity, TResult>>> ValidationRules
+        {
+            get
+            {
+                if(_validationRules == null)
+                {
+                    _validationRules = new Dictionary<Tuple<object, string>, List<IValidationRule<TEntity, TResult>>>();
+                    Refresh();
+                }
+                return _validationRules;
+            }
+            set
+            {
+                _validationRules = value;
+            }
+        }
 
         private void validationRule_ValidationResultChanged(object sender, ValidationResultChangedEventArgs<TResult> e) {
             if(ValidationResultChanged != null)

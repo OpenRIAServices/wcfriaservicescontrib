@@ -59,30 +59,10 @@
     <Compile Include="contrib\EntityStateSet.cs" />
     <Compile Include="contrib\ExtractType.cs" />
     <Compile Include="contrib\RiaServicesExtensions.cs" />
-    <Compile Include="EntityGraphShape.cs" />
-    <Compile Include="EntityValidator\ClassValidationRulesProvider.cs" />
-    <Compile Include="EntityValidator\IValidationAttribute.cs" />
     <Compile Include="EntityValidator\RIA\EntityValidator.cs" />
     <Compile Include="EntityValidator\RIA\RegularExpressionAttribute.cs" />
     <Compile Include="EntityValidator\RIA\RequiredAttribute.cs" />
     <Compile Include="EntityValidator\RIA\ValidationAttribute.cs" />
-    <Compile Include="EntityValidator\ValidationRule.cs" />
-    <Compile Include="EntityValidator\IValidationRule.cs" />
-    <Compile Include="EntityValidator\IValidationRulesProvider.cs" />
-    <Compile Include="EntityValidator\MEFValidationRulesProvider.cs" />
-    <Compile Include="EntityValidator\ValidateMethodAttribute.cs" />
-    <Compile Include="EntityValidator\ValidationRuleDependencies.cs" />
-    <Compile Include="EntityValidator\ValidationRuleInvokeHelper.cs" />
-    <Compile Include="EntityValidator\ValidationValueChangedEventArgs.cs" />
-    <Compile Include="EntityGraph.cs" />
-    <Compile Include="EntityGraphComparer.cs" />
-    <Compile Include="EntityRelationGraph.cs" />
-    <Compile Include="GraphValidationRule.cs" />
-    <Compile Include="GraphValidator.cs" />
-    <Compile Include="IDisposable.cs" />
-    <Compile Include="IEnumerable.cs" />
-    <Compile Include="INotifyCollectionChanged.cs" />
-    <Compile Include="INotifyPropertyChanged.cs" />
     <Compile Include="RIA\Clone.cs" />
     <Compile Include="RIA\CloneComparer.cs" />
     <Compile Include="RIA\EntityChangeSet.cs" />
@@ -95,7 +75,6 @@
     <Compile Include="RIA\IEDitableObject.cs" />
     <Compile Include="RIA\Proxies.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="EntityValidator\ValidationEngine.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="mefcontrib\" />

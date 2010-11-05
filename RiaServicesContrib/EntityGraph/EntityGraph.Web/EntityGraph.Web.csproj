@@ -32,6 +32,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -40,7 +42,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EntityGraph.shared.cs" />
     <Compile Include="EntityGraphAttribute.shared.cs" />
+    <Compile Include="EntityGraphComparer.shared.cs" />
+    <Compile Include="EntityGraphShape.shared.cs" />
+    <Compile Include="EntityRelationGraph.shared.cs" />
+    <Compile Include="EntityValidator\ClassValidationRulesProvider.shared.cs" />
+    <Compile Include="EntityValidator\IValidationAttribute.shared.cs" />
+    <Compile Include="EntityValidator\IValidationRule.shared.cs" />
+    <Compile Include="EntityValidator\IValidationRulesProvider.shared.cs" />
+    <Compile Include="EntityValidator\MEFValidationRulesProvider.shared.cs" />
+    <Compile Include="EntityValidator\ValidateMethodAttribute.shared.cs" />
+    <Compile Include="EntityValidator\ValidationEngine.shared.cs" />
+    <Compile Include="EntityValidator\ValidationRule.shared.cs" />
+    <Compile Include="EntityValidator\ValidationRuleDependencies.shared.cs" />
+    <Compile Include="EntityValidator\ValidationRuleInvokeHelper.shared.cs" />
+    <Compile Include="EntityValidator\ValidationValueChangedEventArgs.shared.cs" />
+    <Compile Include="GraphValidationRule.shared.cs" />
+    <Compile Include="GraphValidator.shared.cs" />
+    <Compile Include="IDisposable.shared.cs" />
+    <Compile Include="IEnumerable.shared.cs" />
+    <Compile Include="INotifyCollectionChanged.shared.cs" />
+    <Compile Include="INotifyPropertyChanged.shared.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

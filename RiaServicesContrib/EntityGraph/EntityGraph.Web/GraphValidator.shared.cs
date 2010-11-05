@@ -26,6 +26,7 @@ namespace EntityGraph
         {
             this.PropertyChanged -= Validate;
             this.CollectionChanged -= Validator_CollectionChanged;
+            this.Validator.ValidationResultChanged -= Validator_ValidationResultChanged;
         }
 
         private void Validator_ValidationResultChanged(object sender, ValidationResultChangedEventArgs<TValidationResult> e)

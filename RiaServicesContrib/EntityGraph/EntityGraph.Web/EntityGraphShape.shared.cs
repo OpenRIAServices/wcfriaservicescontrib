@@ -23,9 +23,53 @@ namespace EntityGraph
 
     public class EntityGraphShape<TEntity, TBase> : List<Expression<Func<TEntity, TBase>>> where TEntity : TBase
     {
+        public IEnumerable<Type> PathComponents(Expression<Func<TEntity, TBase>> pathExpr)
+        {
+            return PathComponents(pathExpr.Body);
+        }
+        private IEnumerable<Type> PathComponents(Expression pathExpr)
+        {
+            Expression e = pathExpr;
+
+            while(pathExpr != null && pathExpr is ParameterExpression == false)
+            {
+                Type type = null;
+                if(pathExpr is UnaryExpression)
+                {
+                    var unary = pathExpr as UnaryExpression;
+                    if(unary.Operand is MemberExpression)
+                    {
+                        type = pathExpr.Type;
+                        pathExpr = ((MemberExpression)unary.Operand).Expression;
+                    }
+                }
+                else if(pathExpr is MemberExpression)
+                {
+                    type = pathExpr.Type;
+                    pathExpr = ((MemberExpression)pathExpr).Expression;
+//                    continue;
+                }
+                else if(pathExpr is MethodCallExpression)
+                {
+                    type= pathExpr.Type;
+                    pathExpr = ((MethodCallExpression)pathExpr).Arguments.SingleOrDefault();
+                    continue;
+                }
+                else
+                {
+                    throw new ArgumentException("Invalid expression encountered");
+                }
+                yield return type;
+            }
+            yield return pathExpr.Type;
+        }
         public IEnumerable<PropertyInfo> OutEdges(TBase entity, string visitedPath)
         {
             return OutEdgesAll(entity.GetType(), visitedPath).Distinct();
+        }
+        public IEnumerable<PropertyInfo> OutEdges(Type entityType, string visitedPath)
+        {
+            return OutEdgesAll(entityType, visitedPath).Distinct();
         }
         private IEnumerable<PropertyInfo> OutEdgesAll(Type entityType, string visitedPath)
         {
