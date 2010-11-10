@@ -60,6 +60,7 @@
     <Compile Include="contrib\ExtractType.cs" />
     <Compile Include="contrib\RiaServicesExtensions.cs" />
     <Compile Include="EntityValidator\RIA\EntityValidator.cs" />
+    <Compile Include="EntityValidator\RIA\NoDuplicatesAttribute.cs" />
     <Compile Include="EntityValidator\RIA\RegularExpressionAttribute.cs" />
     <Compile Include="EntityValidator\RIA\RequiredAttribute.cs" />
     <Compile Include="EntityValidator\RIA\ValidationAttribute.cs" />

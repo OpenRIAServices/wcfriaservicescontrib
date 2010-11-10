@@ -1,6 +1,7 @@
 ﻿using System.ServiceModel.DomainServices.Client;
 using EntityGraph.EntityValidator.RIA;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.ObjectModel;
 
 namespace EntityGraphTest.Tests
 {
@@ -52,6 +53,9 @@ namespace EntityGraphTest.Tests
                     RaiseDataMemberChanged("RegExprProperty");
                 }
             }
+            private ObservableCollection<string> _elements = new ObservableCollection<string>();
+            [RIA.EntityValidator.RIA.NoDuplicates(ErrorMessage = "Supplicate elements founhd in {0}")]
+            public ObservableCollection<string> Elements { get { return _elements; } }
         }
         [TestMethod]
         public void RequiredAttributeIntTest()
@@ -81,6 +85,25 @@ namespace EntityGraphTest.Tests
             entity.RegExprProperty = "abc";
             Assert.IsTrue(entity.HasValidationErrors);
             entity.RegExprProperty = "abcdef";
+            Assert.IsFalse(entity.HasValidationErrors);
+        }
+        [TestMethod]
+        public void NoDuplicatesAttributeTest()
+        {
+            var entity = new MyTestClass();
+            var validatior = new EntityValidator<MyTestClass>(entity);
+
+            Assert.IsFalse(entity.HasValidationErrors);
+            entity.Elements.Add("bar");
+            Assert.IsFalse(entity.HasValidationErrors);
+
+            entity.Elements.Add("foo");
+            Assert.IsFalse(entity.HasValidationErrors);
+
+            entity.Elements.Add("bar");
+            Assert.IsTrue(entity.HasValidationErrors);
+
+            entity.Elements.Remove("bar");
             Assert.IsFalse(entity.HasValidationErrors);
         }
     }
