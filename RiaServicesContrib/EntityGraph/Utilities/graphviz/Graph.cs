@@ -31,6 +31,7 @@ namespace Utilities.graphviz
         {
             StringBuilder b = new StringBuilder();
             b.AppendFormat("digraph {0} {{", Name);
+            b.AppendLine();
             foreach(var node in Nodes)
             {
                 b.AppendLine(node.ToString());

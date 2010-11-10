@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 
 namespace Utilities.graphviz
 {
@@ -10,14 +11,19 @@ namespace Utilities.graphviz
         {
             this.LhsType = edge.LhsType;
             this.RhsType = edge.RhsType;
+            this.IsCollection = edge.IsCollection;
         }
         public string Lhs { get { return LhsType.Name; } }
         public string Rhs { get { return RhsType.Name; } }
+        public bool IsCollection { get; set; }
         public Type LhsType { get; set; }
         public Type RhsType { get; set; }
         public override string ToString()
         {
-            return "\"" + Lhs + "\"" + "->" + "\"" + Rhs + "\"" + Attributes2String();// +String.Format(@"[label=""{0}""]", Name);
+            string edgeString = String.Format(@"""{0}"" -> ""{1}"" {2}", Lhs, Rhs, Attributes2String());
+            if(IsCollection)
+                edgeString += @"[label=""*""]";
+            return edgeString;
         }
         public bool Equals(Edge other)
         {

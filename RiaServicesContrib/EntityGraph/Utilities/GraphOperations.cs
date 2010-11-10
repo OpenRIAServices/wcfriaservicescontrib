@@ -150,7 +150,8 @@ namespace Utilities
                     {
                         Name = propInfo.Name,
                         LhsType = type,
-                        RhsType = ptype
+                        RhsType = ptype,
+                        IsCollection = true
                     };
                     yield return edge;
                 }
