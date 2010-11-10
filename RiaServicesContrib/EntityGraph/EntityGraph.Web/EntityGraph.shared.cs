@@ -27,8 +27,8 @@ namespace EntityGraph
 
         public EntityGraph(TEntity Source) : this(Source, default(string)) { }
 
-        public EntityGraph(TEntity Source, string Name) 
-            : this(Source, Name, (entity, path) => GetAssociations(entity).Where(a => HasEntityGraphAttribute(a, Name)))
+        public EntityGraph(TEntity Source, string Name)
+            : this(Source, Name, (entity, path) => GetEntityGraphAssociations(entity, Name)) 
         {
         }
         
@@ -190,7 +190,22 @@ namespace EntityGraph
 #endif
             }
         }
-
+#if SILVERLIGHT
+        /// <summary>
+        /// This is a helper class for reconstructing associations in Silverlight (see explanation above).
+        /// Returns an IEnumerable of PropertyInfo objects for properties which have the "AssociationAttribute"
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        private static IEnumerable<PropertyInfo> GetAssociations(TBase obj)
+        {
+            BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.Instance;
+            var qry = from p in obj.GetType().GetProperties(bindingAttr)
+                      where p.IsDefined(typeof(AssociationAttribute), true)
+                      select p;
+            return qry;
+        }
+#endif
         private static IEnumerable<PropertyInfo> GetNeigborsByStringEdges(TBase entity, string[] edges)
         {
             string name = entity.GetType().Name;
@@ -250,7 +265,7 @@ namespace EntityGraph
         }
 
         /// <summary>
-        /// Returns true of the property has the "EntityGraphAttribute" (or a subclass), false otherwise.
+        /// Returns true if the property has the "EntityGraphAttribute" (or a subclass), false otherwise.
         /// </summary>
         /// <param name="propInfo"></param>
         /// <returns></returns>
@@ -261,17 +276,20 @@ namespace EntityGraph
 
             return propInfo.GetCustomAttributes(true).OfType<EntityGraphAttribute>().Any(match);
         }
-
         /// <summary>
-        /// Returns an array of PropertyInfo objects for properties which have the "AssociationAttribute"
+        /// Returns an IEnumerable of PropertyInfo objects for properties which have the "EntityGraph". If entityGraphname
+        /// is not null, the name of the entity graph should match entityGraphname.
         /// </summary>
         /// <param name="obj"></param>
+        /// <param name="entityGraphName"></param>
         /// <returns></returns>
-        private static IEnumerable<PropertyInfo> GetAssociations(TBase obj)
+        private static IEnumerable<PropertyInfo> GetEntityGraphAssociations(TBase obj, string entityGraphName)
         {
+            Func<EntityGraphAttribute, bool> match =
+                entityGraph => entityGraph is EntityGraphAttribute && (entityGraphName == null || entityGraphName == entityGraph.Name);
             BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.Instance;
             var qry = from p in obj.GetType().GetProperties(bindingAttr)
-                      where p.IsDefined(typeof(AssociationAttribute), true)
+                      where p.GetCustomAttributes(true).OfType<EntityGraphAttribute>().Any(match)
                       select p;
             return qry;
         }
