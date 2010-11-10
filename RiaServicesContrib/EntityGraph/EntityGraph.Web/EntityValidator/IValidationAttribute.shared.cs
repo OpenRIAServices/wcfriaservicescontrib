@@ -6,6 +6,5 @@ namespace RIA.EntityValidator
         IValidationRule<TEntity, TResult> where TResult : class
     {
         void SetPropertyInfo(PropertyInfo propInfo);
-        string ErrorMessage { get; set; }
     }
 }
