@@ -4,32 +4,35 @@ using RIA.EntityValidator;
 
 namespace EntityGraph.EntityValidator.RIA
 {
-    public class EntityValidator
+    public class EntityValidator<TEntity> : EntityValidator<TEntity, ValidationResult> where TEntity : Entity
     {
-        private static ClassValidationRulesProvider<Entity,ValidationResult> Provider = 
-            new ClassValidationRulesProvider<Entity,ValidationResult>();
-        
-        private Entity Entity;
+        private static ClassValidationRulesProvider<TEntity,ValidationResult> Provider = 
+            new ClassValidationRulesProvider<TEntity,ValidationResult>();
 
-        public EntityValidator(Entity entity)
+        public EntityValidator(IValidationRulesProvider<TEntity, ValidationResult> provider, TEntity entity) :
+            base(provider, entity)
         {
-            this.Entity = entity;
-            var engine = new ValidationEngine<Entity, ValidationResult>(Provider, entity);
-            engine.ValidationResultChanged += engine_ValidationResultChanged;
-            entity.PropertyChanged += (sender, args) => engine.Validate(sender, args.PropertyName);
         }
-
-        void engine_ValidationResultChanged(object sender, ValidationResultChangedEventArgs<ValidationResult> e)
+        public EntityValidator(TEntity entity) : base(Provider, entity)
         {
-            if(e.OldResult != ValidationResult.Success)
+        }
+        protected override void ClearValidationResult(TEntity entity, ValidationResult validationResult)
+        {
+            if(validationResult != ValidationResult.Success)
             {
-                if(Entity.ValidationErrors.Contains(e.OldResult))
-                    Entity.ValidationErrors.Remove(e.OldResult);
+                entity.ValidationErrors.Remove(validationResult);
             }
-            if(e.Result != ValidationResult.Success)
-            {
-                Entity.ValidationErrors.Add(e.Result);
-            }
+        }
+        protected override void SetValidationResult(TEntity entity, ValidationResult validationResult)
+        {
+            if(validationResult != ValidationResult.Success)
+                entity.ValidationErrors.Add(validationResult);
+        }
+        protected override bool HasValidationResult(TEntity entity, ValidationResult validationResult)
+        {
+            if(validationResult == ValidationResult.Success)
+                return false;
+            return entity.ValidationErrors.Contains(validationResult);
         }
     }
 }

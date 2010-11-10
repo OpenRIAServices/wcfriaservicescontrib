@@ -5,7 +5,7 @@ using System.ServiceModel.DomainServices.Client;
 
 namespace RIA.EntityValidator.RIA
 {
-    public abstract class ValidationAttribute : Attribute, IValidationAttribute<Entity, ValidationResult>
+    public abstract class ValidationAttribute : Attribute, IValidationAttribute<ValidationResult>
     {
         public event EventHandler<ValidationResultChangedEventArgs<ValidationResult>> ValidationResultChanged;
 
@@ -36,7 +36,7 @@ namespace RIA.EntityValidator.RIA
             }
         }
 
-        public void InvokeValidate(Entity entity)
+        public void InvokeValidate(object entity)
         {
             var minfo = ValidationRuleInvokeHelper<Entity, ValidationResult>.FindValidateMethod(this, new Type[] { PropertyInfo.PropertyType });
             minfo.Invoke(this, new object[] { PropertyInfo.GetValue(entity, null) });

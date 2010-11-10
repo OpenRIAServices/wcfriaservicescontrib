@@ -5,6 +5,6 @@ namespace RIA.EntityValidator
 {
     public interface IValidationRulesProvider<TEntity, TResult> where TResult : class
     {
-        Dictionary<Tuple<object, string>, List<IValidationRule<TEntity, TResult>>> GetValidationRules(TEntity root);
+        Dictionary<Tuple<object, string>, List<IValidationRule<TResult>>> GetValidationRules(TEntity root);
     }
 }

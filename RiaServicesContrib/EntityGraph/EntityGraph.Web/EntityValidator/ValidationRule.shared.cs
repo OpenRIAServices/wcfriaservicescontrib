@@ -4,7 +4,7 @@ using System.ComponentModel.Composition;
 namespace RIA.EntityValidator
 {
     [InheritedExport]
-    public abstract class ValidationRule<TEntity, TResult> : IValidationRule<TEntity, TResult> where TResult : class
+    public abstract class ValidationRule<TEntity, TResult> : IValidationRule<TResult> where TResult : class
     {
         public event EventHandler<ValidationResultChangedEventArgs<TResult>> ValidationResultChanged;
 
@@ -33,8 +33,8 @@ namespace RIA.EntityValidator
         /// Validates entity by invoking the validation method of this EntityValidationRule 
         /// </summary>
         /// <param name="entity"></param>
-        public void InvokeValidate(TEntity entity) {
-            ValidationRuleInvokeHelper<TEntity, TResult>.InvokeValidator(this, entity);
+        public void InvokeValidate(object entity) {
+            ValidationRuleInvokeHelper<TEntity, TResult>.InvokeValidator(this, (TEntity)entity);
         }
     }
 }

@@ -49,8 +49,8 @@ namespace EntityGraphTest.Tests
         }
         [TestMethod]
         public void AValidatorTest2() {
-            var gr = a.EntityGraph();
             MEFValidationRules.RegisterType(typeof(AValidator));
+            var gr = a.EntityGraph();
             AValidator.IsValidated = false;
             b.name = "hello";
             Assert.IsTrue(b.HasValidationErrors);

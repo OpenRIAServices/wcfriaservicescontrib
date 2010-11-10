@@ -1,9 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.ServiceModel.DomainServices.Client;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RIA.EntityValidator;
+﻿using System.ServiceModel.DomainServices.Client;
 using EntityGraph.EntityValidator.RIA;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace EntityGraphTest.Tests
 {
@@ -60,7 +57,7 @@ namespace EntityGraphTest.Tests
         public void RequiredAttributeIntTest()
         {
             var entity = new MyTestClass();
-            var validatior = new EntityValidator(entity);
+            var validatior = new EntityValidator<MyTestClass>(entity);
             entity.IntProperty = null;
             Assert.IsTrue(entity.HasValidationErrors);
             entity.IntProperty = 0;
@@ -70,7 +67,7 @@ namespace EntityGraphTest.Tests
         public void RequiredAttributeStringTest()
         {
             var entity = new MyTestClass();
-            var validatior = new EntityValidator(entity);
+            var validatior = new EntityValidator<MyTestClass>(entity);
             entity.StringProperty = null;
             Assert.IsTrue(entity.HasValidationErrors);
             entity.StringProperty = "";
@@ -80,7 +77,7 @@ namespace EntityGraphTest.Tests
         public void RegularExpressionAttributeTest()
         {
             var entity = new MyTestClass();
-            var validatior = new EntityValidator(entity);
+            var validatior = new EntityValidator<MyTestClass>(entity);
             entity.RegExprProperty = "abc";
             Assert.IsTrue(entity.HasValidationErrors);
             entity.RegExprProperty = "abcdef";

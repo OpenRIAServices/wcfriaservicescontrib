@@ -49,14 +49,6 @@ namespace EntityGraph
         private void collection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             EntityRelationGraphReset();
-            //switch(e.Action)
-            //{
-            //    case NotifyCollectionChangedAction.Remove:
-            //        if(EditStarted)
-            //            ((IEditableObject)e.OldItems[0]).EndEdit();
-            //        break;
-            //}
-            if (CollectionChanged != null)
             {
                 CollectionChanged(sender, e);
             }

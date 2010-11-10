@@ -52,8 +52,8 @@ namespace RIA.EntityValidator
         [ImportMany(AllowRecomposition = true)]
         public IEnumerable<ValidationRule<TEntity, TResult>> EntityValidators { get; set; }
 
-        public Dictionary<Tuple<object, string>, List<IValidationRule<TEntity, TResult>>> GetValidationRules(TEntity root) {
-            var rules = new Dictionary<Tuple<object, string>, List<IValidationRule<TEntity, TResult>>>();
+        public Dictionary<Tuple<object, string>, List<IValidationRule<TResult>>> GetValidationRules(TEntity root) {
+            var rules = new Dictionary<Tuple<object, string>, List<IValidationRule<TResult>>>();
 
             foreach(var validator in EntityValidators)
             {
@@ -66,7 +66,7 @@ namespace RIA.EntityValidator
                         rules[key].Add(validator);
                     }
                     else{
-                        rules.Add(key, new List<IValidationRule<TEntity, TResult>> { validator });
+                        rules.Add(key, new List<IValidationRule<TResult>> { validator });
                     }
                 }
             }

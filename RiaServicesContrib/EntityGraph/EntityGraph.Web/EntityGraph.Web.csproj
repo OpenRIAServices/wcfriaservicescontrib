@@ -48,6 +48,7 @@
     <Compile Include="EntityGraphShape.shared.cs" />
     <Compile Include="EntityRelationGraph.shared.cs" />
     <Compile Include="EntityValidator\ClassValidationRulesProvider.shared.cs" />
+    <Compile Include="EntityValidator\EntityValidator.shared.cs" />
     <Compile Include="EntityValidator\IValidationAttribute.shared.cs" />
     <Compile Include="EntityValidator\IValidationRule.shared.cs" />
     <Compile Include="EntityValidator\IValidationRulesProvider.shared.cs" />

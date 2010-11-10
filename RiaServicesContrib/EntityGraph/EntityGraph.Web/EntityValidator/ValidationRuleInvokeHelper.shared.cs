@@ -34,7 +34,7 @@ namespace RIA.EntityValidator
         /// <param name="signature"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public static MethodInfo FindValidateMethod(IValidationRule<TEntity, TResult> validator, Type[] signature) {
+        public static MethodInfo FindValidateMethod(IValidationRule<TResult> validator, Type[] signature) {
             Type type = validator.GetType();
             MethodInfo[] methods = null;
 

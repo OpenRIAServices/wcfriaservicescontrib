@@ -34,19 +34,43 @@ namespace RIA.EntityValidator
         }
 
         public event EventHandler<ValidationResultChangedEventArgs<TResult>> ValidationResultChanged;
+        /// <summary>
+        /// Returns the collection of objects that are involved in any validation rule of the current validation engine
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<object> ObjectsInvolved()
+        {
+            return ValidationRules.Keys.Select(key => key.Item1).Distinct();
+        }
 
         /// <summary>
         /// Returns the collection of objects that are involved in the given validation rule
         /// </summary>
         /// <param name="rule"></param>
         /// <returns></returns>
-        public IEnumerable<object> ObjectsInvolved(IValidationRule<TEntity, TResult> rule) {
-            return from r in ValidationRules.Keys
-                   where
-                       ValidationRules[r].Contains(rule)
-                   select r.Item1;
+        public IEnumerable<object> ObjectsInvolved(IValidationRule<TResult> rule) {
+            return (from r in ValidationRules.Keys
+                    where
+                        ValidationRules[r].Contains(rule)
+                    select r.Item1).Distinct();
         }
-
+        /// <summary>
+        /// Returns the collection of properties that are involved in any validation rule for the given entity
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<string> PropertiesInvolved(object entity)
+        {
+            return ValidationRules.Keys.Where(key=>key.Item1 == entity).Select(key => key.Item2).Distinct();
+        }
+        /// <summary>
+        /// Returns the collection of properties of the given entity that are involved in the given validation rule.
+        /// </summary>
+        /// <param name="rule"></param>
+        /// <returns></returns>
+        public IEnumerable<string> PropertiesInvolved(object entity, IValidationRule<TResult> rule)
+        {
+            return ValidationRules.Where(r => r.Key.Item1 == entity && r.Value.Contains(rule)).Select(r => r.Key.Item2).Distinct();
+        }
         /// <summary>
         /// Validates the given property of the given object according to the current set of validation rules
         /// </summary>
@@ -74,14 +98,14 @@ namespace RIA.EntityValidator
 
         private TEntity Root { get; set; }
 
-        private Dictionary<Tuple<object, string>, List<IValidationRule<TEntity, TResult>>> _validationRules;
-        private Dictionary<Tuple<object, string>, List<IValidationRule<TEntity, TResult>>> ValidationRules
+        private Dictionary<Tuple<object, string>, List<IValidationRule<TResult>>> _validationRules;
+        private Dictionary<Tuple<object, string>, List<IValidationRule<TResult>>> ValidationRules
         {
             get
             {
                 if(_validationRules == null)
                 {
-                    _validationRules = new Dictionary<Tuple<object, string>, List<IValidationRule<TEntity, TResult>>>();
+                    _validationRules = new Dictionary<Tuple<object, string>, List<IValidationRule<TResult>>>();
                     Refresh();
                 }
                 return _validationRules;

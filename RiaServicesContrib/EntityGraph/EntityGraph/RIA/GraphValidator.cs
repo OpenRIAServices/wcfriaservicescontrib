@@ -8,7 +8,9 @@ namespace EntityGraph.RIA
         protected override void ClearValidationResult(Entity entity, ValidationResult validationResult)
         {
             if(validationResult != ValidationResult.Success)
+            {
                 entity.ValidationErrors.Remove(validationResult);
+            }
         }
         protected override void SetValidationResult(Entity entity, ValidationResult validationResult)
         {
