@@ -12,7 +12,6 @@ namespace RiaServicesContrib.Extensions
     public static class RiaServicesExtensions
     {
 
-
         public static IDictionary<string, object> ExtractState(this Entity entity, ExtractType extractType)
         {
             Entity extractEntity;

@@ -131,7 +131,7 @@ namespace RiaServicesContrib.ComboBoxExtensions
                     }
 
                     // Bind DisplayMemberPath
-                    be = comboBox.GetBindingExpression(Selector.SelectedValuePathProperty);
+                    be = comboBox.GetBindingExpression(Selector.DisplayMemberPathProperty);
                     if (be != null)
                     {
                         BindingOperations.SetBinding(this._bindingListener, BindingListener.DisplayMemberPathProperty, be.ParentBinding);
@@ -230,7 +230,9 @@ namespace RiaServicesContrib.ComboBoxExtensions
 
             private void SyncToItemsSource()
             {
-                this._items = this._bindingListener.ItemsSource.Cast<object>().ToList();
+                this._items = (this._bindingListener.ItemsSource == null) ?
+                    new List<object>() :
+                    this._bindingListener.ItemsSource.Cast<object>().ToList();
 
                 this._ignoreCallback = true;
                 this.RaisePropertyChanged("Items");
@@ -304,7 +306,7 @@ namespace RiaServicesContrib.ComboBoxExtensions
 
             private static object GetValue(object item, string valuePath)
             {
-                string[] paths = valuePath.Split('.');
+                string[] paths = (valuePath == null) ? new string[0] : valuePath.Split('.');
                 foreach (string path in paths)
                 {
                     if (item == null)
@@ -447,4 +449,5 @@ namespace RiaServicesContrib.ComboBoxExtensions
             #endregion
         }
     }
+
 }

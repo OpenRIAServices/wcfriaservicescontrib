@@ -88,6 +88,7 @@
     <Compile Include="ExtractType.cs" />
     <Compile Include="ComboBoxExtensions\Parameter.cs" />
     <Compile Include="ComboBoxExtensions\ParameterCollection.cs" />
+    <Compile Include="IExtendedEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RiaServicesExtensions.cs" />
   </ItemGroup>
