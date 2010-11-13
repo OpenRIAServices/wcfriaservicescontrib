@@ -13,7 +13,7 @@ namespace RIA.EntityValidator
             var type = validator.GetType();
 
             Type[] parameterTypes = new Type[signature.Count()];
-            for(int i = 0; i < signature.Count(); i++)
+            for(int i = 0; i < signature.Count; i++)
             {
                 parameterTypes[i] = GetExpressionType(signature[i].Body);
             }
@@ -23,7 +23,14 @@ namespace RIA.EntityValidator
             for(int i = 0; i < signature.Count; i++)
             {
                 var func = signature[i].Compile();
-                parameters[i] = func(entity);
+                try
+                {
+                    parameters[i] = func(entity);
+                }
+                catch(Exception)
+                {
+                    // Return if we can't evaluate the lambda function func
+                }
             }
             method.Invoke(validator, parameters);
         }
