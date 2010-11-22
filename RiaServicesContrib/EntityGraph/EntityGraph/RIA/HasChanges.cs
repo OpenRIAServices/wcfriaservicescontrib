@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel;
+using System.Linq;
+using System.ServiceModel.DomainServices.Client;
 
 namespace EntityGraph.RIA
 {
@@ -17,14 +19,14 @@ namespace EntityGraph.RIA
 
         void EntityGraph_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (sender != this)
+            if(sender != this)
             {
-                bool hasChanges = false;
-                foreach (var node in EntityRelationGraph)
+                if(((Entity)sender).HasChanges == true)
+                    HasChanges = true;
+                else
                 {
-                    hasChanges |= node.HasChanges;
+                    HasChanges = EntityRelationGraph.Aggregate(false, (result, entity) => result |= entity.HasChanges);
                 }
-                HasChanges = hasChanges;
             }
         }
 
