@@ -22,7 +22,6 @@ namespace EntityGraphTest.Tests
                 };
             }
         }
-
         [ValidateMethod]
         public void ValidateMe(string nameOfB, string nameOfC) {
             IsValidated = true;
@@ -38,6 +37,21 @@ namespace EntityGraphTest.Tests
     [TestClass]
     public class GraphValidatorTests : EntityGraphTest
     {
+        /// <summary>
+        /// Checks if validation framework works correctly when one of the dependency paths
+        /// of a valudationrule includes null. In this case the path A.B.C.name includes null,
+        /// becasue C equals null.
+        /// </summary>
+        [TestMethod]
+        public void EntityGraphValidatorWithNullElelements()
+        {
+            A a = new A();
+            a.B = new B();
+            MEFValidationRules.RegisterType(typeof(AValidator));
+            var gr = a.EntityGraph();
+            a.B.name = "Hi";
+            Assert.IsFalse(b.HasValidationErrors);
+        }
         [TestMethod]
         public void AValidatorTest() {
             MEFValidationRules.RegisterType(typeof(AValidator));

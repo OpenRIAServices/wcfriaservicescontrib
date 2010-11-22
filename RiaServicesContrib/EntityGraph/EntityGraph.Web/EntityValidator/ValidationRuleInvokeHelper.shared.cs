@@ -30,6 +30,7 @@ namespace RIA.EntityValidator
                 catch(Exception)
                 {
                     // Return if we can't evaluate the lambda function func
+                    return;
                 }
             }
             method.Invoke(validator, parameters);
