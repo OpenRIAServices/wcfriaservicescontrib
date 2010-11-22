@@ -21,7 +21,7 @@ namespace EntityGraph
         [Initialize]
         internal void SetupINotifyPropertyChanged()
         {
-            this.EntityRelationGraphResetting += (sender, args) => RemoveNotifyCollectionChangedHandlers();
+            this.EntityRelationGraphResetting += (sender, args) => RemoveNotifyPropertyChangedHandlers();
             this.EntityRelationGraphResetted += (sender, args) => SetupNotifyPropertyChangedHandlers();
             SetupNotifyPropertyChangedHandlers();
         }
@@ -33,9 +33,9 @@ namespace EntityGraph
 
         private void SetupNotifyPropertyChangedHandlers()
         {
-            foreach (var node in EntityRelationGraph.OfType<INotifyPropertyChanged>())
+            foreach(var node in EntityRelationGraph.OfType<INotifyPropertyChanged>())
             {
-                    node.PropertyChanged += node_PropertyChanged;
+                node.PropertyChanged += node_PropertyChanged;
             }
         }
 
