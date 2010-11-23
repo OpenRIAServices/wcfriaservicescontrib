@@ -12,7 +12,7 @@ namespace EntityGraph.RIA
         /// <param name="entitySet"></param>
         public void DetachEntityGraph(EntitySet<TEntity> entitySet)
         {
-            GraphOperation(e => DetachAction(e, entitySet.EntityContainer));
+            GraphMap(e => DetachAction(e, entitySet.EntityContainer));
         }
         private Entity DetachAction(Entity entity, EntityContainer entityContainer)
         {
@@ -29,7 +29,7 @@ namespace EntityGraph.RIA
         /// <param name="entitySet"></param>
         public void RemoveEntityGraph(EntitySet<TEntity> entitySet)
         {
-            GraphOperation(e => RemoveAction(e, entitySet.EntityContainer));
+            GraphMap(e => RemoveAction(e, entitySet.EntityContainer));
         }
         private static Entity RemoveAction(Entity entity, EntityContainer entityContainer)
         {

@@ -16,7 +16,7 @@ namespace EntityGraph.RIA
         /// <returns></returns>
         public TEntity Clone() 
         {
-            return GraphOperation(CloneDataMembers);
+            return GraphMap(CloneDataMembers);
         }
 
         private TClone CloneDataMembers<TClone>(TClone entity) where TClone : Entity

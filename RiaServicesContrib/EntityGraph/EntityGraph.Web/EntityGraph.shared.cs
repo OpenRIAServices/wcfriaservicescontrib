@@ -81,7 +81,7 @@ namespace EntityGraph
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public TEntity GraphOperation(Func<TBase, TBase> action)
+        public TEntity GraphMap(Func<TBase, TBase> action)
         {
             var nodeMap = new Dictionary<TBase, TBase>();
 
