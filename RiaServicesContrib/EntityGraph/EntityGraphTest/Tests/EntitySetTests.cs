@@ -22,6 +22,53 @@ namespace EntityGraphTest.Tests
 
             Assert.IsTrue(ctx.EntityContainer.GetChanges().AddedEntities.Count() == 0);
         }
+
+        [TestMethod]
+        public void DetachWithNonIncludedNewEntityTest()
+        {
+            EntityGraphTestDomainContext ctx = new EntityGraphTestDomainContext();
+            EntityGraph<A> gr = a.EntityGraph();
+            ctx.As.Add(a);
+            var newB = new B();
+            a.BNotInGraph = newB;
+
+            Assert.IsTrue(a.EntityState == EntityState.New);
+            Assert.IsTrue(a.BNotInGraph.EntityState == EntityState.New);
+            Assert.IsTrue(a.BNotInGraphId == newB.Id);
+
+            gr.DetachEntityGraph(ctx.As);
+
+            Assert.IsTrue(a.EntityState == EntityState.Detached);
+            Assert.IsTrue(a.BNotInGraph.EntityState == EntityState.New);
+            Assert.IsTrue(a.BNotInGraphId == newB.Id);
+
+        }
+        [Asynchronous]
+        [TestMethod]
+        public void DetachWithNonIncludedExistingEntityTest()
+        {
+            EntityGraphTestDomainContext ctx = new EntityGraphTestDomainContext();
+            LoadOperation<B> loadOp = ctx.Load(ctx.GetBSetQuery());
+            EnqueueConditional(() => loadOp.IsComplete);
+            EnqueueCallback(
+                () =>
+                {
+                    EntityGraph<A> gr = a.EntityGraph();
+                    B existingB = ctx.Bs.Single();
+                    ctx.As.Add(a);
+                    a.BNotInGraph = existingB;
+                    Assert.IsTrue(a.EntityState == EntityState.New);
+                    Assert.IsTrue(a.BNotInGraph.EntityState == EntityState.Unmodified);
+                    Assert.IsTrue(a.BNotInGraphId == existingB.Id);
+
+                    gr.DetachEntityGraph(ctx.As);
+
+                    Assert.IsTrue(a.EntityState == EntityState.Detached);
+                    Assert.IsTrue(a.BNotInGraph.EntityState == EntityState.Unmodified);
+                    Assert.IsTrue(a.BNotInGraphId == existingB.Id);
+                });
+            EnqueueTestComplete();
+        }
         [Asynchronous]
         [TestMethod]
         public void RemoveTest() {
