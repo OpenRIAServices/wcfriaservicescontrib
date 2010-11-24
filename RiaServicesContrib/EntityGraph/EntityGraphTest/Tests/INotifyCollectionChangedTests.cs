@@ -20,14 +20,14 @@ namespace EntityGraphTest.Tests
             Assert.IsTrue(collectionChangedHandlerVisited, "CollectionChanged handler not called");
         }
         [TestMethod]
-        public void AddEntityToGraphTest() {
+        public void AddToEntityCollectionTest() {
             EntityGraph<A> gr = a.EntityGraph();
             var b = new B();
             a.BSet.Add(b);
             Assert.IsTrue(gr.Contains(b), "Entity graph does not contain entity b");
         }
         [TestMethod]
-        public void RemoveEntityFromGraphTest() {
+        public void RemoveFromEntityCollectionTest() {
             var b = new B();
             a.BSet.Add(b);
             EntityGraph<A> gr = a.EntityGraph();
