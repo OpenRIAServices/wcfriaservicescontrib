@@ -49,7 +49,10 @@ namespace EntityGraph
         private void collection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             EntityRelationGraphReset();
-            CollectionChanged(sender, e);
+            if(CollectionChanged != null)
+            {
+                CollectionChanged(sender, e);
+            }
         }
 
         /// <summary>
