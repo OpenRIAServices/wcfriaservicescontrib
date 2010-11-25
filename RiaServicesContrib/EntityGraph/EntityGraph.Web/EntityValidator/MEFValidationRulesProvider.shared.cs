@@ -96,23 +96,41 @@ namespace RIA.EntityValidator
 
             foreach(var validator in EntityValidators)
             {
+                var tmpRules = new Dictionary<Tuple<object, string>, List<IValidationRule<TResult>>>();
                 var signature = validator.Signature;
+
                 foreach(Expression<Func<TEntity, object>> method in signature)
                 {
                     var key = ResolveDependency(method, root);
-                    if(rules.ContainsKey(key))
+                    if(key.Item1 == null)
+                        break;
+                    AddRule(tmpRules, key, validator);
+                }
+                // Only add members from signature if they are all reachable from 'root'. I.e.,
+                // non of the paths include a null element
+                if(tmpRules.Count == signature.Count)
+                {
+                    foreach(var key in tmpRules.Keys)
                     {
-                        rules[key].Add(validator);
-                    }
-                    else
-                    {
-                        rules.Add(key, new List<IValidationRule<TResult>> { validator });
+                        foreach(var v in tmpRules[key])
+                            AddRule(rules, key, v);
                     }
                 }
             }
             return rules;
         }
-
+        private void AddRule(Dictionary<Tuple<object, string>, List<IValidationRule<TResult>>> rules,
+            Tuple<object, string> key, IValidationRule<TResult> validator)
+        {
+            if(rules.ContainsKey(key))
+            {
+                rules[key].Add(validator);
+            }
+            else
+            {
+                rules.Add(key, new List<IValidationRule<TResult>> { validator });
+            }
+        }
         private CompositionContainer container;
 
         static private object GetValueFromExpression(Expression expr, object o)

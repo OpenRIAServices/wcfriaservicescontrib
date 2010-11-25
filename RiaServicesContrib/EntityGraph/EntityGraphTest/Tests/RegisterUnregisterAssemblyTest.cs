@@ -6,7 +6,7 @@ using RIA.EntityValidator;
 
 namespace EntityGraphTest.Tests
 {
-    public class RegisterUnregisterTest : ValidationRule<A, ValidationResult>
+    public class RegisterUnregisterValidation : ValidationRule<A, ValidationResult>
     {
         public static bool visited = false;
         public override ValidationRuleDependencies<A> Signature
@@ -26,36 +26,36 @@ namespace EntityGraphTest.Tests
     }
 
     [TestClass]
-    public class RegisterUnregisterAssemblyTest : EntityGraphTest
+    public class RegisterUnregisterTest : EntityGraphTest
     {
         public override void TestSetup()
         {
             base.TestSetup();
-            MEFValidationRules.RegisterType(typeof(RegisterUnregisterTest));
+            MEFValidationRules.RegisterType(typeof(RegisterUnregisterValidation));
         }
         public override void TestCleanup()
         {
             base.TestCleanup();
-            MEFValidationRules.UnregisterType(typeof(RegisterUnregisterTest));
+            MEFValidationRules.UnregisterType(typeof(RegisterUnregisterValidation));
         }
         [TestMethod]
         public void RegisterTest()
         {
             var validator = new EntityValidator<A>(new MEFValidationRulesProvider<A, ValidationResult>(), a);
-            RegisterUnregisterTest.visited = false;
+            RegisterUnregisterValidation.visited = false;
 
             a.B = null;
-            Assert.IsTrue(RegisterUnregisterTest.visited);
+            Assert.IsTrue(RegisterUnregisterValidation.visited);
         }
         [TestMethod]
         public void UnregisterTest()
         {
-            MEFValidationRules.UnregisterType(typeof(RegisterUnregisterTest));
+            MEFValidationRules.UnregisterType(typeof(RegisterUnregisterValidation));
             var validator = new EntityValidator<A>(new MEFValidationRulesProvider<A, ValidationResult>(), a);
-            RegisterUnregisterTest.visited = false;
+            RegisterUnregisterValidation.visited = false;
 
             a.B = null;
-            Assert.IsFalse(RegisterUnregisterTest.visited);
+            Assert.IsFalse(RegisterUnregisterValidation.visited);
         }
     }
 }

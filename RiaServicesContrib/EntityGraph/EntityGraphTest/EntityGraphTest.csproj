@@ -120,6 +120,7 @@
     <Compile Include="Tests\RegisterUnregisterAssemblyTest.cs" />
     <Compile Include="Tests\StringPathsTests.cs" />
     <Compile Include="Tests\ValidationAttributeTests.cs" />
+    <Compile Include="Tests\ValidationSignatureRobustnessTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
