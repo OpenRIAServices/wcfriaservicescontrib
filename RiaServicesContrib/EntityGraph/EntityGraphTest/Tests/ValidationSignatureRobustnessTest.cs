@@ -3,6 +3,7 @@ using System.Linq;
 using EntityGraphTest.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RIA.EntityValidator;
+using System.ServiceModel.DomainServices.Client;
 
 namespace EntityGraphTest.Tests
 {
@@ -43,7 +44,7 @@ namespace EntityGraphTest.Tests
         {
             a.name = null;
             a.B = null;
-            var engine = new ValidationEngine<A, ValidationResult>(new MEFValidationRulesProvider<A, ValidationResult>(), a);
+            var engine = new ValidationEngine<A, Entity, ValidationResult>(new MEFValidationRulesProvider<A, Entity, ValidationResult>(), a);
             Assert.IsTrue(engine.ObjectsInvolved().Count() == 0);
             a.B = new B();
             engine.Refresh();

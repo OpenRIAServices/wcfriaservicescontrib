@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ServiceModel.DomainServices.Client;
-using EntityGraph;
 using EntityGraph.RIA;
 using EntityGraphTest.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -8,17 +6,17 @@ using RIA.EntityValidator;
 
 namespace EntityGraphTest.Tests
 {
-    public class AValidator : GraphValidationRule<A>
+    public class AValidator : ValidationRule<A, ValidationResult>
     {
         public static bool IsValidated = false;
 
-        public override ValidationRuleDependencies<EntityGraph<A, Entity, ValidationResult>> Signature
+        public override ValidationRuleDependencies<A> Signature
         {
             get {
-                return new ValidationRuleDependencies<EntityGraph<A, Entity, ValidationResult>>
+                return new ValidationRuleDependencies<A>
                 {
-                    a => a.Source.B.name,
-                    a => a.Source.B.C.name
+                    a => a.B.name,
+                    a => a.B.C.name
                 };
             }
         }

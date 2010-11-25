@@ -47,7 +47,6 @@ namespace RIA.EntityValidator.RIA
                 {
                     Result = ValidationResult.Success;
                 }
-
             }
         }
     }

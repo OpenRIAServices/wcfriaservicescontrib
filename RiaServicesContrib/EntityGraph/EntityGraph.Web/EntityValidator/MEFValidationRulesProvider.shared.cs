@@ -71,8 +71,10 @@ namespace RIA.EntityValidator
         }
     }
 
-    public class MEFValidationRulesProvider<TEntity, TResult> : 
-        IValidationRulesProvider<TEntity, TResult> where TResult : class
+    public class MEFValidationRulesProvider<TRoot, TEntity, TResult> : 
+        IValidationRulesProvider<TRoot, TEntity, TResult>
+        where TRoot : TEntity
+        where TResult : class
     {
 
         public MEFValidationRulesProvider() {
@@ -88,18 +90,18 @@ namespace RIA.EntityValidator
         }
 
         [ImportMany(AllowRecomposition = true)]
-        public IEnumerable<ValidationRule<TEntity, TResult>> EntityValidators { get; set; }
+        public IEnumerable<ValidationRule<TRoot, TResult>> EntityValidators { get; set; }
 
-        public Dictionary<Tuple<object, string>, List<IValidationRule<TResult>>> GetValidationRules(TEntity root)
+        public Dictionary<Tuple<TEntity, string>, List<IValidationRule<TRoot, TResult>>> GetValidationRules(TRoot root)
         {
-            var rules = new Dictionary<Tuple<object, string>, List<IValidationRule<TResult>>>();
+            var rules = new Dictionary<Tuple<TEntity, string>, List<IValidationRule<TRoot, TResult>>>();
 
             foreach(var validator in EntityValidators)
             {
-                var tmpRules = new Dictionary<Tuple<object, string>, List<IValidationRule<TResult>>>();
+                var tmpRules = new Dictionary<Tuple<TEntity, string>, List<IValidationRule<TRoot, TResult>>>();
                 var signature = validator.Signature;
 
-                foreach(Expression<Func<TEntity, object>> method in signature)
+                foreach(Expression<Func<TRoot, object>> method in signature)
                 {
                     var key = ResolveDependency(method, root);
                     if(key.Item1 == null)
@@ -119,8 +121,8 @@ namespace RIA.EntityValidator
             }
             return rules;
         }
-        private void AddRule(Dictionary<Tuple<object, string>, List<IValidationRule<TResult>>> rules,
-            Tuple<object, string> key, IValidationRule<TResult> validator)
+        private void AddRule(Dictionary<Tuple<TEntity, string>, List<IValidationRule<TRoot, TResult>>> rules,
+            Tuple<TEntity, string> key, IValidationRule<TRoot, TResult> validator)
         {
             if(rules.ContainsKey(key))
             {
@@ -128,23 +130,24 @@ namespace RIA.EntityValidator
             }
             else
             {
-                rules.Add(key, new List<IValidationRule<TResult>> { validator });
+                rules.Add(key, new List<IValidationRule<TRoot, TResult>> { validator });
             }
         }
         private CompositionContainer container;
 
-        static private object GetValueFromExpression(Expression expr, object o)
+        static private TEntity GetValueFromExpression(Expression expr, TEntity entity)
         {
             if(expr is ParameterExpression)
             {
-                return o;
+                return entity;
             }
             var memberExpression = expr as MemberExpression;
-            var propValue = GetValueFromExpression(memberExpression.Expression, o);
-            return ((PropertyInfo)memberExpression.Member).GetValue(propValue, null);
+            var propValue = GetValueFromExpression(memberExpression.Expression, entity);
+            var value =((PropertyInfo)memberExpression.Member).GetValue(propValue, null);
+            return (TEntity)value;
         }
-        static private Tuple<object, string> ResolveDependency(Expression<Func<TEntity, object>> propertyExpression, object arg) {
-
+        static private Tuple<TEntity, string> ResolveDependency(Expression<Func<TRoot, object>> propertyExpression, TEntity arg)
+        {
             MemberExpression body = null;
             if(propertyExpression.Body is UnaryExpression)
             {
@@ -157,19 +160,19 @@ namespace RIA.EntityValidator
                 body = propertyExpression.Body as MemberExpression;
             }
             if(body == null)
-                throw new ArgumentException("propertyExpression' should be a member expression");
+                throw new ArgumentException("propertyExpression should be a member expression");
             var propertyPath = body.Member;
             if(body.Expression is ParameterExpression)
             {
-                return new Tuple<object, string>(arg, propertyPath.Name);
+                return new Tuple<TEntity, string>(arg, propertyPath.Name);
             }
             else
             {
                 var objectExpression = body.Expression as MemberExpression;
                 if(objectExpression == null)
-                    throw new ArgumentException("propertyExpression' should be a member expression");
+                    throw new ArgumentException("propertyExpression should be a member expression");
                 var objectPath = objectExpression.Member;
-                return new Tuple<object, string>(GetValueFromExpression(body.Expression, arg), propertyPath.Name);
+                return new Tuple<TEntity, string>(GetValueFromExpression(body.Expression, arg), propertyPath.Name);
             }
         }
     }

@@ -59,7 +59,6 @@
     <Compile Include="EntityValidator\ValidationRuleDependencies.shared.cs" />
     <Compile Include="EntityValidator\ValidationRuleInvokeHelper.shared.cs" />
     <Compile Include="EntityValidator\ValidationValueChangedEventArgs.shared.cs" />
-    <Compile Include="GraphValidationRule.shared.cs" />
     <Compile Include="GraphValidator.shared.cs" />
     <Compile Include="IDisposable.shared.cs" />
     <Compile Include="IEnumerable.shared.cs" />

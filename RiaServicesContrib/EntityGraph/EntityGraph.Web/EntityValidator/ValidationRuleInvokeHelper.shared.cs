@@ -6,9 +6,9 @@ using System.Reflection;
 
 namespace RIA.EntityValidator
 {
-    internal static class ValidationRuleInvokeHelper<TEntity, TResult> where TResult : class
+    internal static class ValidationRuleInvokeHelper<TRoot, TResult> where TResult : class
     {
-        public static void InvokeValidator(ValidationRule<TEntity, TResult> validator, TEntity entity) {
+        public static void InvokeValidator(ValidationRule<TRoot, TResult> validator, TRoot entity) {
             var signature = validator.Signature;
             var type = validator.GetType();
 
@@ -42,7 +42,7 @@ namespace RIA.EntityValidator
         /// <param name="signature"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public static MethodInfo FindValidateMethod(IValidationRule<TResult> validator, Type[] signature) {
+        public static MethodInfo FindValidateMethod(IValidationRule<TRoot, TResult> validator, Type[] signature) {
             Type type = validator.GetType();
             MethodInfo[] methods = null;
 

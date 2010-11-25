@@ -9,13 +9,13 @@ namespace EntityGraph
 {
     public partial class EntityGraph<TEntity, TBase, TValidationResult>
     {
-        private ValidationEngine<EntityGraph<TEntity, TBase, TValidationResult>, TValidationResult> Validator;
+        private ValidationEngine<TEntity, TBase, TValidationResult> Validator;
 
         [Initialize]
         internal void InitGraphValidation()
         {
-            var rulesProvider = new MEFValidationRulesProvider<EntityGraph<TEntity, TBase, TValidationResult>, TValidationResult>();
-            Validator = new ValidationEngine<EntityGraph<TEntity, TBase, TValidationResult>, TValidationResult>(rulesProvider, this);
+            var rulesProvider = new MEFValidationRulesProvider<TEntity, TBase, TValidationResult>();
+            Validator = new ValidationEngine<TEntity, TBase, TValidationResult>(rulesProvider, Source);
             Validator.ValidationResultChanged += Validator_ValidationResultChanged;
             ValidatorRefresh(null, null);
             ValidatorRefresh(null, null);
@@ -58,7 +58,7 @@ namespace EntityGraph
         }
         private void Validator_ValidationResultChanged(object sender, ValidationResultChangedEventArgs<TValidationResult> e)
         {
-            var rule = (GraphValidationRule<TEntity, TBase, TValidationResult>)sender;
+            var rule = (ValidationRule<TEntity, TValidationResult>)sender;
             foreach(var entity in Validator.ObjectsInvolved(rule).Cast<TBase>())
             {
                 if(HasValidationResult(entity, e.OldResult))
@@ -86,7 +86,7 @@ namespace EntityGraph
         }
         private void Validate(object sender, PropertyChangedEventArgs args)
         {
-            Validator.Validate(sender, args.PropertyName);
+            Validator.Validate((TBase)sender, args.PropertyName);
         }
         private void ValidateAll()
         {

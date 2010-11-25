@@ -3,7 +3,7 @@
 
 namespace RIA.EntityValidator
 {
-    public interface IValidationRule<TResult> where TResult : class
+    public interface IValidationRule<TRoot, TResult> where TResult : class
     {
         event EventHandler<ValidationResultChangedEventArgs<TResult>> ValidationResultChanged;
         TResult Result { get; }
@@ -12,6 +12,6 @@ namespace RIA.EntityValidator
         /// Validates entity by invoking the validation method of this IValidationRule 
         /// </summary>
         /// <param name="entity"></param>
-        void InvokeValidate(object entity);
+        void InvokeValidate(TRoot entity);
     }
 }

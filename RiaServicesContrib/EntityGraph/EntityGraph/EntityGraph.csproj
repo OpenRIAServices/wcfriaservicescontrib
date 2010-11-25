@@ -59,7 +59,11 @@
     <Compile Include="contrib\EntityStateSet.cs" />
     <Compile Include="contrib\ExtractType.cs" />
     <Compile Include="contrib\RiaServicesExtensions.cs" />
+    <Compile Include="EntityValidator\RIA\ClassEntityValidator.cs" />
+    <Compile Include="EntityValidator\RIA\ClassValidationRulesProvider.cs" />
     <Compile Include="EntityValidator\RIA\EntityValidator.cs" />
+    <Compile Include="EntityValidator\RIA\MEFEntityValidator.cs" />
+    <Compile Include="EntityValidator\RIA\MEFValidationRulesProvider.cs" />
     <Compile Include="EntityValidator\RIA\NoDuplicatesAttribute.cs" />
     <Compile Include="EntityValidator\RIA\RegularExpressionAttribute.cs" />
     <Compile Include="EntityValidator\RIA\RequiredAttribute.cs" />
@@ -70,7 +74,6 @@
     <Compile Include="RIA\EntityGraph.cs" />
     <Compile Include="RIA\EntityGraphChangeSet.cs" />
     <Compile Include="RIA\EntitySet.cs" />
-    <Compile Include="RIA\GraphValidationRule.cs" />
     <Compile Include="RIA\GraphValidator.cs" />
     <Compile Include="RIA\HasChanges.cs" />
     <Compile Include="RIA\IEDitableObject.cs" />

@@ -4,16 +4,11 @@ using RIA.EntityValidator;
 
 namespace EntityGraph.EntityValidator.RIA
 {
-    public class EntityValidator<TEntity> : EntityValidator<TEntity, ValidationResult> where TEntity : Entity
+    public abstract class EntityValidator<TEntity> : EntityValidator<TEntity, Entity, ValidationResult> 
+        where TEntity : Entity
     {
-        private static ClassValidationRulesProvider<TEntity,ValidationResult> Provider = 
-            new ClassValidationRulesProvider<TEntity,ValidationResult>();
-
-        public EntityValidator(IValidationRulesProvider<TEntity, ValidationResult> provider, TEntity entity) :
+        public EntityValidator(IValidationRulesProvider<TEntity, Entity, ValidationResult> provider, TEntity entity) :
             base(provider, entity)
-        {
-        }
-        public EntityValidator(TEntity entity) : base(Provider, entity)
         {
         }
         protected override void ClearValidationResult(TEntity entity, ValidationResult validationResult)

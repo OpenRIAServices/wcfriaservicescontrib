@@ -3,6 +3,7 @@ using EntityGraph.EntityValidator.RIA;
 using EntityGraphTest.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RIA.EntityValidator;
+using System.ServiceModel.DomainServices.Client;
 
 namespace EntityGraphTest.Tests
 {
@@ -41,7 +42,7 @@ namespace EntityGraphTest.Tests
         [TestMethod]
         public void RegisterTest()
         {
-            var validator = new EntityValidator<A>(new MEFValidationRulesProvider<A, ValidationResult>(), a);
+            var validator = new MEFEntityValidator<A>(a);
             RegisterUnregisterValidation.visited = false;
 
             a.B = null;
@@ -51,7 +52,7 @@ namespace EntityGraphTest.Tests
         public void UnregisterTest()
         {
             MEFValidationRules.UnregisterType(typeof(RegisterUnregisterValidation));
-            var validator = new EntityValidator<A>(new MEFValidationRulesProvider<A, ValidationResult>(), a);
+            var validator = new MEFEntityValidator<A>(a);
             RegisterUnregisterValidation.visited = false;
 
             a.B = null;

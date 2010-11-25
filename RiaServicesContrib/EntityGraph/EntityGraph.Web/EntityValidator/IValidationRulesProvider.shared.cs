@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace RIA.EntityValidator
 {
-    public interface IValidationRulesProvider<TEntity, TResult> where TResult : class
+    public interface IValidationRulesProvider<TRoot, TEntity, TResult> where TResult : class
     {
-        Dictionary<Tuple<object, string>, List<IValidationRule<TResult>>> GetValidationRules(TEntity root);
+        Dictionary<Tuple<TEntity, string>, List<IValidationRule<TRoot,TResult>>> GetValidationRules(TRoot root);
     }
 }

@@ -61,7 +61,7 @@ namespace EntityGraphTest.Tests
         public void RequiredAttributeIntTest()
         {
             var entity = new MyTestClass();
-            var validatior = new EntityValidator<MyTestClass>(entity);
+            var validatior = new ClassEntityValidator(entity);
             entity.IntProperty = null;
             Assert.IsTrue(entity.HasValidationErrors);
             entity.IntProperty = 0;
@@ -71,7 +71,7 @@ namespace EntityGraphTest.Tests
         public void RequiredAttributeStringTest()
         {
             var entity = new MyTestClass();
-            var validatior = new EntityValidator<MyTestClass>(entity);
+            var validatior = new ClassEntityValidator(entity);
             entity.StringProperty = null;
             Assert.IsTrue(entity.HasValidationErrors);
             entity.StringProperty = "";
@@ -81,7 +81,7 @@ namespace EntityGraphTest.Tests
         public void RegularExpressionAttributeTest()
         {
             var entity = new MyTestClass();
-            var validatior = new EntityValidator<MyTestClass>(entity);
+            var validatior = new ClassEntityValidator(entity);
             entity.RegExprProperty = "abc";
             Assert.IsTrue(entity.HasValidationErrors);
             entity.RegExprProperty = "abcdef";
@@ -91,7 +91,7 @@ namespace EntityGraphTest.Tests
         public void NoDuplicatesAttributeTest()
         {
             var entity = new MyTestClass();
-            var validatior = new EntityValidator<MyTestClass>(entity);
+            var validatior = new ClassEntityValidator(entity);
 
             Assert.IsFalse(entity.HasValidationErrors);
             entity.Elements.Add("bar");

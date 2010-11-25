@@ -29,14 +29,14 @@ namespace EntityGraphTest.Tests
             visited = true;
         }
     }
-    public class EntityValidatorTest : GraphValidationRule<A>
+    public class EntityValidatorTest : ValidationRule<A, ValidationResult>
     {
-        public override ValidationRuleDependencies<EntityGraph<A, Entity, ValidationResult>> Signature {
+        public override ValidationRuleDependencies<A> Signature {
             get {
-                return new ValidationRuleDependencies<EntityGraph<A, Entity, ValidationResult>>
+                return new ValidationRuleDependencies<A>
                 {
-                    a => a.Source.B.name,
-                    a => a.Source.name
+                    a => a.B.name,
+                    a => a.name
                 };
             }
         }
@@ -64,7 +64,7 @@ namespace EntityGraphTest.Tests
         public void EntityValidatorSimpleTest() {
             var gr = a.EntityGraph();
             var v = new EntityValidatorTest();
-            v.InvokeValidate(gr);
+            v.InvokeValidate(gr.Source);
             Assert.IsTrue(v.Result != null);
         }
         [TestMethod]
@@ -76,13 +76,13 @@ namespace EntityGraphTest.Tests
                 Assert.IsTrue(sender == v);
                 Assert.IsTrue(args.Result != null);
             };
-            v.InvokeValidate(gr);
+            v.InvokeValidate(gr.Source);
             Assert.IsTrue(v.Result != null);
         }
         [TestMethod]
         public void EntityValidatorTest()
         {
-            var validator = new EntityValidator<A>(new MEFValidationRulesProvider<A, ValidationResult>(), a);
+            var validator = new MEFEntityValidator<A>(a);
 
             var b = new B();
 

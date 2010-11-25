@@ -2,8 +2,8 @@
 
 namespace RIA.EntityValidator
 {
-    public interface IValidationAttribute<TResult> : 
-        IValidationRule<TResult> where TResult : class
+    public interface IValidationAttribute<TRoot, TResult> : 
+        IValidationRule<TRoot, TResult> where TResult : class
     {
         void SetPropertyInfo(PropertyInfo propInfo);
     }
