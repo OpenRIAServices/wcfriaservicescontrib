@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -16,19 +17,45 @@ namespace EntityGraph
             var rulesProvider = new MEFValidationRulesProvider<EntityGraph<TEntity, TBase, TValidationResult>, TValidationResult>();
             Validator = new ValidationEngine<EntityGraph<TEntity, TBase, TValidationResult>, TValidationResult>(rulesProvider, this);
             Validator.ValidationResultChanged += Validator_ValidationResultChanged;
-            this.PropertyChanged += Validate;
-            this.CollectionChanged += Validator_CollectionChanged;
-            this.ValidateAll();
+            ValidatorRefresh(null, null);
+            ValidatorRefresh(null, null);
+
+            this.EntityRelationGraphResetting += ValidatorReset;
+            this.EntityRelationGraphResetted += ValidatorRefresh;
         }
 
         [Dispose]
         internal void CleanGraphValidation()
         {
-            this.PropertyChanged -= Validate;
-            this.CollectionChanged -= Validator_CollectionChanged;
             this.Validator.ValidationResultChanged -= Validator_ValidationResultChanged;
+            this.EntityRelationGraphResetting -= ValidatorReset;
+            this.EntityRelationGraphResetted -= ValidatorRefresh;
+            ValidatorReset(null, null);
         }
-
+        private void ValidatorReset(object sender, EventArgs args)
+        {
+            foreach(var entity in Validator.ObjectsInvolved().OfType<INotifyPropertyChanged>())
+            {
+                entity.PropertyChanged -= Validate;
+            }
+            foreach(var entity in Validator.ObjectsInvolved().OfType<INotifyCollectionChanged>())
+            {
+                entity.CollectionChanged -= Validator_CollectionChanged;
+            }
+        }
+        private void ValidatorRefresh(object sender, EventArgs args)
+        {
+            Validator.Refresh();
+            ValidateAll();
+            foreach(var entity in Validator.ObjectsInvolved().OfType<INotifyPropertyChanged>())
+            {
+                entity.PropertyChanged += Validate;
+            }
+            foreach(var entity in Validator.ObjectsInvolved().OfType<INotifyCollectionChanged>())
+            {
+                entity.CollectionChanged += Validator_CollectionChanged;
+            }
+        }
         private void Validator_ValidationResultChanged(object sender, ValidationResultChangedEventArgs<TValidationResult> e)
         {
             var rule = (GraphValidationRule<TEntity, TBase, TValidationResult>)sender;
@@ -47,7 +74,6 @@ namespace EntityGraph
 
         private void Validator_CollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
         {
-            Validator.Refresh();
             var senderType = sender.GetType();
             var collections = (from n in EntityRelationGraph.Nodes
                                from edge in n.ListEdges

@@ -49,17 +49,25 @@ namespace EntityGraphTest.Tests
         }
         /// <summary>
         /// Checks if validation framework works correctly when one of the dependency paths
-        /// of a valudationrule includes null. In this case the path A.B.C.name includes null,
+        /// of a valudation rule includes null. In this case the path A.B.C.name includes null,
         /// becasue C equals null.
         /// </summary>
         [TestMethod]
         public void EntityGraphValidatorWithNullElelements()
         {
             A a = new A();
-            a.B = new B();
+            B b = new B { name = "hi" };
+            C c = new C { name = "Hello" };
+
+            a.B = b;
+
             var gr = a.EntityGraph();
-            a.B.name = "Hi";
             Assert.IsFalse(b.HasValidationErrors);
+
+            // Now we attach C to the entity graph, which should
+            // trigger the validation rule.
+            b.C = c;
+            Assert.IsTrue(b.HasValidationErrors);
         }
         [TestMethod]
         public void AValidatorTest() {
