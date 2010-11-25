@@ -12,7 +12,7 @@ namespace EntityGraphTest.Tests
         protected D d;
 
         [TestInitialize]
-        public void TestSetup() {
+        virtual public void TestSetup() {
             a = new A { name = "A" };
             b = new B { name = "B" };
             c = new C { name = "C" };
@@ -22,6 +22,10 @@ namespace EntityGraphTest.Tests
             b.C = c;
             c.D = d;
             d.A = a;
+        }
+        [TestCleanup]
+        virtual public void TestCleanup()
+        {
         }
     }
 }
