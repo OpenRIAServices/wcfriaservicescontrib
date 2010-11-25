@@ -37,6 +37,16 @@ namespace EntityGraphTest.Tests
     [TestClass]
     public class GraphValidatorTests : EntityGraphTest
     {
+        public override void TestSetup()
+        {
+            base.TestSetup();
+            MEFValidationRules.RegisterType(typeof(AValidator));
+        }
+        public override void TestCleanup()
+        {
+            base.TestCleanup();
+            MEFValidationRules.UnregisterType(typeof(AValidator));
+        }
         /// <summary>
         /// Checks if validation framework works correctly when one of the dependency paths
         /// of a valudationrule includes null. In this case the path A.B.C.name includes null,
@@ -47,14 +57,12 @@ namespace EntityGraphTest.Tests
         {
             A a = new A();
             a.B = new B();
-            MEFValidationRules.RegisterType(typeof(AValidator));
             var gr = a.EntityGraph();
             a.B.name = "Hi";
             Assert.IsFalse(b.HasValidationErrors);
         }
         [TestMethod]
         public void AValidatorTest() {
-            MEFValidationRules.RegisterType(typeof(AValidator));
             var gr = a.EntityGraph();
             AValidator.IsValidated = false;
             b.name = "hello";
@@ -63,7 +71,6 @@ namespace EntityGraphTest.Tests
         }
         [TestMethod]
         public void AValidatorTest2() {
-            MEFValidationRules.RegisterType(typeof(AValidator));
             var gr = a.EntityGraph();
             AValidator.IsValidated = false;
             b.name = "hello";

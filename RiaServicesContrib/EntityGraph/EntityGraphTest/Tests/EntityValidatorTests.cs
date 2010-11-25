@@ -50,6 +50,16 @@ namespace EntityGraphTest.Tests
     [TestClass]
     public class EntityValidatorTests : EntityGraphTest
     {
+        public override void TestSetup()
+        {
+            base.TestSetup();
+            MEFValidationRules.RegisterType(typeof(EntityValidatorTest1));
+        }
+        public override void TestCleanup()
+        {
+            base.TestCleanup();
+            MEFValidationRules.UnregisterType(typeof(EntityValidatorTest1));
+        }
         [TestMethod]
         public void EntityValidatorSimpleTest() {
             var gr = a.EntityGraph();
@@ -72,7 +82,6 @@ namespace EntityGraphTest.Tests
         [TestMethod]
         public void EntityValidatorTest()
         {
-            MEFValidationRules.RegisterType(typeof(EntityValidatorTest1));
             var validator = new EntityValidator<A>(new MEFValidationRulesProvider<A, ValidationResult>(), a);
 
             var b = new B();
