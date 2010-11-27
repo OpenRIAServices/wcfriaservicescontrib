@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
+using System.ComponentModel.Composition.ReflectionModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -18,10 +19,14 @@ namespace RIA.EntityValidator
         public static AggregateCatalog Catalog { get { return _catalog; } }
 
         /// <summary>
-        /// Don't know how fidn out if the aggregate catalog contains a type catalog for the given type.
-        /// Therefore, we do our own book keeping using a dictionary.
+        /// Query to obtain the type catalog that holds the given type
         /// </summary>
-        private static Dictionary<Type, TypeCatalog> RegisteredTypes = new Dictionary<Type, TypeCatalog>();
+        private static Func<Type, TypeCatalog> GetTypeCatalog =
+            type => (from tc in Catalog.Catalogs.OfType<TypeCatalog>()
+                     from part in tc.Parts
+                     where
+                     ReflectionModelServices.GetPartType(part).Value == type
+                     select tc).SingleOrDefault();
 
         /// <summary>
         /// Registers given entity validation rule
@@ -29,11 +34,8 @@ namespace RIA.EntityValidator
         /// <param name="type"></param>
         public static void RegisterType(Type type)
         {
-            if(RegisteredTypes.ContainsKey(type))
-                return;
-            var tc = new TypeCatalog(type);
-            RegisteredTypes.Add(type, tc);
-            Catalog.Catalogs.Add(tc);
+            if(GetTypeCatalog(type) == null)
+                Catalog.Catalogs.Add(new TypeCatalog(type));
         }
 
         /// <summary>
@@ -42,11 +44,9 @@ namespace RIA.EntityValidator
         /// <param name="type"></param>
         public static void UnregisterType(Type type)
         {
-            if(RegisteredTypes.ContainsKey(type) == false)
-                return;
-            var tc = RegisteredTypes[type];
-            Catalog.Catalogs.Remove(tc);
-            RegisteredTypes.Remove(type);
+            var typeCatalog = GetTypeCatalog(type);
+            if(typeCatalog != null)
+                Catalog.Catalogs.Remove(typeCatalog);
         }
         /// <summary>
         /// Registers collection of entity validation rules in given assembly.

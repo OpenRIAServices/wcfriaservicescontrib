@@ -11,6 +11,7 @@ namespace RIA.EntityValidator
         where TResult : class
     {
         private ValidationEngine<TRoot, TEntity, TResult> validator;
+
         public EntityValidator(IValidationRulesProvider<TRoot, TEntity, TResult> provider, TRoot root)
         {
             validator = new ValidationEngine<TRoot, TEntity, TResult>(provider, root);
