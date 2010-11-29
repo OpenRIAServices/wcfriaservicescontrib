@@ -68,6 +68,7 @@
     <Compile Include="EntityValidator\RIA\RegularExpressionAttribute.cs" />
     <Compile Include="EntityValidator\RIA\RequiredAttribute.cs" />
     <Compile Include="EntityValidator\RIA\ValidationAttribute.cs" />
+    <Compile Include="EntityValidator\RIA\ValidationRule.cs" />
     <Compile Include="RIA\Clone.cs" />
     <Compile Include="RIA\CloneComparer.cs" />
     <Compile Include="RIA\EntityChangeSet.cs" />

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using EntityGraph.EntityValidator.RIA;
 using EntityGraph.RIA;
 using EntityGraphTest.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -6,7 +7,7 @@ using RIA.EntityValidator;
 
 namespace EntityGraphTest.Tests
 {
-    public class AValidator : ValidationRule<A, ValidationResult>
+    public class AValidator : ValidationRule<A>
     {
         public static bool IsValidated = false;
 

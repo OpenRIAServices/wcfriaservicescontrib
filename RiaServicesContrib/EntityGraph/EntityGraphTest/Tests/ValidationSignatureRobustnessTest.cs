@@ -1,13 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.ServiceModel.DomainServices.Client;
+using EntityGraph.EntityValidator.RIA;
 using EntityGraphTest.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RIA.EntityValidator;
-using System.ServiceModel.DomainServices.Client;
 
 namespace EntityGraphTest.Tests
 {
-    public class ValidationSignatureRobustnessValidation : ValidationRule<A, ValidationResult>
+    public class ValidationSignatureRobustnessValidation : ValidationRule<A>
     {
         public override ValidationRuleDependencies<A> Signature
         {

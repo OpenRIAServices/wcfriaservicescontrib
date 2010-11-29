@@ -1,13 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-using EntityGraph.EntityValidator.RIA;
+﻿using EntityGraph.EntityValidator.RIA;
 using EntityGraphTest.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RIA.EntityValidator;
-using System.ServiceModel.DomainServices.Client;
 
 namespace EntityGraphTest.Tests
 {
-    public class RegisterUnregisterValidation : ValidationRule<A, ValidationResult>
+    public class RegisterUnregisterValidation : ValidationRule<A>
     {
         public static bool visited = false;
         public override ValidationRuleDependencies<A> Signature
