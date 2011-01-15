@@ -1,0 +1,48 @@
+﻿<#+
+// <summary>
+//	This file contains settings used by T4RIA.tt. The main goal is to avoid the need
+//	for users to edit the template in order to customize the generated output.
+// </summary>
+
+// The folder under the project that contains the services
+const string ServicesFolder = "Services";
+
+// The folder under the project that contains the models
+const string ModelsFolder = "Models";
+
+// The folder under the project that contains the resources
+const string ResourcesFolder = "Resources";
+
+// The namespace to place generated fragments into
+const string Namespace = "Web";
+
+// The generated WCF RIA service name
+const string ServiceName = "ProjectService";
+
+// The entity framework model name
+const string ModelName = "ProjectModel";
+
+// The entity framework container name
+const string ContainerName = "ProjectEntities";
+
+// Whether to preserve existing files when generating code
+const bool PreserveExistingFile = false;
+
+// The names of the properties to ignore for localization
+readonly static string[] NonlocalizableProperties = new string[] {
+	"Valid",
+    "Created",
+    "Modified"
+};
+
+// The names of the properties which are read-only
+readonly static string[] ReadonlyProperties = new string[] {
+	"Valid"
+};
+
+// The names of the properties representing timestamps
+readonly static string[] TimestampProperties = new string[] {
+	"Created",
+    "Modified"
+};
+#>

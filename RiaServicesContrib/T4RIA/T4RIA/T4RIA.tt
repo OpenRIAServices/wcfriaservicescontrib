@@ -1,0 +1,535 @@
+﻿<#
+/*
+T4RIA Version 1.0.00
+Find latest version and documentation at http://riaservicescontrib.codeplex.com/wikipage?title=T4RIA
+
+T4RIA is part of the WCF RIA Contrib project (http://riaservicescontrib.codeplex.com/)
+Maintained by Petr Hosek, petr.hosek@baud.cz (http://www.baud.cz/blog)
+Based on T4 Toolbox (http://t4toolbox.codeplex.com/)
+
+Please use in accordance to the Microsoft Public License (http://www.microsoft.com/opensource/licenses.mspx)
+*/
+#>
+<#@ template language="C#" hostspecific="True" debug="True" #>
+<#@ include file="T4Toolbox.tt" #>
+<#@ assembly name="Microsoft.CSharp" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Data" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="System.Xml.Linq" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Dynamic" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Xml" #>
+<#@ import namespace="System.Xml.Linq" #>
+<#
+// Generate WCF RIA services for entity model
+var serviceGenerator = new ServiceGenerator();
+serviceGenerator.Run();
+
+// Generate entity metadata for validation
+var metadataGenerator = new MetadataGenerator();
+metadataGenerator.Run();
+
+// Generate entity resource for localization
+var resourceGenerator = new ResourceGenerator();
+resourceGenerator.Run();
+#>
+<#@ include file="T4RIA.settings.t4" #>
+<#+
+public class ServiceTemplate : CSharpTemplate
+{
+	public dynamic Entity { get; set; }
+
+	public override string TransformText()
+	{
+#>
+namespace <#= Namespace #>.Services
+{
+	using System;
+	using System.Collections.Generic;
+	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
+	using System.Data;
+	using System.Linq;
+	using System.ServiceModel.DomainServices.EntityFramework;
+	using System.ServiceModel.DomainServices.Hosting;
+	using System.ServiceModel.DomainServices.Server;
+	using <#= Namespace #>.Models;
+
+	public partial class <#= ServiceName #> : LinqToEntitiesDomainService<<#= ContainerName #>>
+	{
+		public IQueryable<<#= Entity.Name #>> Get<#= Entity.Name #>()
+		{
+			return this.ObjectContext.<#= Entity.Mapping.StoreEntitySet #>;
+		}
+
+		public void Insert<#= Entity.Name #>(<#= Entity.Name #> <#= FieldName(Entity.Name) #>)
+		{
+			if (<#= FieldName(Entity.Name) #>.EntityState != EntityState.Detached)
+			{
+				this.ObjectContext.ObjectStateManager.ChangeObjectState(<#= FieldName(Entity.Name) #>, EntityState.Added);
+			}
+			else
+			{
+				this.ObjectContext.<#= Entity.Mapping.StoreEntitySet #>.AddObject(<#= FieldName(Entity.Name) #>);
+			}
+		}
+
+		public void Update<#= Entity.Name #>(<#= Entity.Name #> current<#= Entity.Name #>)
+		{
+			this.ObjectContext.<#= Entity.Mapping.StoreEntitySet #>.AttachAsModified(current<#= Entity.Name #>, this.ChangeSet.GetOriginal(current<#= Entity.Name #>));
+		}
+
+		public void Delete<#= Entity.Name #>(<#= Entity.Name #> <#= FieldName(Entity.Name) #>)
+		{
+			if (<#= FieldName(Entity.Name) #>.EntityState == EntityState.Detached)
+			{
+				this.ObjectContext.<#= Entity.Mapping.StoreEntitySet #>.Attach(<#= FieldName(Entity.Name) #>);
+			}
+			this.ObjectContext.<#= Entity.Mapping.StoreEntitySet #>.DeleteObject(<#= FieldName(Entity.Name) #>);
+		}
+	}
+}
+<#+
+		return this.GenerationEnvironment.ToString();
+	}
+}
+
+public class ResourceTemplate : Template
+{
+	public IEnumerable<dynamic> Entities { get; set; }
+	public IEnumerable<string> Properties { get; set; }
+
+	public String LabelFormat { get; set; }
+
+	public override string TransformText()
+	{
+#>
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+	<xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+	<xsd:element name="root" msdata:IsDataSet="true">
+	  <xsd:complexType>
+		<xsd:choice maxOccurs="unbounded">
+		  <xsd:element name="metadata">
+			<xsd:complexType>
+			  <xsd:sequence>
+				<xsd:element name="value" type="xsd:string" minOccurs="0" />
+			  </xsd:sequence>
+			  <xsd:attribute name="name" use="required" type="xsd:string" />
+			  <xsd:attribute name="type" type="xsd:string" />
+			  <xsd:attribute name="mimetype" type="xsd:string" />
+			  <xsd:attribute ref="xml:space" />
+			</xsd:complexType>
+		  </xsd:element>
+		  <xsd:element name="assembly">
+			<xsd:complexType>
+			  <xsd:attribute name="alias" type="xsd:string" />
+			  <xsd:attribute name="name" type="xsd:string" />
+			</xsd:complexType>
+		  </xsd:element>
+		  <xsd:element name="data">
+			<xsd:complexType>
+			  <xsd:sequence>
+				<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+				<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+			  </xsd:sequence>
+			  <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+			  <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+			  <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+			  <xsd:attribute ref="xml:space" />
+			</xsd:complexType>
+		  </xsd:element>
+		  <xsd:element name="resheader">
+			<xsd:complexType>
+			  <xsd:sequence>
+				<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+			  </xsd:sequence>
+			  <xsd:attribute name="name" type="xsd:string" use="required" />
+			</xsd:complexType>
+		  </xsd:element>
+		</xsd:choice>
+	  </xsd:complexType>
+	</xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+	<value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+	<value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+	<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+	<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+<#+
+		foreach (String property in Properties)
+		{
+			var entities = Entities.Where(e => (e.Property as IList<dynamic>).Any(p => p.Name == property)).Select(e => e.Name);
+
+			string label = string.Format(LabelFormat, property);
+			string comment = string.Join(",", entities.ToArray());
+#>
+  <data name="<#= label #>" xml:space="preserve">
+	<value><#= property #></value>
+	  <comment><#= comment #></comment>
+  </data>
+<#+
+		}
+#>
+</root>
+<#+
+		return this.GenerationEnvironment.ToString();
+	}
+
+	protected override void Validate()
+	{
+		if (string.IsNullOrEmpty(LabelFormat))
+		{
+			throw new TransformationException("LabelFormat property must be assigned");
+		}
+	}
+}
+
+public class MetadataTemplate : CSharpTemplate
+{
+	public XElement Entity { get; set; }
+	public IEnumerable<XElement> Associations { get; set; }
+
+	public override string TransformText()
+	{
+#>
+#pragma warning disable 649    // disable compiler warnings about unassigned fields
+
+namespace <#= Namespace #>.Models
+{
+	using System;
+	using System.Collections.Generic;
+	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
+	using System.Data.Objects.DataClasses;
+	using System.Linq;
+	using System.ServiceModel.DomainServices.Hosting;
+	using System.ServiceModel.DomainServices.Server;
+	using Resources;
+
+	[MetadataTypeAttribute(typeof(<#= Entity.Attribute("Name").Value #>.<#= Entity.Attribute("Name").Value #>Metadata))]
+	public partial class <#= Entity.Attribute("Name").Value #>
+	{
+		internal sealed class <#= Entity.Attribute("Name").Value #>Metadata
+		{
+			private <#= Entity.Attribute("Name").Value #>Metadata()
+			{
+			}
+
+			<#+ this.WriteFields(); #>
+			<#+ this.WriteAssociations(); #>
+		}
+	}
+}
+#pragma warning restore 649    // re-enable compiler warnings about unassigned fields
+<#+
+		return this.GenerationEnvironment.ToString();
+	}
+
+	protected void WriteFields()
+	{
+		this.PushIndent("\t\t\t");
+
+		var keys = Entity.Element(EntityGenerator.edmns + "Key").Elements(EntityGenerator.edmns + "PropertyRef").Select(e => e.Attribute("Name").Value);
+		foreach (XElement property in Entity.Elements(EntityGenerator.edmns + "Property"))
+		{
+			string name = property.Attribute("Name").Value;
+			if (keys.Contains(name))
+			{
+				WriteLine("[Key]");
+			}
+
+			if (ReadonlyProperties.Contains(name))
+			{
+				WriteLine("[ReadOnly(true)]");
+			}
+			if (TimestampProperties.Contains(name))
+			{
+				WriteLine("[Timestamp]");
+			}
+			if (!NonlocalizableProperties.Contains(name))
+			{
+				WriteLine("[Display(Name = \"{0}Label\", ResourceType = typeof({1}Resources))]", name, ServiceName);
+			}
+
+			string type = property.Attribute("Type").Value;
+			switch (type)
+			{
+				case "Time":
+					type = "TimeSpan";
+					break;
+			}
+
+			XAttribute maxLength = property.Attribute("MaxLength");
+			if (type == "String" && maxLength != null && maxLength.Value != "Max")
+			{
+				WriteLine("[StringLength({0}, ErrorMessageResourceName = \"ValidationError{1}Length\", ErrorMessageResourceType = typeof(ValidationErrorResources))]", maxLength.Value, name);
+			}
+
+			XAttribute nullable = property.Attribute("Nullable");
+			if (type != "String" && nullable == null)
+			{
+				WriteLine("public Nullable<{0}> {1};", type, name);
+			}
+			else
+			{
+				WriteLine("public {0} {1};", type, name);
+			}
+			WriteLine(string.Empty);
+		}
+
+		this.PopIndent();
+	}
+
+	protected void WriteAssociations()
+	{
+		this.PushIndent("\t\t\t");
+
+		foreach (XElement property in Entity.Elements(EntityGenerator.edmns + "NavigationProperty"))
+		{
+			string name = property.Attribute("Name").Value;
+			string relationship = property.Attribute("Relationship").Value;
+			string fromRole = property.Attribute("FromRole").Value;
+			string toRole = property.Attribute("ToRole").Value;
+
+			var association = Associations.Single(a => a.Attribute("Name").Value == relationship.Split('.').Last());
+			var referentialConstraint = association.Element(EntityGenerator.edmns + "ReferentialConstraint");
+			if (referentialConstraint == null)
+			{
+				continue;
+			}
+
+			var associationName = association.Attribute("Name").Value;
+			var principal = referentialConstraint.Element(EntityGenerator.edmns + "Principal");
+			var principalPropertyRef = principal.Element(EntityGenerator.edmns + "PropertyRef").Attribute("Name").Value;
+			var dependent = referentialConstraint.Element(EntityGenerator.edmns + "Dependent");
+			var dependentPropertyRef = dependent.Element(EntityGenerator.edmns + "PropertyRef").Attribute("Name").Value;
+
+			var thisKey = referentialConstraint.Elements().Single(e => e.Attribute("Role").Value == fromRole).Element(EntityGenerator.edmns + "PropertyRef").Attribute("Name").Value;
+			var otherKey = referentialConstraint.Elements().Single(e => e.Attribute("Role").Value == toRole).Element(EntityGenerator.edmns + "PropertyRef").Attribute("Name").Value;
+
+			XElement role = association.Elements(EntityGenerator.edmns + "End").Single(e => e.Attribute("Role").Value == toRole);
+			var type = role.Attribute("Type").Value.Split('.').Last();
+			var multiplicity = role.Attribute("Multiplicity").Value;
+			if (multiplicity == "*")
+			{
+				type = string.Format("EntityCollection<{0}>", type);
+			}
+
+			WriteLine("[Include]");
+			if (fromRole == principal.Attribute("Role").Value && toRole == dependent.Attribute("Role").Value)
+			{
+				WriteLine("[Association(\"{0}\", \"{1}\", \"{2}\")]", associationName, principalPropertyRef, dependentPropertyRef);
+			}
+			else
+			{
+				WriteLine("[Association(\"{0}\", \"{1}\", \"{2}\", IsForeignKey = true)]", associationName, dependentPropertyRef, principalPropertyRef);
+			}
+			WriteLine("public {0} {1};", type, name);
+
+			WriteLine(string.Empty);
+		}
+
+		this.PopIndent();
+	}
+}
+
+public class ServiceGenerator : EntityGenerator
+{
+	private ServiceTemplate template = new ServiceTemplate();
+
+	protected override void RunCore()
+	{
+		template.Output.PreserveExistingFile = PreserveExistingFile;
+		template.Output.References.Add("System.ServiceModel.DomainServices.EntityFramework");
+		template.Output.References.Add("System.ServiceModel.DomainServices.Hosting");
+		template.Output.References.Add("System.ServiceModel.DomainServices.Server");
+
+		foreach (dynamic entity in EntityTypes)
+		{
+			template.Entity = entity;
+			template.RenderToFile(string.Format(@"{0}\{1}.{2}.g.cs", ServicesFolder, ServiceName, entity.Name));
+		}
+	}
+
+	protected override void Validate()
+	{
+		base.Validate();
+		
+		if (string.IsNullOrEmpty(Namespace))
+		{
+			throw new TransformationException("Namespace property must be assigned");
+		}
+		if (string.IsNullOrEmpty(ServiceName))
+		{
+			throw new TransformationException("ServiceName property must be assigned");
+		}
+		if (string.IsNullOrEmpty(ContainerName))
+		{
+			throw new TransformationException("ContainerName property must be assigned");
+		}
+	}
+}
+
+public class ResourceGenerator : EntityGenerator
+{
+	private ResourceTemplate template = new ResourceTemplate();
+
+	protected override void RunCore()
+	{
+		template.Output.PreserveExistingFile = PreserveExistingFile;
+		template.Output.BuildAction = BuildAction.EmbeddedResource;
+		template.Output.CustomTool = "PublicResXFileCodeGenerator";
+
+		template.Entities = EntityTypes;
+
+		template.Properties = Schema.Elements(edmns + "EntityType")
+			.SelectMany(e => e.Elements(EntityGenerator.edmns + "Property"))
+			.Select(e => e.Attribute("Name").Value)
+			.Where(e => !NonlocalizableProperties.Contains(e))
+			.OrderBy(e => e).Distinct();
+		template.LabelFormat = "{0}Label";
+		template.RenderToFile(string.Format(@"{0}\{1}Resources.resx", ResourcesFolder, ServiceName));
+
+		template.Properties = Schema.Elements(edmns + "EntityType")
+			.Elements(EntityGenerator.edmns + "Property")
+			.Where(e => e.Attribute("Type").Value == "String" && e.Attribute("MaxLength") != null && e.Attribute("MaxLength").Value != "Max")
+			.Select(e => e.Attribute("Name").Value)
+			.OrderBy(e => e).Distinct();
+		template.LabelFormat = "ValidationError{0}Length";
+		template.RenderToFile(string.Format(@"{0}\ValidationError{1}Resources.resx", ResourcesFolder, ServiceName));
+	}
+
+	protected override void Validate()
+	{
+		base.Validate();
+		
+		if (string.IsNullOrEmpty(ServiceName))
+		{
+			throw new TransformationException("ServiceName property must be assigned");
+		}
+	}
+}
+
+public class MetadataGenerator : EntityGenerator
+{
+	private MetadataTemplate template = new MetadataTemplate();
+
+	protected override void RunCore()
+	{
+		template.Output.PreserveExistingFile = PreserveExistingFile;
+		template.Output.References.Add("System.ComponentModel.DataAnnotations");
+		template.Output.References.Add("System.ServiceModel.DomainServices.Hosting");
+		template.Output.References.Add("System.ServiceModel.DomainServices.Server");
+
+		template.Associations = Schema.Elements(edmns + "Association");
+		foreach (XElement type in Schema.Elements(edmns + "EntityType"))
+		{
+			template.Entity = type;
+			template.RenderToFile(string.Format(@"{0}\{1}.{2}.metadata.g.cs", ModelsFolder, ServiceName, type.Attribute("Name").Value));
+		}
+	}
+
+	protected override void Validate()
+	{
+		base.Validate();
+		
+		if (string.IsNullOrEmpty(Namespace))
+		{
+			throw new TransformationException("Namespace property must be assigned");
+		}
+		if (string.IsNullOrEmpty(ServiceName))
+		{
+			throw new TransformationException("ServiceName property must be assigned");
+		}
+	}
+}
+
+public abstract class EntityGenerator : Generator
+{
+	public static readonly XNamespace csns = "http://schemas.microsoft.com/ado/2008/09/mapping/cs";
+	public static readonly XNamespace edmns = "http://schemas.microsoft.com/ado/2008/09/edm";
+	public static readonly XNamespace edmxns = "http://schemas.microsoft.com/ado/2008/10/edmx";
+
+	public abstract class EntityContext
+	{
+		public string Namespace { get; set; }
+		public string ServiceName { get; set; }
+	}
+
+	internal XElement Schema { get; private set; }
+	internal XElement Mapping { get; private set; }
+	internal IEnumerable<dynamic> EntityTypes { get; private set; }
+	internal IEnumerable<dynamic> Associations { get; private set; }
+
+	public void LoadModel()
+	{
+		var directoryName = Path.GetDirectoryName(TransformationContext.Host.TemplateFile);
+		var runtime = XDocument.Load(string.Format(@"{0}\{1}\{2}.edmx", directoryName, ModelsFolder, ModelName))
+			.Element(edmxns + "Edmx")
+			.Element(edmxns + "Runtime");
+
+		Schema = runtime.Element(edmxns + "ConceptualModels").Element(edmns + "Schema");
+		Mapping = runtime.Element(edmxns + "Mappings").Element(csns + "Mapping").Element(csns + "EntityContainerMapping");
+
+		EntityTypes = Schema.Elements(edmns + "EntityType").Select(e => ToObject(e)).ToList();
+		Associations = Schema.Elements(edmns + "Association").Select(e => ToObject(e)).ToList();
+
+		var mappings = Mapping.Elements(csns + "EntitySetMapping").Select(e => e.Element(csns + "EntityTypeMapping"));
+		foreach (dynamic type in EntityTypes)
+		{
+			var mapping = mappings.SingleOrDefault((XElement e) => e.Attribute("TypeName").Value.EndsWith(type.Name));
+			if (mapping != null)
+			{
+				type.Mapping = ToObject(mapping.Element(csns + "MappingFragment"));
+			}
+		}
+	}
+
+	protected override void Validate()
+	{
+		if (string.IsNullOrEmpty(ModelName))
+		{
+			throw new TransformationException("ModelName property must be assigned");
+		}
+		
+		this.LoadModel();
+	}
+									 
+	public static dynamic ToObject(XElement element)
+	{
+		dynamic expando = new ExpandoObject();
+		IDictionary<string, object> dictionary = expando as IDictionary<string, object>;
+																			  
+		foreach (var attribute in element.Attributes())
+		{
+			dictionary.Add(attribute.Name.LocalName, attribute.Value);
+		}
+		
+		var node = element.Nodes().FirstOrDefault();
+		if (node is XText)
+		{
+			dictionary.Add("Text", node.ToString());
+		}
+		
+		foreach (var group in element.Elements().GroupBy(e => e.Name.LocalName))
+		{
+			dictionary.Add(group.Key, group.Select(e => ToObject(e)).ToList());
+		}
+		
+		return expando;
+	}
+}
+#>
