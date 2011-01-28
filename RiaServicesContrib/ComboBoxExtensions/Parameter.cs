@@ -39,6 +39,7 @@ namespace RiaServicesContrib.ComboBoxExtensions
         /// <summary>
         /// Gets or sets the value of the <see cref="Parameter"/>.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods")]
         public object Value
         {
             get { return this.GetValue(Parameter.ValueProperty); }

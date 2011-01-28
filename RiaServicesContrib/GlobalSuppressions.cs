@@ -25,3 +25,4 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "NotifyCollectionChangedActions", Scope = "member", Target = "RiaServicesContrib.ComboBoxExtensions.ParameterCollection.#OnCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)")]
 //This one is suppressed for being a bug. The check is there.
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Scope = "member", Target = "RiaServicesContrib.Extensions.RiaServicesExtensions.#Import`1(System.ServiceModel.DomainServices.Client.EntitySet`1<!!0>,System.Collections.Generic.IList`1<RiaServicesContrib.EntityStateSet>,System.ServiceModel.DomainServices.Client.LoadBehavior)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA2210:AssembliesShouldHaveValidStrongNames")]

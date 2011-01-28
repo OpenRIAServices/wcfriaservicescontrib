@@ -11,6 +11,7 @@ namespace RiaServicesContrib.ComboBoxExtensions
 {
     public class ComboBoxDataSource : Control
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible")]
         public static DependencyProperty DataProperty =
             DependencyProperty.Register(
                 "Data",
@@ -18,6 +19,7 @@ namespace RiaServicesContrib.ComboBoxExtensions
                 typeof(ComboBoxDataSource),
                 new PropertyMetadata(null, ComboBoxDataSource.DataPropertyChanged));
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible")]
         public static DependencyProperty DomainContextProperty = 
             DependencyProperty.Register(
                 "DomainContext",
@@ -25,6 +27,7 @@ namespace RiaServicesContrib.ComboBoxExtensions
                 typeof(ComboBoxDataSource),
                 new PropertyMetadata(null, ComboBoxDataSource.DomainContextPropertyChanged));
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible")]
         public static DependencyProperty OperationNameProperty = 
             DependencyProperty.Register(
                 "OperationName",
@@ -39,6 +42,7 @@ namespace RiaServicesContrib.ComboBoxExtensions
                 typeof(ComboBoxDataSource),
                 null);
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible")]
         public static DependencyProperty IsLoadingProperty =
             DependencyProperty.Register(
                 "IsLoading",
@@ -125,6 +129,7 @@ namespace RiaServicesContrib.ComboBoxExtensions
             this.Refresh();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "EntityQuery"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "InvokeOperation")]
         public void Refresh()
         {
             if ((this.DomainContext != null) & !string.IsNullOrEmpty(this.OperationName))

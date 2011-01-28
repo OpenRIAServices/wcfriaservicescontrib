@@ -16,6 +16,7 @@ namespace RiaServicesContrib.ComboBoxExtensions
 
     public static class ComboBox
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]
         public enum ComboBoxMode
         {
             Default = 0,
@@ -25,6 +26,7 @@ namespace RiaServicesContrib.ComboBoxExtensions
 
         #region Mode
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible")]
         public static DependencyProperty ModeProperty =
             DependencyProperty.RegisterAttached(
                 "Mode",
@@ -34,11 +36,13 @@ namespace RiaServicesContrib.ComboBoxExtensions
 
         public static ComboBoxMode GetMode(DependencyObject target)
         {
+            if (target == null) throw new ArgumentNullException("target");
             return (ComboBoxMode)target.GetValue(ComboBox.ModeProperty);
         }
 
         public static void SetMode(DependencyObject target, ComboBoxMode mode)
         {
+            if (target == null) throw new ArgumentNullException("target");
             target.SetValue(ComboBox.ModeProperty, mode);
         }
 
@@ -59,6 +63,7 @@ namespace RiaServicesContrib.ComboBoxExtensions
 
         #endregion
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]
         public class Shim : INotifyPropertyChanged
         {
             private readonly BindingListener _bindingListener;
@@ -87,6 +92,7 @@ namespace RiaServicesContrib.ComboBoxExtensions
                 this._bindingListener = new BindingListener(this);
             }
 
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "SelectedValuePath"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "DisplayMemberPath"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ComboBoxMode")]
             private void Initialize(CB comboBox, bool useEagerSelection)
             {
                 // Add to visual tree to enable ElementName binding
@@ -189,21 +195,25 @@ namespace RiaServicesContrib.ComboBoxExtensions
                 this.SyncToItemsSource();
             }
 
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "e")]
             private void HandleSelectedItemChanged(DependencyPropertyChangedEventArgs e)
             {
                 this.SyncToSelectedItem();
             }
 
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "e")]
             private void HandleSelectedValueChanged(DependencyPropertyChangedEventArgs e)
             {
                 this.SyncToSelectedValue();
             }
 
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "e")]
             private void HandleSelectedValuePathChanged(DependencyPropertyChangedEventArgs e)
             {
                 this.SyncToSelectedValue();
             }
 
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "e")]
             private void HandleDisplayMemberPathChanged(DependencyPropertyChangedEventArgs e)
             {
                 this._displayMemberPath = this._bindingListener.DisplayMemberPath;
