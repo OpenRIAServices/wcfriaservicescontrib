@@ -20,6 +20,7 @@ namespace RiaServicesContrib.Extensions
         /// <returns>IDictionary<string,object> of DataMember values keyed by DataMember name</returns>
         public static IDictionary<string, object> ExtractState(this Entity entity, ExtractType extractType)
         {
+            if (entity == null) throw new ArgumentNullException("entity");
             Entity extractEntity;
             if (extractType == ExtractType.OriginalState && entity.HasChanges)
                 extractEntity = entity.GetOriginal();
@@ -42,7 +43,8 @@ namespace RiaServicesContrib.Extensions
         /// <param name="sourceEntity">Entity being copied from</param>
         public static void ApplyState<T>(this T targetEntity, T sourceEntity) where T : Entity
         {
-
+            if (targetEntity == null) throw new ArgumentNullException("targetEntity");
+            if (sourceEntity == null) throw new ArgumentNullException("sourceEntity");
             StreamingContext dummy = new StreamingContext();
             //Call OnDeserializing to temporarily disable validation
             targetEntity.OnDeserializing(dummy);
@@ -67,7 +69,8 @@ namespace RiaServicesContrib.Extensions
         /// <param name="modifiedState">IDictionary<string,object> of modified (aka current) state DataMembers keyed by DataMember name</param>
         public static void ApplyState(this Entity entity, IDictionary<string, object> originalState, IDictionary<string, object> modifiedState)
         {
-
+            if (entity == null) throw new ArgumentNullException("entity");
+            
             StreamingContext dummy = new StreamingContext();
             //Call OnDeserializing to temporarily disable validation
             entity.OnDeserializing(dummy);
@@ -108,6 +111,8 @@ namespace RiaServicesContrib.Extensions
         /// <returns>IEnumerable of imported entities</returns>
         public static IEnumerable<T> Import<T>(this EntitySet<T> collection, IList<EntityStateSet> stateSet, LoadBehavior loadBehavior) where T : Entity, new()
         {
+            if (collection == null) throw new ArgumentNullException("collection");
+            if (stateSet == null) throw new ArgumentNullException("stateSet");
             List<T> loadedEntities = new List<T>();
             Dictionary<object, T> identityCache = new Dictionary<object, T>();
             foreach (T currentEntity in collection)
@@ -183,6 +188,8 @@ namespace RiaServicesContrib.Extensions
         /// <param name="sourceEntity"></param>
         public static T Clone<T>(this EntitySet<T> collection, T sourceEntity) where T : Entity, new()
         {
+            if (collection == null) throw new ArgumentNullException("collection");
+            if (sourceEntity == null) throw new ArgumentNullException("sourceEntity");
             StreamingContext dummy = new StreamingContext();
             T targetEntity = new T();
             //Call OnDeserializing to temporarily disable validation
@@ -198,7 +205,7 @@ namespace RiaServicesContrib.Extensions
             }
             else if (sourceEntity.EntityState == EntityState.Detached)
             {
-                throw new Exception("Detached entities cannot be cloned into an EntitySet");
+                throw new ArgumentException("Detached entities cannot be cloned into an EntitySet", "sourceEntity");
             }
             else if (sourceEntity.EntityState == EntityState.Modified)
             {
@@ -229,6 +236,8 @@ namespace RiaServicesContrib.Extensions
         /// <returns></returns>
         public static IEnumerable<T> Clone<T>(this EntitySet<T> collection, IEnumerable<T> source, LoadBehavior loadBehavior) where T : Entity, new()
         {
+            if (collection == null) throw new ArgumentNullException("collection");
+            if (source == null) throw new ArgumentNullException("source");
             List<T> clonedEntities = new List<T>();
             Dictionary<object, T> identityCache = new Dictionary<object, T>();
 
@@ -286,6 +295,7 @@ namespace RiaServicesContrib.Extensions
         /// <remarks>Any EntityStateSet which has a ModifiedState will ignore the OriginalState</remarks>
         public static IEnumerable<T> ToEntities<T>(this IList<EntityStateSet> stateSet) where T : Entity, new()
         {
+            if (stateSet == null) throw new ArgumentNullException("stateSet");
             List<T> returnList = new List<T>();
 
             foreach (EntityStateSet currentStateSet in stateSet)
@@ -308,6 +318,7 @@ namespace RiaServicesContrib.Extensions
         /// <returns>IList of EntityStateSet</returns>
         public static IList<EntityStateSet> Export<T>(this IEnumerable<T> collection) where T : Entity, new()
         {
+            if (collection == null) throw new ArgumentNullException("collection");
             List<EntityStateSet> stateList = new List<EntityStateSet>();
             foreach (Entity currentEntity in collection)
             {
@@ -410,6 +421,6 @@ namespace RiaServicesContrib.Extensions
             }
             return true;
         }
-
+ 
     }
 }

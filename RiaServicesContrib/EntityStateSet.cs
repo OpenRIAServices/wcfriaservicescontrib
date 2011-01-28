@@ -5,10 +5,10 @@ namespace RiaServicesContrib
 {
     public class EntityStateSet
     {
-        [DataMember]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly"), DataMember]
         public IDictionary<string, object> OriginalState { get; set; }
 
-        [DataMember]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly"), DataMember]
         public IDictionary<string, object> ModifiedState { get; set; }
 
         [DataMember]
