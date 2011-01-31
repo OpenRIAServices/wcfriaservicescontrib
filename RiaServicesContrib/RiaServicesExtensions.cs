@@ -128,8 +128,11 @@ namespace RiaServicesContrib.Extensions
                 if (existingEntity == null)
                 {
                     T newEntity = new T();
-                    if (currentStateSet.ModifiedState != null)
+                    if (currentStateSet.ModifiedState != null && currentStateSet.OriginalState != null)
                         collection.Attach(newEntity);
+                    else if (currentStateSet.ModifiedState != null)
+                        collection.Add(newEntity);
+
                     newEntity.ApplyState(currentStateSet.OriginalState, currentStateSet.ModifiedState);
                     if (currentStateSet.ModifiedState == null)
                         collection.Attach(newEntity);
