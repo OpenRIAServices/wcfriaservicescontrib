@@ -169,20 +169,25 @@ namespace EntityGraph
                 // The code below is to fix an error in RIA where relationship span is not performed
                 // for newly created entities. 
                 // This means that for an association that is not included in the entity graph,
-                // the intity would include the foreing key to that entity, but since no relationship span
+                // the 'newEntity' entity would include the foreing key to that entity, but since no relationship span
                 // takes place, the corresponding association is not bound to that entity.
                 // Below we set these association properties ourselves. We detect newly created entities by
-                // the heuristic that they don't have an origional state.
+                // the heuristic that they don't have an origional state. We only set the association if the
+                // corresponding entity is detached from the context, otherwise the 'newEntity' entity would be
+                // added to the context as a side effect.
                 foreach(PropertyInfo association in GetAssociations(newEntity))
                 {
                     if(association.PropertyType.IsSubclassOf(typeof(TBase)))
                     {
                         TBase e = (TBase)association.GetValue(n.Node, null);
-                        if(e != null && e is  System.ServiceModel.DomainServices.Client.Entity)
+                        if(e != null && e is System.ServiceModel.DomainServices.Client.Entity)
                         {
-                            if((e as System.ServiceModel.DomainServices.Client.Entity).GetOriginal() == null)
+                            if ((e as System.ServiceModel.DomainServices.Client.Entity).GetOriginal() == null)
                             {
-                                association.SetValue(newEntity, nodes.ContainsKey(e) ? nodes[e] : e, null);
+                                if ((e as System.ServiceModel.DomainServices.Client.Entity).EntityState == System.ServiceModel.DomainServices.Client.EntityState.Detached)
+                                {
+                                    association.SetValue(newEntity, nodes.ContainsKey(e) ? nodes[e] : e, null);
+                                }
                             }
                         }
                     }

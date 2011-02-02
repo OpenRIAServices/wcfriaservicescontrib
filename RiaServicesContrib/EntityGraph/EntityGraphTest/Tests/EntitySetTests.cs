@@ -87,7 +87,7 @@ namespace EntityGraphTest.Tests
 
                     var changeSet = ctx.EntityContainer.GetChanges();
                     Assert.IsTrue(changeSet.AddedEntities.Count() == 0, "Added entities should be zero");
-                    Assert.IsTrue(changeSet.RemovedEntities.Count() == 1, "Removed entities should be 1");
+                    Assert.IsTrue(changeSet.RemovedEntities.Count() == 2, "Removed entities should be 2");
                 });
             EnqueueTestComplete();
         }

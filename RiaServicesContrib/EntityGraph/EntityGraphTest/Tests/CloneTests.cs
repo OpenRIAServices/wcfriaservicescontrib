@@ -2,6 +2,9 @@
 using EntityGraph.RIA;
 using EntityGraphTest.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Silverlight.Testing;
+using System.ServiceModel.DomainServices.Client;
+using EntityGraph;
 
 namespace EntityGraphTest.Tests
 {
@@ -221,6 +224,33 @@ namespace EntityGraphTest.Tests
             var g2 = b.EntityGraph();
             Assert.IsTrue(g1.All(n => g2.Contains(n)));
             Assert.IsTrue(g2.All(n => g1.Contains(n)));
+        }
+        [Asynchronous]
+        [TestMethod]
+        public void CloneIsDetachedFromContextTest() {
+            EntityGraphTestDomainContext ctx = new EntityGraphTestDomainContext();
+            LoadOperation<B> loadOp = ctx.Load(ctx.GetBSetQuery());
+            EnqueueConditional(() => loadOp.IsComplete);
+            EnqueueCallback(
+                () =>
+                {
+                    B b = loadOp.Entities.SingleOrDefault();
+                    Assert.IsFalse(ctx.HasChanges);
+                    var clone = b.Clone(new EntityGraph.EntityGraphShape().Edge<B, A>(B => B.A).Edge<B, C>(B => B.C));
+                    Assert.IsFalse(ctx.HasChanges);
+                });
+            EnqueueTestComplete();
+        }
+        /// <summary>
+        /// The method BuildEntityGraph (in Entitygraph.shared.cs) contains some Silverlight specific code to deal with a bug in 
+        /// RIA. This test checks that the workaround in EntityGraph is correct.
+        /// </summary>
+        [TestMethod]
+        public void CloneWithNewEntityTest()
+        {
+            a.B = new B(); // The RIA bug would make clone.B null (only for newly created entities).
+            var clone = a.Clone(new EntityGraphShape().Edge<A, D>(A => A.DSet).Edge<A, B>(A => A.BSet));
+            Assert.IsNotNull(clone.B);            
         }
     }
 }

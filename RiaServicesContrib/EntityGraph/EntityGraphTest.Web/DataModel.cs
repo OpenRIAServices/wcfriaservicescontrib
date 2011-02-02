@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
+using System.ServiceModel.DomainServices.Server;
 
 namespace EntityGraphTest.Web
 {
@@ -140,7 +141,7 @@ namespace EntityGraphTest.Web
         [DataMember]
         [Key]
         public int Id { get; set; }
-
+        [Include]
         [EntityGraph]
         [Association("A_B", "AId", "Id", IsForeignKey = true)]
         [XmlIgnore]
@@ -153,7 +154,7 @@ namespace EntityGraphTest.Web
         [Association("B_A", "Id", "BId")]
         [XmlIgnore]
         public List<A> ASet { get; set; }
-
+        [Include]
         [EntityGraph("MyGraph")]
         [Association("C_B", "CId", "Id", IsForeignKey = true)]
         [XmlIgnore]

@@ -11,13 +11,14 @@ namespace EntityGraphTest.Web
         public IQueryable<A> GetASet() { return null; }
         public void InsertA(A a) { }
         public void UpdateA(A a) { }
-        public List<B> GetBSet() { return new List<B> { new B { Id = 1 } }; }
+        public List<B> GetBSet() { return new List<B> { new B { Id = 1, AId = -22, A = new A { Id = -22 }, CId = -23, C = new C { Id = -23 } } }; }
         public void InsertB(B b) { }
         public void UpdateB(B b) { }
         public void DeleteB(B b) { }
         public IQueryable<C> GetCSet() { return null; }
         public void InsertC(C c) { }
         public void UpdateC(C c) { }
+        public void DeleteC(C c) { }
         public IQueryable<D> GetDSet() { return null; }
         public void InsertD(D d) { }
         public void UpdateD(D d) { }
