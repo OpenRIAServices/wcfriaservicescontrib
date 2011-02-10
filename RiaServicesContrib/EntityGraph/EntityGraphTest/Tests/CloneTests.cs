@@ -1,10 +1,11 @@
 ﻿using System.Linq;
-using EntityGraph.RIA;
-using EntityGraphTest.Web;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Silverlight.Testing;
+using System.Runtime.Serialization;
 using System.ServiceModel.DomainServices.Client;
 using EntityGraph;
+using EntityGraph.RIA;
+using EntityGraphTest.Web;
+using Microsoft.Silverlight.Testing;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace EntityGraphTest.Tests
 {
@@ -12,7 +13,8 @@ namespace EntityGraphTest.Tests
     public class CloneTests : EntityGraphTest
     {
         [TestMethod]
-        public void CloneTest() {
+        public void CloneTest()
+        {
             a.BSet.Add(new B { name = "B1" });
             A cloneOfA = a.Clone();
             Assert.AreEqual(a.EntityGraph().Count(), cloneOfA.EntityGraph().Count(), "Clone of a does not have same number of elements");
@@ -40,7 +42,8 @@ namespace EntityGraphTest.Tests
         }
 
         [TestMethod]
-        public void CloneNamedGraphTest() {
+        public void CloneNamedGraphTest()
+        {
             a.BSet.Add(new B { name = "B1" });
             A cloneOfA = a.Clone("MyGraph");
             Assert.IsTrue(a.EntityGraph().Count() == cloneOfA.EntityGraph().Count() + 1, "Clone of a does the correct number of elements");
@@ -67,12 +70,13 @@ namespace EntityGraphTest.Tests
                 }
             }
         }
-        
+
         /// <summary>
         /// Test that cloning a one-2-many relation clones all members of the entity graph
         /// </summary>
         [TestMethod]
-        public void OneToManyCloneTest() {
+        public void OneToManyCloneTest()
+        {
             F f = new F();
             E e1 = new E { F = f };
             E e2 = new E { F = f };
@@ -88,7 +92,8 @@ namespace EntityGraphTest.Tests
         /// Test that cloning a "named" one-2-many relation clones all members of the entity graph
         /// </summary>
         [TestMethod]
-        public void OneToManyNamedCloneTest1() {
+        public void OneToManyNamedCloneTest1()
+        {
             F f = new F();
             E e1 = new E { F = f };
             E e2 = new E { F = f };
@@ -104,7 +109,8 @@ namespace EntityGraphTest.Tests
         /// Tests that cloning using a non-existing graph name, will yield a graph without the one-2-many associations
         /// </summary>
         [TestMethod]
-        public void OneToManyNamedCloneTest2() {
+        public void OneToManyNamedCloneTest2()
+        {
             F f = new F();
             E e1 = new E { F = f };
             E e2 = new E { F = f };
@@ -120,7 +126,8 @@ namespace EntityGraphTest.Tests
         /// Tests that cloning a many-2-one relation will clone the complete entity graph
         /// </summary>
         [TestMethod]
-        public void ManyToOneCloneTest1() {
+        public void ManyToOneCloneTest1()
+        {
             F f = new F();
             E e1 = new E { F = f };
             E e2 = new E { F = f };
@@ -138,7 +145,8 @@ namespace EntityGraphTest.Tests
         /// Tests that an association points to the origional entitiy if it is not part of an entity graph
         /// </summary>
         [TestMethod]
-        public void ManyToOneNamedCloneTest1() {
+        public void ManyToOneNamedCloneTest1()
+        {
             F f = new F();
             E e1 = new E { F = f };
             E e2 = new E { F = f };
@@ -151,7 +159,7 @@ namespace EntityGraphTest.Tests
 
             // Check that F/FId point to the origional (non-cloned) entity f
             Assert.IsTrue(cloneOfE1.FId == f.Id);
-            Assert.IsTrue(cloneOfE1.F == f); 
+            Assert.IsTrue(cloneOfE1.F == f);
         }
         /// <summary>
         /// Test that creates a full clone of an m2m relation.
@@ -159,7 +167,8 @@ namespace EntityGraphTest.Tests
         /// the other end entities will be cloned
         /// </summary>
         [TestMethod]
-        public void Many2ManyFullCloneTest() {
+        public void Many2ManyFullCloneTest()
+        {
             G g = new G();
             H h = new H();
             GH gh = new GH { G = g, H = h };
@@ -181,7 +190,8 @@ namespace EntityGraphTest.Tests
         /// the other end entities are be cloned and the origional values will be used.
         /// </summary>
         [TestMethod]
-        public void Many2ManyShallowCloneTest() {
+        public void Many2ManyShallowCloneTest()
+        {
             G g = new G();
             H h = new H();
             GH gh = new GH { G = g, H = h };
@@ -194,7 +204,7 @@ namespace EntityGraphTest.Tests
 
             // Check that the m2m association to h still exists, because h is not cloned
             var cloneOfH = cloneOfg.GHSet.First().H;
-            Assert.IsTrue(cloneOfH == h);            
+            Assert.IsTrue(cloneOfH == h);
         }
         /// <summary>
         /// Test that creates a clone without cloning an m2m relation.
@@ -202,7 +212,8 @@ namespace EntityGraphTest.Tests
         /// m2m relations are not cloned. The resulting collection will be empty.
         /// </summary>
         [TestMethod]
-        public void Many2ManyNoCloneTest() {
+        public void Many2ManyNoCloneTest()
+        {
             G g = new G();
             H h = new H();
             GH gh = new GH { G = g, H = h };
@@ -219,7 +230,8 @@ namespace EntityGraphTest.Tests
         /// result will always be an entity graph with the same entities.
         /// </summary>
         [TestMethod]
-        public void CircularGraphCloneTest() {
+        public void CircularGraphCloneTest()
+        {
             var g1 = a.EntityGraph();
             var g2 = b.EntityGraph();
             Assert.IsTrue(g1.All(n => g2.Contains(n)));
@@ -227,7 +239,8 @@ namespace EntityGraphTest.Tests
         }
         [Asynchronous]
         [TestMethod]
-        public void CloneIsDetachedFromContextTest() {
+        public void CloneIsDetachedFromContextTest()
+        {
             EntityGraphTestDomainContext ctx = new EntityGraphTestDomainContext();
             LoadOperation<B> loadOp = ctx.Load(ctx.GetBSetQuery());
             EnqueueConditional(() => loadOp.IsComplete);
@@ -250,7 +263,26 @@ namespace EntityGraphTest.Tests
         {
             a.B = new B(); // The RIA bug would make clone.B null (only for newly created entities).
             var clone = a.Clone(new EntityGraphShape().Edge<A, D>(A => A.DSet).Edge<A, B>(A => A.BSet));
-            Assert.IsNotNull(clone.B);            
+            Assert.IsNotNull(clone.B);
         }
+
+        [TestMethod]
+        public void CloneWithSelfReferenceTest()
+        {
+            var testClass = new SelfReferenceTestClass();
+            testClass.SelfReference = testClass;
+            Assert.IsTrue(testClass == testClass.SelfReference);
+
+            var shape = new EntityGraphShape().Edge<SelfReferenceTestClass, SelfReferenceTestClass>(c => c.SelfReference);
+            var clone = testClass.Clone(shape);
+            Assert.IsTrue(clone == clone.SelfReference);
+            Assert.IsTrue(clone.EntityGraph(shape).IsCloneOf(testClass.EntityGraph(shape)));
+        }
+    }
+    public class SelfReferenceTestClass : Entity
+    {
+        [DataMember]
+        public string Name { get; set; }
+        public SelfReferenceTestClass SelfReference { get; set; }
     }
 }
