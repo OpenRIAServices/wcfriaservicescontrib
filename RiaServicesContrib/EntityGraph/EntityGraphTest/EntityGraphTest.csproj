@@ -102,8 +102,8 @@
     <Compile Include="IDFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests.cs" />
-    <Compile Include="Tests\CloneComparerTests.cs" />
-    <Compile Include="Tests\CloneTests.cs" />
+    <Compile Include="Tests\CopyComparerTests.cs" />
+    <Compile Include="Tests\CopyTests.cs" />
     <Compile Include="Tests\EntityChangeSetTests.cs" />
     <Compile Include="Tests\EntityGraphComparerTests.cs" />
     <Compile Include="Tests\EntityGraphShapeTests.cs" />

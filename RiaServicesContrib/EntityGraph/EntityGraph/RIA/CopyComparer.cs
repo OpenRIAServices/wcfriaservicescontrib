@@ -9,11 +9,11 @@ namespace EntityGraph.RIA
     public partial class EntityGraph<TEntity>
     {
         /// <summary>
-        /// Determines whether two entity graphs are clones by member-wise comparing all entities in both graphs.
+        /// Determines whether two entity graphs are copies of eachother by member-wise comparing all entities in both graphs.
         /// </summary>
         /// <param name="graph"></param>
         /// <returns></returns>
-        public bool IsCloneOf<T>(EntityGraph<T> graph) where T : Entity
+        public bool IsCopyOf<T>(EntityGraph<T> graph) where T : Entity
         {
             return EntityGraphEqual(graph, (e1, e2) => e1 != e2 && MemberwiseCompare(e1, e2));
         }
@@ -42,6 +42,5 @@ namespace EntityGraph.RIA
             }
             return true;
         }
-
     }
 }

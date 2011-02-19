@@ -10,35 +10,35 @@ namespace EntityGraph.RIA
     public partial class EntityGraph<TEntity> 
     {
         /// <summary>
-        /// Method that clones an entity and, recursively, all its associations that are marked with 
-        /// the 'EntityGraphAttribute' attribute
+        /// Method that copies an entity and, recursively, all its associations that are included in the entity graph
         /// </summary>
         /// <returns></returns>
-        public TEntity Clone() 
+        public TEntity Copy() 
         {
-            return GraphMap(CloneDataMembers);
+            return GraphMap(CopyDataMembers);
         }
 
-        private TClone CloneDataMembers<TClone>(TClone entity) where TClone : Entity
+        private TCopy CopyDataMembers<TCopy>(TCopy entity) where TCopy : Entity
         {
             // Create new object of type T (or subtype) using reflection and inspecting the concrete 
-            // type of the entity to clone.
-            TClone clone = (TClone)Activator.CreateInstance(entity.GetType());
+            // type of the entity to copy.
+            TCopy copy = (TCopy)Activator.CreateInstance(entity.GetType());
 
-            // Clone DataMember properties
-            foreach (PropertyInfo currentPropertyInfo in GetDataMembers(entity))
+            // Copy DataMember properties
+            foreach (PropertyInfo currentPropertyInfo in GetDataMembers(entity, false))
             {
                 object currentObject = currentPropertyInfo.GetValue(entity, null);
-                currentPropertyInfo.SetValue(clone, currentObject, null);
+                currentPropertyInfo.SetValue(copy, currentObject, null);
             }
-            return clone;
+            return copy;
         }
         /// <summary>
-        /// Returns an array of PropertyInfo  objects for properties which have the "DataMemberAttribute"
+        /// Returns an array of PropertyInfo objects for properties which have the "DataMemberAttribute"
         /// </summary>
         /// <param name="obj"></param>
+        /// <param name="includeKeys">Indicates whether key properties should also be included</param>
         /// <returns></returns>
-        private static PropertyInfo[] GetDataMembers(object obj)
+        private static PropertyInfo[] GetDataMembers(object obj, bool includeKeys)
         {
             BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.Instance;
             var qry = from p in obj.GetType().GetProperties(bindingAttr)

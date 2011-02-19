@@ -10,18 +10,18 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace EntityGraphTest.Tests
 {
     [TestClass]
-    public class CloneTests : EntityGraphTest
+    public class CopyTests : EntityGraphTest
     {
         [TestMethod]
-        public void CloneTest()
+        public void CopyTest()
         {
             a.BSet.Add(new B { name = "B1" });
-            A cloneOfA = a.Clone();
-            Assert.AreEqual(a.EntityGraph().Count(), cloneOfA.EntityGraph().Count(), "Clone of a does not have same number of elements");
-            var zip = a.EntityGraph().Zip(cloneOfA.EntityGraph(), (ea, eb) => new { ea, eb });
+            A copyOfA = a.Copy();
+            Assert.AreEqual(a.EntityGraph().Count(), copyOfA.EntityGraph().Count(), "Copy of a does not have same number of elements");
+            var zip = a.EntityGraph().Zip(copyOfA.EntityGraph(), (ea, eb) => new { ea, eb });
             foreach(var el in zip)
             {
-                Assert.IsTrue(el.ea.GetType() == el.eb.GetType(), "Clone is not equal");
+                Assert.IsTrue(el.ea.GetType() == el.eb.GetType(), "Copy is not equal");
                 if(el.ea is A)
                 {
                     Assert.IsTrue(((A)el.ea).name == ((A)el.eb).name);
@@ -42,16 +42,16 @@ namespace EntityGraphTest.Tests
         }
 
         [TestMethod]
-        public void CloneNamedGraphTest()
+        public void CopyNamedGraphTest()
         {
             a.BSet.Add(new B { name = "B1" });
-            A cloneOfA = a.Clone("MyGraph");
-            Assert.IsTrue(a.EntityGraph().Count() == cloneOfA.EntityGraph().Count() + 1, "Clone of a does the correct number of elements");
-            Assert.IsTrue(cloneOfA.BSet.Count() == 0);
-            var zip = a.EntityGraph().Zip(cloneOfA.EntityGraph(), (ea, eb) => new { ea, eb });
+            A copyOfA = a.Copy("MyGraph");
+            Assert.IsTrue(a.EntityGraph().Count() == copyOfA.EntityGraph().Count() + 1, "Copy of a does the correct number of elements");
+            Assert.IsTrue(copyOfA.BSet.Count() == 0);
+            var zip = a.EntityGraph().Zip(copyOfA.EntityGraph(), (ea, eb) => new { ea, eb });
             foreach(var el in zip)
             {
-                Assert.AreEqual(el.ea.GetType(), el.eb.GetType(), "Clone is not equal");
+                Assert.AreEqual(el.ea.GetType(), el.eb.GetType(), "Copy is not equal");
                 if(el.ea is A)
                 {
                     Assert.IsTrue(((A)el.ea).name == ((A)el.eb).name);
@@ -72,165 +72,165 @@ namespace EntityGraphTest.Tests
         }
 
         /// <summary>
-        /// Test that cloning a one-2-many relation clones all members of the entity graph
+        /// Test that copying a one-2-many relation copies all members of the entity graph
         /// </summary>
         [TestMethod]
-        public void OneToManyCloneTest()
+        public void OneToManyCopyTest()
         {
             F f = new F();
             E e1 = new E { F = f };
             E e2 = new E { F = f };
 
-            var cloneOfF = f.Clone();
+            var copyOfF = f.Copy();
             var g1 = f.EntityGraph();
-            var g2 = cloneOfF.EntityGraph();
+            var g2 = copyOfF.EntityGraph();
 
-            Assert.IsTrue(g1.IsCloneOf(g2));
-            Assert.IsTrue(cloneOfF.ESet.Count() == 2);
+            Assert.IsTrue(g1.IsCopyOf(g2));
+            Assert.IsTrue(copyOfF.ESet.Count() == 2);
         }
         /// <summary>
-        /// Test that cloning a "named" one-2-many relation clones all members of the entity graph
+        /// Test that copying a "named" one-2-many relation copies all members of the entity graph
         /// </summary>
         [TestMethod]
-        public void OneToManyNamedCloneTest1()
+        public void OneToManyNamedCopyTest1()
         {
             F f = new F();
             E e1 = new E { F = f };
             E e2 = new E { F = f };
 
-            var cloneOfF = f.Clone("MyGraph");
+            var copyOfF = f.Copy("MyGraph");
             var g1 = f.EntityGraph("MyGraph");
-            var g2 = cloneOfF.EntityGraph();
+            var g2 = copyOfF.EntityGraph();
 
-            Assert.IsTrue(g1.IsCloneOf(g2));
-            Assert.IsTrue(cloneOfF.ESet.Count() == 2);
+            Assert.IsTrue(g1.IsCopyOf(g2));
+            Assert.IsTrue(copyOfF.ESet.Count() == 2);
         }
         /// <summary>
-        /// Tests that cloning using a non-existing graph name, will yield a graph without the one-2-many associations
+        /// Tests that copying using a non-existing graph name, will yield a graph without the one-2-many associations
         /// </summary>
         [TestMethod]
-        public void OneToManyNamedCloneTest2()
+        public void OneToManyNamedCopyTest2()
         {
             F f = new F();
             E e1 = new E { F = f };
             E e2 = new E { F = f };
 
-            var cloneOfF = f.Clone("MyGraph2");
+            var copyOfF = f.Copy("MyGraph2");
             var g1 = f.EntityGraph("MyGraph2");
-            var g2 = cloneOfF.EntityGraph();
+            var g2 = copyOfF.EntityGraph();
 
-            Assert.IsTrue(g1.IsCloneOf(g2));
-            Assert.IsTrue(cloneOfF.ESet.Count() == 0);
+            Assert.IsTrue(g1.IsCopyOf(g2));
+            Assert.IsTrue(copyOfF.ESet.Count() == 0);
         }
         /// <summary>
-        /// Tests that cloning a many-2-one relation will clone the complete entity graph
+        /// Tests that copying a many-2-one relation will copy the complete entity graph
         /// </summary>
         [TestMethod]
-        public void ManyToOneCloneTest1()
+        public void ManyToOneCopyTest1()
         {
             F f = new F();
             E e1 = new E { F = f };
             E e2 = new E { F = f };
 
-            var cloneOfE1 = e1.Clone();
+            var copyOfE1 = e1.Copy();
             var g1 = e1.EntityGraph();
-            var g2 = cloneOfE1.EntityGraph();
+            var g2 = copyOfE1.EntityGraph();
 
-            Assert.IsTrue(g1.IsCloneOf(g2));
-            Assert.IsTrue(cloneOfE1.F.ESet.Count() == 2);
-            Assert.IsTrue(cloneOfE1.FId != f.Id);
-            Assert.IsTrue(cloneOfE1.F != f);
+            Assert.IsTrue(g1.IsCopyOf(g2));
+            Assert.IsTrue(copyOfE1.F.ESet.Count() == 2);
+            Assert.IsTrue(copyOfE1.FId != f.Id);
+            Assert.IsTrue(copyOfE1.F != f);
         }
         /// <summary>
         /// Tests that an association points to the origional entitiy if it is not part of an entity graph
         /// </summary>
         [TestMethod]
-        public void ManyToOneNamedCloneTest1()
+        public void ManyToOneNamedCopyTest1()
         {
             F f = new F();
             E e1 = new E { F = f };
             E e2 = new E { F = f };
 
-            var cloneOfE1 = e1.Clone("MyGraph2");
+            var copyOfE1 = e1.Copy("MyGraph2");
             var g1 = e1.EntityGraph();
-            var g2 = cloneOfE1.EntityGraph();
+            var g2 = copyOfE1.EntityGraph();
 
-            Assert.IsFalse(g1.IsCloneOf(g2));
+            Assert.IsFalse(g1.IsCopyOf(g2));
 
-            // Check that F/FId point to the origional (non-cloned) entity f
-            Assert.IsTrue(cloneOfE1.FId == f.Id);
-            Assert.IsTrue(cloneOfE1.F == f);
+            // Check that F/FId point to the origional (non-copied) entity f
+            Assert.IsTrue(copyOfE1.FId == f.Id);
+            Assert.IsTrue(copyOfE1.F == f);
         }
         /// <summary>
-        /// Test that creates a full clone of an m2m relation.
+        /// Test that creates a copy of an m2m relation.
         /// It tests that if the other end in an join table entity is part of the entity graph,
-        /// the other end entities will be cloned
+        /// the other end entities will be copied
         /// </summary>
         [TestMethod]
-        public void Many2ManyFullCloneTest()
+        public void Many2ManyFullCopyTest()
         {
             G g = new G();
             H h = new H();
             GH gh = new GH { G = g, H = h };
 
-            var cloneOfg = g.Clone();
+            var copyOfg = g.Copy();
             var g1 = g.EntityGraph();
-            var g2 = cloneOfg.EntityGraph();
+            var g2 = copyOfg.EntityGraph();
 
-            Assert.IsTrue(g1.IsCloneOf(g2));
+            Assert.IsTrue(g1.IsCopyOf(g2));
 
-            // Check that the m2m association to h is now an association to a clone of h
-            var cloneOfH = cloneOfg.GHSet.First().H;
-            Assert.IsTrue(cloneOfH != h);
+            // Check that the m2m association to h is now an association to a copy of h
+            var copyOfH = copyOfg.GHSet.First().H;
+            Assert.IsTrue(copyOfH != h);
         }
         /// <summary>
-        /// Test that creates a clone of an m2m relation by cloning the join table objects, but not the
+        /// Test that creates a copy of an m2m relation by copying the join table objects, but not the
         /// target entities.
         /// It tests that if the other end in an join table entity is _not_ part of the graph,
-        /// the other end entities are be cloned and the origional values will be used.
+        /// the other end entities are not copied and the origional values will be used.
         /// </summary>
         [TestMethod]
-        public void Many2ManyShallowCloneTest()
+        public void Many2ManyShallowCopyTest()
         {
             G g = new G();
             H h = new H();
             GH gh = new GH { G = g, H = h };
 
-            var cloneOfg = g.Clone("MyGraph1");
+            var copyOfg = g.Copy("MyGraph1");
             var g1 = g.EntityGraph();
-            var g2 = cloneOfg.EntityGraph();
+            var g2 = copyOfg.EntityGraph();
 
-            Assert.IsFalse(g1.IsCloneOf(g2));
+            Assert.IsFalse(g1.IsCopyOf(g2));
 
-            // Check that the m2m association to h still exists, because h is not cloned
-            var cloneOfH = cloneOfg.GHSet.First().H;
-            Assert.IsTrue(cloneOfH == h);
+            // Check that the m2m association to h still exists, because h is not copied
+            var copyOfH = copyOfg.GHSet.First().H;
+            Assert.IsTrue(copyOfH == h);
         }
         /// <summary>
-        /// Test that creates a clone without cloning an m2m relation.
+        /// Test that creates a copy without copying an m2m relation.
         /// It tests that if the collection property (holding m2m relations) is not part of the entity graph the
-        /// m2m relations are not cloned. The resulting collection will be empty.
+        /// m2m relations are not copied . The resulting collection will be empty.
         /// </summary>
         [TestMethod]
-        public void Many2ManyNoCloneTest()
+        public void Many2ManyNoCopyTest()
         {
             G g = new G();
             H h = new H();
             GH gh = new GH { G = g, H = h };
 
-            var cloneOfg = g.Clone("MyGraph2");
+            var copyOfg = g.Copy("MyGraph2");
             var g1 = g.EntityGraph();
-            var g2 = cloneOfg.EntityGraph();
+            var g2 = copyOfg.EntityGraph();
 
-            Assert.IsFalse(g1.IsCloneOf(g2));
-            Assert.IsTrue(cloneOfg.GHSet.Count() == 0);
+            Assert.IsFalse(g1.IsCopyOf(g2));
+            Assert.IsTrue(copyOfg.GHSet.Count() == 0);
         }
         /// <summary>
-        /// Test to check for a circular entity graph it doesn't matter which element is cloned. The 
+        /// Test to check for a circular entity graph it doesn't matter which element is copied. The 
         /// result will always be an entity graph with the same entities.
         /// </summary>
         [TestMethod]
-        public void CircularGraphCloneTest()
+        public void CircularGraphCopyTest()
         {
             var g1 = a.EntityGraph();
             var g2 = b.EntityGraph();
@@ -239,7 +239,7 @@ namespace EntityGraphTest.Tests
         }
         [Asynchronous]
         [TestMethod]
-        public void CloneIsDetachedFromContextTest()
+        public void CopyIsDetachedFromContextTest()
         {
             EntityGraphTestDomainContext ctx = new EntityGraphTestDomainContext();
             LoadOperation<B> loadOp = ctx.Load(ctx.GetBSetQuery());
@@ -249,7 +249,7 @@ namespace EntityGraphTest.Tests
                 {
                     B b = loadOp.Entities.SingleOrDefault();
                     Assert.IsFalse(ctx.HasChanges);
-                    var clone = b.Clone(new EntityGraph.EntityGraphShape().Edge<B, A>(B => B.A).Edge<B, C>(B => B.C));
+                    var copy = b.Copy(new EntityGraph.EntityGraphShape().Edge<B, A>(B => B.A).Edge<B, C>(B => B.C));
                     Assert.IsFalse(ctx.HasChanges);
                 });
             EnqueueTestComplete();
@@ -259,24 +259,24 @@ namespace EntityGraphTest.Tests
         /// RIA. This test checks that the workaround in EntityGraph is correct.
         /// </summary>
         [TestMethod]
-        public void CloneWithNewEntityTest()
+        public void CopyWithNewEntityTest()
         {
-            a.B = new B(); // The RIA bug would make clone.B null (only for newly created entities).
-            var clone = a.Clone(new EntityGraphShape().Edge<A, D>(A => A.DSet).Edge<A, B>(A => A.BSet));
-            Assert.IsNotNull(clone.B);
+            a.B = new B(); // The RIA bug would make copy.B null (only for newly created entities).
+            var copy = a.Copy(new EntityGraphShape().Edge<A, D>(A => A.DSet).Edge<A, B>(A => A.BSet));
+            Assert.IsNotNull(copy.B);
         }
 
         [TestMethod]
-        public void CloneWithSelfReferenceTest()
+        public void CopyWithSelfReferenceTest()
         {
             var testClass = new SelfReferenceTestClass();
             testClass.SelfReference = testClass;
             Assert.IsTrue(testClass == testClass.SelfReference);
 
             var shape = new EntityGraphShape().Edge<SelfReferenceTestClass, SelfReferenceTestClass>(c => c.SelfReference);
-            var clone = testClass.Clone(shape);
-            Assert.IsTrue(clone == clone.SelfReference);
-            Assert.IsTrue(clone.EntityGraph(shape).IsCloneOf(testClass.EntityGraph(shape)));
+            var copy = testClass.Copy(shape);
+            Assert.IsTrue(copy == copy.SelfReference);
+            Assert.IsTrue(copy.EntityGraph(shape).IsCopyOf(testClass.EntityGraph(shape)));
         }
     }
     public class SelfReferenceTestClass : Entity

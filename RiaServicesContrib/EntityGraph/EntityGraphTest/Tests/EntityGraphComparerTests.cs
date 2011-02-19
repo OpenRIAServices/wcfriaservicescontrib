@@ -12,15 +12,15 @@ namespace EntityGraphTest.Tests
             Assert.IsTrue(gr.EntityGraphEqual(gr));
         }
         [TestMethod]
-        public void EntityGraphComparerCloneTest() {
+        public void EntityGraphComparerCopyTest() {
             var gr1 = a.EntityGraph();
-            var gr2 = a.Clone().EntityGraph();
+            var gr2 = a.Copy().EntityGraph();
             Assert.IsFalse(gr1.EntityGraphEqual(gr2));
         }
         [TestMethod]
         public void EntityGraphComparerCustomComparerTest() {
             var gr1 = a.EntityGraph();
-            var gr2 = a.Clone().EntityGraph();
+            var gr2 = a.Copy().EntityGraph();
             Assert.IsTrue(gr1.EntityGraphEqual(gr2, (e1, e2) => e1.GetType() == e2.GetType()));
         }
     }

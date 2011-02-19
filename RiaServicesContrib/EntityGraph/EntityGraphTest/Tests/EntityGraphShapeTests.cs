@@ -33,7 +33,7 @@ namespace EntityGraphTest.Tests
             Assert.IsTrue(gr.Contains(newB));
         }
         [TestMethod]
-        public void CloneEqualGraphShapeTests()
+        public void CopyEqualGraphShapeTests()
         {
             var shape = new EntityGraphShape()
             .Edge<A,B>(A => A.B)
@@ -41,30 +41,30 @@ namespace EntityGraphTest.Tests
             .Edge<C,D>(C => C.D)
             .Edge<A, B>(A => A.BSet);
 
-            var clone1 = a.Clone(shape);
-            var clone2 = a.Clone();
+            var copy1 = a.Copy(shape);
+            var copy2 = a.Copy();
 
-            var gr1 = clone1.EntityGraph();
-            var gr2 = clone2.EntityGraph();
+            var gr1 = copy1.EntityGraph();
+            var gr2 = copy2.EntityGraph();
 
-            Assert.IsTrue(gr1.IsCloneOf(gr2));
+            Assert.IsTrue(gr1.IsCopyOf(gr2));
         }
 
         [TestMethod]
-        public void CloneNotEqualGraphShapeTests()
+        public void CopyNotEqualGraphShapeTests()
         {
             var shape = new EntityGraphShape()
             .Edge<A,B>(A => A.B)
             .Edge<A, D>(A => A.DSet)
             .Edge<A, B>(A => A.BSet);
 
-            var clone1 = a.Clone(shape);
-            var clone2 = a.Clone();
+            var copy1 = a.Copy(shape);
+            var copy2 = a.Copy();
 
-            var gr1 = clone1.EntityGraph();
-            var gr2 = clone2.EntityGraph();
+            var gr1 = copy1.EntityGraph();
+            var gr2 = copy2.EntityGraph();
 
-            Assert.IsFalse(gr1.IsCloneOf(gr2));
+            Assert.IsFalse(gr1.IsCopyOf(gr2));
         }
     }
 }
