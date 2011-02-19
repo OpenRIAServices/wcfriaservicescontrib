@@ -44,7 +44,7 @@ namespace EntityGraph.RIA
             var qry = from p in obj.GetType().GetProperties(bindingAttr)
                       where
                         p.IsDefined(typeof(DataMemberAttribute), true)
-                      && p.IsDefined(typeof(KeyAttribute), true) == false
+                      && (includeKeys || p.IsDefined(typeof(KeyAttribute), true) == false)
                       && p.GetSetMethod() != null
                       select p;
             return qry.ToArray();

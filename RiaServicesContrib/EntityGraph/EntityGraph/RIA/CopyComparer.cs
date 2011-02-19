@@ -16,34 +16,42 @@ namespace EntityGraph.RIA
         /// <returns></returns>
         public bool IsCopyOf<T>(EntityGraph<T> graph) where T : Entity
         {
-            return EntityGraphEqual(graph, (e1, e2) => e1 != e2 && MemberwiseCompare(e1, e2));
+            return EntityGraphEqual(graph, (e1, e2) => e1 != e2 && MemberwiseCompare(e1, e2, false));
         }
 
-        private bool MemberwiseCompare(Entity e1, Entity e2) {
-            if(CheckState(e1, e2, ExtractType.ModifiedState) == false)
+        private bool MemberwiseCompare(Entity e1, Entity e2, bool checkKeys) {
+            if(CheckState(e1, e2, ExtractType.ModifiedState, checkKeys) == false)
                 return false;
-            if(CheckState(e1, e2, ExtractType.OriginalState) == false)
+            if(CheckState(e1, e2, ExtractType.OriginalState, checkKeys) == false)
                 return false;
             return true;
         }
 
-        private bool CheckState(Entity e1, Entity e2, ExtractType state) {
+        private bool CheckState(Entity e1, Entity e2, ExtractType state, bool checkKeys) {
+            List<string> keys = null;
+            List<string> foreignKeys = null;
             var stateE1 = e1.ExtractState(state);
             var stateE2 = e2.ExtractState(state);
             if(stateE1.Count != stateE2.Count)
             {
                 return false;
             }
-            var keys = GetKey(e1);
-            var foreignKeys = GetForeignKeys(e1);
+            if(checkKeys == false)
+            {
+                keys = GetKey(e1);
+                foreignKeys = GetForeignKeys(e1);
+            }
             var zip = stateE1.Zip(stateE2, (a, b) => new { name = a.Key, a = a.Value, b = b.Value });
             foreach(var v in zip)
             {
-                if(v.a != v.b)
+                if(v.a != v.b && v.a.Equals(v.b) == false)
                 {
-                    if(keys.Contains(v.name) || foreignKeys.Contains(v.name))
+                    if(checkKeys == false)
                     {
-                        continue;
+                        if(keys.Contains(v.name) || foreignKeys.Contains(v.name))
+                        {
+                            continue;
+                        }
                     }
                     return false;
                 }
@@ -68,7 +76,6 @@ namespace EntityGraph.RIA
                        where prop.IsDefined(typeof(KeyAttribute), true)
                        select prop.Name;
             return keys.ToList();
-
         }
     }
 }

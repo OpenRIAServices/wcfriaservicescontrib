@@ -55,7 +55,7 @@ namespace EntityGraph.RIA
         }
         /// <summary>
         /// Extension method that copies the given entity and all associated entities marked with the GraphAttribute attribute and 
-        /// which have the same gaph name. 
+        /// which have the same graph name. 
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="entity"></param>
@@ -87,6 +87,52 @@ namespace EntityGraph.RIA
         {
             return new EntityGraph<TEntity>(entity, shape).Copy();
         }
+
+        /// <summary>
+        /// Extension method that clones the given entity and all associated entities marked with the GraphAttribute attribute. 
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public static TEntity Clone<TEntity>(this TEntity entity) where TEntity : Entity
+        {
+            return entity.EntityGraph().Clone();
+        }
+        /// <summary>
+        /// Extension method that clones the given entity and all associated entities marked with the GraphAttribute attribute and 
+        /// which have the same graph name. 
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="entity"></param>
+        /// <param name="graphName"></param>
+        /// <returns></returns>
+        public static TEntity Clone<TEntity>(this TEntity entity, string graphName) where TEntity : Entity
+        {
+            return entity.EntityGraph(graphName).Clone();
+        }
+        /// <summary>
+        /// Extension method that clones the given entity and all associated entities as indicated by the given collection of paths
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="entity"></param>
+        /// <param name="paths"></param>
+        /// <returns></returns>
+        public static TEntity Clone<TEntity>(this TEntity entity, string[] paths) where TEntity : Entity
+        {
+            return entity.EntityGraph(paths).Clone();
+        }
+        /// <summary>
+        /// Extension method that clones the given entity and all associated entities in the entity graph defined by the given EntityGraphShape.
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="entity"></param>
+        /// <param name="shape"></param>
+        /// <returns></returns>
+        public static TEntity Clone<TEntity>(this TEntity entity, EntityGraphShape shape) where TEntity : Entity
+        {
+            return new EntityGraph<TEntity>(entity, shape).Clone();
+        }
+
         #region Factory
         private static class GraphFactory<TEntity> where TEntity : Entity
         {
