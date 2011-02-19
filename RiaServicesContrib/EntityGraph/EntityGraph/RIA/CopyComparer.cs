@@ -3,6 +3,7 @@ using System.Linq;
 using System.ServiceModel.DomainServices.Client;
 using RiaServicesContrib;
 using RiaServicesContrib.Extensions;
+using System.Collections.Generic;
 
 namespace EntityGraph.RIA
 {
@@ -27,20 +28,47 @@ namespace EntityGraph.RIA
         }
 
         private bool CheckState(Entity e1, Entity e2, ExtractType state) {
-            var stateE1 = e1.ExtractState(ExtractType.ModifiedState);
-            var stateE2 = e2.ExtractState(ExtractType.ModifiedState);
+            var stateE1 = e1.ExtractState(state);
+            var stateE2 = e2.ExtractState(state);
+            if(stateE1.Count != stateE2.Count)
+            {
+                return false;
+            }
+            var keys = GetKey(e1);
+            var foreignKeys = GetForeignKeys(e1);
             var zip = stateE1.Zip(stateE2, (a, b) => new { name = a.Key, a = a.Value, b = b.Value });
             foreach(var v in zip)
             {
                 if(v.a != v.b)
                 {
-                    var propInfo = e1.GetType().GetProperty(v.name);
-                    if(propInfo.IsDefined(typeof(RoundtripOriginalAttribute), true))
+                    if(keys.Contains(v.name) || foreignKeys.Contains(v.name))
+                    {
                         continue;
+                    }
                     return false;
                 }
             }
             return true;
+        }
+        private List<string> GetForeignKeys(Entity e)
+        {
+            var type = e.GetType();
+            var assocs = from prop in type.GetProperties()
+                         where prop.IsDefined(typeof(AssociationAttribute), true)
+                         from assoc in prop.GetCustomAttributes(typeof(AssociationAttribute), true).Cast<AssociationAttribute>()
+                         where
+                         assoc.IsForeignKey
+                         select assoc.ThisKey;
+            return assocs.ToList();
+        }
+        private List<string> GetKey(Entity e)
+        {
+            var type = e.GetType();
+            var keys = from prop in type.GetProperties()
+                       where prop.IsDefined(typeof(KeyAttribute), true)
+                       select prop.Name;
+            return keys.ToList();
+
         }
     }
 }
