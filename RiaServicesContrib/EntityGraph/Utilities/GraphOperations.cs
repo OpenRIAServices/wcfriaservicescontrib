@@ -105,7 +105,6 @@ namespace Utilities
         public static Graph EntityTypes2DotGraph(Func<IEnumerable<Type>> Entities, Func<PropertyInfo, bool> IsAssociation)
         {
             var graph = new Graph();
-            var xs = Entities().ToList();
             var elements = Entities().SelectMany(entityType => EntityType2DotElements(entityType, IsAssociation));
 
             foreach(var node in elements.OfType<Node>())

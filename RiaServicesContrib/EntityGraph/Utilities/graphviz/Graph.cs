@@ -32,11 +32,11 @@ namespace Utilities.graphviz
             StringBuilder b = new StringBuilder();
             b.AppendFormat("digraph {0} {{", Name);
             b.AppendLine();
-            foreach(var node in Nodes)
+            foreach(var node in Nodes.OrderBy(n => n.Name))
             {
                 b.AppendLine(node.ToString());
             }
-            foreach(var edge in Edges)
+            foreach(var edge in Edges.OrderBy(e => e.LhsType.Name))
             {
                 b.AppendLine(edge.ToString());
             }
