@@ -9,7 +9,7 @@ namespace EntityGraph
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
-            return GetEnumerator();
+            return EntityRelationGraph.GetEnumerator();
         }
     }
 }

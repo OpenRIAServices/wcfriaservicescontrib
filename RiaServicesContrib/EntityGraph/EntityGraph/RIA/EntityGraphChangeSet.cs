@@ -31,12 +31,30 @@ namespace EntityGraph.RIA
 
         public IEnumerator<Entity> GetEnumerator()
         {
-            throw new NotImplementedException();
+            foreach(var entity in AddedEntities)
+            {
+                yield return entity;
+            }
+            foreach(var entity in ModifiedEntities)
+            {
+                yield return entity;
+            }
+            foreach(var entity in RemovedEntities)
+            {
+                yield return entity;
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return GetEnumerator();
+        }
+        public override string ToString()
+        {
+            return string.Format("Added = {0}, Modified = {1}, Removed = {2}",
+                AddedEntities.Count,
+                ModifiedEntities.Count,
+                RemovedEntities.Count);
         }
     }
 }
