@@ -3,68 +3,52 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using RIA.EntityValidator;
+using EntityGraph.Validation;
 
 namespace EntityGraph
 {
     public partial class EntityGraph<TEntity, TBase, TValidationResult>
     {
-        private ValidationEngine<TEntity, TBase, TValidationResult> Validator;
+        private ValidationEngine<TBase, TValidationResult> Validator;
 
         [Initialize]
         internal void InitGraphValidation()
         {
-            var rulesProvider = new MEFValidationRulesProvider<TEntity, TBase, TValidationResult>();
-            Validator = new ValidationEngine<TEntity, TBase, TValidationResult>(rulesProvider, Source);
+            var rulesProvider = new MEFValidationRulesProvider<TValidationResult>();
+            Validator = new ValidationEngine<TBase, TValidationResult>(rulesProvider);
             Validator.ValidationResultChanged += Validator_ValidationResultChanged;
-            ValidatorRefresh(null, null);
-            ValidatorRefresh(null, null);
 
-            this.EntityRelationGraphResetting += ValidatorReset;
             this.EntityRelationGraphResetted += ValidatorRefresh;
+
+            this.CollectionChanged += Validator_CollectionChanged;
+            this.PropertyChanged += Validate;
+
+            Validator.ValidateAll(this);
         }
 
         [Dispose]
         internal void CleanGraphValidation()
         {
             this.Validator.ValidationResultChanged -= Validator_ValidationResultChanged;
-            this.EntityRelationGraphResetting -= ValidatorReset;
             this.EntityRelationGraphResetted -= ValidatorRefresh;
-            ValidatorReset(null, null);
+            Validator.Dispose();
+            this.CollectionChanged -= Validator_CollectionChanged;
+            this.PropertyChanged -= Validate;
         }
-        private void ValidatorReset(object sender, EventArgs args)
-        {
-            foreach(var entity in Validator.ObjectsInvolved().OfType<INotifyPropertyChanged>())
-            {
-                entity.PropertyChanged -= Validate;
-            }
-            foreach(var entity in Validator.ObjectsInvolved().OfType<INotifyCollectionChanged>())
-            {
-                entity.CollectionChanged -= Validator_CollectionChanged;
-            }
-        }
+
         private void ValidatorRefresh(object sender, EventArgs args)
         {
-            Validator.Refresh();
             ValidateAll();
-            foreach(var entity in Validator.ObjectsInvolved().OfType<INotifyPropertyChanged>())
-            {
-                entity.PropertyChanged += Validate;
-            }
-            foreach(var entity in Validator.ObjectsInvolved().OfType<INotifyCollectionChanged>())
-            {
-                entity.CollectionChanged += Validator_CollectionChanged;
-            }
         }
         private void Validator_ValidationResultChanged(object sender, ValidationResultChangedEventArgs<TValidationResult> e)
         {
-            var rule = (ValidationRule<TEntity, TValidationResult>)sender;
-            foreach(var entity in Validator.ObjectsInvolved(rule).Cast<TBase>())
+            var rule = (ValidationRule<TValidationResult>)sender;
+            foreach(var entity in Validator.ObjectsInvolved(rule).OfType<TBase>())
             {
-                if(HasValidationResult(entity, e.OldResult))
-                    ClearValidationResult(entity, e.OldResult);
-                if(HasValidationResult(entity, e.Result) == false)
-                    SetValidationResult(entity, e.Result);
+                if(HasValidationResult(entity, e.OldValidationResult))
+                    ClearValidationResult(entity, e.OldValidationResult);
+                if(HasValidationResult(entity, e.ValidationResult) == false)
+                    SetValidationResult(entity, e.ValidationResult);
             }
         }
 
@@ -82,15 +66,15 @@ namespace EntityGraph
                                  edge.Key.GetValue(n.Node, null) == sender
                                select new { owner = n.Node, propInfo = edge.Key });
             var collection = collections.SingleOrDefault();
-            Validator.Validate(collection.owner, collection.propInfo.Name);
+            Validator.Validate(collection.owner, collection.propInfo.Name, this);
         }
         private void Validate(object sender, PropertyChangedEventArgs args)
         {
-            Validator.Validate((TBase)sender, args.PropertyName);
+            Validator.Validate(sender, args.PropertyName, this);
         }
         private void ValidateAll()
         {
-            Validator.ValidateAll();
+            Validator.ValidateAll(this);
         }
     }
 }

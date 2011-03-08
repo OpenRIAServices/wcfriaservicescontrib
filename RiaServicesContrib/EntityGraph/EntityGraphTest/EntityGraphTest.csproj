@@ -110,8 +110,10 @@
     <Compile Include="Tests\EntityGraphShapeTests.cs" />
     <Compile Include="Tests\EntityGraphTests.cs" />
     <Compile Include="Tests\EntitySetTests.cs" />
-    <Compile Include="Tests\EntityValidatorTests.cs" />
-    <Compile Include="Tests\GraphValidatorTests.cs" />
+    <Compile Include="Tests\GraphValidatorTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tests\ValidationEngineTests.cs" />
     <Compile Include="Tests\HasChangesTests.cs" />
     <Compile Include="Tests\IDisposableTests.cs" />
     <Compile Include="Tests\INotifyCollectionChangedTests.cs" />
@@ -119,8 +121,6 @@
     <Compile Include="Tests\IEnumerableTests.cs" />
     <Compile Include="Tests\INotifyPropertyChangedTests.cs" />
     <Compile Include="Tests\RegisterUnregisterAssemblyTest.cs" />
-    <Compile Include="Tests\ValidationAttributeTests.cs" />
-    <Compile Include="Tests\ValidationSignatureRobustnessTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

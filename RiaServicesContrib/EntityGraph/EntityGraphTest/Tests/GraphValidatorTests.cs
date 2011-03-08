@@ -1,41 +1,39 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using EntityGraph.EntityValidator.RIA;
 using EntityGraph.RIA;
+using EntityGraph.RIA.EntityValidator;
+using EntityGraph.Validation;
 using EntityGraphTest.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RIA.EntityValidator;
 
 namespace EntityGraphTest.Tests
 {
-    public class AValidator : ValidationRule<A>
-    {
-        public static bool IsValidated = false;
-
-        public override ValidationRuleDependencies<A> Signature
-        {
-            get {
-                return new ValidationRuleDependencies<A>
-                {
-                    a => a.B.name,
-                    a => a.B.C.name
-                };
-            }
-        }
-        [ValidateMethod]
-        public void ValidateMe(string nameOfB, string nameOfC) {
-            IsValidated = true;
-            if(nameOfB != nameOfC)
-            {
-                this.Result = new ValidationResult("Invalid names");
-            }
-            else
-                this.Result = ValidationResult.Success;
-        }
-    }
 
     [TestClass]
     public class GraphValidatorTests : EntityGraphTest
     {
+        public class AValidator : ValidationRule
+        {
+            public AValidator() :
+                base(new Signature()
+                .Depedency<A, string>(A => A.B.name)
+                .Depedency<A, string>(A => A.B.C.name))
+            {
+            }
+
+            public static bool IsValidated = false;
+
+            [ValidateMethod]
+            public void ValidateMe(string nameOfB, string nameOfC)
+            {
+                IsValidated = true;
+                if(nameOfB != nameOfC)
+                {
+                    this.ValidationResult = new ValidationResult("Invalid names");
+                }
+                else
+                    this.ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult.Success;
+            }
+        }
         public override void TestSetup()
         {
             base.TestSetup();

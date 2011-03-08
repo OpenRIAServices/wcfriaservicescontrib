@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace EntityGraph
 {
-    public class EntityGraphShape : IEnumerable<Tuple<Type, PropertyInfo>> 
+    public class EntityGraphShape : IEntityGraphShape, IEnumerable<Tuple<Type, PropertyInfo>>
     {
         public delegate TTo EdgeType<in TFrom, out TTo>(TFrom from);
         public delegate IEnumerable<TTo> EdgeEnumType<in TFrom, TTo>(TFrom from);
@@ -38,12 +38,12 @@ namespace EntityGraph
                 if(entityType != null && propInfo != null)
                     edges.Add(new Tuple<Type, PropertyInfo>(entityType, propInfo));
             }
-            return this; 
+            return this;
         }
-        public IEnumerable<PropertyInfo> GetAssociations(object entity)
+        public IEnumerable<PropertyInfo> OutEdges(object entity)
         {
             var entityType = entity.GetType();
-            return this.Where(edge => edge.Item1 == entityType).Select(edge => edge.Item2).Distinct();
+            return this.Where(edge => edge.Item1.IsAssignableFrom(entityType)).Select(edge => edge.Item2).Distinct();
         }
 
         public IEnumerator<Tuple<Type, PropertyInfo>> GetEnumerator()
@@ -54,6 +54,12 @@ namespace EntityGraph
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
+        }
+
+
+        public bool IsElementOf(PropertyInfo edge)
+        {
+            return edges.Any(e => e.Item2.Name == edge.Name && e.Item2.PropertyType.IsAssignableFrom(edge.PropertyType));
         }
     }
 }

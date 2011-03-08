@@ -44,27 +44,30 @@
   <ItemGroup>
     <Compile Include="EntityGraph.shared.cs" />
     <Compile Include="EntityGraphAttribute.shared.cs" />
+    <Compile Include="EntityGraphAttributeShape.shared.cs" />
     <Compile Include="EntityGraphComparer.shared.cs" />
     <Compile Include="EntityGraphShape.shared.cs" />
     <Compile Include="EntityRelationGraph.shared.cs" />
-    <Compile Include="EntityValidator\ClassValidationRulesProvider.shared.cs" />
-    <Compile Include="EntityValidator\EntityValidator.shared.cs" />
-    <Compile Include="EntityValidator\IValidationAttribute.shared.cs" />
-    <Compile Include="EntityValidator\IValidationRule.shared.cs" />
-    <Compile Include="EntityValidator\IValidationRulesProvider.shared.cs" />
-    <Compile Include="EntityValidator\MEFValidationRulesProvider.shared.cs" />
-    <Compile Include="EntityValidator\ValidateMethodAttribute.shared.cs" />
-    <Compile Include="EntityValidator\ValidationEngine.shared.cs" />
-    <Compile Include="EntityValidator\ValidationRule.shared.cs" />
-    <Compile Include="EntityValidator\ValidationRuleDependencies.shared.cs" />
-    <Compile Include="EntityValidator\ValidationRuleInvokeHelper.shared.cs" />
-    <Compile Include="EntityValidator\ValidationValueChangedEventArgs.shared.cs" />
     <Compile Include="GraphValidator.shared.cs" />
     <Compile Include="IDisposable.shared.cs" />
+    <Compile Include="IEntityGraphShape.shared.cs" />
     <Compile Include="IEnumerable.shared.cs" />
     <Compile Include="INotifyCollectionChanged.shared.cs" />
     <Compile Include="INotifyPropertyChanged.shared.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Validation\ExpressionAggregator.shared.cs" />
+    <Compile Include="Validation\InputBinding.shared.cs" />
+    <Compile Include="Validation\IValidationRulesProvider.shared.cs" />
+    <Compile Include="Validation\MEFValidationRulesProvider.shared.cs" />
+    <Compile Include="Validation\ParameterObjectBinding.shared.cs" />
+    <Compile Include="Validation\RuleBinding.shared.cs" />
+    <Compile Include="Validation\Signature.shared.cs" />
+    <Compile Include="Validation\ValidateMethodAttribute.shared.cs" />
+    <Compile Include="Validation\ValidationEngine.shared.cs" />
+    <Compile Include="Validation\ValidationResultChangedEventArgs.shared.cs" />
+    <Compile Include="Validation\ValidationRule.shared.cs" />
+    <Compile Include="Validation\ValidationRuleDependency.shared.cs" />
+    <Compile Include="Validation\ValidationRuleEvaluator.shared.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -9,13 +9,13 @@ namespace EntityGraph.RIA
         /// Extension method that returns an entity graph object that represents the entity graph this entity is part of.
         /// </summary>
         /// <param name="Source"></param>
-        public EntityGraph(TEntity Source) : base (Source) { }
+        public EntityGraph(TEntity Source) : base(Source, new EntityGraphAttributeShape()) { }
         /// <summary>
         /// Extension method that returns an entity graph object that represents the entity graph with given name this entity is part of.
         /// </summary>
         /// <param name="Source"></param>
         /// <param name="Name"></param>
-        public EntityGraph(TEntity Source, string Name) : base(Source, Name) { }
+        public EntityGraph(TEntity Source, string Name) : base(Source, new EntityGraphAttributeShape(Name)) { }
 
         /// <summary>
         /// Extension method that returns an entity graph object, defined by the provided graph shape

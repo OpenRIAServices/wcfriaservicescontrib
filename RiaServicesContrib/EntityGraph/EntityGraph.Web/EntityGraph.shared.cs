@@ -21,26 +21,12 @@ namespace EntityGraph
         where TValidationResult : class
     {
         public TEntity Source { get; private set; }
-        public string Name { get; private set; }
+        private IEntityGraphShape GraphShape { get; set; }
 
-        private Func<TBase, IEnumerable<PropertyInfo>> GetNeighbors;
-
-        public EntityGraph(TEntity Source) : this(Source, default(string)) { }
-
-        public EntityGraph(TEntity Source, string Name)
-            : this(Source, Name, (entity) => GetEntityGraphAssociations(entity, Name)) 
-        {
-        }
-        
-        public EntityGraph(TEntity Source, EntityGraphShape shape)
-            : this(Source, null, (entity) => shape.GetAssociations(entity))
-        {
-        }
-        private EntityGraph(TEntity Source, string Name, Func<TBase, IEnumerable<PropertyInfo>> GetNeighbors)
+        public EntityGraph(TEntity Source, IEntityGraphShape graphShape)
         {
             this.Source = Source;
-            this.Name = Name;
-            this.GetNeighbors = GetNeighbors;
+            this.GraphShape = graphShape;
 
             var type = this.GetType();
             var flags = BindingFlags.Instance | BindingFlags.NonPublic;
@@ -60,7 +46,7 @@ namespace EntityGraph
                 if(_entityRelationGraph == null)
                 {
                     _entityRelationGraph = new EntityRelationGraph<TBase>();
-                    BuildEntityGraph(Source, _entityRelationGraph, GetNeighbors);
+                    BuildEntityGraph(Source, _entityRelationGraph);
                 }
                 return _entityRelationGraph;
             }
@@ -98,14 +84,14 @@ namespace EntityGraph
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="graph"></param>
-        private void BuildEntityGraph(TBase entity, EntityRelationGraph<TBase> graph, Func<TBase,IEnumerable<PropertyInfo>> OutEdges)
+        private void BuildEntityGraph(TBase entity, EntityRelationGraph<TBase> graph)
         {
             if(graph.Nodes.Any(n => n.Node == entity))
                 return;
             EntityRelation<TBase> node = new EntityRelation<TBase>() { Node = entity };
             graph.Nodes.Add(node);
 
-            foreach(PropertyInfo association in OutEdges(entity))
+            foreach(PropertyInfo association in GraphShape.OutEdges(entity))
             {
                 if(typeof(IEnumerable).IsAssignableFrom(association.PropertyType))
                 {
@@ -116,7 +102,7 @@ namespace EntityGraph
                         if(e != null)
                         {
                             node.ListEdges[association].Add(e);
-                            BuildEntityGraph(e, graph, OutEdges);
+                            BuildEntityGraph(e, graph);
                         }
                     }
                 }
@@ -126,7 +112,7 @@ namespace EntityGraph
                     if(e != null)
                     {
                         node.SingleEdges.Add(association, e);
-                        BuildEntityGraph(e, graph, OutEdges);
+                        BuildEntityGraph(e, graph);
                     }
                 }
             }
@@ -233,36 +219,6 @@ namespace EntityGraph
                     yield return propInfo;
                 }
             }
-        }
-
-        /// <summary>
-        /// Returns true if the property has the "EntityGraphAttribute" (or a subclass), false otherwise.
-        /// </summary>
-        /// <param name="propInfo"></param>
-        /// <returns></returns>
-        private static bool HasEntityGraphAttribute(PropertyInfo propInfo, string Name)
-        {
-            Func<EntityGraphAttribute, bool> match =
-                entityGraph => entityGraph is EntityGraphAttribute && (Name == null || Name == entityGraph.Name);
-
-            return propInfo.GetCustomAttributes(true).OfType<EntityGraphAttribute>().Any(match);
-        }
-        /// <summary>
-        /// Returns an IEnumerable of PropertyInfo objects for properties which have the "EntityGraph". If entityGraphname
-        /// is not null, the name of the entity graph should match entityGraphname.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="entityGraphName"></param>
-        /// <returns></returns>
-        private static IEnumerable<PropertyInfo> GetEntityGraphAssociations(TBase obj, string entityGraphName)
-        {
-            Func<EntityGraphAttribute, bool> match =
-                entityGraph => entityGraph is EntityGraphAttribute && (entityGraphName == null || entityGraphName == entityGraph.Name);
-            BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.Instance;
-            var qry = from p in obj.GetType().GetProperties(bindingAttr)
-                      where p.GetCustomAttributes(true).OfType<EntityGraphAttribute>().Any(match)
-                      select p;
-            return qry;
         }
 
         /// <summary>
