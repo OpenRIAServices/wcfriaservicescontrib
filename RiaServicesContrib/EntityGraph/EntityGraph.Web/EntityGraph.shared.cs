@@ -23,25 +23,20 @@ namespace EntityGraph
         public TEntity Source { get; private set; }
         public string Name { get; private set; }
 
-        private Func<TBase, string, IEnumerable<PropertyInfo>> GetNeighbors;
+        private Func<TBase, IEnumerable<PropertyInfo>> GetNeighbors;
 
         public EntityGraph(TEntity Source) : this(Source, default(string)) { }
 
         public EntityGraph(TEntity Source, string Name)
-            : this(Source, Name, (entity, path) => GetEntityGraphAssociations(entity, Name)) 
+            : this(Source, Name, (entity) => GetEntityGraphAssociations(entity, Name)) 
         {
         }
         
-        public EntityGraph(TEntity Source, string[] paths)
-            : this(Source, null, (entity, path) => GetNeigborsByStringPaths(entity, path, paths))
-        {
-        }
-
         public EntityGraph(TEntity Source, EntityGraphShape shape)
-            : this(Source, null, (entity, path) => shape.GetAssociations(entity))
+            : this(Source, null, (entity) => shape.GetAssociations(entity))
         {
         }
-        private EntityGraph(TEntity Source, string Name, Func<TBase, string, IEnumerable<PropertyInfo>> GetNeighbors)
+        private EntityGraph(TEntity Source, string Name, Func<TBase, IEnumerable<PropertyInfo>> GetNeighbors)
         {
             this.Source = Source;
             this.Name = Name;
@@ -65,7 +60,7 @@ namespace EntityGraph
                 if(_entityRelationGraph == null)
                 {
                     _entityRelationGraph = new EntityRelationGraph<TBase>();
-                    BuildEntityGraph(Source, _entityRelationGraph, Source.GetType().Name, GetNeighbors);
+                    BuildEntityGraph(Source, _entityRelationGraph, GetNeighbors);
                 }
                 return _entityRelationGraph;
             }
@@ -103,14 +98,14 @@ namespace EntityGraph
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="graph"></param>
-        private void BuildEntityGraph(TBase entity, EntityRelationGraph<TBase> graph, string path, Func<TBase,string, IEnumerable<PropertyInfo>> OutEdges)
+        private void BuildEntityGraph(TBase entity, EntityRelationGraph<TBase> graph, Func<TBase,IEnumerable<PropertyInfo>> OutEdges)
         {
             if(graph.Nodes.Any(n => n.Node == entity))
                 return;
             EntityRelation<TBase> node = new EntityRelation<TBase>() { Node = entity };
             graph.Nodes.Add(node);
 
-            foreach(PropertyInfo association in OutEdges(entity, path))
+            foreach(PropertyInfo association in OutEdges(entity))
             {
                 if(typeof(IEnumerable).IsAssignableFrom(association.PropertyType))
                 {
@@ -121,7 +116,7 @@ namespace EntityGraph
                         if(e != null)
                         {
                             node.ListEdges[association].Add(e);
-                            BuildEntityGraph(e, graph, path + "." + association.Name, OutEdges);
+                            BuildEntityGraph(e, graph, OutEdges);
                         }
                     }
                 }
@@ -131,7 +126,7 @@ namespace EntityGraph
                     if(e != null)
                     {
                         node.SingleEdges.Add(association, e);
-                        BuildEntityGraph(e, graph, path + "." + association.Name, OutEdges);
+                        BuildEntityGraph(e, graph, OutEdges);
                     }
                 }
             }
@@ -237,35 +232,6 @@ namespace EntityGraph
                     }
                     yield return propInfo;
                 }
-            }
-        }
-
-        /// <summary>
-        /// This method returns all neighbor nodes for path.Entity with given collection of paths
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="visitedPath"></param>
-        /// <param name="paths"></param>
-        /// <returns></returns>
-        private static IEnumerable<PropertyInfo> GetNeigborsByStringPaths(TBase entity, string visitedPath, string[] paths)
-        {
-            var entityType = entity.GetType();
-            foreach(var path in paths.Where(p => p.StartsWith(visitedPath) && p != visitedPath))
-            {
-                if(path[visitedPath.Length] != '.')
-                    continue;
-                var visitedPathComponents = visitedPath.Split('.');
-                var pathComponents = path.Substring(visitedPath.Length + 1).Split('.');
-                int pathComponentsCount = visitedPathComponents.Count();
-
-                var propName = pathComponents[0];
-                var propInfo = entityType.GetProperty(propName);
-                if(propInfo == null)
-                {
-                    Console.Error.WriteLine("Invalid property name '{0}' in path for entity '{1}'", propName, entityType.Name); ;
-                    continue;
-                }
-                yield return propInfo;
             }
         }
 

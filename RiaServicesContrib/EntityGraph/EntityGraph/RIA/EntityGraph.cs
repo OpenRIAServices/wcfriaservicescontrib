@@ -16,12 +16,6 @@ namespace EntityGraph.RIA
         /// <param name="Source"></param>
         /// <param name="Name"></param>
         public EntityGraph(TEntity Source, string Name) : base(Source, Name) { }
-        /// <summary>
-        /// Extension method that returns an entity graph object, defined by the provided collection of paths
-        /// </summary>
-        /// <param name="Source"></param>
-        /// <param name="Paths"></param>
-        public EntityGraph(TEntity Source, string[] Paths) : base(Source, Paths) { }
 
         /// <summary>
         /// Extension method that returns an entity graph object, defined by the provided graph shape

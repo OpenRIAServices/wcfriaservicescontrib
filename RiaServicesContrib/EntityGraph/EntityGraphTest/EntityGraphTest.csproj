@@ -119,7 +119,6 @@
     <Compile Include="Tests\IEnumerableTests.cs" />
     <Compile Include="Tests\INotifyPropertyChangedTests.cs" />
     <Compile Include="Tests\RegisterUnregisterAssemblyTest.cs" />
-    <Compile Include="Tests\StringPathsTests.cs" />
     <Compile Include="Tests\ValidationAttributeTests.cs" />
     <Compile Include="Tests\ValidationSignatureRobustnessTest.cs" />
   </ItemGroup>
