@@ -16,12 +16,11 @@ namespace EntityGraph.RIA
         /// <param name="Source"></param>
         /// <param name="Name"></param>
         public EntityGraph(TEntity Source, string Name) : base(Source, new EntityGraphAttributeShape(Name)) { }
-
         /// <summary>
         /// Extension method that returns an entity graph object, defined by the provided graph shape
         /// </summary>
         /// <param name="Source"></param>
-        /// <param name="Paths"></param>
+        /// <param name="shape"></param>
         public EntityGraph(TEntity Source, EntityGraphShape shape) : base(Source, shape) { }
     }
 }

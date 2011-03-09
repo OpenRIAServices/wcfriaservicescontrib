@@ -211,7 +211,7 @@ namespace EntityGraph.Validation
         /// Filter rules for which the collection of dependency bindings does not contain obj
         /// and rules for which any TargetOwnerObject of an dependency binings is null.
         /// </summary>
-        /// <param name="rule"></param>
+        /// <param name="bindings"></param>
         /// <param name="obj"></param>
         /// <returns></returns>
         private static IEnumerable<RuleBinding<TResult>> FilterRuleBindings(IEnumerable<RuleBinding<TResult>> bindings, object obj)

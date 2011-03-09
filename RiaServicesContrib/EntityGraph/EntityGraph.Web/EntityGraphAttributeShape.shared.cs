@@ -8,18 +8,28 @@ namespace EntityGraph
 {
     public class EntityGraphAttributeShape : IEntityGraphShape
     {
+        /// <summary>
+        /// Initializes a new instance of the EntityGraphAttributeShape class. 
+        /// </summary>
         public EntityGraphAttributeShape() : this(null) { }
+
+        /// <summary>
+        /// Initializes a new instance of the EntityGraphAttributeShape class. 
+        /// </summary>
+        /// <param name="Name"></param>
         public EntityGraphAttributeShape(string Name)
         {
             this.Name = Name;
         }
-        public string Name { get; set; }
+        /// <summary>
+        /// Gets the name of this entity graph shape.
+        /// </summary>
+        public string Name { get; private set; }
         /// <summary>
         /// Returns an IEnumerable of PropertyInfo objects for properties which have the "EntityGraph". If entityGraphname
         /// is not null, the name of the entity graph should match entityGraphname.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="entityGraphName"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
         public IEnumerable<System.Reflection.PropertyInfo> OutEdges(object entity)
         {
@@ -31,7 +41,6 @@ namespace EntityGraph
                       select p;
             return qry;
         }
-
         /// <summary>
         /// Returns true if the property has the "EntityGraphAttribute" (or a subclass), false otherwise.
         /// </summary>

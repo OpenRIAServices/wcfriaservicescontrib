@@ -10,8 +10,8 @@ namespace EntityGraph.Validation
     public static class ExpressionAggregator
     {
         /// <summary>
-        //     Applies an accumulator function over a Linq expression. The specified seed value
-        //     is used as the initial accumulator value.
+        ///     Applies an accumulator function over a Linq expression. The specified seed value
+        ///     is used as the initial accumulator value.
         /// </summary>
         /// <typeparam name="TAccumulate"></typeparam>
         /// <param name="expr"></param>
