@@ -50,7 +50,7 @@ namespace EntityGraph
         {
             PropertyInfo propInfo;
             propInfo = sender.GetType().GetProperty(e.PropertyName);
-            if(GraphShape.IsElementOf(propInfo))
+            if(GraphShape.IsEdge(propInfo))
             {
                 EntityRelationGraphReset();
             }

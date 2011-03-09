@@ -28,7 +28,7 @@ namespace EntityGraph.Validation
                      select tc).SingleOrDefault();
 
         /// <summary>
-        /// Registers given entity validation rule
+        /// Registers a validation rule by its type.
         /// </summary>
         /// <param name="type"></param>
         public static void RegisterType(Type type)
@@ -38,7 +38,7 @@ namespace EntityGraph.Validation
         }
 
         /// <summary>
-        /// Unregisters give type 
+        /// Unregisters a validation rule given its type.
         /// </summary>
         /// <param name="type"></param>
         public static void UnregisterType(Type type)
@@ -48,7 +48,7 @@ namespace EntityGraph.Validation
                 Catalog.Catalogs.Remove(typeCatalog);
         }
         /// <summary>
-        /// Registers collection of entity validation rules in given assembly.
+        /// Registers a collection of entity validation rules in given assembly.
         /// </summary>
         /// <param name="assembly"></param>
         public static void RegisterAssembly(Assembly assembly)
@@ -57,7 +57,7 @@ namespace EntityGraph.Validation
                 Catalog.Catalogs.Add(new AssemblyCatalog(assembly));
         }
         /// <summary>
-        /// Unregisters the given assembly with validatio rules
+        /// Unregisters the given assembly with validation rules.
         /// </summary>
         /// <param name="assembly"></param>
         public static void UnregisterAssembly(Assembly assembly)
@@ -70,15 +70,18 @@ namespace EntityGraph.Validation
         }
     }
 
+    /// <summary>
+    /// Class that provides a collection of validation rules which are loaded
+    /// using MEF.
+    /// </summary>
+    /// <typeparam name="TResult"></typeparam>
     public class MEFValidationRulesProvider<TResult> : IValidationRulesProvider<TResult>
         where TResult : class
     {
-
+        /// <summary>
+        /// Creates a new instance of the MEFValidationRulesProvider
+        /// </summary>
         public MEFValidationRulesProvider() {
-            //Adds all the parts found in the same assembly as the Program class
-            var assembly = this.GetType().Assembly;
-            MEFValidationRules.RegisterAssembly(assembly);
-
             //Create the CompositionContainer with the parts in the catalog
             container = new CompositionContainer(MEFValidationRules.Catalog);
 

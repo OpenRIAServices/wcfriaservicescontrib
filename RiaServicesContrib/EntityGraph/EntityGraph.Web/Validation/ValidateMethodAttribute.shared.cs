@@ -8,6 +8,9 @@ namespace EntityGraph.Validation
     [AttributeUsage(AttributeTargets.Method, Inherited=true)]
     public class ValidateMethodAttribute : Attribute
     {
+        /// <summary>
+        /// Initializes a new instance of the ValidateMethodAttribute class.
+        /// </summary>
         public ValidateMethodAttribute() { }
     }
 }

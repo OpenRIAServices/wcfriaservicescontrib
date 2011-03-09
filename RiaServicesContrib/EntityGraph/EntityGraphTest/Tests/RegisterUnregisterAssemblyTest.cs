@@ -13,7 +13,7 @@ namespace EntityGraphTest.Tests
         public class RegisterUnregisterValidation : ValidationRule<ValidationResult>
         {
             public RegisterUnregisterValidation() :
-                base(new Signature().Depedency<A, B>(A => A.B))
+                base(new Signature().InputOutput<A, B>(A => A.B))
             { }
             public static bool visited = false;
             public void Validate(B b)

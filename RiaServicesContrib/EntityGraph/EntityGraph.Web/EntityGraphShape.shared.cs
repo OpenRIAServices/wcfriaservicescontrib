@@ -57,7 +57,7 @@ namespace EntityGraph
         }
 
 
-        public bool IsElementOf(PropertyInfo edge)
+        public bool IsEdge(PropertyInfo edge)
         {
             return edges.Any(e => e.Item2.Name == edge.Name && e.Item2.PropertyType.IsAssignableFrom(edge.PropertyType));
         }

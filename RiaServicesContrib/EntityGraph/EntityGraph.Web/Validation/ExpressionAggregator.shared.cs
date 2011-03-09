@@ -4,9 +4,20 @@ using System.Reflection;
 
 namespace EntityGraph.Validation
 {
+    /// <summary>
+    /// Extension class that provides an aggregate method on linq expressions
+    /// </summary>
     public static class ExpressionAggregator
     {
-
+        /// <summary>
+        //     Applies an accumulator function over a Linq expression. The specified seed value
+        //     is used as the initial accumulator value.
+        /// </summary>
+        /// <typeparam name="TAccumulate"></typeparam>
+        /// <param name="expr"></param>
+        /// <param name="seed"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
         public static TAccumulate Aggregate<TAccumulate>(this Expression expr, TAccumulate seed, Func<TAccumulate, Expression, TAccumulate> func)
         {
             if(expr is ConstantExpression)

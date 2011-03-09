@@ -4,6 +4,7 @@ using EntityGraph.RIA.EntityValidator;
 using EntityGraph.Validation;
 using EntityGraphTest.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 
 namespace EntityGraphTest.Tests
 {
@@ -15,8 +16,8 @@ namespace EntityGraphTest.Tests
         {
             public AValidator() :
                 base(new Signature()
-                .Depedency<A, string>(A => A.B.name)
-                .Depedency<A, string>(A => A.B.C.name))
+                .InputOutput<A, string>(A => A.B.name)
+                .InputOutput<A, string>(A => A.B.C.name))
             {
             }
 
@@ -28,11 +29,50 @@ namespace EntityGraphTest.Tests
                 IsValidated = true;
                 if(nameOfB != nameOfC)
                 {
-                    this.ValidationResult = new ValidationResult("Invalid names");
+                    this.Result = new ValidationResult("Invalid names");
                 }
                 else
-                    this.ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult.Success;
+                    this.Result = ValidationResult.Success;
             }
+        }
+        public class MultiPropertyValidator : ValidationRule
+        {
+            public MultiPropertyValidator() :
+                base(
+                new Signature()
+                .InputOutput<A, string>(A => A.name)
+                .InputOutput<A, string>(A => A.lastName)) { }
+
+            public void Validate(string name, string lastName)
+            {
+                if(name == lastName)
+                {
+                    this.Result = new ValidationResult("Name and LastName cannot be the same", new string[] { "dummy", "members" });
+                }
+                else
+                {
+                    this.Result = ValidationResult.Success;
+                }
+            }
+        }
+        public class InputOutputInputOnlyValidator : ValidationRule
+        {
+            public InputOutputInputOnlyValidator() :
+                base(
+                new Signature()
+                .InputOutput<A, string>(A => A.name)
+                .InputOnly<A, string>(A => A.lastName)) { }
+            public void Validate(string name, string lastName)
+            {
+                if(name == lastName)
+                {
+                    this.Result = new ValidationResult("Name and LastName cannot be the same", new string[] { "dummy", "members" });
+                }
+                else
+                {
+                    this.Result = ValidationResult.Success;
+                }
+            }            
         }
         public override void TestSetup()
         {
@@ -43,6 +83,8 @@ namespace EntityGraphTest.Tests
         {
             base.TestCleanup();
             MEFValidationRules.UnregisterType(typeof(AValidator));
+            MEFValidationRules.UnregisterType(typeof(MultiPropertyValidator));
+            MEFValidationRules.UnregisterType(typeof(InputOutputInputOnlyValidator));
         }
         /// <summary>
         /// Checks if validation framework works correctly when one of the dependency paths
@@ -84,6 +126,38 @@ namespace EntityGraphTest.Tests
             c.name = b.name;
             Assert.IsFalse(b.HasValidationErrors);
             Assert.IsFalse(c.HasValidationErrors);
+        }
+        [TestMethod]
+        public void MultiPropertyValidatorTest()
+        {
+            MEFValidationRules.RegisterType(typeof(MultiPropertyValidator));
+            a.name = "John";
+            a.lastName = "John";
+            var gr = a.EntityGraph();
+            Assert.IsTrue(a.HasValidationErrors);
+            var validationError = a.ValidationErrors.Single();
+            Assert.IsTrue(validationError.MemberNames.Contains("name"));
+            Assert.IsTrue(validationError.MemberNames.Contains("lastName"));
+            Assert.IsTrue(validationError.MemberNames.Count() == 2);
+            a.lastName = "Doe";
+            Assert.IsFalse(a.HasValidationErrors);
+            MEFValidationRules.UnregisterType(typeof(MultiPropertyValidator));
+        }
+        [TestMethod]
+        public void InputOutputInputOnlyValidatorTest()
+        {
+            MEFValidationRules.RegisterType(typeof(InputOutputInputOnlyValidator));
+            a.name = "John";
+            a.lastName = "John";
+            var gr = a.EntityGraph();
+            Assert.IsTrue(a.HasValidationErrors);
+            var validationError = a.ValidationErrors.Single();
+            Assert.IsTrue(validationError.MemberNames.Contains("name"));
+            Assert.IsFalse(validationError.MemberNames.Contains("lastName"));
+            Assert.IsTrue(validationError.MemberNames.Count() == 1);
+            a.lastName = "Doe";
+            Assert.IsFalse(a.HasValidationErrors);
+            MEFValidationRules.UnregisterType(typeof(InputOutputInputOnlyValidator));
         }
     }
 }

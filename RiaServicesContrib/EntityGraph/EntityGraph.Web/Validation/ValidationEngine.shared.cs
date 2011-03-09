@@ -1,25 +1,98 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Collections;
 
 namespace EntityGraph.Validation
 {
-    public class ValidationEngine<TEntity, TValidationResult> : IDisposable
-        where TValidationResult : class
+    /// <summary>
+    /// Class that implements cross-entity validation.
+    /// 
+    /// There are two alternative ways fro cross-entity validation
+    /// - Validation for all objects and validation rules. In this variant, the engine computes all possible
+    ///   bindings for a given set of entities of type TEntity and a collection of validation rules provided by 
+    ///   the given IValidationRulesProvider. For each binding it invokes the corresponding validation rule.
+    /// - Validation given an object and a property name. In this variant, the permutations of entity bindings 
+    ///   are restricted to include the given object. The set of validation rules is restricted to those rules
+    ///   that have the given property in their signature.
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    public class ValidationEngine<TEntity, TResult> : IDisposable
+        where TResult : class
     {
-        public event EventHandler<ValidationResultChangedEventArgs<TValidationResult>> ValidationResultChanged;
+        /// <summary>
+        /// Initializes a new instance of the ValidationEngine class.
+        /// </summary>
+        /// <param name="rulesProvider"></param>
+        public ValidationEngine(IValidationRulesProvider<TResult> rulesProvider)
+        {
+            this.rulesProvider = rulesProvider;
+            ValidationRules = rulesProvider.ValidationRules;
 
-        private IEnumerable<ValidationRule<TValidationResult>> GetRulesByPropertyName(string propertyName)
+            foreach(var rule in ValidationRules)
+            {
+                rule.ResultChanged += ValidationResultChangedCallback;
+            }
+        }
+        /// <summary>
+        /// Method that invokes all matching validation rules for all possible bindings given
+        /// a collection of objects, an object 'obj' that should be presentin any bindings, and a 
+        /// (changed) property with name 'propertyName' that should be part in any signature.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="propertyName"></param>
+        /// <param name="objects"></param>
+        public void Validate(object obj, string propertyName, IEnumerable<TEntity> objects)
+        {
+            var type = obj.GetType();
+            var rules = from rule in GetRulesByPropertyName(propertyName)
+                        where rule.Signature.Any(dep => dep.TargetPropertyOwnerType == type)
+                        select rule;
+            ValidateRules(rules, objects, obj);
+        }
+        /// <summary>
+        /// Method that invokes all matching validation rules for all possible bindings given a 
+        /// collection of validation rules.
+        /// </summary>
+        /// <param name="objects"></param>
+        public void ValidateAll(IEnumerable<TEntity> objects)
+        {
+            ValidateRules(ValidationRules, objects, null);
+        }
+        /// <summary>
+        /// Frees allocated resources for this validation engine.
+        /// </summary>
+        public void Dispose()
+        {
+            foreach(var rule in ValidationRules)
+            {
+                rule.ResultChanged -= ValidationResultChangedCallback;
+            }
+        }
+        /// <summary>
+        /// Event handler that is called when the parameterObjectBindings of any of the validation rules changes.
+        /// </summary>
+        internal event EventHandler<ValidationResultChangedEventArgs<TResult>> ValidationResultChanged;
+        /// <summary>
+        /// Returns a collection of validation rules that have 'propertyName' as one of the target properties in
+        /// any of their validation rule dependencies.
+        /// </summary>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
+        private IEnumerable<ValidationRule<TResult>> GetRulesByPropertyName(string propertyName)
         {
             return from rule in ValidationRules
                    where rule.Signature.Any(dep => dep.TargetProperty.Name == propertyName)
                    select rule;
         }
-        private IEnumerable<ValidationRule<TValidationResult>> FilterByObjectType(IEnumerable<ValidationRule<TValidationResult>> rules, object obj)
+        /// <summary>
+        /// Filters the given collection of validation rules for rules that operate on the type 
+        /// of the given object.
+        /// </summary>
+        /// <param name="rules"></param>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        private IEnumerable<ValidationRule<TResult>> FilterByObjectType(IEnumerable<ValidationRule<TResult>> rules, object obj)
         {
             var type = obj.GetType();
             return from rule in rules
@@ -27,19 +100,9 @@ namespace EntityGraph.Validation
                    select rule;
         }
 
-        private IValidationRulesProvider<TValidationResult> rulesProvider;
-        public ValidationEngine(IValidationRulesProvider<TValidationResult> rulesProvider)
-        {
-            this.rulesProvider = rulesProvider;
-            ValidationRules = rulesProvider.ValidationRules;
+        private IValidationRulesProvider<TResult> rulesProvider;
 
-            foreach(var rule in ValidationRules)
-            {
-                rule.ValidationResultChanged += ValidationResultChangedCallback;
-            }
-        }
-
-        public IEnumerable<ValidationRule<TValidationResult>> ValidationRules { get; private set; }
+        private IEnumerable<ValidationRule<TResult>> ValidationRules { get; set; }
 
         /// <summary>
         /// Given a validation rule with dependency expressions and a collection of objects
@@ -48,28 +111,36 @@ namespace EntityGraph.Validation
         /// <param name="rule"></param>
         /// <param name="objects"></param>
         /// <returns></returns>
-        private static IEnumerable<IEnumerable<ParameterObjectBinding>> GetRuleArgumentObjectBindings(ValidationRule<TValidationResult> rule, IEnumerable<TEntity> objects)
+        private static IEnumerable<IEnumerable<ParameterObjectBinding>> GetRuleArgumentObjectBindings(ValidationRule<TResult> rule, IEnumerable<TEntity> objects)
         {
             List<IEnumerable<ParameterObjectBinding>> bindings = new List<IEnumerable<ParameterObjectBinding>>();
 
             var dependencyParameters = rule.GetValidationRuleDependencyParameters();
 
-            var result = (from obj in objects
-                          from parameter in dependencyParameters
-                          where parameter.ParameterObjectType.IsAssignableFrom(obj.GetType())
-                          select new ParameterObjectBinding { ParameterName = parameter.ParameterName, ParameterObjectType = parameter.ParameterObjectType, ParameterObject = obj })
-                          .Distinct()
-                          .GroupBy(x => x.ParameterName);
-            foreach(var group in result.ToList())
+            var parameterObjectBindings =
+                (from obj in objects
+                 from parameter in dependencyParameters
+                 where parameter.ParameterObjectType.IsAssignableFrom(obj.GetType())
+                 select new ParameterObjectBinding { ParameterName = parameter.ParameterName, ParameterObjectType = parameter.ParameterObjectType, ParameterObject = obj })
+                .GroupBy(x => x.ParameterName);
+            foreach(var group in parameterObjectBindings.ToList())
             {
-                bindings.Add(group.Select(x => x).ToList());
+                bindings.Add(group.ToList());
             }
 
             return GetPermutations(bindings);
         }
-        private static IEnumerable<RuleBinding<TValidationResult>> GetRuleBindings(ValidationRule<TValidationResult> rule, IEnumerable<IEnumerable<ParameterObjectBinding>> objectBindings)
+        /// <summary>
+        /// Given a validation rule and a collection of tuples of parameter to object bindings (represented as list),
+        /// create corresponding RuleBindings.
+        /// We create a separate rule binding for each parameter to object binding tuple.
+        /// </summary>
+        /// <param name="rule"></param>
+        /// <param name="objectBindings"></param>
+        /// <returns></returns>
+        private static IEnumerable<RuleBinding<TResult>> GetRuleBindings(ValidationRule<TResult> rule, IEnumerable<IEnumerable<ParameterObjectBinding>> objectBindings)
         {
-            var result = new List<RuleBinding<TValidationResult>>();
+            var result = new List<RuleBinding<TResult>>();
             foreach(var objectBinding in objectBindings)
             {
                 var bindings = (from dependency in rule.Signature
@@ -78,7 +149,7 @@ namespace EntityGraph.Validation
                                     ValidationRuleDependency = dependency,
                                     ParameterObjectBinding = objectBinding.Single(b => b.ParameterName == dependency.ParameterExpression.Name)
                                 }).ToList();
-                result.Add(new RuleBinding<TValidationResult>
+                result.Add(new RuleBinding<TResult>
                 {
                     DependencyBindings = bindings.ToArray(),
                     ValidationRule = rule
@@ -86,6 +157,31 @@ namespace EntityGraph.Validation
             }
             return result;
         }
+        /// <summary>
+        /// Synthesizes all possible permutations for each collection in the provided list.
+        /// That is, for a the collection
+        /// { {a,b}, {c,d} }
+        /// The following permutation is calculated:
+        /// { {a, c}, {a, d}, {b, c}, {c, d} }
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        private static List<IEnumerable<T>> GetPermutations<T>(List<IEnumerable<T>> list)
+        {
+            if(list.Count() == 0)
+            {
+                return list;
+            }
+            return GetPermutations(list.First(), list.Skip(1).ToList());
+        }
+        /// <summary>
+        /// This method does the actual work for computating the collection of permutations.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="head"></param>
+        /// <param name="tail"></param>
+        /// <returns></returns>
         private static List<IEnumerable<T>> GetPermutations<T>(IEnumerable<T> head, List<IEnumerable<T>> tail)
         {
             if(tail.Count() == 0)
@@ -111,22 +207,14 @@ namespace EntityGraph.Validation
             }
             return list;
         }
-        private static List<IEnumerable<T>> GetPermutations<T>(List<IEnumerable<T>> list)
-        {
-            if(list.Count() == 0)
-            {
-                return list;
-            }
-            return GetPermutations(list.First(), list.Skip(1).ToList());
-        }
         /// <summary>
-        /// Filter rules for which the collections of dependency bindings does not contain obj
-        /// and rules for which any TargetOwnerObject of an   dependency binings is null.
+        /// Filter rules for which the collection of dependency bindings does not contain obj
+        /// and rules for which any TargetOwnerObject of an dependency binings is null.
         /// </summary>
         /// <param name="rule"></param>
         /// <param name="obj"></param>
         /// <returns></returns>
-        private static IEnumerable<RuleBinding<TValidationResult>> FilterRuleBindings(IEnumerable<RuleBinding<TValidationResult>> bindings, object obj)
+        private static IEnumerable<RuleBinding<TResult>> FilterRuleBindings(IEnumerable<RuleBinding<TResult>> bindings, object obj)
         {
             return (from binding in bindings
                     where
@@ -135,15 +223,20 @@ namespace EntityGraph.Validation
                         (obj == null || binding.DependencyBindings.Any(b => b.TargetOwnerObject == obj))
                     select binding).ToList();
         }
-        public void Validate(object obj, string propertyName, IEnumerable<TEntity> objects)
-        {
-            var type = obj.GetType();
-            var rules = from rule in GetRulesByPropertyName(propertyName)
-                        where rule.Signature.Any(dep => dep.TargetPropertyOwnerType == type)
-                        select rule;
-            ValidateRules(rules, objects, obj);
-        }
-        private void ValidateRules(IEnumerable<ValidationRule<TValidationResult>> rules, IEnumerable<TEntity> objects, object obj)
+        /// <summary>
+        /// This is the actual validation method that invokes a collection of validation rules for a collection of validation
+        /// rule bindings.
+        /// For each rule, this amounts to:
+        /// 1) Synthesizing the bindings of objects from the provided objects to parameters of validation rule dependencies 
+        ///    defined in the signature of the validation rule.
+        /// 2) Synthesizing all possible bindings for the signature of the validation rule
+        /// 3) Filtering this collection to remove invalid bindings
+        /// 4) For each resulting binding, invoke the validaton rule.
+        /// </summary>
+        /// <param name="rules"></param>
+        /// <param name="objects"></param>
+        /// <param name="obj"></param>
+        private void ValidateRules(IEnumerable<ValidationRule<TResult>> rules, IEnumerable<TEntity> objects, object obj)
         {
             foreach(var rule in rules)
             {
@@ -156,28 +249,17 @@ namespace EntityGraph.Validation
                 }
             }
         }
-        internal void ValidateAll(IEnumerable<TEntity> objects)
-        {
-            ValidateRules(ValidationRules, objects, null);
-        }
-        public void Dispose()
-        {
-            foreach(var rule in ValidationRules)
-            {
-                rule.ValidationResultChanged -= ValidationResultChangedCallback;
-            }
-        }
-
-        void ValidationResultChangedCallback(object sender, ValidationResultChangedEventArgs<TValidationResult> e)
+        /// <summary>
+        /// Callback method that is called when the result of a validation rule has changed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ValidationResultChangedCallback(object sender, ValidationResultChangedEventArgs<TResult> e)
         {
             if(ValidationResultChanged != null)
             {
                 ValidationResultChanged(sender, e);
             }
-        }
-        internal IEnumerable<object> ObjectsInvolved(ValidationRule<TValidationResult> rule)
-        {
-            return rule.RuleBinding.DependencyBindings.Select(binding => binding.TargetOwnerObject).Distinct().ToList();
         }
     }
 }

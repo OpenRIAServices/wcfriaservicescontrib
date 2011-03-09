@@ -22,8 +22,11 @@ namespace EntityGraph.RIA
             if(sender != this)
             {
                 if(((Entity)sender).HasChanges == true)
+                {
                     HasChanges = true;
+                }
                 else
+                if(HasChanges == true)
                 {
                     HasChanges = EntityRelationGraph.Aggregate(false, (result, entity) => result |= entity.HasChanges);
                 }

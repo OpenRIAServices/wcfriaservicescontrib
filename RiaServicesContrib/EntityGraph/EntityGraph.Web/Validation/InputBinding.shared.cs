@@ -4,12 +4,25 @@ using System.Reflection;
 namespace EntityGraph.Validation
 {
     /// <summary>
-    /// Class that represent a binding for an validation rule dependency
+    /// Class that represent a binding for a validation rule dependency
+    /// 
+    /// For a validation rule dependency
+    ///    A => A.B.c
+    ///    
+    /// And an object
+    ///    var a = new A { B = new B() };
+    /// 
+    /// TargetOwnerObject equals the object a.B,
+    /// ParameterObjectBinding represents the binding of parameter 'A' to object 'a'.
+    /// 
     /// </summary>
     internal class ValidationRuleDependencyBinding
     {
         public ValidationRuleDependency ValidationRuleDependency { get; set; }
         private object _targetOwnerObject;
+        /// <summary>
+        /// Represents the owning object of the target property 'p' of a validation rule dependency 'A => A.some.path.p'.
+        /// </summary>
         public object TargetOwnerObject
         {
             get
@@ -21,6 +34,9 @@ namespace EntityGraph.Validation
                 return _targetOwnerObject;
             }
         }
+        /// <summary>
+        /// Represents the binding for the parameter 'A' of a validation rule dependency 'A => A.some.path.p'.
+        /// </summary>
         public ParameterObjectBinding ParameterObjectBinding { get; set; }
 
         private Object GetTargetOwnerObject()

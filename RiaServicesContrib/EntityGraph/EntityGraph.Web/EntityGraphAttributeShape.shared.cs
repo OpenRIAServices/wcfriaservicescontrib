@@ -37,7 +37,7 @@ namespace EntityGraph
         /// </summary>
         /// <param name="edge"></param>
         /// <returns></returns>
-        public bool IsElementOf(PropertyInfo edge)
+        public bool IsEdge(PropertyInfo edge)
         {
             Func<EntityGraphAttribute, bool> match =
                 entityGraph => entityGraph is EntityGraphAttribute && (Name == null || Name == entityGraph.Name);

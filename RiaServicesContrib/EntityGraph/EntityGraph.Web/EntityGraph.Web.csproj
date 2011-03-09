@@ -67,7 +67,6 @@
     <Compile Include="Validation\ValidationResultChangedEventArgs.shared.cs" />
     <Compile Include="Validation\ValidationRule.shared.cs" />
     <Compile Include="Validation\ValidationRuleDependency.shared.cs" />
-    <Compile Include="Validation\ValidationRuleEvaluator.shared.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
