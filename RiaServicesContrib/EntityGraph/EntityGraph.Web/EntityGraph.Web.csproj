@@ -64,6 +64,7 @@
     <Compile Include="Validation\ParameterObjectBinding.shared.cs" />
     <Compile Include="Validation\RuleBinding.shared.cs" />
     <Compile Include="Validation\Signature.shared.cs" />
+    <Compile Include="Validation\SimpleValidationRulesProvider.shared.cs" />
     <Compile Include="Validation\ValidateMethodAttribute.shared.cs" />
     <Compile Include="Validation\ValidationEngine.shared.cs" />
     <Compile Include="Validation\ValidationResultChangedEventArgs.shared.cs" />

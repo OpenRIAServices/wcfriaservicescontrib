@@ -35,6 +35,16 @@ namespace EntityGraph.Validation
             }
         }
         /// <summary>
+        /// Method that invokes all matching validation rules for the given object and 
+        /// property name.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="propertyName"></param>
+        public void Validate(TEntity obj, string propertyName)
+        {
+            Validate(obj, propertyName, new List<TEntity> { obj });
+        }
+        /// <summary>
         /// Method that invokes all matching validation rules for all possible bindings given
         /// a collection of objects, an object 'obj' that should be presentin any bindings, and a 
         /// (changed) property with name 'propertyName' that should be part in any signature.
@@ -46,7 +56,7 @@ namespace EntityGraph.Validation
         {
             var type = obj.GetType();
             var rules = from rule in GetRulesByPropertyName(propertyName)
-                        where rule.Signature.Any(dep => dep.TargetPropertyOwnerType == type)
+                        where rule.Signature.Any(dep => dep.TargetPropertyOwnerType.IsAssignableFrom(type))
                         select rule;
             ValidateRules(rules, objects, obj);
         }
@@ -85,23 +95,12 @@ namespace EntityGraph.Validation
                    where rule.Signature.Any(dep => dep.TargetProperty.Name == propertyName)
                    select rule;
         }
-        /// <summary>
-        /// Filters the given collection of validation rules for rules that operate on the type 
-        /// of the given object.
-        /// </summary>
-        /// <param name="rules"></param>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        private IEnumerable<ValidationRule<TResult>> FilterByObjectType(IEnumerable<ValidationRule<TResult>> rules, object obj)
-        {
-            var type = obj.GetType();
-            return from rule in rules
-                   where rule.Signature.Any(dep => dep.TargetPropertyOwnerType == type)
-                   select rule;
-        }
 
         private IValidationRulesProvider<TResult> rulesProvider;
 
+        /// <summary>
+        /// Gets or sets the collection of validation rules for this validation engine.
+        /// </summary>
         private IEnumerable<ValidationRule<TResult>> ValidationRules { get; set; }
 
         /// <summary>

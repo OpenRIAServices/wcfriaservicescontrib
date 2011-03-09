@@ -86,13 +86,6 @@ namespace EntityGraphTest.Tests
                 Bindings.Add(RuleBinding);
             }
         }
-        public class TestRulesProvider : List<ValidationRule<ValidationResult>>, IValidationRulesProvider<ValidationResult>
-        {
-            public IEnumerable<ValidationRule<ValidationResult>> ValidationRules
-            {
-                get { return this; }
-            }
-        }
         public override void TestSetup()
         {
             base.TestSetup();
@@ -131,7 +124,7 @@ namespace EntityGraphTest.Tests
         {
             var a1 = new A();
             var a2 = new A();
-            var validator = new ValidationEngine<Entity, ValidationResult>(new TestRulesProvider { new PermutationsOneParameterValidator() });
+            var validator = new ValidationEngine<Entity, ValidationResult>(new SimpleValidationRulesProvider<ValidationResult>{ new PermutationsOneParameterValidator() });
             PermutationsOneParameterValidator.Bindings = new List<RuleBinding<ValidationResult>>();
             validator.ValidateAll(new List<Entity> { a1, a2 });
             Assert.IsTrue(PermutationsOneParameterValidator.Bindings.Count == 2);
@@ -144,7 +137,7 @@ namespace EntityGraphTest.Tests
         {
             var a1 = new A();
             var a2 = new A();
-            var validator = new ValidationEngine<Entity, ValidationResult>(new TestRulesProvider { new PermutationsTwoParameterValidator() });
+            var validator = new ValidationEngine<Entity, ValidationResult>(new SimpleValidationRulesProvider<ValidationResult> { new PermutationsTwoParameterValidator() });
             PermutationsTwoParameterValidator.Bindings = new List<RuleBinding<ValidationResult>>();
             validator.ValidateAll(new List<Entity> { a1, a2 });
             Assert.IsTrue(PermutationsTwoParameterValidator.Bindings.Count == 2);
@@ -157,7 +150,7 @@ namespace EntityGraphTest.Tests
         {
             var a1 = new A();
             var a2 = new A();
-            var validator = new ValidationEngine<Entity, ValidationResult>(new TestRulesProvider { new PermutationsTwoParameterNamesValidator() });
+            var validator = new ValidationEngine<Entity, ValidationResult>(new SimpleValidationRulesProvider<ValidationResult> { new PermutationsTwoParameterNamesValidator() });
             PermutationsTwoParameterNamesValidator.Bindings = new List<RuleBinding<ValidationResult>>();
 
             validator.ValidateAll(new List<Entity> { a1, a2 });
@@ -177,7 +170,7 @@ namespace EntityGraphTest.Tests
         {
             var a1 = new A();
             var a2 = new A();
-            var validator = new ValidationEngine<Entity, ValidationResult>(new TestRulesProvider { new PermutationsThreeParameterNamesValidator() });
+            var validator = new ValidationEngine<Entity, ValidationResult>(new SimpleValidationRulesProvider<ValidationResult> { new PermutationsThreeParameterNamesValidator() });
             PermutationsThreeParameterNamesValidator.Bindings = new List<RuleBinding<ValidationResult>>();
             validator.ValidateAll(new List<Entity> { a1, a2 });
             Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Count == 8);
@@ -229,10 +222,27 @@ namespace EntityGraphTest.Tests
             var a1 = new A();
             var a2 = new A();
             var a3 = new A();
-            var validator = new ValidationEngine<Entity, ValidationResult>(new TestRulesProvider { new PermutationsThreeParameterNamesValidator() });
+            var validator = new ValidationEngine<Entity, ValidationResult>(new SimpleValidationRulesProvider<ValidationResult> { new PermutationsThreeParameterNamesValidator() });
             PermutationsThreeParameterNamesValidator.Bindings = new List<RuleBinding<ValidationResult>>();
             validator.ValidateAll(new List<Entity> { a1, a2, a3 });
             Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Count == 27);
+        }
+        [TestMethod]
+        public void SingleEntityValidation1()
+        {
+            var validator = new ValidationEngine<Entity, ValidationResult>(new SimpleValidationRulesProvider<ValidationResult> { new AValidator() });
+            AValidator.TestResult = ValidationResult.Success;
+            validator.Validate(a, "name");
+            Assert.IsTrue(AValidator.TestResult == ValidationResult.Success);            
+        }
+        [TestMethod]
+        public void SingleEntityValidation2()
+        {
+            PermutationsOneParameterValidator.Bindings = new List<RuleBinding<ValidationResult>>();
+            var validator = new ValidationEngine<Entity, ValidationResult>(new SimpleValidationRulesProvider<ValidationResult> { new PermutationsOneParameterValidator() });
+            AValidator.TestResult = ValidationResult.Success;
+            validator.Validate(a, "name");
+            Assert.IsTrue(PermutationsOneParameterValidator.Bindings.Count() == 1);
         }
     }
 }
