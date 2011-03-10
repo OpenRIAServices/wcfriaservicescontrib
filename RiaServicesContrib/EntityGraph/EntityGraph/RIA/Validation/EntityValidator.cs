@@ -1,11 +1,23 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.ServiceModel.DomainServices.Client;
+using EntityGraph.Validation;
 
-namespace EntityGraph.RIA
+namespace EntityGraph.RIA.Validation
 {
-    public partial class EntityGraph<TEntity>
+    /// <summary>
+    /// WCF RIA services-specific instantiation of the EntityGraph.Validation.EntityValidator class.
+    /// </summary>
+    public class EntityValidator : EntityValidator<Entity, ValidationResult>
     {
+        /// <summary>
+        /// Initializes a new instance of the EntityValidator class.
+        /// </summary>
+        /// <param name="entity"></param>
+        public EntityValidator(Entity entity)
+            : base(entity)
+        {
+        }
         /// <summary>
         /// Method that clears the validation result of the given entity, for the given members.
         /// </summary>

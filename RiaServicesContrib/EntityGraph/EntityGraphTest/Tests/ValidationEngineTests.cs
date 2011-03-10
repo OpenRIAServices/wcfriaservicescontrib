@@ -126,7 +126,7 @@ namespace EntityGraphTest.Tests
             var a2 = new A();
             var validator = new ValidationEngine<Entity, ValidationResult>(new SimpleValidationRulesProvider<ValidationResult>{ new PermutationsOneParameterValidator() });
             PermutationsOneParameterValidator.Bindings = new List<RuleBinding<ValidationResult>>();
-            validator.ValidateAll(new List<Entity> { a1, a2 });
+            validator.Validate(new List<Entity> { a1, a2 });
             Assert.IsTrue(PermutationsOneParameterValidator.Bindings.Count == 2);
             Assert.IsTrue(PermutationsOneParameterValidator.Bindings.Any(b => b.DependencyBindings[0].TargetOwnerObject == a1));
             Assert.IsTrue(PermutationsOneParameterValidator.Bindings.Any(b => b.DependencyBindings[0].TargetOwnerObject == a2));
@@ -139,7 +139,7 @@ namespace EntityGraphTest.Tests
             var a2 = new A();
             var validator = new ValidationEngine<Entity, ValidationResult>(new SimpleValidationRulesProvider<ValidationResult> { new PermutationsTwoParameterValidator() });
             PermutationsTwoParameterValidator.Bindings = new List<RuleBinding<ValidationResult>>();
-            validator.ValidateAll(new List<Entity> { a1, a2 });
+            validator.Validate(new List<Entity> { a1, a2 });
             Assert.IsTrue(PermutationsTwoParameterValidator.Bindings.Count == 2);
             Assert.IsTrue(PermutationsTwoParameterValidator.Bindings.Any(b => b.DependencyBindings[0].TargetOwnerObject == a1));
             Assert.IsTrue(PermutationsTwoParameterValidator.Bindings.Any(b => b.DependencyBindings[0].TargetOwnerObject == a2));
@@ -153,7 +153,7 @@ namespace EntityGraphTest.Tests
             var validator = new ValidationEngine<Entity, ValidationResult>(new SimpleValidationRulesProvider<ValidationResult> { new PermutationsTwoParameterNamesValidator() });
             PermutationsTwoParameterNamesValidator.Bindings = new List<RuleBinding<ValidationResult>>();
 
-            validator.ValidateAll(new List<Entity> { a1, a2 });
+            validator.Validate(new List<Entity> { a1, a2 });
             Assert.IsTrue(PermutationsTwoParameterNamesValidator.Bindings.Count == 4);
             Assert.IsTrue(PermutationsTwoParameterNamesValidator.Bindings.Any(
                 b => b.DependencyBindings[0].TargetOwnerObject == a1 &&
@@ -172,7 +172,7 @@ namespace EntityGraphTest.Tests
             var a2 = new A();
             var validator = new ValidationEngine<Entity, ValidationResult>(new SimpleValidationRulesProvider<ValidationResult> { new PermutationsThreeParameterNamesValidator() });
             PermutationsThreeParameterNamesValidator.Bindings = new List<RuleBinding<ValidationResult>>();
-            validator.ValidateAll(new List<Entity> { a1, a2 });
+            validator.Validate(new List<Entity> { a1, a2 });
             Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Count == 8);
             Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Any(
                 b => b.DependencyBindings[0].TargetOwnerObject == a1 &&
@@ -224,7 +224,7 @@ namespace EntityGraphTest.Tests
             var a3 = new A();
             var validator = new ValidationEngine<Entity, ValidationResult>(new SimpleValidationRulesProvider<ValidationResult> { new PermutationsThreeParameterNamesValidator() });
             PermutationsThreeParameterNamesValidator.Bindings = new List<RuleBinding<ValidationResult>>();
-            validator.ValidateAll(new List<Entity> { a1, a2, a3 });
+            validator.Validate(new List<Entity> { a1, a2, a3 });
             Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Count == 27);
         }
         [TestMethod]

@@ -89,6 +89,9 @@ namespace EntityGraph.Validation
             container.ComposeParts(this);
         }
 
+        /// <summary>
+        /// Gets the collection of Validation rules that are provided by this validation rules provider.
+        /// </summary>
         [ImportMany(AllowRecomposition = true)]
         public IEnumerable<ValidationRule<TResult>> ValidationRules { get; set; }
 

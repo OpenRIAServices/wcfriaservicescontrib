@@ -33,7 +33,7 @@ namespace EntityGraph
             this.CollectionChanged += Validator_CollectionChanged;
             this.PropertyChanged += Validator_PropertyChanged;
 
-            Validator.ValidateAll(this);
+            Validator.Validate(this);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace EntityGraph
         /// <param name="args"></param>
         private void ValidatorRefresh(object sender, EventArgs args)
         {
-            Validator.ValidateAll(this);
+            Validator.Validate(this);
         }
         /// <summary>
         /// Callback method that is called when a ValidationResultChanged event is received from the
@@ -112,8 +112,8 @@ namespace EntityGraph
         }
         /// <summary>
         /// Callback method that is called when a CollectionChanged event is received from the entity graph.
-        /// We obtain the node and edge in the entity graph for this collection and then call the Evaluate method
-        /// of the validation engine for them.
+        /// We obtain the node and edge in the entity graph for this collection and then call the Validate
+        /// method of the validation engine for them.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
@@ -130,8 +130,8 @@ namespace EntityGraph
         }
         /// <summary>
         /// Callback method that is called when a PropertyChanged event is received from the entity graph.
-        /// We call the Evaluate method of the validation engine for the object and property name of the 
-        /// changed proeprty.
+        /// We call the Validate method of the validation engine for the object and property name of the 
+        /// changed property.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>

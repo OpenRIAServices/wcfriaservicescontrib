@@ -3,7 +3,7 @@
 namespace EntityGraph.Validation
 {
     /// <summary>
-    /// Represents a collection of validation rules
+    /// Represents a collection of validation rules.
     /// </summary>
     /// <typeparam name="TResult"></typeparam>
     public interface IValidationRulesProvider<TResult> where TResult : class

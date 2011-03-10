@@ -27,15 +27,33 @@ namespace EntityGraph.Validation
             internal set
             {
                 _expression = value;
-                if(value.Body is MemberExpression == false)
-                {
-                    throw new Exception("Invalid expression. Expression should be a property path.");
-                }
-                var tail = ((MemberExpression)value.Body);
+                var tail = GetMemberExpression(value.Body);
                 TargetProperty = tail.Member as PropertyInfo;
                 TargetPropertyOwnerType = tail.Expression.Type;
                 ParameterExpression = tail.Aggregate<ParameterExpression>(null, (x, expr) => x == null ? expr as ParameterExpression : x);
             }
+        }
+        /// <summary>
+        /// Method that returns the MemberExpression of an expression, stripping of
+        /// any unary expressions that represent type casts.
+        /// </summary>
+        /// <param name="expr"></param>
+        /// <returns></returns>
+        private MemberExpression GetMemberExpression(Expression expr)
+        {
+            if(expr is MemberExpression)
+            {
+                return expr as MemberExpression;
+            }
+            if(expr is UnaryExpression)
+            {
+                var uexpr = (UnaryExpression)expr;
+                if(uexpr.NodeType == ExpressionType.Convert || uexpr.NodeType == ExpressionType.TypeAs)
+                {
+                    return GetMemberExpression(uexpr.Operand);
+                }
+            }
+            throw new Exception(expr.ToString() + " is invalid. Expression should be a property path.");
         }
         /// <summary>
         /// Gets the parameter expression 'A' of a validation rule dependency 'A => A.B.c'.

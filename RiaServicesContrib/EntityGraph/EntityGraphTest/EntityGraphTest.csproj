@@ -113,6 +113,7 @@
     <Compile Include="Tests\GraphValidatorTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tests\ValidationAttributeTests.cs" />
     <Compile Include="Tests\ValidationEngineTests.cs" />
     <Compile Include="Tests\HasChangesTests.cs" />
     <Compile Include="Tests\IDisposableTests.cs" />

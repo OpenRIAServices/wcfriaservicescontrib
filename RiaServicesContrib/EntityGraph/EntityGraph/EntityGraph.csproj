@@ -74,6 +74,12 @@
     <Compile Include="RIA\IEDitableObject.cs" />
     <Compile Include="RIA\Proxies.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RIA\Validation\AttributeValidator.cs" />
+    <Compile Include="RIA\Validation\EntityValidator.cs" />
+    <Compile Include="RIA\Validation\NoDuplicatesAttribute.cs" />
+    <Compile Include="RIA\Validation\PatternAttribute.cs" />
+    <Compile Include="RIA\Validation\MandatoryAttribute.cs" />
+    <Compile Include="RIA\Validation\ValidationAttribute.cs" />
     <Compile Include="RIA\Validation\ValidationRule.cs" />
   </ItemGroup>
   <ItemGroup />

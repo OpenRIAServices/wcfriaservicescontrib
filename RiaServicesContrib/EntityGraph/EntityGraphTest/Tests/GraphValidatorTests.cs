@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using EntityGraph.RIA;
-using EntityGraph.RIA.EntityValidator;
 using EntityGraph.Validation;
 using EntityGraphTest.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
+using EntityGraph.RIA.Validation;
 
 namespace EntityGraphTest.Tests
 {

@@ -57,7 +57,11 @@
     <Compile Include="INotifyCollectionChanged.shared.cs" />
     <Compile Include="INotifyPropertyChanged.shared.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Validation\AttributeValidator.shared.cs" />
+    <Compile Include="Validation\ClassValidationRulesProvider.shared.cs" />
+    <Compile Include="Validation\EntityValidator.shared.cs" />
     <Compile Include="Validation\ExpressionAggregator.shared.cs" />
+    <Compile Include="Validation\IAttributeValidator.shared.cs" />
     <Compile Include="Validation\InputBinding.shared.cs" />
     <Compile Include="Validation\IValidationRulesProvider.shared.cs" />
     <Compile Include="Validation\MEFValidationRulesProvider.shared.cs" />
@@ -70,6 +74,9 @@
     <Compile Include="Validation\ValidationResultChangedEventArgs.shared.cs" />
     <Compile Include="Validation\ValidationRule.shared.cs" />
     <Compile Include="Validation\ValidationRuleDependency.shared.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Validation\IValidationAttribute.shared.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

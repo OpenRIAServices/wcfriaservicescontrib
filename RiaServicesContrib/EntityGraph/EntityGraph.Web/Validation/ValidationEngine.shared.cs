@@ -33,6 +33,8 @@ namespace EntityGraph.Validation
             {
                 rule.ResultChanged += ValidationResultChangedCallback;
             }
+            observedProperties = ValidationRules.SelectMany(
+                rule => rule.Signature.Select(dep => dep.TargetProperty.Name)).ToArray();
         }
         /// <summary>
         /// Method that invokes all matching validation rules for the given object and 
@@ -45,6 +47,14 @@ namespace EntityGraph.Validation
             Validate(obj, propertyName, new List<TEntity> { obj });
         }
         /// <summary>
+        /// Method that invokes all matching validation rules for the given object
+        /// </summary>
+        /// <param name="obj"></param>
+        public void Validate(TEntity obj)
+        {
+            Validate(new List<TEntity> { obj });
+        }
+        /// <summary>
         /// Method that invokes all matching validation rules for all possible bindings given
         /// a collection of objects, an object 'obj' that should be presentin any bindings, and a 
         /// (changed) property with name 'propertyName' that should be part in any signature.
@@ -54,6 +64,10 @@ namespace EntityGraph.Validation
         /// <param name="objects"></param>
         public void Validate(object obj, string propertyName, IEnumerable<TEntity> objects)
         {
+            if(Skip(propertyName))
+            {
+                return;
+            }
             var type = obj.GetType();
             var rules = from rule in GetRulesByPropertyName(propertyName)
                         where rule.Signature.Any(dep => dep.TargetPropertyOwnerType.IsAssignableFrom(type))
@@ -65,7 +79,7 @@ namespace EntityGraph.Validation
         /// collection of validation rules.
         /// </summary>
         /// <param name="objects"></param>
-        public void ValidateAll(IEnumerable<TEntity> objects)
+        public void Validate(IEnumerable<TEntity> objects)
         {
             ValidateRules(ValidationRules, objects, null);
         }
@@ -102,7 +116,16 @@ namespace EntityGraph.Validation
         /// Gets or sets the collection of validation rules for this validation engine.
         /// </summary>
         private IEnumerable<ValidationRule<TResult>> ValidationRules { get; set; }
-
+        /// <summary>
+        /// This method implements a quick to check if validation should continue,
+        /// by looking up if a property plays a role in a validation rule.
+        /// </summary>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
+        private bool Skip(string propertyName)
+        {
+            return observedProperties.Contains(propertyName) == false;
+        }
         /// <summary>
         /// Given a validation rule with dependency expressions and a collection of objects
         /// return a list of tuples (represented as lists) with all permutations of matching objects.
@@ -260,5 +283,6 @@ namespace EntityGraph.Validation
                 ValidationResultChanged(sender, e);
             }
         }
+        private string[] observedProperties;
     }
 }
