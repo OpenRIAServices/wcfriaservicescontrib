@@ -102,7 +102,7 @@ namespace EntityGraph
             foreach(var bindingGroup in bindingGroups)
             {
                 var entity = bindingGroup.Key as TBase;
-                var membersInError = bindingGroup.Select(binding => binding.ValidationRuleDependency.TargetProperty.Name).ToArray();
+                var membersInError = bindingGroup.Select(binding => binding.ValidationRuleDependency.TargetProperty.Name).Distinct().ToArray();
 
                 if(HasValidationResult(entity, membersInError, e.OldValidationResult))
                     ClearValidationResult(entity, membersInError, e.OldValidationResult);

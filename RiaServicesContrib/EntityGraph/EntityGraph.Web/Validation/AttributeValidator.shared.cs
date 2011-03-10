@@ -11,7 +11,7 @@
         /// Initializes a new instance of the AttributeValidator class.
         /// </summary>
         /// <param name="signature"></param>
-        protected AttributeValidator(Signature signature) : base(signature) { }
+        protected AttributeValidator(params ValidationRuleDependency[] signature) : base(signature) { }
         /// <summary>
         /// Invokes this validator on the given object
         /// </summary>

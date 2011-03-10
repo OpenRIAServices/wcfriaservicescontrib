@@ -14,6 +14,6 @@ namespace EntityGraph.RIA.Validation
         /// Initializes a new instance of the AttributeValidator class.
         /// </summary>
         /// <param name="signature"></param>
-        protected AttributeValidator(Signature signature) : base(signature) { }
+        protected AttributeValidator(params ValidationRuleDependency[] signature) : base(signature) { }
     }
 }

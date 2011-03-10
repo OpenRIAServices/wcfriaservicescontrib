@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Reflection;
+using System.Linq.Expressions;
 
 namespace EntityGraph.Validation
 {
@@ -13,6 +14,10 @@ namespace EntityGraph.Validation
     [InheritedExport]
     public abstract class ValidationRule<TResult> where TResult : class
     {
+        //public static Signature InputOutput<TSource, TTarget>(Expression<Func<TSource, TTarget>> dependency)
+        //{
+        //    return new Signature().InputOutput<TSource, TTarget>(dependency);
+        //}
         /// <summary>
         /// Gets the signature of the validation rule
         /// </summary>
@@ -56,9 +61,9 @@ namespace EntityGraph.Validation
         /// Creates a new instance of the ValidationRule class.
         /// </summary>
         /// <param name="signature"></param>
-        protected ValidationRule(Signature signature)
+        protected ValidationRule(params ValidationRuleDependency[] signature)
         {
-            this.Signature = signature;
+            Signature = new Signature(signature);
             ValidationMethod = this.GetValidateMethod();
         }
         /// <summary>
@@ -161,6 +166,37 @@ namespace EntityGraph.Validation
                 }
             }
             return matchingMethods.ToArray();
+        }
+        /// <summary>
+        /// Creates an InputOutput dependency parameter 'A => A.some.path.i'. The target property
+        /// 'i' will be invalidated in case of validation errors.
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TTarget"></typeparam>
+        /// <param name="dependency"></param>
+        /// <returns></returns>
+        public static ValidationRuleDependency InputOutput<TSource, TTarget>(Expression<Func<TSource, TTarget>> dependency)
+        {
+            return new ValidationRuleDependency
+            {
+                Expression = dependency
+            };
+        }
+        /// <summary>
+        /// Creates an InputOnly dependency parameter 'A => A.some.path.i' to this Signature. The target
+        /// property 'i' will not be invalidaed in case of validation errors.
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TTarget"></typeparam>
+        /// <param name="dependency"></param>
+        /// <returns></returns>
+        public static ValidationRuleDependency InputOnly<TSource, TTarget>(Expression<Func<TSource, TTarget>> dependency)
+        {
+            return new ValidationRuleDependency
+            {
+                Expression = dependency,
+                InputOnly = true
+            };
         }
     }
 }

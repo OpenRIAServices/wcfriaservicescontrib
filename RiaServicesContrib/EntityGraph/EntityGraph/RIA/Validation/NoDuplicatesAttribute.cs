@@ -17,7 +17,7 @@ namespace EntityGraph.RIA.Validation
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
-        protected override EntityGraph.Validation.ValidationRule<ValidationResult> Create(EntityGraph.Validation.Signature signature)
+        protected override ValidationRule<ValidationResult> Create(params ValidationRuleDependency[] signature)
         {
             return new NoDuplicatesValidator(this, signature);
         }
@@ -33,7 +33,7 @@ namespace EntityGraph.RIA.Validation
         /// </summary>
         /// <param name="attribute"></param>
         /// <param name="signature"></param>
-        public NoDuplicatesValidator(NoDuplicatesAttribute attribute, Signature signature)
+        public NoDuplicatesValidator(NoDuplicatesAttribute attribute, params ValidationRuleDependency[] signature)
             : base(signature)
         {
             this.attribute = attribute;

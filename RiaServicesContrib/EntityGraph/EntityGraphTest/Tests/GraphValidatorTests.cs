@@ -15,9 +15,10 @@ namespace EntityGraphTest.Tests
         public class AValidator : ValidationRule
         {
             public AValidator() :
-                base(new Signature()
-                .InputOutput<A, string>(A => A.B.name)
-                .InputOutput<A, string>(A => A.B.C.name))
+                base(
+                    InputOutput<A, string>(A => A.B.name),
+                    InputOutput<A, string>(A => A.B.C.name)
+                )
             {
             }
 
@@ -39,9 +40,10 @@ namespace EntityGraphTest.Tests
         {
             public MultiPropertyValidator() :
                 base(
-                new Signature()
-                .InputOutput<A, string>(A => A.name)
-                .InputOutput<A, string>(A => A.lastName)) { }
+                    InputOutput<A, string>(A => A.name),
+                    InputOutput<A, string>(A => A.lastName)
+                ) 
+            { }
 
             public void Validate(string name, string lastName)
             {
@@ -59,9 +61,10 @@ namespace EntityGraphTest.Tests
         {
             public InputOutputInputOnlyValidator() :
                 base(
-                new Signature()
-                .InputOutput<A, string>(A => A.name)
-                .InputOnly<A, string>(A => A.lastName)) { }
+                    InputOutput<A, string>(A => A.name),
+                    InputOnly<A, string>(A => A.lastName)
+                ) 
+            { }
             public void Validate(string name, string lastName)
             {
                 if(name == lastName)

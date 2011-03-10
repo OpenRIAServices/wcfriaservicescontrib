@@ -76,7 +76,7 @@ namespace EntityGraph.Validation
         void Validator_ValidationResultChanged(object sender, ValidationResultChangedEventArgs<TResult> e)
         {
             var rule = (ValidationRule<TResult>)sender;
-            var membersInError = rule.RuleBinding.DependencyBindings.Select(b => b.ValidationRuleDependency.TargetProperty.Name).ToArray();
+            var membersInError = rule.RuleBinding.DependencyBindings.Select(b => b.ValidationRuleDependency.TargetProperty.Name).Distinct().ToArray();
 
             if(HasValidationResult(Entity, membersInError, e.OldValidationResult))
                 ClearValidationResult(Entity, membersInError, e.OldValidationResult);

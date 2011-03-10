@@ -14,9 +14,10 @@ namespace EntityGraphTest.Tests
         public class AValidator : ValidationRule<ValidationResult>
         {
             public AValidator()
-                : base(new Signature()
-                .InputOutput<A, string>(A => A.B.name)
-                .InputOutput<A, string>(A => A.B.C.name))
+                : base(
+                    InputOutput<A, string>(A => A.B.name),
+                    InputOutput<A, string>(A => A.B.C.name)
+                )
             { }
 
             public static ValidationResult TestResult { get; set; }
@@ -38,9 +39,8 @@ namespace EntityGraphTest.Tests
         {
             internal static List<RuleBinding<ValidationResult>> Bindings { get; set; }
             public PermutationsOneParameterValidator() :
-                base(
-                new Signature()
-                .InputOutput<A, string>(A => A.name)) { }
+                base(InputOutput<A, string>(A => A.name)) 
+            { }
             public void Validate(string arg)
             {
                 Bindings.Add(RuleBinding);
@@ -50,10 +50,11 @@ namespace EntityGraphTest.Tests
         {
             internal static List<RuleBinding<ValidationResult>> Bindings { get; set; }
             public PermutationsTwoParameterValidator() :
-                base(
-                new Signature()
-                .InputOutput<A, string>(A => A.name)
-                .InputOutput<A, string>(A => A.lastName)) { }
+                base(                
+                    InputOutput<A, string>(A => A.name),
+                    InputOutput<A, string>(A => A.lastName)
+                ) 
+            { }
             public void Validate(string arg1, string arg2)
             {
                 Bindings.Add(RuleBinding);
@@ -64,9 +65,10 @@ namespace EntityGraphTest.Tests
             internal static List<RuleBinding<ValidationResult>> Bindings { get; set; }
             public PermutationsTwoParameterNamesValidator() :
                 base(
-                new Signature()
-                .InputOutput<A, string>(A => A.name)
-                .InputOutput<A, string>(B => B.name)) { }
+                    InputOutput<A, string>(A => A.name),
+                    InputOutput<A, string>(B => B.name)
+                ) 
+            { }
             public void Validate(string arg1, string arg2)
             {
                 Bindings.Add(RuleBinding);
@@ -77,10 +79,11 @@ namespace EntityGraphTest.Tests
             internal static List<RuleBinding<ValidationResult>> Bindings { get; set; }
             public PermutationsThreeParameterNamesValidator() :
                 base(
-                new Signature()
-                .InputOutput<A, string>(A => A.name)
-                .InputOutput<A, string>(B => B.name)
-                .InputOutput<A, string>(C => C.name)) { }
+                    InputOutput<A, string>(A => A.name),
+                    InputOutput<A, string>(B => B.name),
+                    InputOutput<A, string>(C => C.name)
+                ) 
+            { }
             public void Validate(string arg1, string arg2, string arg3)
             {
                 Bindings.Add(RuleBinding);

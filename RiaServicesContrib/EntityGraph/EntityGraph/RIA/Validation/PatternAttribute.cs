@@ -31,7 +31,7 @@ namespace EntityGraph.RIA.Validation
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
-        protected override EntityGraph.Validation.ValidationRule<ValidationResult> Create(EntityGraph.Validation.Signature signature)
+        protected override ValidationRule<ValidationResult> Create(params ValidationRuleDependency[] signature)
         {
             return new PatternValidator(this, signature);
         }
@@ -49,7 +49,7 @@ namespace EntityGraph.RIA.Validation
         /// </summary>
         /// <param name="attribute"></param>
         /// <param name="signature"></param>
-        public PatternValidator(PatternAttribute attribute, Signature signature)
+        public PatternValidator(PatternAttribute attribute, params ValidationRuleDependency[] signature)
             : base(signature)
         {
             this.attribute = attribute;

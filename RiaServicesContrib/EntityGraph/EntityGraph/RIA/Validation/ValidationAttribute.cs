@@ -51,7 +51,7 @@ namespace EntityGraph.RIA.Validation
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
-        protected abstract ValidationRule<ValidationResult> Create(Signature signature);
+        protected abstract ValidationRule<ValidationResult> Create(params ValidationRuleDependency[] signature);
         /// <summary>
         /// Creates a signature with a single rule dependency expression of type 
         ///   Expression&lt;Func&lt;object,object>>:
@@ -63,7 +63,7 @@ namespace EntityGraph.RIA.Validation
         /// </summary>
         /// <param name="propInfo"></param>
         /// <returns></returns>
-        private static Signature CreateSignature(PropertyInfo propInfo)
+        private static ValidationRuleDependency CreateSignature(PropertyInfo propInfo)
         {
             ParameterExpression paramExpr = Expression.Parameter(typeof(object), "A");
 
@@ -73,7 +73,7 @@ namespace EntityGraph.RIA.Validation
             var typeAsExpr = Expression.TypeAs(memberExpr, typeof(object));
             Expression<Func<object, object>> lambdaExpr =
                 Expression.Lambda<Func<object, object>>(typeAsExpr, paramExpr);
-            return new Signature().InputOutput<object, object>(lambdaExpr);
+            return new ValidationRuleDependency { Expression = lambdaExpr };
         }
     }
 }

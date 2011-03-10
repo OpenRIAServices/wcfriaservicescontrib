@@ -12,8 +12,8 @@ namespace EntityGraph.RIA.Validation
         /// Initializes a new instance of the ValidationRule class.
         /// </summary>
         /// <param name="signature"></param>
-        public ValidationRule(Signature signature) :
-            base(signature)
+        public ValidationRule(params ValidationRuleDependency[] signature)
+            : base(signature)
         {
         }
     }

@@ -18,7 +18,7 @@ namespace EntityGraph.RIA.Validation
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
-        protected override ValidationRule<ValidationResult> Create(Signature signature)
+        protected override ValidationRule<ValidationResult> Create(params ValidationRuleDependency[] signature)
         {
             return new MandatoryValidator(this, signature);
         }
@@ -34,7 +34,7 @@ namespace EntityGraph.RIA.Validation
         /// </summary>
         /// <param name="attribute"></param>
         /// <param name="signature"></param>
-        public MandatoryValidator(MandatoryAttribute attribute, Signature signature)
+        public MandatoryValidator(MandatoryAttribute attribute, params ValidationRuleDependency[] signature)
             : base(signature)
         {
             this.attribute = attribute;

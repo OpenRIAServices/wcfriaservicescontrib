@@ -23,40 +23,9 @@ namespace EntityGraph.Validation
         /// Creates a new instance of a validation rule signature.
         /// </summary>
         private List<ValidationRuleDependency> RuleDependendencies = new List<ValidationRuleDependency>();
-        /// <summary>
-        /// Adds an InputOutput dependency parameter 'A => A.some.path.i' to this Signature. The target property
-        /// 'i' will be invalidated in case of validation errors.
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <typeparam name="TTarget"></typeparam>
-        /// <param name="dependency"></param>
-        /// <returns></returns>
-        public Signature InputOutput<TSource, TTarget>(Expression<Func<TSource, TTarget>> dependency)
+        internal Signature(params ValidationRuleDependency[] inputs)
         {
-            var validationRuleDependency = new ValidationRuleDependency
-            {
-                Expression = dependency
-            };
-            RuleDependendencies.Add(validationRuleDependency);
-            return this;
-        }
-        /// <summary>
-        /// Adds an InputOnly dependency parameter 'A => A.some.path.i' to this Signature. The target
-        /// property 'i' will not be invalidaed in case of validation errors.
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <typeparam name="TTarget"></typeparam>
-        /// <param name="dependency"></param>
-        /// <returns></returns>
-        public Signature InputOnly<TSource, TTarget>(Expression<Func<TSource, TTarget>> dependency)
-        {
-            var validationRuleDependency = new ValidationRuleDependency
-            {
-                Expression = dependency,
-                InputOnly = true
-            };
-            RuleDependendencies.Add(validationRuleDependency);
-            return this;
+            RuleDependendencies.AddRange(inputs);
         }
         /// <summary>
         /// Returns an enumerator that iterates through the collection of input parameters. 
