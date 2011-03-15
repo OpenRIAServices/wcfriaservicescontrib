@@ -77,7 +77,19 @@ namespace EntityGraphTest.Tests
                 new Door()};
             Engine = new Engine { EngineType = EngineType.Diesel };
         }
-        public Trailer Trailer { get; set; }
+        private Trailer _trailer;
+        public Trailer Trailer
+        {
+            get { return _trailer; }
+            set
+            {
+                if(_trailer != value)
+                {
+                    _trailer = value;
+                    RaisePropertyChanged("Trailer");
+                }
+            }
+        }
     }
     public class PersonCar : Car
     {
@@ -115,15 +127,16 @@ namespace EntityGraphTest.Tests
     {
         public UniqIds()
             : base(
-                InputOutput<Car, string>(C1 => C1.Id),
-                InputOutput<Car, string>(C2 => C2.Id)
-            ) { }
+                InputOutput<Car, string>(Car1 => Car1.Id),
+                InputOutput<Car, string>(Car2 => Car2.Id)
+            )
+        { }
 
-        public void Validate(string c1, string c2)
+        public void Validate(string car1, string car2)
         {
-            if(c1 == c2)
+            if(car1 == car2)
             {
-                Result = new ValidationResult("Car  ids should be uniqe");
+                Result = new ValidationResult("Car ids should be uniqe");
             }
             else
             {
@@ -154,7 +167,7 @@ namespace EntityGraphTest.Tests
         public TruckEngineValidator() :
             base(
              InputOutput<Truck, Engine>(Truck => Truck.Engine),
-             InputOutput<Truck, EngineType>(Truck => Truck.Engine.EngineType)
+             InputOnly<Truck, EngineType>(Truck => Truck.Engine.EngineType)
             ) 
         { }
 
@@ -186,6 +199,26 @@ namespace EntityGraphTest.Tests
             Result = ValidationResult.Success;
         }
     }
+    public class TruckTrailerValidator : ValidationRule
+    {
+        public TruckTrailerValidator() :
+            base(
+            InputOutput<Truck, Trailer>(Truck1 => Truck1.Trailer),
+            InputOutput<Truck, Trailer>(Truck2 => Truck2.Trailer)
+            )
+        { }
+        public void Validate(Trailer trailer1, Trailer trailer2)
+        {
+            if(trailer1 != null && trailer1 == trailer2)
+            {
+                Result = new ValidationResult("A trailer can be attached to a single truck only");
+            }
+            else
+            {
+                Result = ValidationResult.Success;
+            }
+        }
+    }
     [TestClass]
     public class CarsExampleTests
     {
@@ -193,22 +226,26 @@ namespace EntityGraphTest.Tests
         public void UniqIdsTest()
         {
             var truck = new Truck { Id = "1" };
-            var personCar = new PersonCar { Id = "1" };
+            var personCar = new PersonCar { Id = "2" };
             var carPark = new CarPark
             {
                 Cars = new ObservableCollection<Car> { truck, personCar }
             };
             MEFValidationRules.RegisterType(typeof(UniqIds));
             var gr = carPark.EntityGraph(CarPark.Shape);
-            Assert.IsTrue(truck.HasValidationErrors);
-            Assert.IsTrue(personCar.HasValidationErrors);
-            truck.Id = "2";
             Assert.IsFalse(truck.HasValidationErrors);
             Assert.IsFalse(personCar.HasValidationErrors);
+            truck.Id = "2";
+            Assert.IsTrue(truck.HasValidationErrors);
+            Assert.IsTrue(personCar.HasValidationErrors);
+            personCar.Id = "1";
+            Assert.IsFalse(truck.HasValidationErrors);
+            Assert.IsFalse(personCar.HasValidationErrors);
+
             MEFValidationRules.UnregisterType(typeof(UniqIds));
         }
         [TestMethod]
-        public void TruckEquipmenttest()
+        public void TruckEquipmentTest()
         {
             var truck = new Truck { Id = "1" };
             var personCar = new PersonCar { Id = "2" };
@@ -216,13 +253,60 @@ namespace EntityGraphTest.Tests
             {
                 Cars = new ObservableCollection<Car> { truck, personCar }
             };
-            MEFValidationRules.RegisterAssembly(typeof(CarPark).Assembly);
+            MEFValidationRules.RegisterType(typeof(TruckDoorsValidator));
             var gr = carPark.EntityGraph(CarPark.Shape);
             Assert.IsFalse(truck.HasValidationErrors);
-            truck.Engine.EngineType = EngineType.Benzin;
+            truck.Doors.Add(new Door());
             Assert.IsTrue(truck.HasValidationErrors);
 
-            MEFValidationRules.UnregisterAssembly(typeof(CarPark).Assembly);
+            MEFValidationRules.UnregisterType(typeof(TruckDoorsValidator));
+        }
+        [TestMethod]
+        public void TruckEngineTest()
+        {
+            var truck = new Truck { Id = "1" };
+            var personCar = new PersonCar { Id = "2" };
+            var carPark = new CarPark
+            {
+                Cars = new ObservableCollection<Car> { truck, personCar }
+            };
+            MEFValidationRules.RegisterType(typeof(TruckEngineValidator));
+            var gr = carPark.EntityGraph(CarPark.Shape);
+
+            Assert.IsFalse(truck.HasValidationErrors);
+            Assert.IsFalse(truck.Engine.HasValidationErrors);
+            
+            truck.Engine.EngineType = EngineType.Benzin;
+            
+            Assert.IsTrue(truck.HasValidationErrors);
+            Assert.IsFalse(truck.Engine.HasValidationErrors);
+            
+            truck.Engine.EngineType = EngineType.Diesel;
+            Assert.IsFalse(truck.HasValidationErrors);
+            Assert.IsFalse(truck.Engine.HasValidationErrors);
+            MEFValidationRules.UnregisterType(typeof(TruckEngineValidator));
+        }
+        [TestMethod]
+        public void TruckTrailerTest()
+        {
+            var truck1 = new Truck { Id = "1" };
+            var truck2 = new Truck { Id = "2" };
+            var trailer = new Trailer();
+            var carPark = new CarPark
+            {
+                Cars = new ObservableCollection<Car> { truck1, truck2 }
+            };
+            MEFValidationRules.RegisterType(typeof(TruckTrailerValidator));
+            var gr = carPark.EntityGraph(CarPark.Shape);
+
+            truck1.Trailer = trailer;
+            Assert.IsFalse(truck1.HasValidationErrors);
+            Assert.IsFalse(truck2.HasValidationErrors);
+
+            truck2.Trailer = trailer;
+            Assert.IsTrue(truck1.HasValidationErrors);
+            Assert.IsTrue(truck2.HasValidationErrors);
+            MEFValidationRules.UnregisterType(typeof(TruckTrailerValidator));
         }
     }
 }

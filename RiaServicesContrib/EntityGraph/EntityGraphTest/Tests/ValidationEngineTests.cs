@@ -157,7 +157,7 @@ namespace EntityGraphTest.Tests
             PermutationsTwoParameterNamesValidator.Bindings = new List<RuleBinding<ValidationResult>>();
 
             validator.Validate(new List<Entity> { a1, a2 });
-            Assert.IsTrue(PermutationsTwoParameterNamesValidator.Bindings.Count == 4);
+            Assert.IsTrue(PermutationsTwoParameterNamesValidator.Bindings.Count == 2);
             Assert.IsTrue(PermutationsTwoParameterNamesValidator.Bindings.Any(
                 b => b.DependencyBindings[0].TargetOwnerObject == a1 &&
                      b.DependencyBindings[1].TargetOwnerObject == a2
@@ -176,47 +176,7 @@ namespace EntityGraphTest.Tests
             var validator = new ValidationEngine<Entity, ValidationResult>(new SimpleValidationRulesProvider<ValidationResult> { new PermutationsThreeParameterNamesValidator() });
             PermutationsThreeParameterNamesValidator.Bindings = new List<RuleBinding<ValidationResult>>();
             validator.Validate(new List<Entity> { a1, a2 });
-            Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Count == 8);
-            Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Any(
-                b => b.DependencyBindings[0].TargetOwnerObject == a1 &&
-                     b.DependencyBindings[1].TargetOwnerObject == a1 &&
-                     b.DependencyBindings[2].TargetOwnerObject == a1
-                ));
-            Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Any(
-                b => b.DependencyBindings[0].TargetOwnerObject == a2 &&
-                     b.DependencyBindings[1].TargetOwnerObject == a1 &&
-                     b.DependencyBindings[2].TargetOwnerObject == a1
-                ));
-            Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Any(
-                b => b.DependencyBindings[0].TargetOwnerObject == a1 &&
-                     b.DependencyBindings[1].TargetOwnerObject == a2 &&
-                     b.DependencyBindings[2].TargetOwnerObject == a1
-                ));
-            Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Any(
-                b => b.DependencyBindings[0].TargetOwnerObject == a1 &&
-                     b.DependencyBindings[1].TargetOwnerObject == a1 &&
-                     b.DependencyBindings[2].TargetOwnerObject == a2
-                ));
-            Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Any(
-                b => b.DependencyBindings[0].TargetOwnerObject == a2 &&
-                     b.DependencyBindings[1].TargetOwnerObject == a2 &&
-                     b.DependencyBindings[2].TargetOwnerObject == a1
-                ));
-            Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Any(
-                b => b.DependencyBindings[0].TargetOwnerObject == a2 &&
-                     b.DependencyBindings[1].TargetOwnerObject == a1 &&
-                     b.DependencyBindings[2].TargetOwnerObject == a2
-                ));
-            Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Any(
-                b => b.DependencyBindings[0].TargetOwnerObject == a1 &&
-                     b.DependencyBindings[1].TargetOwnerObject == a2 &&
-                     b.DependencyBindings[2].TargetOwnerObject == a2
-                ));
-            Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Any(
-                b => b.DependencyBindings[0].TargetOwnerObject == a2 &&
-                     b.DependencyBindings[1].TargetOwnerObject == a2 &&
-                     b.DependencyBindings[2].TargetOwnerObject == a2
-                ));
+            Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Count == 0);
         }
         [Description("Test permutations in case of three different parameter names with three objects")]
         [TestMethod]
@@ -228,7 +188,38 @@ namespace EntityGraphTest.Tests
             var validator = new ValidationEngine<Entity, ValidationResult>(new SimpleValidationRulesProvider<ValidationResult> { new PermutationsThreeParameterNamesValidator() });
             PermutationsThreeParameterNamesValidator.Bindings = new List<RuleBinding<ValidationResult>>();
             validator.Validate(new List<Entity> { a1, a2, a3 });
-            Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Count == 27);
+            Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Count == 6);
+
+            Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Any(
+                b => b.DependencyBindings[0].TargetOwnerObject == a1 &&
+                     b.DependencyBindings[1].TargetOwnerObject == a2 &&
+                     b.DependencyBindings[2].TargetOwnerObject == a3
+                ));
+            Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Any(
+                b => b.DependencyBindings[0].TargetOwnerObject == a1 &&
+                     b.DependencyBindings[1].TargetOwnerObject == a3 &&
+                     b.DependencyBindings[2].TargetOwnerObject == a2
+                ));
+            Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Any(
+                b => b.DependencyBindings[0].TargetOwnerObject == a2 &&
+                     b.DependencyBindings[1].TargetOwnerObject == a1 &&
+                     b.DependencyBindings[2].TargetOwnerObject == a3
+                ));
+            Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Any(
+                b => b.DependencyBindings[0].TargetOwnerObject == a2 &&
+                     b.DependencyBindings[1].TargetOwnerObject == a3 &&
+                     b.DependencyBindings[2].TargetOwnerObject == a1
+                ));
+            Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Any(
+                b => b.DependencyBindings[0].TargetOwnerObject == a3 &&
+                     b.DependencyBindings[1].TargetOwnerObject == a1 &&
+                     b.DependencyBindings[2].TargetOwnerObject == a2
+                ));
+            Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Any(
+                b => b.DependencyBindings[0].TargetOwnerObject == a3 &&
+                     b.DependencyBindings[1].TargetOwnerObject == a2 &&
+                     b.DependencyBindings[2].TargetOwnerObject == a1
+                ));
         }
         [TestMethod]
         public void SingleEntityValidation1()

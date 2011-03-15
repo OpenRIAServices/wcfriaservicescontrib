@@ -170,7 +170,9 @@ namespace EntityGraph.Validation
                                 {
                                     ValidationRuleDependency = dependency,
                                     ParameterObjectBinding = objectBinding.Single(b => b.ParameterName == dependency.ParameterExpression.Name)
-                                }).ToList();
+                                }).Distinct(new ValidationRuleDependencyBindingComparer());
+                if(bindings.Count() != rule.Signature.Count()){
+                    continue;}
                 result.Add(new RuleBinding<TResult>
                 {
                     DependencyBindings = bindings.ToArray(),
@@ -245,6 +247,7 @@ namespace EntityGraph.Validation
                         (obj == null || binding.DependencyBindings.Any(b => b.TargetOwnerObject == obj))
                     select binding).ToList();
         }
+
         /// <summary>
         /// This is the actual validation method that invokes a collection of validation rules for a collection of validation
         /// rule bindings.
@@ -284,5 +287,36 @@ namespace EntityGraph.Validation
             }
         }
         private string[] observedProperties;
+
+        /// <summary>
+        /// This class tests for equality between ValidationRuleDependencyBinding objects.
+        /// Two ValidationRuleDependencyBinding objects are equal if the target properties 
+        /// of their ValidationRuleDependencies are euqals and if their TargetOwnerObjects are equal.
+        /// 
+        /// This means that both dependencies correspond to the same property of the same owning object.
+        /// 
+        /// </summary>
+        private class ValidationRuleDependencyBindingComparer : IEqualityComparer<ValidationRuleDependencyBinding>
+        {
+            public bool Equals(ValidationRuleDependencyBinding x, ValidationRuleDependencyBinding y)
+            {
+                if(
+                    x.ValidationRuleDependency.TargetProperty == y.ValidationRuleDependency.TargetProperty &&
+                    x.TargetOwnerObject == y.TargetOwnerObject)
+                {
+                    return true;
+                }
+                return false;
+            }
+
+            public int GetHashCode(ValidationRuleDependencyBinding db)
+            {
+                int hashCode = 0;
+                hashCode ^= db.ValidationRuleDependency.TargetProperty.GetHashCode();
+                if(db.TargetOwnerObject != null)
+                    hashCode ^= db.TargetOwnerObject.GetHashCode();
+                return hashCode;
+            }
+        }
     }
 }
