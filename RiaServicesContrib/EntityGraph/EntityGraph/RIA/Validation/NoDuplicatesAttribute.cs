@@ -19,7 +19,11 @@ namespace EntityGraph.RIA.Validation
         /// <returns></returns>
         protected override ValidationRule<ValidationResult> Create(params ValidationRuleDependency[] signature)
         {
-            return new NoDuplicatesValidator(this, signature);
+            var validator = new NoDuplicatesValidator(signature)
+            {
+                Message = String.Format(ErrorMessage, PropertyInfo.Name),
+            };
+            return validator;
         }
     }
     /// <summary>
@@ -27,16 +31,17 @@ namespace EntityGraph.RIA.Validation
     /// </summary>
     public class NoDuplicatesValidator : AttributeValidator
     {
-        NoDuplicatesAttribute attribute;
+        /// <summary>
+        /// Gets or sets the error message of this validator.
+        /// </summary>
+        public string Message { get; set; }
         /// <summary>
         /// Initializes a new instance of the NoDuplicatesValidator class.
         /// </summary>
-        /// <param name="attribute"></param>
         /// <param name="signature"></param>
-        public NoDuplicatesValidator(NoDuplicatesAttribute attribute, params ValidationRuleDependency[] signature)
+        public NoDuplicatesValidator(params ValidationRuleDependency[] signature)
             : base(signature)
         {
-            this.attribute = attribute;
         }
         /// <summary>
         /// Validation method for the class.
@@ -54,8 +59,7 @@ namespace EntityGraph.RIA.Validation
             {
                 if(list.Contains(element))
                 {
-                    string msg = String.Format(attribute.ErrorMessage, attribute.PropertyInfo.Name);
-                    Result = new ValidationResult(msg);
+                    Result = new ValidationResult(Message);
                     return;
                 }
                 list.Add(element);

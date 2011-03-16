@@ -20,7 +20,11 @@ namespace EntityGraph.RIA.Validation
         /// <returns></returns>
         protected override ValidationRule<ValidationResult> Create(params ValidationRuleDependency[] signature)
         {
-            return new MandatoryValidator(this, signature);
+            var validator = new MandatoryValidator(signature)
+            {
+                Message = String.Format(ErrorMessage, PropertyInfo.Name)
+            };
+            return validator;
         }
     }
     /// <summary>
@@ -28,16 +32,17 @@ namespace EntityGraph.RIA.Validation
     /// </summary>
     public class MandatoryValidator : AttributeValidator
     {
-        private MandatoryAttribute attribute;
+        /// <summary>
+        /// Gets or sets the error message of this validator.
+        /// </summary>
+        public string Message { get; set; }
         /// <summary>
         /// Initializes a new instance of the MandatoryValidator class.
         /// </summary>
-        /// <param name="attribute"></param>
         /// <param name="signature"></param>
-        public MandatoryValidator(MandatoryAttribute attribute, params ValidationRuleDependency[] signature)
+        public MandatoryValidator(params ValidationRuleDependency[] signature)
             : base(signature)
         {
-            this.attribute = attribute;
         }
         /// <summary>
         /// The validation method.
@@ -47,8 +52,7 @@ namespace EntityGraph.RIA.Validation
         {
             if(value == null)
             {
-                string msg = String.Format(attribute.ErrorMessage, attribute.PropertyInfo.Name);
-                Result = new ValidationResult(msg);
+                Result = new ValidationResult(Message);
             }
             else
             {

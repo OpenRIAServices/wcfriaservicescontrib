@@ -110,17 +110,17 @@ namespace EntityGraphTest.Tests
     }
     public class CarPark : Entity
     {
-        public static EntityGraphShape Shape { get; private set; }
-        public CarPark()
-        {
-            Shape = new EntityGraphShape()
-            .Edge<CarPark, Car>(CarPark => CarPark.Cars)
-            .Edge<Car, Wheel>(Car => Car.Wheels)
-            .Edge<Car, Door>(Car => Car.Doors)
-            .Edge<Car, Engine>(Car => Car.Engine)
-            .Edge<Truck, Trailer>(Truck => Truck.Trailer);
-        }
         public ObservableCollection<Car> Cars { get; set; }
+
+        private static EntityGraphShape _shape =
+            new EntityGraphShape()
+                .Edge<CarPark, Car>(CarPark => CarPark.Cars)
+                .Edge<Car, Wheel>(Car => Car.Wheels)
+                .Edge<Car, Door>(Car => Car.Doors)
+                .Edge<Car, Engine>(Car => Car.Engine)
+                .Edge<Truck, Trailer>(Truck => Truck.Trailer);
+
+        public static EntityGraphShape Shape { get { return _shape; } }
     }
 
     public class UniqIds : ValidationRule
@@ -132,9 +132,9 @@ namespace EntityGraphTest.Tests
             )
         { }
 
-        public void Validate(string car1, string car2)
+        public void Validate(string carId1, string carId2)
         {
-            if(car1 == car2)
+            if(carId1 == carId2)
             {
                 Result = new ValidationResult("Car ids should be uniqe");
             }

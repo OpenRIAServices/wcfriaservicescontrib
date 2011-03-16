@@ -33,7 +33,12 @@ namespace EntityGraph.RIA.Validation
         /// <returns></returns>
         protected override ValidationRule<ValidationResult> Create(params ValidationRuleDependency[] signature)
         {
-            return new PatternValidator(this, signature);
+            var validator = new PatternValidator(signature)
+            {
+                Message = String.Format(ErrorMessage, PropertyInfo.Name),
+                Pattern = Pattern
+            };
+            return validator;
         }
     }
     /// <summary>
@@ -41,20 +46,40 @@ namespace EntityGraph.RIA.Validation
     /// </summary>
     public class PatternValidator : AttributeValidator
     {
-        private Regex Regex;
+        /// <summary>
+        /// Gets or sets the error message of this validator.
+        /// </summary>
+        public string Message { get; set; }
 
-        private PatternAttribute attribute;
+        /// <summary>
+        /// Gets or sets the pattern of the validator.
+        /// </summary>
+        public string Pattern
+        {
+            get
+            {
+                return _pattern;
+            }
+            set
+            {
+                if(_pattern != value)
+                {
+                    _pattern = value;
+                    _regex = new Regex(value);
+                }
+            }
+        }
+        private string _pattern;
+
+        private Regex _regex;
+
         /// <summary>
         /// Initializes a new instance of the PatternValidator class.
         /// </summary>
-        /// <param name="attribute"></param>
         /// <param name="signature"></param>
-        public PatternValidator(PatternAttribute attribute, params ValidationRuleDependency[] signature)
+        public PatternValidator(params ValidationRuleDependency[] signature)
             : base(signature)
         {
-            this.attribute = attribute;
-            Regex = new Regex(attribute.Pattern);
-
         }
         /// <summary>
         /// The validation method.
@@ -66,11 +91,10 @@ namespace EntityGraph.RIA.Validation
                 if(value is string)
                 {
                     string input = (string)value;
-                    Match m = Regex.Match(input);
+                    Match m = _regex.Match(input);
                     if(m.Length != input.Length)
                     {
-                        string msg = String.Format(attribute.ErrorMessage, attribute.PropertyInfo.Name);
-                        Result = new ValidationResult(msg);
+                        Result = new ValidationResult(Message);
                     }
                     else
                     {
