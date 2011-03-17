@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using EntityGraph.Validation;
 
 namespace EntityGraph.RIA.Validation
@@ -36,11 +37,19 @@ namespace EntityGraph.RIA.Validation
         /// </summary>
         public string Message { get; set; }
         /// <summary>
-        /// Initializes a new instance of the NoDuplicatesValidator class.
+        /// Initializes a new instance of the NoDuplicatesValidator class using an array of ValidationRuleDependencies.
         /// </summary>
         /// <param name="signature"></param>
         public NoDuplicatesValidator(params ValidationRuleDependency[] signature)
             : base(signature)
+        {
+        }
+        /// <summary>
+        /// Initializes a new instance of the NoDuplicatesValidator class using a givenSignature.
+        /// </summary>
+        /// <param name="signature"></param>
+        public NoDuplicatesValidator(Signature signature)
+            : base(signature.ToArray())
         {
         }
         /// <summary>

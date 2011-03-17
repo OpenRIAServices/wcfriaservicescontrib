@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using EntityGraph.Validation;
@@ -74,11 +75,19 @@ namespace EntityGraph.RIA.Validation
         private Regex _regex;
 
         /// <summary>
-        /// Initializes a new instance of the PatternValidator class.
+        /// Initializes a new instance of the PatternValidator class using an array of ValidationRuleDependencies.
         /// </summary>
         /// <param name="signature"></param>
         public PatternValidator(params ValidationRuleDependency[] signature)
             : base(signature)
+        {
+        }
+        /// <summary>
+        /// Initializes a new instance of the PatternValidator class using a givenSignature.
+        /// </summary>
+        /// <param name="signature"></param>
+        public PatternValidator(Signature signature)
+            : base(signature.ToArray())
         {
         }
         /// <summary>

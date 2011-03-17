@@ -18,6 +18,47 @@ namespace EntityGraph
     {
         private ValidationEngine<TBase, TValidationResult> Validator;
 
+        private static IValidationRulesProvider<TValidationResult> _defaultRulesProvider;
+        /// <summary>
+        /// Gets or sets the default validation rules provider for all entity graph instances.
+        /// </summary>
+        public static IValidationRulesProvider<TValidationResult> DefaultRulesProvider
+        {
+            get
+            {
+                if(_defaultRulesProvider == null)
+                {
+                    DefaultRulesProvider = new MEFValidationRulesProvider<TValidationResult>();
+                }
+                return _defaultRulesProvider;
+            }
+            set
+            {
+                if(_defaultRulesProvider != value)
+                {
+                    _defaultRulesProvider = value;
+                }
+            }
+        }
+        /// <summary>
+        /// Gets or sets the validation rules provider for this entity graph instance.
+        /// </summary>
+        public IValidationRulesProvider<TValidationResult> RulesProvider
+        {
+            get
+            {
+                return Validator.RulesProvider;
+            }
+            set
+            {
+                if(Validator.RulesProvider != value)
+                {
+                    Validator.RulesProvider = value;
+                    Validator.Validate(this);
+                }
+            }
+        }
+
         /// <summary>
         /// Initialization method.
         /// </summary>

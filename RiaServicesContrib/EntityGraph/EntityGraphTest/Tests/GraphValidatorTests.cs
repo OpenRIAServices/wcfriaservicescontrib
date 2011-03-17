@@ -42,7 +42,7 @@ namespace EntityGraphTest.Tests
                 base(
                     InputOutput<A, string>(A => A.name),
                     InputOutput<A, string>(A => A.lastName)
-                ) 
+                )
             { }
 
             public void Validate(string name, string lastName)
@@ -63,7 +63,7 @@ namespace EntityGraphTest.Tests
                 base(
                     InputOutput<A, string>(A => A.name),
                     InputOnly<A, string>(A => A.lastName)
-                ) 
+                )
             { }
             public void Validate(string name, string lastName)
             {
@@ -75,7 +75,7 @@ namespace EntityGraphTest.Tests
                 {
                     this.Result = ValidationResult.Success;
                 }
-            }            
+            }
         }
         public override void TestSetup()
         {
@@ -112,7 +112,8 @@ namespace EntityGraphTest.Tests
             Assert.IsTrue(b.HasValidationErrors);
         }
         [TestMethod]
-        public void AValidatorTest() {
+        public void AValidatorTest()
+        {
             var gr = a.EntityGraph();
             AValidator.IsValidated = false;
             b.name = "hello";
@@ -120,7 +121,8 @@ namespace EntityGraphTest.Tests
             Assert.IsTrue(AValidator.IsValidated);
         }
         [TestMethod]
-        public void AValidatorTest2() {
+        public void AValidatorTest2()
+        {
             var gr = a.EntityGraph();
             AValidator.IsValidated = false;
             b.name = "hello";
@@ -161,6 +163,19 @@ namespace EntityGraphTest.Tests
             a.lastName = "Doe";
             Assert.IsFalse(a.HasValidationErrors);
             MEFValidationRules.UnregisterType(typeof(InputOutputInputOnlyValidator));
+        }
+        [TestMethod]
+        public void CustomRulesProviderTest()
+        {
+            var gr = a.EntityGraph();
+            a.name = "Someone";
+            gr.RulesProvider = new SimpleValidationRulesProvider<ValidationResult>
+            {
+                new MandatoryValidator(new Signature().InputOutput<A,string>(A => A.name))
+            };
+            Assert.IsFalse(a.HasValidationErrors);
+            a.name = null;
+            Assert.IsTrue(a.HasValidationErrors);
         }
     }
 }

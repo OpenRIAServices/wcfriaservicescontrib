@@ -53,5 +53,39 @@ namespace EntityGraph.Validation
                 return RuleDependendencies.Count;
             }
         }
+        /// <summary>
+        /// Adds an InputOutput rule dependency 'A => A.some.path.i' to this signature. The target property
+        /// 'i' will be invalidated in case of validation errors.
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TTarget"></typeparam>
+        /// <param name="dependency"></param>
+        /// <returns></returns>
+        public Signature InputOutput<TSource, TTarget>(Expression<Func<TSource, TTarget>> dependency)
+        {
+            RuleDependendencies.Add(new ValidationRuleDependency
+            {
+                Expression = dependency
+            });
+            return this;
+        }
+        /// <summary>
+        /// Adds an InputOnly dependency parameter 'A => A.some.path.i' to this Signature. The target
+        /// property 'i' will not be invalidated in case of validation errors.
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TTarget"></typeparam>
+        /// <param name="dependency"></param>
+        /// <returns></returns>
+        public Signature InputOnly<TSource, TTarget>(Expression<Func<TSource, TTarget>> dependency)
+        {
+            RuleDependendencies.Add(
+            new ValidationRuleDependency
+            {
+                Expression = dependency,
+                InputOnly = true
+            });
+            return this;
+        }
     }
 }

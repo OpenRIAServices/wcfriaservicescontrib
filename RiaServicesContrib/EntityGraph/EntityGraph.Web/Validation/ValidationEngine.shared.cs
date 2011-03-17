@@ -20,21 +20,52 @@ namespace EntityGraph.Validation
     public class ValidationEngine<TEntity, TResult> : IDisposable
         where TResult : class
     {
+        private IValidationRulesProvider<TResult> _rulesProvider;
+        /// <summary>
+        /// Gets or sets the validation rules provider of this instance.
+        /// </summary>
+        public IValidationRulesProvider<TResult> RulesProvider
+        {
+            get
+            {
+                return _rulesProvider;
+            }
+            set
+            {
+                if(_rulesProvider != value)
+                {
+                    if(_rulesProvider != null)
+                    {
+                        foreach(var rule in ValidationRules)
+                        {
+                            rule.ResultChanged -= ValidationResultChangedCallback;
+                        }
+                    }
+                    ValidationRules = null;
+                    observedProperties = null;
+                }
+                _rulesProvider = value;
+                if(_rulesProvider != null)
+                {
+                    ValidationRules = _rulesProvider.ValidationRules;
+
+                    foreach(var rule in ValidationRules)
+                    {
+                        rule.ResultChanged += ValidationResultChangedCallback;
+                    }
+                    observedProperties = ValidationRules.SelectMany(
+                        rule => rule.Signature.Select(dep => dep.TargetProperty.Name)).ToArray();
+                }
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the ValidationEngine class.
         /// </summary>
         /// <param name="rulesProvider"></param>
         public ValidationEngine(IValidationRulesProvider<TResult> rulesProvider)
         {
-            this.rulesProvider = rulesProvider;
-            ValidationRules = rulesProvider.ValidationRules;
-
-            foreach(var rule in ValidationRules)
-            {
-                rule.ResultChanged += ValidationResultChangedCallback;
-            }
-            observedProperties = ValidationRules.SelectMany(
-                rule => rule.Signature.Select(dep => dep.TargetProperty.Name)).ToArray();
+            RulesProvider = rulesProvider;
         }
         /// <summary>
         /// Method that invokes all matching validation rules for the given object and 
@@ -88,10 +119,7 @@ namespace EntityGraph.Validation
         /// </summary>
         public void Dispose()
         {
-            foreach(var rule in ValidationRules)
-            {
-                rule.ResultChanged -= ValidationResultChangedCallback;
-            }
+            RulesProvider = null;
         }
         /// <summary>
         /// Event handler that is called when the parameterObjectBindings of any of the validation rules changes.
@@ -109,8 +137,6 @@ namespace EntityGraph.Validation
                    where rule.Signature.Any(dep => dep.TargetProperty.Name == propertyName)
                    select rule;
         }
-
-        private IValidationRulesProvider<TResult> rulesProvider;
 
         /// <summary>
         /// Gets or sets the collection of validation rules for this validation engine.

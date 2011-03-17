@@ -1,7 +1,7 @@
 ﻿using System;
-using EntityGraph.RIA.Validation;
-using EntityGraph.Validation;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using EntityGraph.Validation;
 
 namespace EntityGraph.RIA.Validation
 {
@@ -37,11 +37,19 @@ namespace EntityGraph.RIA.Validation
         /// </summary>
         public string Message { get; set; }
         /// <summary>
-        /// Initializes a new instance of the MandatoryValidator class.
+        /// Initializes a new instance of the MandatoryValidator class using an array of ValidationRuleDependencies.
         /// </summary>
         /// <param name="signature"></param>
         public MandatoryValidator(params ValidationRuleDependency[] signature)
             : base(signature)
+        {
+        }
+        /// <summary>
+        /// Initializes a new instance of the MandatoryValidator class using a givenSignature.
+        /// </summary>
+        /// <param name="signature"></param>
+        public MandatoryValidator(Signature signature)
+            : base(signature.ToArray())
         {
         }
         /// <summary>
