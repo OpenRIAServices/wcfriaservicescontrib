@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel.DomainServices.Client;
-using EntityGraph;
-using EntityGraph.RIA;
+using RiaServicesContrib;
+using RiaServicesContrib.DomainServices.Client;
 using EntityGraphTest.Web;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -249,19 +249,19 @@ namespace EntityGraphTest.Tests
                 {
                     B b = loadOp.Entities.SingleOrDefault();
                     Assert.IsFalse(ctx.HasChanges);
-                    var copy = b.Copy(new EntityGraph.EntityGraphShape().Edge<B, A>(B => B.A).Edge<B, C>(B => B.C));
+                    var copy = b.Copy(new RiaServicesContrib.EntityGraphShape().Edge<B, A>(B => B.A).Edge<B, C>(B => B.C));
                     Assert.IsFalse(ctx.HasChanges);
                 });
             EnqueueTestComplete();
         }
         /// <summary>
         /// The method BuildEntityGraph (in Entitygraph.shared.cs) contains some Silverlight specific code to deal with a bug in 
-        /// RIA. This test checks that the workaround in EntityGraph is correct.
+        /// DomainServices.Client. This test checks that the workaround in RiaServicesContrib.EntityGraph is correct.
         /// </summary>
         [TestMethod]
         public void CopyWithNewEntityTest()
         {
-            a.B = new B(); // The RIA bug would make copy.B null (only for newly created entities).
+            a.B = new B(); // The DomainServices.Client bug would make copy.B null (only for newly created entities).
             var copy = a.Copy(new EntityGraphShape().Edge<A, D>(A => A.DSet).Edge<A, B>(A => A.BSet));
             Assert.IsNotNull(copy.B);
         }

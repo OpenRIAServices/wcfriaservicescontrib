@@ -3,19 +3,13 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using EntityGraph.Validation;
+using RiaServicesContrib.Validation;
 
-namespace EntityGraph
+namespace RiaServicesContrib
 {
-    /// <summary>
-    /// Class that implements cross-entity validation for entity graphs.
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="TBase"></typeparam>
-    /// <typeparam name="TValidationResult"></typeparam>
-    public partial class EntityGraph<TEntity, TBase, TValidationResult>
+    public partial class EntityGraph<TEntity, TValidationResult>
     {
-        private ValidationEngine<TBase, TValidationResult> Validator;
+        private ValidationEngine<TEntity, TValidationResult> Validator;
 
         private static IValidationRulesProvider<TValidationResult> _defaultRulesProvider;
         /// <summary>
@@ -65,7 +59,7 @@ namespace EntityGraph
         internal void InitGraphValidation()
         {
             var rulesProvider = new MEFValidationRulesProvider<TValidationResult>();
-            Validator = new ValidationEngine<TBase, TValidationResult>(rulesProvider);
+            Validator = new ValidationEngine<TEntity, TValidationResult>(rulesProvider);
             Validator.ValidationResultChanged += Validator_ValidationResultChanged;
 
             this.EntityRelationGraphResetted += ValidatorRefresh;
@@ -96,21 +90,21 @@ namespace EntityGraph
         /// <param name="membersInError"></param>
         /// <param name="validationResult"></param>
         /// <returns></returns>
-        protected abstract bool HasValidationResult(TBase entity, string[] membersInError, TValidationResult validationResult);
+        protected abstract bool HasValidationResult(TEntity entity, string[] membersInError, TValidationResult validationResult);
         /// <summary>
         /// Method that clears the validation result of the given entity, for the given members.
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="membersInError"></param>
         /// <param name="validationResult"></param>
-        protected abstract void ClearValidationResult(TBase entity, string[] membersInError, TValidationResult validationResult);
+        protected abstract void ClearValidationResult(TEntity entity, string[] membersInError, TValidationResult validationResult);
         /// <summary>
         /// Method that sets a validation error for the given memebrs of the given entity.
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="membersInError"></param>
         /// <param name="validationResult"></param>
-        protected abstract void SetValidationResult(TBase entity, string[] membersInError, TValidationResult validationResult);
+        protected abstract void SetValidationResult(TEntity entity, string[] membersInError, TValidationResult validationResult);
 
         /// <summary>
         /// callback method that is called when the entity graph has been reset. In that case 
@@ -136,12 +130,12 @@ namespace EntityGraph
             var bindingGroups = from binding in rule.RuleBinding.DependencyBindings
                                 where
                                 binding.ValidationRuleDependency.InputOnly == false &&
-                                binding.TargetOwnerObject is TBase
+                                binding.TargetOwnerObject is TEntity
                                 group binding by binding.TargetOwnerObject;
 
             foreach(var bindingGroup in bindingGroups)
             {
-                var entity = bindingGroup.Key as TBase;
+                var entity = bindingGroup.Key as TEntity;
                 var membersInError = bindingGroup.Select(binding => binding.ValidationRuleDependency.TargetProperty.Name).Distinct().ToArray();
 
                 if(HasValidationResult(entity, membersInError, e.OldValidationResult))

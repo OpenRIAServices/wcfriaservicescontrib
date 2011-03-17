@@ -2,9 +2,9 @@
 using System.Linq;
 using System.ServiceModel.DomainServices.Client;
 
-namespace EntityGraph.RIA
+namespace RiaServicesContrib.DomainServices.Client
 {
-    public partial class EntityGraph<TEntity> 
+    public partial class EntityGraph 
     {
         [Initialize]
         internal void SetupHasChanges()

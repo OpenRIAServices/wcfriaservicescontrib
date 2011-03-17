@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace EntityGraph.Validation
+namespace RiaServicesContrib.Validation
 {
     /// <summary>
     /// Represents a collection of validation rules.

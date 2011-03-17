@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace EntityGraph
+namespace RiaServicesContrib
 {
     public class EntityGraphEdge
     {
@@ -31,7 +31,7 @@ namespace EntityGraph
             }
             return this;
         }
-        // We can't use TBase as the return type of EdgeEnumType, because IEnumerable<T> is not 
+        // We can't use TEntity as the return type of EdgeEnumType, because IEnumerable<T> is not 
         // covariant in Silverlight!!. Therefore a second type parameter TRHS is needed.
         public EntityGraphShape Edge<TLHS, TRHS>(Expression<EdgeEnumType<TLHS, TRHS>> edge)
         {

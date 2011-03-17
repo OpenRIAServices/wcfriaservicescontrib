@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.ServiceModel.DomainServices.Client;
-using EntityGraph.Validation;
+using RiaServicesContrib.Validation;
 
-namespace EntityGraph.RIA.Validation
+namespace RiaServicesContrib.DomainServices.Client.Validation
 {
     /// <summary>
-    /// WCF RIA services-specific instantiation of the EntityGraph.Validation.EntityValidator class.
+    /// WCF DomainServices.Client services-specific instantiation of the RiaServicesContrib.EntityGraph.Validation.EntityValidator class.
     /// </summary>
     public class EntityValidator : EntityValidator<Entity, ValidationResult>
     {

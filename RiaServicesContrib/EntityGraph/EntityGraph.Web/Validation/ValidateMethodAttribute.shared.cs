@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EntityGraph.Validation
+namespace RiaServicesContrib.Validation
 {
     /// <summary>
     /// Attribute that marks a method as a validation method.

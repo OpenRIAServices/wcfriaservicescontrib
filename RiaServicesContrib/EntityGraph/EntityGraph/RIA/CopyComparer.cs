@@ -5,16 +5,16 @@ using RiaServicesContrib;
 using RiaServicesContrib.Extensions;
 using System.Collections.Generic;
 
-namespace EntityGraph.RIA
+namespace RiaServicesContrib.DomainServices.Client
 {
-    public partial class EntityGraph<TEntity>
+    public partial class EntityGraph
     {
         /// <summary>
         /// Determines whether two entity graphs are copies of eachother by member-wise comparing all entities in both graphs.
         /// </summary>
         /// <param name="graph"></param>
         /// <returns></returns>
-        public bool IsCopyOf<T>(EntityGraph<T> graph) where T : Entity
+        public bool IsCopyOf(EntityGraph graph)
         {
             return EntityGraphEqual(graph, (e1, e2) => e1 != e2 && MemberwiseCompare(e1, e2, false));
         }

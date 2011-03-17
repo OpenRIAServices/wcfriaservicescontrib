@@ -1,11 +1,11 @@
 ﻿using System.ServiceModel.DomainServices.Client;
-using EntityGraph;
+using RiaServicesContrib;
 using EntityGraphTest.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
 
-using EntityGraph.RIA;
+using RiaServicesContrib.DomainServices.Client;
 
 namespace EntityGraphTest.Tests
 {

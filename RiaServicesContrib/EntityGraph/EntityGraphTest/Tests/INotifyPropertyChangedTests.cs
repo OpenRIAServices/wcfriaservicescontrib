@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-using EntityGraph.RIA;
+using RiaServicesContrib.DomainServices.Client;
 using EntityGraphTest.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -13,7 +13,7 @@ namespace EntityGraphTest.Tests
         public void INotifyPropertyChangedTest() {
             bool propertyChangedHandlerVisited = false;
 
-            EntityGraph<A> gr = a.EntityGraph();
+            EntityGraph gr = a.EntityGraph();
             gr.PropertyChanged += (sender, args) =>
             {
                 propertyChangedHandlerVisited = true;
@@ -25,7 +25,7 @@ namespace EntityGraphTest.Tests
         public void AddAssociationTest()
         {
             B newB = new B();
-            EntityGraph<A> gr = a.EntityGraph();
+            EntityGraph gr = a.EntityGraph();
             Assert.IsFalse(gr.Contains(newB));
 
             a.B = newB;
@@ -34,7 +34,7 @@ namespace EntityGraphTest.Tests
         [TestMethod]
         public void RemoveAssociationTest()
         {
-            EntityGraph<A> gr = a.EntityGraph();
+            EntityGraph gr = a.EntityGraph();
             Assert.IsTrue(gr.Contains(b));
 
             a.B = null; ;

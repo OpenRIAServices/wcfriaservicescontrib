@@ -6,7 +6,7 @@ using System.ComponentModel.Composition.ReflectionModel;
 using System.Linq;
 using System.Reflection;
 
-namespace EntityGraph.Validation
+namespace RiaServicesContrib.Validation
 {
     /// <summary>
     /// Class that holds the singleton AggregateCatalog for storing entity validation rules 

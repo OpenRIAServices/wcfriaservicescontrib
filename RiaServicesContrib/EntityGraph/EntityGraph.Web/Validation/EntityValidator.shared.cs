@@ -3,7 +3,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 
-namespace EntityGraph.Validation
+namespace RiaServicesContrib.Validation
 {
     /// <summary>
     /// Class that implements signature-bsaed validation for single entities.

@@ -1,4 +1,4 @@
-﻿using EntityGraph.RIA;
+﻿using RiaServicesContrib.DomainServices.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace EntityGraphTest.Tests

@@ -1,14 +1,15 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using EntityGraph.Validation;
+using RiaServicesContrib;
+using RiaServicesContrib.Validation;
 
-namespace EntityGraph.RIA.Validation
+namespace RiaServicesContrib.DomainServices.Client.Validation
 {
     /// <summary>
     /// This class is similar (but simpler) to System.ComponentModel.DataAnnotations.RequiredAttribute.
-    /// Its purpose is to demonstrate that the validation mechanism in RIA.EntityValidator
-    /// can support similar property-level validation as with the RIA validation mechanism.
+    /// Its purpose is to demonstrate that the validation mechanism in DomainServices.Client.EntityValidator
+    /// can support similar property-level validation as with the DomainServices.Client validation mechanism.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
     public class MandatoryAttribute : ValidationAttribute

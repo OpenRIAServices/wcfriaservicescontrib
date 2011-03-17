@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using EntityGraph.Validation;
+using RiaServicesContrib.Validation;
 
-namespace EntityGraph.RIA.Validation
+namespace RiaServicesContrib.DomainServices.Client.Validation
 {
     /// <summary>
     /// Abstract base class for attribute validators.
-    /// This is a WCF RIA services-specific instantation of the 
-    /// EntityGraph.Validation.AttributeValidator class.
+    /// This is a WCF DomainServices.Client services-specific instantation of the 
+    /// RiaServicesContrib.EntityGraph.Validation.AttributeValidator class.
     /// </summary>
     public abstract class AttributeValidator : AttributeValidator<ValidationResult>
     {

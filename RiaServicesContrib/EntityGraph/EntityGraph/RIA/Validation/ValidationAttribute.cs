@@ -2,15 +2,15 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 using System.Reflection;
-using EntityGraph.Validation;
+using RiaServicesContrib.Validation;
 
-namespace EntityGraph.RIA.Validation
+namespace RiaServicesContrib.DomainServices.Client.Validation
 {
     /// <summary>
     /// Abstract base class that implements attribute-based validation.
     /// 
-    /// This is a WCF RIA services-specific implementation of the 
-    /// EntityGraph.Validation.IValidationAttribute interface.
+    /// This is a WCF DomainServices.Client services-specific implementation of the 
+    /// RiaServicesContrib.EntityGraph.Validation.IValidationAttribute interface.
     /// 
     /// Notes:
     /// This class derives from Attribute. Since we don't have multiple inheritance,

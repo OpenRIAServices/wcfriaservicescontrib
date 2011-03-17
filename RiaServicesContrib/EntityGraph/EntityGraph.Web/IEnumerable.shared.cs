@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 
-namespace EntityGraph
+namespace RiaServicesContrib
 {
-    public partial class EntityGraph<TEntity, TBase, TValidationResult> : IEnumerable<TBase>
+    public partial class EntityGraph<TEntity, TValidationResult> : IEnumerable<TEntity>
     {
-        public IEnumerator<TBase> GetEnumerator() {
+        public IEnumerator<TEntity> GetEnumerator() {
             return EntityRelationGraph.GetEnumerator();
         }
 

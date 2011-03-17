@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using EntityGraph.Validation;
+using RiaServicesContrib.Validation;
 
-namespace EntityGraph.RIA.Validation
+namespace RiaServicesContrib.DomainServices.Client.Validation
 {
     /// <summary>
     /// This validation attribute verifies that a collection does not contain duplicate elements

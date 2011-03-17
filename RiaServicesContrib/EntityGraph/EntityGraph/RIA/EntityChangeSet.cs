@@ -2,9 +2,9 @@
 using System.Collections.ObjectModel;
 using System.ServiceModel.DomainServices.Client;
 
-namespace EntityGraph.RIA
+namespace RiaServicesContrib.DomainServices.Client
 {
-    public partial class EntityGraph<TEntity> where TEntity : Entity
+    public partial class EntityGraph
     {
         public EntityGraphChangeSet GetChanges()
         {

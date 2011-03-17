@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 
-namespace EntityGraph
+namespace RiaServicesContrib
 {
     internal class InitializeAttribute : Attribute
     {
@@ -15,9 +13,8 @@ namespace EntityGraph
     {
     }
 
-    public abstract partial class EntityGraph<TEntity, TBase, TValidationResult>
-        where TEntity : class, TBase
-        where TBase : class
+    public abstract partial class EntityGraph<TEntity, TValidationResult>
+        where TEntity : class
         where TValidationResult : class
     {
         public TEntity Source { get; private set; }
@@ -38,14 +35,14 @@ namespace EntityGraph
             }
         }
 
-        private EntityRelationGraph<TBase> _entityRelationGraph;
-        protected EntityRelationGraph<TBase> EntityRelationGraph
+        private EntityRelationGraph<TEntity> _entityRelationGraph;
+        protected EntityRelationGraph<TEntity> EntityRelationGraph
         {
             get
             {
                 if(_entityRelationGraph == null)
                 {
-                    _entityRelationGraph = new EntityRelationGraph<TBase>();
+                    _entityRelationGraph = new EntityRelationGraph<TEntity>();
                     BuildEntityGraph(Source, _entityRelationGraph);
                 }
                 return _entityRelationGraph;
@@ -62,9 +59,9 @@ namespace EntityGraph
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public TEntity GraphMap(Func<TBase, TBase> action)
+        public TEntity GraphMap(Func<TEntity, TEntity> action)
         {
-            var nodeMap = new Dictionary<TBase, TBase>();
+            var nodeMap = new Dictionary<TEntity, TEntity>();
 
             nodeMap = EntityRelationGraph.Nodes.Aggregate(nodeMap, (nm, graphNode) =>
             {
@@ -73,7 +70,7 @@ namespace EntityGraph
             }
             );
             BuildEntityGraph(nodeMap, EntityRelationGraph);
-            return nodeMap[Source] as TEntity;
+            return nodeMap[Source];
         }
 
         /// <summary>
@@ -84,11 +81,11 @@ namespace EntityGraph
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="graph"></param>
-        private void BuildEntityGraph(TBase entity, EntityRelationGraph<TBase> graph)
+        private void BuildEntityGraph(TEntity entity, EntityRelationGraph<TEntity> graph)
         {
             if(graph.Nodes.Any(n => n.Node == entity))
                 return;
-            EntityRelation<TBase> node = new EntityRelation<TBase>() { Node = entity };
+            EntityRelation<TEntity> node = new EntityRelation<TEntity>() { Node = entity };
             graph.Nodes.Add(node);
 
             foreach(PropertyInfo association in GraphShape.OutEdges(entity))
@@ -96,8 +93,8 @@ namespace EntityGraph
                 if(typeof(IEnumerable).IsAssignableFrom(association.PropertyType))
                 {
                     IEnumerable assocList = (IEnumerable)association.GetValue(entity, null);
-                    node.ListEdges.Add(association, new List<TBase>());
-                    foreach(TBase e in assocList)
+                    node.ListEdges.Add(association, new List<TEntity>());
+                    foreach(TEntity e in assocList)
                     {
                         if(e != null)
                         {
@@ -108,7 +105,7 @@ namespace EntityGraph
                 }
                 else
                 {
-                    TBase e = (TBase)association.GetValue(entity, null);
+                    TEntity e = (TEntity)association.GetValue(entity, null);
                     if(e != null)
                     {
                         node.SingleEdges.Add(association, e);
@@ -123,7 +120,7 @@ namespace EntityGraph
         /// </summary>
         /// <param name="nodes"></param>
         /// <param name="graph"></param>
-        private static void BuildEntityGraph(Dictionary<TBase, TBase> nodes, EntityRelationGraph<TBase> graph)
+        private static void BuildEntityGraph(Dictionary<TEntity, TEntity> nodes, EntityRelationGraph<TEntity> graph)
         {
             foreach(var n in graph.Nodes)
             {
@@ -158,9 +155,9 @@ namespace EntityGraph
                 // added to the context as a side effect.
                 foreach(PropertyInfo association in GetAssociations(newEntity))
                 {
-                    if(association.PropertyType.IsSubclassOf(typeof(TBase)))
+                    if(association.PropertyType.IsSubclassOf(typeof(TEntity)))
                     {
-                        TBase e = (TBase)association.GetValue(n.Node, null);
+                        TEntity e = (TEntity)association.GetValue(n.Node, null);
                         if(e != null && e is System.ServiceModel.DomainServices.Client.Entity)
                         {
                             if ((e as System.ServiceModel.DomainServices.Client.Entity).GetOriginal() == null)
@@ -183,16 +180,16 @@ namespace EntityGraph
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        private static IEnumerable<PropertyInfo> GetAssociations(TBase obj)
+        private static IEnumerable<PropertyInfo> GetAssociations(TEntity obj)
         {
             BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.Instance;
             var qry = from p in obj.GetType().GetProperties(bindingAttr)
-                      where p.IsDefined(typeof(AssociationAttribute), true)
+                      where p.IsDefined(typeof(System.ComponentModel.DataAnnotations.AssociationAttribute), true)
                       select p;
             return qry;
         }
 #endif
-        private static IEnumerable<PropertyInfo> GetNeigborsByStringEdges(TBase entity, string[] edges)
+        private static IEnumerable<PropertyInfo> GetNeigborsByStringEdges(TEntity entity, string[] edges)
         {
             string name = entity.GetType().Name;
 

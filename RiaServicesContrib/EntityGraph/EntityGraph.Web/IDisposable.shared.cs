@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Reflection;
 
-namespace EntityGraph
+namespace RiaServicesContrib
 {
-    public partial class EntityGraph<TEntity, TBase, TValidationResult> : IDisposable
+    public partial class EntityGraph<TEntity, TValidationResult> : IDisposable
     {
         public void Dispose() {
             var type = this.GetType();

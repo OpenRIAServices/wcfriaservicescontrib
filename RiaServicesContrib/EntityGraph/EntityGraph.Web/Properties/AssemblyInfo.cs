@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("EntityGraph.Web")]
+[assembly: AssemblyTitle("RiaServicesContrib.EntityGraph.Web")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Philips")]
-[assembly: AssemblyProduct("EntityGraph.Web")]
+[assembly: AssemblyProduct("RiaServicesContrib.EntityGraph.Web")]
 [assembly: AssemblyCopyright("Copyright © Philips 2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

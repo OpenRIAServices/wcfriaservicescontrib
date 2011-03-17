@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 
-namespace EntityGraph
+namespace RiaServicesContrib
 {
-    public partial class EntityGraph<TEntity, TBase, TValidationResult>
+    public partial class EntityGraph<TEntity, TValidationResult>
     {
         /// <summary>
         /// Determines whether two entity graphs are equal using the given comparer function.
@@ -11,7 +11,7 @@ namespace EntityGraph
         /// <param name="graph"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public bool EntityGraphEqual<T>(EntityGraph<T, TBase, TValidationResult> graph, Func<TBase, TBase, bool> comparer) where T : class, TBase
+        public bool EntityGraphEqual(EntityGraph<TEntity, TValidationResult> graph, Func<TEntity, TEntity, bool> comparer)
         {
             if(this.Count() != graph.Count())
                 return false;
@@ -24,7 +24,7 @@ namespace EntityGraph
         /// </summary>
         /// <param name="graph"></param>
         /// <returns></returns>
-        public bool EntityGraphEqual<T>(EntityGraph<T, TBase, TValidationResult> graph) where T : class, TBase
+        public bool EntityGraphEqual(EntityGraph<TEntity, TValidationResult> graph)
         {
             return EntityGraphEqual(graph, (e1, e2) => e1 == e2);
         }

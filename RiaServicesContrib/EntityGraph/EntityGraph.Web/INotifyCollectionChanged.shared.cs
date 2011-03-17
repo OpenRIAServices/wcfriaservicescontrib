@@ -1,8 +1,8 @@
 ﻿using System.Collections.Specialized;
 
-namespace EntityGraph
+namespace RiaServicesContrib
 {
-    public partial class EntityGraph<TEntity, TBase, TValidationResult> : INotifyCollectionChanged 
+    public partial class EntityGraph<TEntity, TValidationResult> : INotifyCollectionChanged 
     {
         [Initialize]
         internal void SetupINotifyCollectionChanged() {

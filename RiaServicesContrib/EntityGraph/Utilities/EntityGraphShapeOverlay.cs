@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
-using EntityGraph;
+using RiaServicesContrib;
 using Utilities.graphviz;
 
 namespace Utilities
@@ -20,10 +20,10 @@ namespace Utilities
         {
             foreach(var edgeExpr in EntityGraphShape)
             {
-                var lhsType = edgeExpr.Item1;
-                var lhsDeclaringType = edgeExpr.Item2.DeclaringType;
-                var rhsType = edgeExpr.Item2.PropertyType;
-                var edgeName = edgeExpr.Item2.Name;
+                var lhsType = edgeExpr.From;
+                var lhsDeclaringType = edgeExpr.To.DeclaringType;
+                var rhsType = edgeExpr.To.PropertyType;
+                var edgeName = edgeExpr.To.Name;
                 if(typeof(IEnumerable).IsAssignableFrom(rhsType) && rhsType.IsGenericType)
                 {
                     rhsType = rhsType.GetGenericArguments()[0];

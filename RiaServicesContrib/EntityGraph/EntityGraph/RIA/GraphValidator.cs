@@ -2,9 +2,9 @@
 using System.Linq;
 using System.ServiceModel.DomainServices.Client;
 
-namespace EntityGraph.RIA
+namespace RiaServicesContrib.DomainServices.Client
 {
-    public partial class EntityGraph<TEntity>
+    public partial class EntityGraph
     {
         /// <summary>
         /// Method that clears the validation result of the given entity, for the given members.

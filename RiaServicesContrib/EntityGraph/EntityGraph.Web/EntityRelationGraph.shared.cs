@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace EntityGraph
+namespace RiaServicesContrib
 {
     public class EntityRelation<NType>
     {

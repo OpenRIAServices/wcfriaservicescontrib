@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ServiceModel.DomainServices.Client;
 
-namespace EntityGraph.RIA
+namespace RiaServicesContrib.DomainServices.Client
 {
     public class EntityGraphChangeSet : IEnumerable<Entity>, IEnumerable
     {

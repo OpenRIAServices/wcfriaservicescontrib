@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace EntityGraph.Validation
+namespace RiaServicesContrib.Validation
 {
     /// <summary>
     /// Interface for attribute-based validation.

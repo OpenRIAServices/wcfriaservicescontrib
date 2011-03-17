@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EntityGraph.Validation
+namespace RiaServicesContrib.Validation
 {
     /// <summary>
     /// Class that is used to notify that the result of a validation rule has changed. 

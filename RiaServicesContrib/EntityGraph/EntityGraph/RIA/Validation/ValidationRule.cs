@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using EntityGraph.Validation;
+using RiaServicesContrib.Validation;
 
-namespace EntityGraph.RIA.Validation
+namespace RiaServicesContrib.DomainServices.Client.Validation
 {
     /// <summary>
-    /// WCF RIA services specific instantiation of the EntityGraph.Validation.ValidationRule class.
+    /// WCF DomainServices.Client services specific instantiation of the RiaServicesContrib.EntityGraph.Validation.ValidationRule class.
     /// </summary>
     public abstract class ValidationRule : ValidationRule<ValidationResult>
     {

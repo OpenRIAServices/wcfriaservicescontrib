@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.ServiceModel.DomainServices.Client;
-using EntityGraph.RIA;
+using RiaServicesContrib.DomainServices.Client;
 using EntityGraphTest.Web;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -12,7 +12,7 @@ namespace EntityGraphTest.Tests
     {
         [TestMethod]
         public void DetachTest() {
-            EntityGraph<A> gr = a.EntityGraph();
+            EntityGraph gr = a.EntityGraph();
             EntityGraphTestDomainContext ctx = new EntityGraphTestDomainContext();
             a.BSet.Add(new B());
 
@@ -27,7 +27,7 @@ namespace EntityGraphTest.Tests
         public void DetachWithNonIncludedNewEntityTest()
         {
             EntityGraphTestDomainContext ctx = new EntityGraphTestDomainContext();
-            EntityGraph<A> gr = a.EntityGraph();
+            EntityGraph gr = a.EntityGraph();
             ctx.As.Add(a);
             var newB = new B();
             a.BNotInGraph = newB;
@@ -53,7 +53,7 @@ namespace EntityGraphTest.Tests
             EnqueueCallback(
                 () =>
                 {
-                    EntityGraph<A> gr = a.EntityGraph();
+                    EntityGraph gr = a.EntityGraph();
                     B existingB = ctx.Bs.Single();
                     ctx.As.Add(a);
                     a.BNotInGraph = existingB;
@@ -78,7 +78,7 @@ namespace EntityGraphTest.Tests
             EnqueueCallback(
                 () =>
                 {
-                    EntityGraph<A> gr = a.EntityGraph();
+                    EntityGraph gr = a.EntityGraph();
                     B existingB = ctx.Bs.Single();
                     ctx.As.Add(a);
                     a.BSet.Add(new B());

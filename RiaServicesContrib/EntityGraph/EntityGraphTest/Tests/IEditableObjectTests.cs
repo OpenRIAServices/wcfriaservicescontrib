@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Linq;
 using System.ServiceModel.DomainServices.Client;
-using EntityGraph.RIA;
+using RiaServicesContrib.DomainServices.Client;
 using EntityGraphTest.Web;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -113,8 +113,8 @@ namespace EntityGraphTest.Tests
 
                     // Here we have a bug in IEditableObject (http://forums.silverlight.net/forums/p/204333/478308.aspx#478308)
                     Assert.IsTrue(a.BId == newB.Id); // Succeeds 
-                    Assert.IsTrue(a.B != newB); // Potential RIA bug, (should be equal to newB)
-                    Assert.IsTrue(a.B == null); // Potential RIA bug, (should be equal to newB)
+                    Assert.IsTrue(a.B != newB); // Potential DomainServices.Client bug, (should be equal to newB)
+                    Assert.IsTrue(a.B == null); // Potential DomainServices.Client bug, (should be equal to newB)
                 });
             EnqueueTestComplete();
         }

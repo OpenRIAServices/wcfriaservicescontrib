@@ -1,4 +1,4 @@
-﻿namespace EntityGraph.Validation
+﻿namespace RiaServicesContrib.Validation
 {
     /// <summary>
     /// Interface for attribute validators. They have a validate method with a fixed signature.

@@ -1,5 +1,5 @@
 ﻿
-namespace EntityGraph.Validation
+namespace RiaServicesContrib.Validation
 {
     /// <summary>
     /// Class that represents a collection of dependency bindings for a validation rule.

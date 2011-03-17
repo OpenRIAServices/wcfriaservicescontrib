@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 
-namespace EntityGraph
+namespace RiaServicesContrib
 {
     /// <summary>
     /// Interface with methods to define the shape of an entity graph by means of its edges.

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EntityGraph.Validation
+namespace RiaServicesContrib.Validation
 {
     /// <summary>
     /// Class that represents a binding between a dependency parameter and an object.

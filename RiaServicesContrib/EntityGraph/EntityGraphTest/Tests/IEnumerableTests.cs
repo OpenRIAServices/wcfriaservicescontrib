@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using EntityGraph.RIA;
+using RiaServicesContrib.DomainServices.Client;
 using EntityGraphTest.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -9,13 +9,13 @@ namespace EntityGraphTest.Tests
     public class IEnumerableTests : EntityGraphTest{
         [TestMethod]
         public void IEnumerableCountGraphTest() {
-            EntityGraph<A> gr = a.EntityGraph();
+            EntityGraph gr = a.EntityGraph();
             a.BSet.Add(new B());
             Assert.IsTrue(gr.Count() == 5, "Graph contains unexpected number of elements");
         }
         [TestMethod]
         public void IEnumerableCountNamedGraphTest() {
-            EntityGraph<A> gr = a.EntityGraph("MyGraph");
+            EntityGraph gr = a.EntityGraph("MyGraph");
             a.BSet.Add(new B());
             Assert.IsTrue(gr.Count() == 4, "Graph contains unexpected number of elements");
         }
@@ -24,7 +24,7 @@ namespace EntityGraphTest.Tests
         public void IEnumerableTest() {
             B newB = new B();
             a.BSet.Add(newB);
-            EntityGraph<A> eg = a.EntityGraph();
+            EntityGraph eg = a.EntityGraph();
             Assert.AreEqual(a, eg.OfType<A>().Single());
             Assert.AreEqual(c, eg.OfType<C>().Single());
             Assert.AreEqual(d, eg.OfType<D>().Single());
@@ -39,7 +39,7 @@ namespace EntityGraphTest.Tests
         public void IEnumerableNamedGraphTest() {
             B newB = new B();
             a.BSet.Add(newB);
-            EntityGraph<A> eg = a.EntityGraph("MyGraph");
+            EntityGraph eg = a.EntityGraph("MyGraph");
             Assert.AreEqual(a, eg.OfType<A>().Single());
             Assert.AreEqual(b, eg.OfType<B>().Single());
             Assert.AreEqual(c, eg.OfType<C>().Single());

@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 
-namespace EntityGraph.RIA
+namespace RiaServicesContrib.DomainServices.Client
 {
-    public partial class EntityGraph<TEntity> : IEditableObject 
+    public partial class EntityGraph : IEditableObject 
     {
         private bool EditStarted { get; set; }
         public void BeginEdit() {

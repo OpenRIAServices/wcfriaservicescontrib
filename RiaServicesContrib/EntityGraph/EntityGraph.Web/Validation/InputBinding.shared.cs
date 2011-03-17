@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
-namespace EntityGraph.Validation
+
+namespace RiaServicesContrib.Validation
 {
     /// <summary>
     /// Class that represent a binding for a validation rule dependency

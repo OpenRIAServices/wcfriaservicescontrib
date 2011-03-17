@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 
-namespace EntityGraph
+namespace RiaServicesContrib
 {
     public class EntityGraphAttributeShape : IEntityGraphShape
     {
@@ -26,7 +26,7 @@ namespace EntityGraph
         /// </summary>
         public string Name { get; private set; }
         /// <summary>
-        /// Returns an IEnumerable of PropertyInfo objects for properties which have the "EntityGraph" attribute. 
+        /// Returns an IEnumerable of PropertyInfo objects for properties which have the "RiaServicesContrib.EntityGraph" attribute. 
         /// If Name is not null, the name of the entity graph attribute shape should match the name of the attribute.
         /// </summary>
         /// <param name="entity"></param>

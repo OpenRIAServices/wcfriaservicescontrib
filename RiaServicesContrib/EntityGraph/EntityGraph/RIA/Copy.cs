@@ -5,15 +5,15 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.ServiceModel.DomainServices.Client;
 
-namespace EntityGraph.RIA
+namespace RiaServicesContrib.DomainServices.Client
 {
-    public partial class EntityGraph<TEntity> 
+    public partial class EntityGraph 
     {
         /// <summary>
         /// Method that copies an entity and, recursively, all its associations that are included in the entity graph
         /// </summary>
         /// <returns></returns>
-        public TEntity Copy() 
+        public Entity Copy() 
         {
             return GraphMap(CopyDataMembers);
         }

@@ -1,6 +1,6 @@
 ﻿using EntityGraphTest.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using EntityGraph.Validation;
+using RiaServicesContrib.Validation;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using System.ServiceModel.DomainServices.Client;

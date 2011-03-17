@@ -1,4 +1,4 @@
-﻿namespace EntityGraph.Validation
+﻿namespace RiaServicesContrib.Validation
 {
     /// <summary>
     /// Abstract base class for attribute validators.

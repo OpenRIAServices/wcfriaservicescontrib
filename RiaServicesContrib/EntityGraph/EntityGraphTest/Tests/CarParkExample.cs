@@ -3,10 +3,10 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.ServiceModel.DomainServices.Client;
-using EntityGraph;
-using EntityGraph.RIA;
-using EntityGraph.RIA.Validation;
-using EntityGraph.Validation;
+using RiaServicesContrib;
+using RiaServicesContrib.DomainServices.Client;
+using RiaServicesContrib.DomainServices.Client.Validation;
+using RiaServicesContrib.Validation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace EntityGraphTest.Tests

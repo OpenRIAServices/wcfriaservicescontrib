@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using EntityGraph.RIA;
+using RiaServicesContrib.DomainServices.Client;
 using EntityGraphTest.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -11,7 +11,7 @@ namespace EntityGraphTest.Tests
         [TestMethod]
         public void ICollectionChangedTest() {
             bool collectionChangedHandlerVisited = false;
-            EntityGraph<A> gr = a.EntityGraph();
+            EntityGraph gr = a.EntityGraph();
             gr.CollectionChanged += (sender, args) =>
             {
                 collectionChangedHandlerVisited = true;
@@ -21,7 +21,7 @@ namespace EntityGraphTest.Tests
         }
         [TestMethod]
         public void AddToEntityCollectionTest() {
-            EntityGraph<A> gr = a.EntityGraph();
+            EntityGraph gr = a.EntityGraph();
             var b = new B();
             a.BSet.Add(b);
             Assert.IsTrue(gr.Contains(b), "Entity graph does not contain entity b");
@@ -30,7 +30,7 @@ namespace EntityGraphTest.Tests
         public void RemoveFromEntityCollectionTest() {
             var b = new B();
             a.BSet.Add(b);
-            EntityGraph<A> gr = a.EntityGraph();
+            EntityGraph gr = a.EntityGraph();
             a.BSet.Remove(b);
             Assert.IsFalse(gr.Contains(b), "Entity graph still contains entity b");
         }

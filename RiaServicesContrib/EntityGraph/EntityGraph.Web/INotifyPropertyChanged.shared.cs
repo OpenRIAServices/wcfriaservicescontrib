@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Reflection;
 
-namespace EntityGraph
+namespace RiaServicesContrib
 {
-    public partial class EntityGraph<TEntity, TBase, TValidationResult> : INotifyPropertyChanged
+    public partial class EntityGraph<TEntity, TValidationResult> : INotifyPropertyChanged
     {
         /// <summary>
         /// handler to receive property changed events.

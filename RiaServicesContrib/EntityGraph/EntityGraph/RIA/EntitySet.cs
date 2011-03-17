@@ -1,8 +1,8 @@
 ﻿using System.ServiceModel.DomainServices.Client;
 
-namespace EntityGraph.RIA
+namespace RiaServicesContrib.DomainServices.Client
 {
-    public partial class EntityGraph<TEntity> 
+    public partial class EntityGraph
     {
         #region DetachEntityGraph
         /// <summary>
@@ -10,7 +10,7 @@ namespace EntityGraph.RIA
         /// The graph of entities is defined by associations which are marked with an entity graph attribute of type 'GraphType'.
         /// </summary>
         /// <param name="entitySet"></param>
-        public void DetachEntityGraph(EntitySet<TEntity> entitySet)
+        public void DetachEntityGraph<TEntity>(EntitySet<TEntity> entitySet) where TEntity : Entity
         {
             GraphMap(e => DetachAction(e, entitySet.EntityContainer));
         }
@@ -27,7 +27,7 @@ namespace EntityGraph.RIA
         /// The graph of entities is defined by the 'EntityGraphAttribute' attribute.
         /// </summary>
         /// <param name="entitySet"></param>
-        public void RemoveEntityGraph(EntitySet<TEntity> entitySet)
+        public void RemoveEntityGraph<TEntity>(EntitySet<TEntity> entitySet) where TEntity : Entity
         {
             GraphMap(e => RemoveAction(e, entitySet.EntityContainer));
         }

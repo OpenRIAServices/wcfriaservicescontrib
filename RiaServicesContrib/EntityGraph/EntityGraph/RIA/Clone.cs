@@ -2,15 +2,15 @@
 using System.Reflection;
 using System.ServiceModel.DomainServices.Client;
 
-namespace EntityGraph.RIA
+namespace RiaServicesContrib.DomainServices.Client
 {
-    public partial class EntityGraph<TEntity> 
+    public partial class EntityGraph 
     {
         /// <summary>
         /// Method that clones an entity and, recursively, all its associations that are included in the entity graph
         /// </summary>
         /// <returns></returns>
-        public TEntity Clone() 
+        public Entity Clone()
         {
             return GraphMap(CloneDataMembers);
         }
