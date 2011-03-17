@@ -7,13 +7,18 @@ using System.Reflection;
 
 namespace EntityGraph
 {
-    public class EntityGraphShape : IEntityGraphShape, IEnumerable<Tuple<Type, PropertyInfo>>
+    public class EntityGraphEdge
+    {
+        public Type From { get; set; }
+        public PropertyInfo To { get; set; }
+    }
+
+    public class EntityGraphShape : IEntityGraphShape, IEnumerable<EntityGraphEdge>
     {
         public delegate TTo EdgeType<in TFrom, out TTo>(TFrom from);
         public delegate IEnumerable<TTo> EdgeEnumType<in TFrom, TTo>(TFrom from);
 
-        private List<Tuple<Type, PropertyInfo>> edges = new List<Tuple<Type, PropertyInfo>>();
-
+        private List<EntityGraphEdge> edges = new List<EntityGraphEdge>();
         public EntityGraphShape Edge<TLHS, TRHS>(Expression<EdgeType<TLHS, TRHS>> edge)
         {
             var entityType = edge.Parameters.Single().Type;
@@ -22,7 +27,7 @@ namespace EntityGraph
                 var mexpr = (MemberExpression)edge.Body;
                 var propInfo = mexpr.Member as PropertyInfo;
                 if(entityType != null && propInfo != null)
-                    edges.Add(new Tuple<Type, PropertyInfo>(entityType, propInfo));
+                    edges.Add(new EntityGraphEdge { From = entityType, To = propInfo });
             }
             return this;
         }
@@ -36,17 +41,17 @@ namespace EntityGraph
                 var mexpr = (MemberExpression)edge.Body;
                 var propInfo = mexpr.Member as PropertyInfo;
                 if(entityType != null && propInfo != null)
-                    edges.Add(new Tuple<Type, PropertyInfo>(entityType, propInfo));
+                    edges.Add(new EntityGraphEdge { From = entityType, To = propInfo });
             }
             return this;
         }
         public IEnumerable<PropertyInfo> OutEdges(object entity)
         {
             var entityType = entity.GetType();
-            return this.Where(edge => edge.Item1.IsAssignableFrom(entityType)).Select(edge => edge.Item2).Distinct();
+            return this.Where(edge => edge.From.IsAssignableFrom(entityType)).Select(edge => edge.To).Distinct();
         }
 
-        public IEnumerator<Tuple<Type, PropertyInfo>> GetEnumerator()
+        public IEnumerator<EntityGraphEdge> GetEnumerator()
         {
             return edges.GetEnumerator();
         }
@@ -59,7 +64,7 @@ namespace EntityGraph
 
         public bool IsEdge(PropertyInfo edge)
         {
-            return edges.Any(e => e.Item2.Name == edge.Name && e.Item2.PropertyType.IsAssignableFrom(edge.PropertyType));
+            return edges.Any(e => e.To.Name == edge.Name && e.To.PropertyType.IsAssignableFrom(edge.PropertyType));
         }
     }
 }

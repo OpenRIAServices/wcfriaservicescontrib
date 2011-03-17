@@ -26,8 +26,8 @@ namespace EntityGraph
         /// </summary>
         public string Name { get; private set; }
         /// <summary>
-        /// Returns an IEnumerable of PropertyInfo objects for properties which have the "EntityGraph". If entityGraphname
-        /// is not null, the name of the entity graph should match entityGraphname.
+        /// Returns an IEnumerable of PropertyInfo objects for properties which have the "EntityGraph" attribute. 
+        /// If Name is not null, the name of the entity graph attribute shape should match the name of the attribute.
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
