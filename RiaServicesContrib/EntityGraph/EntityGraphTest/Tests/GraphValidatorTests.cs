@@ -103,7 +103,7 @@ namespace EntityGraphTest.Tests
 
             a.B = b;
 
-            var gr = a.EntityGraph();
+            var gr = a.EntityGraph(EntityGraphs.CircularGraphFull);
             Assert.IsFalse(b.HasValidationErrors);
 
             // Now we attach C to the entity graph, which should
@@ -114,7 +114,7 @@ namespace EntityGraphTest.Tests
         [TestMethod]
         public void AValidatorTest()
         {
-            var gr = a.EntityGraph();
+            var gr = a.EntityGraph(EntityGraphs.CircularGraphFull);
             AValidator.IsValidated = false;
             b.name = "hello";
             Assert.IsTrue(b.HasValidationErrors);
@@ -123,7 +123,7 @@ namespace EntityGraphTest.Tests
         [TestMethod]
         public void AValidatorTest2()
         {
-            var gr = a.EntityGraph();
+            var gr = a.EntityGraph(EntityGraphs.CircularGraphFull);
             AValidator.IsValidated = false;
             b.name = "hello";
             Assert.IsTrue(b.HasValidationErrors);
@@ -138,7 +138,7 @@ namespace EntityGraphTest.Tests
             MEFValidationRules.RegisterType(typeof(MultiPropertyValidator));
             a.name = "John";
             a.lastName = "John";
-            var gr = a.EntityGraph();
+            var gr = a.EntityGraph(EntityGraphs.CircularGraphFull);
             Assert.IsTrue(a.HasValidationErrors);
             var validationError = a.ValidationErrors.Single();
             Assert.IsTrue(validationError.MemberNames.Contains("name"));
@@ -154,7 +154,7 @@ namespace EntityGraphTest.Tests
             MEFValidationRules.RegisterType(typeof(InputOutputInputOnlyValidator));
             a.name = "John";
             a.lastName = "John";
-            var gr = a.EntityGraph();
+            var gr = a.EntityGraph(EntityGraphs.CircularGraphFull);
             Assert.IsTrue(a.HasValidationErrors);
             var validationError = a.ValidationErrors.Single();
             Assert.IsTrue(validationError.MemberNames.Contains("name"));
@@ -167,7 +167,7 @@ namespace EntityGraphTest.Tests
         [TestMethod]
         public void CustomRulesProviderTest()
         {
-            var gr = a.EntityGraph();
+            var gr = a.EntityGraph(EntityGraphs.CircularGraphFull);
             a.name = "Someone";
             gr.RulesProvider = new SimpleValidationRulesProvider<ValidationResult>
             {

@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel;
 using System.Linq;
 using System.ServiceModel.DomainServices.Client;
-using RiaServicesContrib.DomainServices.Client;
 using EntityGraphTest.Web;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RiaServicesContrib.DomainServices.Client;
 
 namespace EntityGraphTest.Tests
 {
@@ -18,7 +18,7 @@ namespace EntityGraphTest.Tests
             string oldNameForC = c.name;
             string oldNameForD = d.name;
 
-            var gr = a.EntityGraph();
+            var gr = a.EntityGraph(EntityGraphs.CircularGraphFull);
             gr.BeginEdit();
             a.name = "NewNameForA";
             b.name = "NewNameForB";
@@ -43,7 +43,7 @@ namespace EntityGraphTest.Tests
                 {
                     B existingB = loadOp.Entities.SingleOrDefault();
                     B b = new B();
-                    var gr = a.EntityGraph();
+                    var gr = a.EntityGraph(EntityGraphs.CircularGraphFull);
 
                     gr.BeginEdit();
                     // Adding a new entity (b) will fail, because this will not correctly raise the proper 
@@ -72,7 +72,7 @@ namespace EntityGraphTest.Tests
                 {
                     B existingB = loadOp.Entities.SingleOrDefault();
                     B b = new B();
-                    var gr = a.EntityGraph();
+                    var gr = a.EntityGraph(EntityGraphs.CircularGraphFull);
 
                     gr.BeginEdit();
                     ((IEditableObject)b).BeginEdit();
@@ -97,7 +97,7 @@ namespace EntityGraphTest.Tests
                     ctx.As.Add(a);
                     B existingB = loadOp.Entities.SingleOrDefault();
                     B newB = new B { Id = -1 };
-                    var gr = a.EntityGraph();
+                    var gr = a.EntityGraph(EntityGraphs.CircularGraphFull);
 
                     a.B = existingB;
                     gr.BeginEdit();

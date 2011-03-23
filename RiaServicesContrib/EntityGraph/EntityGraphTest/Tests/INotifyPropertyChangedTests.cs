@@ -13,7 +13,7 @@ namespace EntityGraphTest.Tests
         public void INotifyPropertyChangedTest() {
             bool propertyChangedHandlerVisited = false;
 
-            EntityGraph gr = a.EntityGraph();
+            EntityGraph gr = a.EntityGraph(EntityGraphs.CircularGraphFull);
             gr.PropertyChanged += (sender, args) =>
             {
                 propertyChangedHandlerVisited = true;
@@ -25,7 +25,7 @@ namespace EntityGraphTest.Tests
         public void AddAssociationTest()
         {
             B newB = new B();
-            EntityGraph gr = a.EntityGraph();
+            EntityGraph gr = a.EntityGraph(EntityGraphs.CircularGraphFull);
             Assert.IsFalse(gr.Contains(newB));
 
             a.B = newB;
@@ -34,7 +34,7 @@ namespace EntityGraphTest.Tests
         [TestMethod]
         public void RemoveAssociationTest()
         {
-            EntityGraph gr = a.EntityGraph();
+            EntityGraph gr = a.EntityGraph(EntityGraphs.CircularGraphFull);
             Assert.IsTrue(gr.Contains(b));
 
             a.B = null; ;

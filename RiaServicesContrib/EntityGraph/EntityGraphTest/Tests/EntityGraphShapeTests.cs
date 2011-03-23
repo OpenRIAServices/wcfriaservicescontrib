@@ -1,10 +1,7 @@
-﻿using System.ServiceModel.DomainServices.Client;
-using RiaServicesContrib;
+﻿using System.Linq;
 using EntityGraphTest.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using System.Linq;
-
+using RiaServicesContrib;
 using RiaServicesContrib.DomainServices.Client;
 
 namespace EntityGraphTest.Tests
@@ -42,10 +39,10 @@ namespace EntityGraphTest.Tests
             .Edge<A, B>(A => A.BSet);
 
             var copy1 = a.Copy(shape);
-            var copy2 = a.Copy();
+            var copy2 = a.Copy(EntityGraphs.CircularGraphFull);
 
-            var gr1 = copy1.EntityGraph();
-            var gr2 = copy2.EntityGraph();
+            var gr1 = copy1.EntityGraph(EntityGraphs.CircularGraphFull);
+            var gr2 = copy2.EntityGraph(EntityGraphs.CircularGraphFull);
 
             Assert.IsTrue(gr1.IsCopyOf(gr2));
         }
@@ -59,10 +56,10 @@ namespace EntityGraphTest.Tests
             .Edge<A, B>(A => A.BSet);
 
             var copy1 = a.Copy(shape);
-            var copy2 = a.Copy();
+            var copy2 = a.Copy(EntityGraphs.CircularGraphFull);
 
-            var gr1 = copy1.EntityGraph();
-            var gr2 = copy2.EntityGraph();
+            var gr1 = copy1.EntityGraph(EntityGraphs.CircularGraphFull);
+            var gr2 = copy2.EntityGraph(EntityGraphs.CircularGraphFull);
 
             Assert.IsFalse(gr1.IsCopyOf(gr2));
         }

@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using System.ServiceModel.DomainServices.Client;
-using RiaServicesContrib.DomainServices.Client;
 using EntityGraphTest.Web;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RiaServicesContrib.DomainServices.Client;
 
 namespace EntityGraphTest.Tests
 {
@@ -19,7 +19,7 @@ namespace EntityGraphTest.Tests
             EnqueueCallback(
                 () =>
                 {
-                    var gr = a.EntityGraph();
+                    var gr = a.EntityGraph(EntityGraphs.CircularGraphFull);
                     B existingB = loadOp.Entities.SingleOrDefault();
                     a.BSet.Add(existingB);
                     Assert.IsFalse(gr.HasChanges);

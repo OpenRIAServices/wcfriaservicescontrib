@@ -75,12 +75,6 @@
     <Compile Include="EntityGraphTestDomainService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\EntityGraph.Web\EntityGraph.Web.csproj">
-      <Project>{DCCBB9AE-C321-42DB-A49A-73A0529D4D6B}</Project>
-      <Name>EntityGraph.Web</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <ProjectExtensions>

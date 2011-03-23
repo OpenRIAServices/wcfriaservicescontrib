@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using System.ServiceModel.DomainServices.Client;
-using RiaServicesContrib.DomainServices.Client;
 using EntityGraphTest.Web;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RiaServicesContrib.DomainServices.Client;
 
 namespace EntityGraphTest.Tests
 {
@@ -27,7 +27,7 @@ namespace EntityGraphTest.Tests
                     a.BSet.Add(newB);
                     ctx.As.Add(a);
 
-                    var changeSet = a.EntityGraph().GetChanges();
+                    var changeSet = a.EntityGraph(EntityGraphs.CircularGraphFull).GetChanges();
                     Assert.IsTrue(changeSet.ModifiedEntities.Contains(existingB), "ChangeSet.ModifiedEntities should contain b");
                     Assert.AreEqual(5, changeSet.AddedEntities.Count(), "Incorrect number of added entities");
                     Assert.IsTrue(changeSet.AddedEntities.Contains(b), "ChangeSet.AddedEntities shoudl contain b");

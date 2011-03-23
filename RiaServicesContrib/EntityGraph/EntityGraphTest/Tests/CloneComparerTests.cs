@@ -12,34 +12,34 @@ namespace EntityGraphTest.Tests
         /// </summary>
         [TestMethod]
         public void IsCloneOfIdentityTest() {
-            var gr = a.EntityGraph();
+            var gr = a.EntityGraph(EntityGraphs.CircularGraphFull);
             Assert.IsFalse(gr.IsCopyOf(gr));
         }
         [TestMethod]
         public void IsCloneOfNamedIdentityTest()
         {
-            var gr = a.EntityGraph("MyGraph");
+            var gr = a.EntityGraph(EntityGraphs.CircularGraphShape1);
             Assert.IsFalse(gr.IsCloneOf(gr));
         }
         [TestMethod]
         public void IsCloneOfSimpleCopyTest() {
-            var gr = a.EntityGraph();
-            var cloneOfA = a.Clone();
-            Assert.IsTrue(gr.IsCloneOf(cloneOfA.EntityGraph()));
+            var gr = a.EntityGraph(EntityGraphs.CircularGraphFull);
+            var cloneOfA = a.Clone(EntityGraphs.CircularGraphFull);
+            Assert.IsTrue(gr.IsCloneOf(cloneOfA.EntityGraph(EntityGraphs.CircularGraphFull)));
         }
         [TestMethod]
         public void CopyIsNotACloneTest()
         {
-            var gr = a.EntityGraph();
-            var copyOfA = a.Copy();
-            Assert.IsFalse(gr.IsCloneOf(copyOfA.EntityGraph()));
+            var gr = a.EntityGraph(EntityGraphs.CircularGraphFull);
+            var copyOfA = a.Copy(EntityGraphs.CircularGraphFull);
+            Assert.IsFalse(gr.IsCloneOf(copyOfA.EntityGraph(EntityGraphs.CircularGraphFull)));
         }
         [TestMethod]
         public void CloneIsACopyTest()
         {
-            var gr = a.EntityGraph();
-            var cloneOfA = a.Clone();
-            Assert.IsTrue(gr.IsCopyOf(cloneOfA.EntityGraph()));
+            var gr = a.EntityGraph(EntityGraphs.CircularGraphFull);
+            var cloneOfA = a.Clone(EntityGraphs.CircularGraphFull);
+            Assert.IsTrue(gr.IsCopyOf(cloneOfA.EntityGraph(EntityGraphs.CircularGraphFull)));
         }
     }
 }

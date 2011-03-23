@@ -1,11 +1,11 @@
 ﻿using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel.DomainServices.Client;
-using RiaServicesContrib;
-using RiaServicesContrib.DomainServices.Client;
 using EntityGraphTest.Web;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RiaServicesContrib;
+using RiaServicesContrib.DomainServices.Client;
 
 namespace EntityGraphTest.Tests
 {
@@ -16,9 +16,9 @@ namespace EntityGraphTest.Tests
         public void CopyTest()
         {
             a.BSet.Add(new B { name = "B1" });
-            A copyOfA = a.Copy();
-            Assert.AreEqual(a.EntityGraph().Count(), copyOfA.EntityGraph().Count(), "Copy of a does not have same number of elements");
-            var zip = a.EntityGraph().Zip(copyOfA.EntityGraph(), (ea, eb) => new { ea, eb });
+            A copyOfA = a.Copy(EntityGraphs.CircularGraphFull);
+            Assert.AreEqual(a.EntityGraph(EntityGraphs.CircularGraphFull).Count(), copyOfA.EntityGraph(EntityGraphs.CircularGraphFull).Count(), "Copy of a does not have same number of elements");
+            var zip = a.EntityGraph(EntityGraphs.CircularGraphFull).Zip(copyOfA.EntityGraph(EntityGraphs.CircularGraphFull), (ea, eb) => new { ea, eb });
             foreach(var el in zip)
             {
                 Assert.IsTrue(el.ea.GetType() == el.eb.GetType(), "Copy is not equal");
@@ -45,10 +45,12 @@ namespace EntityGraphTest.Tests
         public void CopyNamedGraphTest()
         {
             a.BSet.Add(new B { name = "B1" });
-            A copyOfA = a.Copy("MyGraph");
-            Assert.IsTrue(a.EntityGraph().Count() == copyOfA.EntityGraph().Count() + 1, "Copy of a does the correct number of elements");
+            A copyOfA = a.Copy(EntityGraphs.CircularGraphShape1);
+            var gr1 = a.EntityGraph(EntityGraphs.CircularGraphFull);
+            var gr2 = copyOfA.EntityGraph(EntityGraphs.CircularGraphFull);
+            Assert.IsTrue(gr1.Count() == gr2.Count() + 1, "Copy of a does the correct number of elements");
             Assert.IsTrue(copyOfA.BSet.Count() == 0);
-            var zip = a.EntityGraph().Zip(copyOfA.EntityGraph(), (ea, eb) => new { ea, eb });
+            var zip = a.EntityGraph(EntityGraphs.CircularGraphFull).Zip(copyOfA.EntityGraph(EntityGraphs.CircularGraphFull), (ea, eb) => new { ea, eb });
             foreach(var el in zip)
             {
                 Assert.AreEqual(el.ea.GetType(), el.eb.GetType(), "Copy is not equal");
@@ -81,9 +83,9 @@ namespace EntityGraphTest.Tests
             E e1 = new E { F = f };
             E e2 = new E { F = f };
 
-            var copyOfF = f.Copy();
-            var g1 = f.EntityGraph();
-            var g2 = copyOfF.EntityGraph();
+            var copyOfF = f.Copy(EntityGraphs.SimpleGraphShapeFull);
+            var g1 = f.EntityGraph(EntityGraphs.SimpleGraphShapeFull);
+            var g2 = copyOfF.EntityGraph(EntityGraphs.SimpleGraphShapeFull);
 
             Assert.IsTrue(g1.IsCopyOf(g2));
             Assert.IsTrue(copyOfF.ESet.Count() == 2);
@@ -98,9 +100,9 @@ namespace EntityGraphTest.Tests
             E e1 = new E { F = f };
             E e2 = new E { F = f };
 
-            var copyOfF = f.Copy("MyGraph");
-            var g1 = f.EntityGraph("MyGraph");
-            var g2 = copyOfF.EntityGraph();
+            var copyOfF = f.Copy(EntityGraphs.SimpleGraphShape1);
+            var g1 = f.EntityGraph(EntityGraphs.SimpleGraphShape1);
+            var g2 = copyOfF.EntityGraph(EntityGraphs.SimpleGraphShapeFull);
 
             Assert.IsTrue(g1.IsCopyOf(g2));
             Assert.IsTrue(copyOfF.ESet.Count() == 2);
@@ -115,9 +117,9 @@ namespace EntityGraphTest.Tests
             E e1 = new E { F = f };
             E e2 = new E { F = f };
 
-            var copyOfF = f.Copy("MyGraph2");
-            var g1 = f.EntityGraph("MyGraph2");
-            var g2 = copyOfF.EntityGraph();
+            var copyOfF = f.Copy(EntityGraphs.SimpleGraphShape3);
+            var g1 = f.EntityGraph(EntityGraphs.SimpleGraphShape3);
+            var g2 = copyOfF.EntityGraph(EntityGraphs.SimpleGraphShapeFull);
 
             Assert.IsTrue(g1.IsCopyOf(g2));
             Assert.IsTrue(copyOfF.ESet.Count() == 0);
@@ -132,9 +134,9 @@ namespace EntityGraphTest.Tests
             E e1 = new E { F = f };
             E e2 = new E { F = f };
 
-            var copyOfE1 = e1.Copy();
-            var g1 = e1.EntityGraph();
-            var g2 = copyOfE1.EntityGraph();
+            var copyOfE1 = e1.Copy(EntityGraphs.SimpleGraphShapeFull);
+            var g1 = e1.EntityGraph(EntityGraphs.SimpleGraphShapeFull);
+            var g2 = copyOfE1.EntityGraph(EntityGraphs.SimpleGraphShapeFull);
 
             Assert.IsTrue(g1.IsCopyOf(g2));
             Assert.IsTrue(copyOfE1.F.ESet.Count() == 2);
@@ -151,9 +153,9 @@ namespace EntityGraphTest.Tests
             E e1 = new E { F = f };
             E e2 = new E { F = f };
 
-            var copyOfE1 = e1.Copy("MyGraph2");
-            var g1 = e1.EntityGraph();
-            var g2 = copyOfE1.EntityGraph();
+            var copyOfE1 = e1.Copy(EntityGraphs.SimpleGraphShape3);
+            var g1 = e1.EntityGraph(EntityGraphs.SimpleGraphShapeFull);
+            var g2 = copyOfE1.EntityGraph(EntityGraphs.SimpleGraphShapeFull);
 
             Assert.IsFalse(g1.IsCopyOf(g2));
 
@@ -173,9 +175,9 @@ namespace EntityGraphTest.Tests
             H h = new H();
             GH gh = new GH { G = g, H = h };
 
-            var copyOfg = g.Copy();
-            var g1 = g.EntityGraph();
-            var g2 = copyOfg.EntityGraph();
+            var copyOfg = g.Copy(EntityGraphs.SimpleGraphShapeFull);
+            var g1 = g.EntityGraph(EntityGraphs.SimpleGraphShapeFull);
+            var g2 = copyOfg.EntityGraph(EntityGraphs.SimpleGraphShapeFull);
 
             Assert.IsTrue(g1.IsCopyOf(g2));
 
@@ -196,9 +198,9 @@ namespace EntityGraphTest.Tests
             H h = new H();
             GH gh = new GH { G = g, H = h };
 
-            var copyOfg = g.Copy("MyGraph1");
-            var g1 = g.EntityGraph();
-            var g2 = copyOfg.EntityGraph();
+            var copyOfg = g.Copy(EntityGraphs.SimpleGraphShape2);
+            var g1 = g.EntityGraph(EntityGraphs.SimpleGraphShapeFull);
+            var g2 = copyOfg.EntityGraph(EntityGraphs.SimpleGraphShapeFull);
 
             Assert.IsFalse(g1.IsCopyOf(g2));
 
@@ -218,9 +220,9 @@ namespace EntityGraphTest.Tests
             H h = new H();
             GH gh = new GH { G = g, H = h };
 
-            var copyOfg = g.Copy("MyGraph2");
-            var g1 = g.EntityGraph();
-            var g2 = copyOfg.EntityGraph();
+            var copyOfg = g.Copy(EntityGraphs.SimpleGraphShape3);
+            var g1 = g.EntityGraph(EntityGraphs.SimpleGraphShapeFull);
+            var g2 = copyOfg.EntityGraph(EntityGraphs.SimpleGraphShapeFull);
 
             Assert.IsFalse(g1.IsCopyOf(g2));
             Assert.IsTrue(copyOfg.GHSet.Count() == 0);
@@ -232,8 +234,8 @@ namespace EntityGraphTest.Tests
         [TestMethod]
         public void CircularGraphCopyTest()
         {
-            var g1 = a.EntityGraph();
-            var g2 = b.EntityGraph();
+            var g1 = a.EntityGraph(EntityGraphs.CircularGraphFull);
+            var g2 = b.EntityGraph(EntityGraphs.CircularGraphFull);
             Assert.IsTrue(g1.All(n => g2.Contains(n)));
             Assert.IsTrue(g2.All(n => g1.Contains(n)));
         }

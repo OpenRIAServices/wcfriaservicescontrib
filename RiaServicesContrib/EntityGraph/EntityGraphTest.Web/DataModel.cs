@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
-using System.Xml.Serialization;
 using System.ServiceModel.DomainServices.Server;
+using System.Xml.Serialization;
 
 namespace EntityGraphTest.Web
 {
@@ -22,7 +22,6 @@ namespace EntityGraphTest.Web
         [Key]
         public int Id { get; set; }
 
-        [EntityGraph("MyGraph")]
         [Association("E_F", "FId", "Id", IsForeignKey = true)]
         [XmlIgnore]
         public F F { get; set; }
@@ -34,8 +33,6 @@ namespace EntityGraphTest.Web
         [DataMember]
         [Key]
         public int Id { get; set; }
-        [EntityGraph("MyGraph")]
-        [EntityGraph("MyGraph1")]
         [Association("E_F", "Id", "FId")]
         [XmlIgnore]
         public List<E> ESet { get; set; }
@@ -47,7 +44,6 @@ namespace EntityGraphTest.Web
         [Key]
         public int GId { get; set; }
 
-        [EntityGraph("MyGraph1")]
         [Association("G_GH", "GId", "Id", IsForeignKey = true)]
         [XmlIgnore]
         public G G { get; set; }
@@ -56,7 +52,6 @@ namespace EntityGraphTest.Web
         [Key]
         public int HId { get; set; }
 
-        [EntityGraph("MyGraph2")]
         [Association("H_GH", "HId", "Id", IsForeignKey = true)]
         [XmlIgnore]
         public H H { get; set; }
@@ -67,7 +62,6 @@ namespace EntityGraphTest.Web
         [DataMember]
         [Key]
         public int Id { get; set; }
-        [EntityGraph("MyGraph1")]
         [Association("G_GH", "Id", "GId")]
         [XmlIgnore]
         public List<GH> GHSet { get; set; }
@@ -78,7 +72,6 @@ namespace EntityGraphTest.Web
         [DataMember]
         [Key]
         public int Id { get; set; }
-        [EntityGraph("MyGraph2")]
         [Association("H_GH", "Id", "HId")]
         [XmlIgnore]
         public List<GH> GHSet { get; set; }
@@ -103,7 +96,6 @@ namespace EntityGraphTest.Web
         [Key]
         public int Id { get; set; }
 
-        [EntityGraph("MyGraph")]
         [Association("B_A", "BId", "Id", IsForeignKey = true)]
         [XmlIgnore]
         public B B { get; set; }
@@ -118,7 +110,6 @@ namespace EntityGraphTest.Web
         [DataMember]
         public Nullable<int> BNotInGraphId { get; set; }
 
-        [EntityGraph]
         [Association("A_B", "Id", "AId")]
         [XmlIgnore]
         public List<B> BSet { get; set; }
@@ -142,7 +133,6 @@ namespace EntityGraphTest.Web
         [Key]
         public int Id { get; set; }
         [Include]
-        [EntityGraph]
         [Association("A_B", "AId", "Id", IsForeignKey = true)]
         [XmlIgnore]
         public A A { get; set; }
@@ -155,7 +145,6 @@ namespace EntityGraphTest.Web
         [XmlIgnore]
         public List<A> ASet { get; set; }
         [Include]
-        [EntityGraph("MyGraph")]
         [Association("C_B", "CId", "Id", IsForeignKey = true)]
         [XmlIgnore]
         public C C { get; set; }
@@ -177,7 +166,6 @@ namespace EntityGraphTest.Web
         [XmlIgnore]
         public List<B> BSet { get; set; }
 
-        [EntityGraph("MyGraph")]
         [Association("D_C", "DId", "Id", IsForeignKey = true)]
         [XmlIgnore]
         public D D { get; set; }
@@ -196,7 +184,6 @@ namespace EntityGraphTest.Web
         [Key]
         public int Id { get; set; }
 
-        [EntityGraph("MyGraph")]
         [Association("A_D", "AId", "Id", IsForeignKey = true)]
         [XmlIgnore]
         public A A { get; set; }

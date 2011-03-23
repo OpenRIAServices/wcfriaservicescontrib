@@ -11,7 +11,7 @@ namespace EntityGraphTest.Tests
         [TestMethod]
         public void ICollectionChangedTest() {
             bool collectionChangedHandlerVisited = false;
-            EntityGraph gr = a.EntityGraph();
+            EntityGraph gr = a.EntityGraph(EntityGraphs.CircularGraphFull);
             gr.CollectionChanged += (sender, args) =>
             {
                 collectionChangedHandlerVisited = true;
@@ -21,7 +21,7 @@ namespace EntityGraphTest.Tests
         }
         [TestMethod]
         public void AddToEntityCollectionTest() {
-            EntityGraph gr = a.EntityGraph();
+            EntityGraph gr = a.EntityGraph(EntityGraphs.CircularGraphFull);
             var b = new B();
             a.BSet.Add(b);
             Assert.IsTrue(gr.Contains(b), "Entity graph does not contain entity b");
@@ -30,7 +30,7 @@ namespace EntityGraphTest.Tests
         public void RemoveFromEntityCollectionTest() {
             var b = new B();
             a.BSet.Add(b);
-            EntityGraph gr = a.EntityGraph();
+            EntityGraph gr = a.EntityGraph(EntityGraphs.CircularGraphFull);
             a.BSet.Remove(b);
             Assert.IsFalse(gr.Contains(b), "Entity graph still contains entity b");
         }

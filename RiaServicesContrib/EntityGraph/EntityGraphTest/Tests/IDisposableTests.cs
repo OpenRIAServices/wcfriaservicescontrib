@@ -11,7 +11,7 @@ namespace EntityGraphTest.Tests
         public void IDisposableTest() {
             bool PropertyChangedCalled = false;
             bool CollectionChangedCalled = false;
-            var gr = a.EntityGraph();
+            var gr = a.EntityGraph(EntityGraphs.CircularGraphFull);
             gr.PropertyChanged += (sender, args) =>
             {
                 PropertyChangedCalled = true;
