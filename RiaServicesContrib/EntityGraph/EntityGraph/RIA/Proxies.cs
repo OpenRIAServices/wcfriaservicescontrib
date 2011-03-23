@@ -7,55 +7,41 @@ namespace RiaServicesContrib.DomainServices.Client
     public static class EntityGraphProxies
     {
         /// <summary>
-        /// Extension method that returns an entity graph object that represents the entity graph this entity is part of.
+        /// Extension method that returns an entity graph object as defined by the provided entity graph attribute shape object.
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static EntityGraph EntityGraph<TEntity>(this TEntity entity) where TEntity : Entity
+        public static EntityGraph EntityGraph<TEntity>(this TEntity entity, EntityGraphAttributeShape shape) where TEntity : Entity
         {
-            return GraphFactory.GetAttributedEntityGraph(entity, null);
+            return GraphFactory.GetEntityGraph(entity, shape);
         }
         /// <summary>
-        /// Extension method that returns an entity graph object that represents the entity graph with given name this entity is part of.
+        /// Extension method that returns an entity graph object as defined by the provided entity graph shape object.
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="entity"></param>
         /// <param name="graphName"></param>
         /// <returns></returns>
-        public static EntityGraph EntityGraph<TEntity>(this TEntity entity, string graphName) where TEntity : Entity
-        {
-            return GraphFactory.GetAttributedEntityGraph(entity, graphName);
-        }
         public static EntityGraph EntityGraph<TEntity>(this TEntity entity, EntityGraphShape shape) where TEntity : Entity
         {
-            return GraphFactory.GetGraphShapeEntityGraph(entity, shape);
+            return GraphFactory.GetEntityGraph(entity, shape);
         }
 
         /// <summary>
-        /// Extension method that copies the given entity and all associated entities marked with the GraphAttribute attribute. 
+        /// Extension method that copies the given entity and all associated entities in the entity graph defined by the given 
+        /// entity graph attribute shape.
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static TEntity Copy<TEntity>(this TEntity entity) where TEntity : Entity
+        public static TEntity Copy<TEntity>(this TEntity entity, EntityGraphAttributeShape shape) where TEntity : Entity
         {
-            return (TEntity)entity.EntityGraph().Copy();
+            return (TEntity)entity.EntityGraph(shape).Copy();
         }
         /// <summary>
-        /// Extension method that copies the given entity and all associated entities marked with the GraphAttribute attribute and 
-        /// which have the same graph name. 
-        /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
-        /// <param name="entity"></param>
-        /// <param name="graphName"></param>
-        /// <returns></returns>
-        public static TEntity Copy<TEntity>(this TEntity entity, string graphName) where TEntity : Entity
-        {
-            return (TEntity)entity.EntityGraph(graphName).Copy();
-        }
-        /// <summary>
-        /// Extension method that copies the given entity and all associated entities in the entity graph defined by the given EntityGraphShape.
+        /// Extension method that copies the given entity and all associated entities in the entity graph defined by the given 
+        /// entity graph shape.
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="entity"></param>
@@ -67,29 +53,19 @@ namespace RiaServicesContrib.DomainServices.Client
         }
 
         /// <summary>
-        /// Extension method that clones the given entity and all associated entities marked with the GraphAttribute attribute. 
+        /// Extension method that clones the given entity and all associated entities in the entity graph defined by the given 
+        /// entity graph attribute shape.
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static TEntity Clone<TEntity>(this TEntity entity) where TEntity : Entity
+        public static TEntity Clone<TEntity>(this TEntity entity, EntityGraphAttributeShape shape) where TEntity : Entity
         {
-            return (TEntity)entity.EntityGraph().Clone();
+            return (TEntity)entity.EntityGraph(shape).Clone();
         }
         /// <summary>
-        /// Extension method that clones the given entity and all associated entities marked with the GraphAttribute attribute and 
-        /// which have the same graph name. 
-        /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
-        /// <param name="entity"></param>
-        /// <param name="graphName"></param>
-        /// <returns></returns>
-        public static TEntity Clone<TEntity>(this TEntity entity, string graphName) where TEntity : Entity
-        {
-            return (TEntity)entity.EntityGraph(graphName).Clone();
-        }
-        /// <summary>
-        /// Extension method that clones the given entity and all associated entities in the entity graph defined by the given EntityGraphShape.
+        /// Extension method that clones the given entity and all associated entities in the entity graph defined by the given 
+        /// entity graph shape.
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="entity"></param>
@@ -103,32 +79,30 @@ namespace RiaServicesContrib.DomainServices.Client
         #region Factory
         private static class GraphFactory
         {
-            private static Dictionary<Tuple<int, string>, EntityGraph> AttributedEntityGraphs
-                = new Dictionary<Tuple<int, string>, EntityGraph>();
-            private static Dictionary<Tuple<int, EntityGraphShape>, EntityGraph> GraphShapeEntityGraphs
-                = new Dictionary<Tuple<int, EntityGraphShape>, EntityGraph>();
+            private static Dictionary<int, EntityGraph> EntityGraphs
+                = new Dictionary<int, EntityGraph>();
 
-            public static EntityGraph GetAttributedEntityGraph(Entity entity, string graphName)
+            public static EntityGraph GetEntityGraph(Entity entity, EntityGraphAttributeShape shape)
             {
-                var key = new Tuple<int, string>(entity.GetHashCode(), graphName);
-                if(AttributedEntityGraphs.ContainsKey(key) == false)
-                {
-                    var gr = new EntityGraph(entity, graphName);
-                    AttributedEntityGraphs.Add(key, gr);
-                    return gr;
-                }
-                return AttributedEntityGraphs[key];
-            }
-            public static EntityGraph GetGraphShapeEntityGraph(Entity entity, EntityGraphShape shape)
-            {
-                var key = new Tuple<int, EntityGraphShape>(entity.GetHashCode(), shape);
-                if(GraphShapeEntityGraphs.ContainsKey(key) == false)
+                int key = entity.GetHashCode() ^ shape.GetHashCode();
+                if(EntityGraphs.ContainsKey(key) == false)
                 {
                     var gr = new EntityGraph(entity, shape);
-                    GraphShapeEntityGraphs.Add(key, gr);
+                    EntityGraphs.Add(key, gr);
                     return gr;
                 }
-                return GraphShapeEntityGraphs[key];
+                return EntityGraphs[key];
+            }
+            public static EntityGraph GetEntityGraph(Entity entity, EntityGraphShape shape)
+            {
+                int key = entity.GetHashCode() ^ shape.GetHashCode();
+                if(EntityGraphs.ContainsKey(key) == false)
+                {
+                    var gr = new EntityGraph(entity, shape);
+                    EntityGraphs.Add(key, gr);
+                    return gr;
+                }
+                return EntityGraphs[key];
             }
         }
         #endregion
