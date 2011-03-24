@@ -3,6 +3,7 @@ using EntityGraphTest.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RiaServicesContrib;
 using RiaServicesContrib.DomainServices.Client;
+using System;
 
 namespace EntityGraphTest.Tests
 {
@@ -62,6 +63,51 @@ namespace EntityGraphTest.Tests
             var gr2 = copy2.EntityGraph(EntityGraphs.CircularGraphFull);
 
             Assert.IsFalse(gr1.IsCopyOf(gr2));
+        }
+        [TestMethod]
+        public void InvalidPathExpressionTest1()
+        {
+            bool isValidExpression = true;
+            try
+            {
+                var shape = new EntityGraphShape()
+                .Edge<A, D>(A => A.B.C.D);
+            }
+            catch(Exception)
+            {
+                isValidExpression = false;
+            }
+            Assert.IsFalse(isValidExpression);
+        }
+        [TestMethod]
+        public void InvalidPathExpressionTest2()
+        {
+            bool isValidExpression = true;
+            try
+            {
+                var shape = new EntityGraphShape()
+                .Edge<A, B>(A => A.BSet.First());
+            }
+            catch(Exception)
+            {
+                isValidExpression = false;
+            }
+            Assert.IsFalse(isValidExpression);
+        }
+        [TestMethod]
+        public void InvalidPathExpressionTest3()
+        {
+            bool isValidExpression = true;
+            try
+            {
+                var shape = new EntityGraphShape()
+                .Edge<A, A>(A => A.B.ASet);
+            }
+            catch(Exception)
+            {
+                isValidExpression = false;
+            }
+            Assert.IsFalse(isValidExpression);
         }
     }
 }

@@ -22,13 +22,20 @@ namespace RiaServicesContrib
         public EntityGraphShape Edge<TLHS, TRHS>(Expression<EdgeType<TLHS, TRHS>> edge)
         {
             var entityType = edge.Parameters.Single().Type;
-            if(edge.Body is MemberExpression)
+            if(edge.Body is MemberExpression == false)
             {
-                var mexpr = (MemberExpression)edge.Body;
-                var propInfo = mexpr.Member as PropertyInfo;
-                if(entityType != null && propInfo != null)
-                    edges.Add(new EntityGraphEdge { From = entityType, To = propInfo });
+                var msg = String.Format("Edge expression '{0}' is invalid; it should have the form 'A => A.B'", edge.ToString());
+                throw new Exception(msg);
             }
+            var mexpr = (MemberExpression)edge.Body;
+            if(mexpr.Expression is ParameterExpression == false)
+            {
+                var msg = String.Format("Edge expression '{0}' is invalid; it should have the form 'A => A.B'", edge.ToString());
+                throw new Exception(msg);
+            }
+            var propInfo = mexpr.Member as PropertyInfo;
+            if(entityType != null && propInfo != null)
+                edges.Add(new EntityGraphEdge { From = entityType, To = propInfo });
             return this;
         }
         // We can't use TEntity as the return type of EdgeEnumType, because IEnumerable<T> is not 
@@ -36,13 +43,20 @@ namespace RiaServicesContrib
         public EntityGraphShape Edge<TLHS, TRHS>(Expression<EdgeEnumType<TLHS, TRHS>> edge)
         {
             var entityType = edge.Parameters.Single().Type;
-            if(edge.Body is MemberExpression)
+            if(edge.Body is MemberExpression == false)
             {
-                var mexpr = (MemberExpression)edge.Body;
-                var propInfo = mexpr.Member as PropertyInfo;
-                if(entityType != null && propInfo != null)
-                    edges.Add(new EntityGraphEdge { From = entityType, To = propInfo });
+                var msg = String.Format("Edge expression '{0}' is invalid; it should have the form 'A => A.B'", edge.ToString());
+                throw new Exception(msg);
             }
+            var mexpr = (MemberExpression)edge.Body;
+            if(mexpr.Expression is ParameterExpression == false)
+            {
+                var msg = String.Format("Edge expression '{0}' is invalid; it should have the form 'A => A.B'", edge.ToString());
+                throw new Exception(msg);
+            }
+            var propInfo = mexpr.Member as PropertyInfo;
+            if(entityType != null && propInfo != null)
+                edges.Add(new EntityGraphEdge { From = entityType, To = propInfo });
             return this;
         }
         public IEnumerable<PropertyInfo> OutEdges(object entity)
