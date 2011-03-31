@@ -60,10 +60,6 @@
       <Project>{DCCBB9AE-C321-42DB-A49A-73A0529D4D6B}</Project>
       <Name>EntityGraph.Web</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EntityGraphTest.Web\EntityGraphTest.Web.csproj">
-      <Project>{8F76C20D-56AB-41CB-9B78-10B4726543E6}</Project>
-      <Name>EntityGraphTest.Web</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
