@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("T4RIA")]
+[assembly: AssemblyTitle("GeneratedMetadataProvider")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("RiaServicesContrib")]
-[assembly: AssemblyProduct("T4RIA")]
+[assembly: AssemblyProduct("GeneratedMetadataProvider")]
 [assembly: AssemblyCopyright("Copyright © RiaServicesContrib 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("074b929b-db6d-4344-a518-3c13564cf4f4")]
+[assembly: Guid("dbcece30-a6fd-4912-9ad2-49f28a4ea4fe")]
 
 // Version information for an assembly consists of the following four values:
 //

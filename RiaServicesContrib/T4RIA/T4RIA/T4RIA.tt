@@ -1,11 +1,11 @@
 ﻿<#
 /*
-T4RIA Version 1.0.00
+T4RIA Version 1.1.0
 Find latest version and documentation at http://riaservicescontrib.codeplex.com/wikipage?title=T4RIA
 
 T4RIA is part of the WCF RIA Contrib project (http://riaservicescontrib.codeplex.com/)
 Maintained by Petr Hosek, petr.hosek@baud.cz (http://www.baud.cz/blog)
-Based on T4 Toolbox (http://t4toolbox.codeplex.com/)
+Developed using T4 Toolbox (http://t4toolbox.codeplex.com/)
 
 Please use in accordance to the Microsoft Public License (http://www.microsoft.com/opensource/licenses.mspx)
 */
@@ -39,7 +39,7 @@ resourceGenerator.Run();
 #>
 <#@ include file="T4RIA.settings.t4" #>
 <#+
-public class ServiceTemplate : CSharpTemplate
+public class AutoServiceTemplate : CSharpTemplate
 {
 	public dynamic Entity { get; set; }
 
@@ -91,6 +91,36 @@ namespace <#= Namespace #>.Services
 			}
 			this.ObjectContext.<#= Entity.Mapping.StoreEntitySet #>.DeleteObject(<#= FieldName(Entity.Name) #>);
 		}
+	}
+}
+<#+
+		return this.GenerationEnvironment.ToString();
+	}
+}
+
+public class CustomServiceTemplate : CSharpTemplate
+{
+	public override string TransformText()
+	{
+#>
+namespace <#= Namespace #>.Services
+{
+	using System;
+	using System.Collections.Generic;
+	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
+	using System.Data;
+	using System.Linq;
+	using System.ServiceModel.DomainServices.EntityFramework;
+	using System.ServiceModel.DomainServices.Hosting;
+	using System.ServiceModel.DomainServices.Server;
+	using GeneratedMetadataProvider;
+	using <#= Namespace #>.Models;
+
+	[EnableClientAccess]
+    [GeneratedMetadataProvider]
+	public partial class <#= ServiceName #> : LinqToEntitiesDomainService<<#= ContainerName #>>
+	{
 	}
 }
 <#+
@@ -197,7 +227,7 @@ public class ResourceTemplate : Template
 	}
 }
 
-public class MetadataTemplate : CSharpTemplate
+public class AutoMetadataTemplate : CSharpTemplate
 {
 	public XElement Entity { get; set; }
 	public IEnumerable<XElement> Associations { get; set; }
@@ -217,14 +247,15 @@ namespace <#= Namespace #>.Models
 	using System.Linq;
 	using System.ServiceModel.DomainServices.Hosting;
 	using System.ServiceModel.DomainServices.Server;
+    using GeneratedMetadataProvider;
 	using Resources;
 
-	[MetadataTypeAttribute(typeof(<#= Entity.Attribute("Name").Value #>.<#= Entity.Attribute("Name").Value #>Metadata))]
+	[GeneratedMetadataTypeAttribute(typeof(<#= Entity.Attribute("Name").Value #>.<#= Entity.Attribute("Name").Value #>Metadata_Generated))]
 	public partial class <#= Entity.Attribute("Name").Value #>
 	{
-		internal sealed class <#= Entity.Attribute("Name").Value #>Metadata
+		internal sealed class <#= Entity.Attribute("Name").Value #>Metadata_Generated
 		{
-			private <#= Entity.Attribute("Name").Value #>Metadata()
+			private <#= Entity.Attribute("Name").Value #>Metadata_Generated()
 			{
 			}
 
@@ -346,21 +377,64 @@ namespace <#= Namespace #>.Models
 	}
 }
 
+public class CustomMetadataTemplate : CSharpTemplate
+{
+    public string EntityName { get; set; }
+
+	public override string TransformText()
+	{
+#>
+#pragma warning disable 649    // disable compiler warnings about unassigned fields
+
+namespace <#= Namespace #>.Models
+{
+	using System;
+	using System.Collections.Generic;
+	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
+	using System.Data.Objects.DataClasses;
+	using System.Linq;
+	using System.ServiceModel.DomainServices.Hosting;
+	using System.ServiceModel.DomainServices.Server;
+
+	[MetadataTypeAttribute(typeof(<#= EntityName #>.<#= EntityName #>Metadata))]
+	public partial class <#= EntityName #>
+	{
+		internal sealed class <#= EntityName #>Metadata
+		{
+			private <#= EntityName #>Metadata()
+			{
+			}
+		}
+	}
+}
+#pragma warning restore 649    // re-enable compiler warnings about unassigned fields
+<#+
+		return this.GenerationEnvironment.ToString();
+	}
+}
+
 public class ServiceGenerator : EntityGenerator
 {
-	private ServiceTemplate template = new ServiceTemplate();
+	private AutoServiceTemplate templateAuto = new AutoServiceTemplate();
+    private CustomServiceTemplate templateCustom = new CustomServiceTemplate();
 
 	protected override void RunCore()
 	{
-		template.Output.PreserveExistingFile = PreserveExistingFile;
-		template.Output.References.Add("System.ServiceModel.DomainServices.EntityFramework");
-		template.Output.References.Add("System.ServiceModel.DomainServices.Hosting");
-		template.Output.References.Add("System.ServiceModel.DomainServices.Server");
+        templateAuto.Output.References.Add("System.ServiceModel.DomainServices.EntityFramework");
+        templateAuto.Output.References.Add("System.ServiceModel.DomainServices.Hosting");
+        templateAuto.Output.References.Add("System.ServiceModel.DomainServices.Server");
 
+        templateCustom.Output.PreserveExistingFile = PreserveExistingFile;
+        templateCustom.Output.References.Add("System.ServiceModel.DomainServices.EntityFramework");
+        templateCustom.Output.References.Add("System.ServiceModel.DomainServices.Hosting");
+        templateCustom.Output.References.Add("System.ServiceModel.DomainServices.Server");
+
+        templateCustom.RenderToFile(string.Format(@"{0}\{1}.cs", ServicesFolder, ServiceName));
 		foreach (dynamic entity in EntityTypes)
 		{
-			template.Entity = entity;
-			template.RenderToFile(string.Format(@"{0}\{1}.{2}.g.cs", ServicesFolder, ServiceName, entity.Name));
+	        templateAuto.Entity = entity;
+            templateAuto.RenderToFile(string.Format(@"{0}\{1}.{2}.g.cs", ServicesFolder, ServiceName, entity.Name));
 		}
 	}
 
@@ -425,20 +499,28 @@ public class ResourceGenerator : EntityGenerator
 
 public class MetadataGenerator : EntityGenerator
 {
-	private MetadataTemplate template = new MetadataTemplate();
+	private AutoMetadataTemplate templateAuto = new AutoMetadataTemplate();
+    private CustomMetadataTemplate templateCustom = new CustomMetadataTemplate();
 
 	protected override void RunCore()
 	{
-		template.Output.PreserveExistingFile = PreserveExistingFile;
-		template.Output.References.Add("System.ComponentModel.DataAnnotations");
-		template.Output.References.Add("System.ServiceModel.DomainServices.Hosting");
-		template.Output.References.Add("System.ServiceModel.DomainServices.Server");
+	    templateAuto.Output.References.Add("System.ComponentModel.DataAnnotations");
+        templateAuto.Output.References.Add("System.ServiceModel.DomainServices.Hosting");
+        templateAuto.Output.References.Add("System.ServiceModel.DomainServices.Server");
 
-		template.Associations = Schema.Elements(edmns + "Association");
+	    templateCustom.Output.PreserveExistingFile = PreserveExistingFile;
+        templateCustom.Output.References.Add("System.ComponentModel.DataAnnotations");
+        templateCustom.Output.References.Add("System.ServiceModel.DomainServices.Hosting");
+        templateCustom.Output.References.Add("System.ServiceModel.DomainServices.Server");
+
+        templateAuto.Associations = Schema.Elements(edmns + "Association");
 		foreach (XElement type in Schema.Elements(edmns + "EntityType"))
 		{
-			template.Entity = type;
-			template.RenderToFile(string.Format(@"{0}\{1}.{2}.metadata.g.cs", ModelsFolder, ServiceName, type.Attribute("Name").Value));
+	        templateAuto.Entity = type;
+            templateAuto.RenderToFile(string.Format(@"{0}\{1}.{2}.metadata.g.cs", ModelsFolder, ServiceName, type.Attribute("Name").Value));
+
+            templateCustom.EntityName = type.Attribute("Name").Value;
+            templateCustom.RenderToFile(string.Format(@"{0}\{1}.{2}.metadata.cs", ModelsFolder, ServiceName, type.Attribute("Name").Value));
 		}
 	}
 

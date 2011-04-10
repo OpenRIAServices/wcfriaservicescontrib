@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{564CE189-5CAF-49CA-8552-D423476CF2EC}</ProjectGuid>
+    <ProjectGuid>{0C2E27A8-0AE2-4723-BD34-73D0D84D121F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>T4RIA</RootNamespace>
-    <AssemblyName>T4RIA</AssemblyName>
+    <RootNamespace>GeneratedMetadataProvider</RootNamespace>
+    <AssemblyName>GeneratedMetadataProvider</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -37,25 +37,19 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel.DomainServices.Server, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="T4Toolbox.10.0, Version=10.7.16.1, Culture=neutral, PublicKeyToken=7e313accbcce84dc, processorArchitecture=x86" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GeneratedMetadataProvider.cs" />
+    <Compile Include="GeneratedMetadataProviderAttribute.cs" />
+    <Compile Include="GeneratedMetadataTypeAttribute.cs" />
+    <Compile Include="GeneratedMetadataTypeDescriptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="T4RIA.settings.t4" />
-    <None Include="T4RIA.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>T4RIA.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
