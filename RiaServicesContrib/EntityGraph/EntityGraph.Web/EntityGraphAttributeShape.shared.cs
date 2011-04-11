@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using System.Collections;
 
 namespace RiaServicesContrib
 {
@@ -42,7 +43,7 @@ namespace RiaServicesContrib
             return qry;
         }
         /// <summary>
-        /// Returns true if the property has the "EntityGraphAttribute" (or a subclass), false otherwise.
+        /// Indicates of the given property info represents an edge in this graph shape object.
         /// </summary>
         /// <param name="edge"></param>
         /// <returns></returns>
@@ -52,6 +53,26 @@ namespace RiaServicesContrib
                 entityGraph => entityGraph is EntityGraphAttribute && (Name == null || Name == entityGraph.Name);
 
             return edge.GetCustomAttributes(true).OfType<EntityGraphAttribute>().Any(match);
+        }
+        /// <summary>
+        /// Returns the object that is reachable from entity via the given edge.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="edge"></param>
+        /// <returns></returns>
+        public object GetNode(object entity, PropertyInfo edge)
+        {
+            return edge.GetValue(entity, null);
+        }
+        /// <summary>
+        /// Returns the collection og objects that is reachable from entity via the given edge.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="edge"></param>
+        /// <returns></returns>
+        public IEnumerable GetNodes(object entity, PropertyInfo edge)
+        {
+            return (IEnumerable)edge.GetValue(entity, null);
         }
     }
 }

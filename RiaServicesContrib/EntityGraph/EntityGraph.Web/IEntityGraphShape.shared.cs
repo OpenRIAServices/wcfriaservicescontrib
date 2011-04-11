@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
+using System.Collections;
 
 namespace RiaServicesContrib
 {
@@ -9,7 +10,7 @@ namespace RiaServicesContrib
     public interface IEntityGraphShape
     {
         /// <summary>
-        /// Returns an IEnumerable that iterates of the out edges of the given entity
+        /// Returns an IEnumerable that iterates over the out edges of the given entity
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -20,5 +21,19 @@ namespace RiaServicesContrib
         /// <param name="edge"></param>
         /// <returns></returns>
         bool IsEdge(PropertyInfo edge);
+        /// <summary>
+        /// Returns the object that is reachable from entity via the given edge.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="edge"></param>
+        /// <returns></returns>
+        object GetNode(object entity, PropertyInfo edge);
+        /// <summary>
+        /// Returns the collection og objects that is reachable from entity via the given edge.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="edge"></param>
+        /// <returns></returns>
+        IEnumerable GetNodes(object entity, PropertyInfo edge);
     }
 }

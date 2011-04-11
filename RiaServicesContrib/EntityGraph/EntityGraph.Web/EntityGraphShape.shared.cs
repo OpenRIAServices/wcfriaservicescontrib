@@ -59,6 +59,11 @@ namespace RiaServicesContrib
                 edges.Add(new EntityGraphEdge { From = entityType, To = propInfo });
             return this;
         }
+        /// <summary>
+        /// Returns an IEnumerable that iterates over the out edges of the given entity
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public IEnumerable<PropertyInfo> OutEdges(object entity)
         {
             var entityType = entity.GetType();
@@ -75,10 +80,34 @@ namespace RiaServicesContrib
             return this.GetEnumerator();
         }
 
-
+        /// <summary>
+        /// Indicates of the given property info represents an edge in this graph shape object.
+        /// </summary>
+        /// <param name="edge"></param>
+        /// <returns></returns>
         public bool IsEdge(PropertyInfo edge)
         {
             return edges.Any(e => e.To.Name == edge.Name && e.To.PropertyType.IsAssignableFrom(edge.PropertyType));
+        }
+        /// <summary>
+        /// Returns the object that is reachable from entity via the given edge.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="edge"></param>
+        /// <returns></returns>
+        public object GetNode(object entity, PropertyInfo edge)
+        {
+            return edge.GetValue(entity, null);
+        }
+        /// <summary>
+        /// Returns the collection og objects that is reachable from entity via the given edge.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="edge"></param>
+        /// <returns></returns>
+        public IEnumerable GetNodes(object entity, PropertyInfo edge)
+        {
+            return (IEnumerable)edge.GetValue(entity, null);
         }
     }
 }

@@ -88,27 +88,27 @@ namespace RiaServicesContrib
             EntityRelation<TEntity> node = new EntityRelation<TEntity>() { Node = entity };
             graph.Nodes.Add(node);
 
-            foreach(PropertyInfo association in GraphShape.OutEdges(entity))
+            foreach(PropertyInfo edge in GraphShape.OutEdges(entity))
             {
-                if(typeof(IEnumerable).IsAssignableFrom(association.PropertyType))
+                if(typeof(IEnumerable).IsAssignableFrom(edge.PropertyType))
                 {
-                    IEnumerable assocList = (IEnumerable)association.GetValue(entity, null);
-                    node.ListEdges.Add(association, new List<TEntity>());
+                    var assocList = GraphShape.GetNodes(entity, edge);
+                    node.ListEdges.Add(edge, new List<TEntity>());
                     foreach(TEntity e in assocList)
                     {
                         if(e != null)
                         {
-                            node.ListEdges[association].Add(e);
+                            node.ListEdges[edge].Add(e);
                             BuildEntityGraph(e, graph);
                         }
                     }
                 }
                 else
                 {
-                    TEntity e = (TEntity)association.GetValue(entity, null);
+                    TEntity e = (TEntity)GraphShape.GetNode(entity, edge);
                     if(e != null)
                     {
-                        node.SingleEdges.Add(association, e);
+                        node.SingleEdges.Add(edge, e);
                         BuildEntityGraph(e, graph);
                     }
                 }
