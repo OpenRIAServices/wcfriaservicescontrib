@@ -11,6 +11,7 @@ namespace RiaServicesContrib.DomainServices.Client
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="entity"></param>
+        /// <param name="shape"></param>
         /// <returns></returns>
         public static EntityGraph EntityGraph<TEntity>(this TEntity entity, EntityGraphAttributeShape shape) where TEntity : Entity
         {
@@ -21,19 +22,19 @@ namespace RiaServicesContrib.DomainServices.Client
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="entity"></param>
-        /// <param name="graphName"></param>
+        /// <param name="shape"></param>
         /// <returns></returns>
         public static EntityGraph EntityGraph<TEntity>(this TEntity entity, EntityGraphShape shape) where TEntity : Entity
         {
             return GraphFactory.GetEntityGraph(entity, shape);
         }
-
         /// <summary>
         /// Extension method that copies the given entity and all associated entities in the entity graph defined by the given 
         /// entity graph attribute shape.
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="entity"></param>
+        /// <param name="shape"></param>
         /// <returns></returns>
         public static TEntity Copy<TEntity>(this TEntity entity, EntityGraphAttributeShape shape) where TEntity : Entity
         {
@@ -51,13 +52,13 @@ namespace RiaServicesContrib.DomainServices.Client
         {
             return (TEntity)entity.EntityGraph(shape).Copy();
         }
-
         /// <summary>
         /// Extension method that clones the given entity and all associated entities in the entity graph defined by the given 
         /// entity graph attribute shape.
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="entity"></param>
+        /// <param name="shape"></param>
         /// <returns></returns>
         public static TEntity Clone<TEntity>(this TEntity entity, EntityGraphAttributeShape shape) where TEntity : Entity
         {

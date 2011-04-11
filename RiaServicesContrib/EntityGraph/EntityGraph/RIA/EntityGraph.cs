@@ -9,7 +9,7 @@ namespace RiaServicesContrib.DomainServices.Client
         /// Extension method that returns an entity graph object, defined by the provided entitygraph attribute shape
         /// </summary>
         /// <param name="Source"></param>
-        /// <param name="Name"></param>
+        /// <param name="shape"></param>
         public EntityGraph(Entity Source, EntityGraphAttributeShape shape) : base(Source, shape) { }
         /// <summary>
         /// Extension method that returns an entity graph object, defined by the provided entity graph shape
