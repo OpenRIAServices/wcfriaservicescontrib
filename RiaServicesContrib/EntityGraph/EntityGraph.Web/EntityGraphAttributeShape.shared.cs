@@ -60,7 +60,7 @@ namespace RiaServicesContrib
         /// <param name="entity"></param>
         /// <param name="edge"></param>
         /// <returns></returns>
-        public object GetNode(object entity, PropertyInfo edge)
+        public virtual object GetNode(object entity, PropertyInfo edge)
         {
             return edge.GetValue(entity, null);
         }
@@ -70,7 +70,7 @@ namespace RiaServicesContrib
         /// <param name="entity"></param>
         /// <param name="edge"></param>
         /// <returns></returns>
-        public IEnumerable GetNodes(object entity, PropertyInfo edge)
+        public virtual IEnumerable GetNodes(object entity, PropertyInfo edge)
         {
             return (IEnumerable)edge.GetValue(entity, null);
         }
