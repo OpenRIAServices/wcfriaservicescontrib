@@ -23,7 +23,7 @@ namespace RiaServicesContrib.Extensions
             if (entity == null) throw new ArgumentNullException("entity");
             Entity extractEntity;
             if (extractType == ExtractType.OriginalState && entity.HasChanges)
-                extractEntity = entity.GetOriginal();
+                extractEntity = entity.GetOriginalForced();
             else
                 extractEntity = entity;
 
@@ -52,7 +52,7 @@ namespace RiaServicesContrib.Extensions
             List<PropertyInfo> dataMembers = GetDataMembers(targetEntity);
             if (sourceEntity.HasChanges)
             {
-                ApplyState(targetEntity, sourceEntity.GetOriginal(), dataMembers);
+                ApplyState(targetEntity, sourceEntity.GetOriginalForced(), dataMembers);
                 ((IChangeTracking)targetEntity).AcceptChanges();
             }
             
@@ -173,7 +173,7 @@ namespace RiaServicesContrib.Extensions
             List<PropertyInfo> dataMembers = GetDataMembers(sourceEntity);
             if (sourceEntity.HasChanges)
             {
-                ApplyState(targetEntity, sourceEntity.GetOriginal(), dataMembers);
+                ApplyState(targetEntity, sourceEntity.GetOriginalForced(), dataMembers);
                 ((IChangeTracking)targetEntity).AcceptChanges();            
             }            
             ApplyState(targetEntity, sourceEntity, dataMembers);
@@ -199,7 +199,7 @@ namespace RiaServicesContrib.Extensions
             targetEntity.OnDeserializing(dummy);
             List<PropertyInfo> dataMembers = GetDataMembers(sourceEntity);
             if (sourceEntity.HasChanges)
-                ApplyState(targetEntity, sourceEntity.GetOriginal(), dataMembers);
+                ApplyState(targetEntity, sourceEntity.GetOriginalForced(), dataMembers);
 
             if (sourceEntity.EntityState == EntityState.Deleted)
             {
@@ -252,7 +252,7 @@ namespace RiaServicesContrib.Extensions
             {
                 T existingEntity = null;
                 if (currentSourceEntity.HasChanges)
-                    identityCache.TryGetValue(currentSourceEntity.GetOriginal().GetIdentity(), out existingEntity);
+                    identityCache.TryGetValue(currentSourceEntity.GetOriginalForced().GetIdentity(), out existingEntity);
                 if (existingEntity == null)
                     identityCache.TryGetValue(currentSourceEntity.GetIdentity(), out existingEntity);
                 if (existingEntity == null)
@@ -275,7 +275,7 @@ namespace RiaServicesContrib.Extensions
                     }
                     else if (currentSourceEntity.EntityState == EntityState.Modified)
                     {
-                        ApplyState(existingEntity, currentSourceEntity.GetOriginal());
+                        ApplyState(existingEntity, currentSourceEntity.GetOriginalForced());
                         ((IChangeTracking)existingEntity).AcceptChanges();
                         ApplyState(existingEntity, currentSourceEntity);
                     }
@@ -329,7 +329,7 @@ namespace RiaServicesContrib.Extensions
 
                 if (currentEntity.HasChanges)
                 {
-                    newStateSet.OriginalKey = currentEntity.GetOriginal().GetIdentity();
+                    newStateSet.OriginalKey = currentEntity.GetOriginalForced().GetIdentity();
                     object modifiedKey = currentEntity.GetIdentity();
                     if (newStateSet.OriginalKey != modifiedKey)
                         newStateSet.ModifiedKey = modifiedKey;
@@ -423,6 +423,21 @@ namespace RiaServicesContrib.Extensions
                 }
             }
             return true;
+        }
+        /// <summary>
+        /// If the original entity doesn't have an original state, returns the current entity
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="entity"></param>
+        /// <param name="compareEntity"></param>
+        /// <returns>true if duplicate</returns>
+        private static T GetOriginalForced<T>(this T entity) where T : Entity
+        {
+            T returnEntity = entity.GetOriginal() as T;
+            if (returnEntity == null)
+                return entity;
+            else
+                return returnEntity;
         }
  
     }
