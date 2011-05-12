@@ -6,7 +6,7 @@ using Utilities.graphviz;
 
 namespace Utilities
 {
-    class EntityGraphShapeOverlay : GraphOverlay
+    public class EntityGraphShapeOverlay : GraphOverlay
     {
         public EntityGraphShape EntityGraphShape { get; private set; }
 
@@ -20,10 +20,10 @@ namespace Utilities
         {
             foreach(var edgeExpr in EntityGraphShape)
             {
-                var lhsType = edgeExpr.From;
-                var lhsDeclaringType = edgeExpr.To.DeclaringType;
-                var rhsType = edgeExpr.To.PropertyType;
-                var edgeName = edgeExpr.To.Name;
+                var lhsType = edgeExpr.FromType;
+                var lhsDeclaringType = edgeExpr.EdgeInfo.DeclaringType;
+                var rhsType = edgeExpr.EdgeInfo.PropertyType;
+                var edgeName = edgeExpr.EdgeInfo.Name;
                 if(typeof(IEnumerable).IsAssignableFrom(rhsType) && rhsType.IsGenericType)
                 {
                     rhsType = rhsType.GetGenericArguments()[0];
