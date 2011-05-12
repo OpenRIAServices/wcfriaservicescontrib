@@ -9,8 +9,35 @@ namespace RiaServicesContrib
 {
     public class EntityGraphEdge
     {
-        public Type From { get; set; }
-        public PropertyInfo To { get; set; }
+        public Type FromType { get; set; }
+        private PropertyInfo _edgeInfo;
+        public PropertyInfo EdgeInfo
+        {
+            get
+            {
+                return _edgeInfo;
+            }
+            set
+            {
+                if(_edgeInfo != value)
+                {
+                    _edgeInfo = value;
+                    if(typeof(IEnumerable).IsAssignableFrom(_edgeInfo.PropertyType) && _edgeInfo.PropertyType.IsGenericType)
+                    {
+                        ToType = _edgeInfo.PropertyType.GetGenericArguments()[0];
+                    }
+                    else
+                    {
+                        ToType = _edgeInfo.PropertyType;
+                    }
+                }
+            }
+        }
+        public Type ToType { get; private set; }
+        public override string ToString()
+        {
+            return String.Format("{0}->{1}", FromType.Name, ToType.Name);
+        }
     }
 
     public class EntityGraphShape : IEntityGraphShape, IEnumerable<EntityGraphEdge>
@@ -35,7 +62,7 @@ namespace RiaServicesContrib
             }
             var propInfo = mexpr.Member as PropertyInfo;
             if(entityType != null && propInfo != null)
-                edges.Add(new EntityGraphEdge { From = entityType, To = propInfo });
+                edges.Add(new EntityGraphEdge { FromType = entityType, EdgeInfo = propInfo });
             return this;
         }
         // We can't use TEntity as the return type of EdgeEnumType, because IEnumerable<T> is not 
@@ -56,7 +83,7 @@ namespace RiaServicesContrib
             }
             var propInfo = mexpr.Member as PropertyInfo;
             if(entityType != null && propInfo != null)
-                edges.Add(new EntityGraphEdge { From = entityType, To = propInfo });
+                edges.Add(new EntityGraphEdge { FromType = entityType, EdgeInfo = propInfo });
             return this;
         }
         /// <summary>
@@ -66,8 +93,12 @@ namespace RiaServicesContrib
         /// <returns></returns>
         public IEnumerable<PropertyInfo> OutEdges(object entity)
         {
+            if(entity == null)
+            {
+                return new List<PropertyInfo>();
+            }
             var entityType = entity.GetType();
-            return this.Where(edge => edge.From.IsAssignableFrom(entityType)).Select(edge => edge.To).Distinct();
+            return this.Where(edge => edge.FromType.IsAssignableFrom(entityType)).Select(edge => edge.EdgeInfo).Distinct();
         }
 
         public IEnumerator<EntityGraphEdge> GetEnumerator()
@@ -87,7 +118,7 @@ namespace RiaServicesContrib
         /// <returns></returns>
         public bool IsEdge(PropertyInfo edge)
         {
-            return edges.Any(e => e.To.Name == edge.Name && e.To.PropertyType.IsAssignableFrom(edge.PropertyType));
+            return edges.Any(e => e.EdgeInfo.Name == edge.Name && e.EdgeInfo.PropertyType.IsAssignableFrom(edge.PropertyType));
         }
         /// <summary>
         /// Returns the object that is reachable from entity via the given edge.
