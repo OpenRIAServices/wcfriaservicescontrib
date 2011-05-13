@@ -1,9 +1,11 @@
-﻿using EntityGraphTest.Web;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RiaServicesContrib.Validation;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Collections.Generic;
 using System.ServiceModel.DomainServices.Client;
+using EntityGraphTest.Web;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RiaServicesContrib.DomainServices.Client;
+using RiaServicesContrib.DataValidation;
+using RiaServicesContrib.DomainServices.Client.DataValidation;
 
 namespace EntityGraphTest.Tests
 {
@@ -35,7 +37,7 @@ namespace EntityGraphTest.Tests
         [TestMethod]
         public void RegisterTest()
         {
-            var validator = new ValidationEngine<Entity,ValidationResult>(new MEFValidationRulesProvider<ValidationResult>());
+            var validator = new ValidationEngine { RulesProvider = new MEFValidationRulesProvider<ValidationResult>() };
             RegisterUnregisterValidation.visited = false;
 
             validator.Validate(a, "B", new List<Entity> { a });
@@ -45,7 +47,7 @@ namespace EntityGraphTest.Tests
         public void UnregisterTest()
         {
             MEFValidationRules.UnregisterType(typeof(RegisterUnregisterValidation));
-            var validator = new ValidationEngine<Entity,ValidationResult>(new MEFValidationRulesProvider<ValidationResult>());
+            var validator = new ValidationEngine { RulesProvider = new MEFValidationRulesProvider<ValidationResult>() };
             RegisterUnregisterValidation.visited = false;
 
             validator.Validate(a, "B", new List<Entity> { a });

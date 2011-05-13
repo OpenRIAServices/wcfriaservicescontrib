@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace RiaServicesContrib.Validation
+namespace RiaServicesContrib.DataValidation
 {
     /// <summary>
     /// Class that provides a collection of validation rules that are annotated

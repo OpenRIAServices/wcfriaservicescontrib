@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using RiaServicesContrib.Validation;
+using RiaServicesContrib.DataValidation;
 
-namespace RiaServicesContrib.DomainServices.Client.Validation
+namespace RiaServicesContrib.DomainServices.Client.DataValidation
 {
     /// <summary>
     /// This class is similar to System.ComponentModel.DataAnnotations.RegularExpressionAttribute.

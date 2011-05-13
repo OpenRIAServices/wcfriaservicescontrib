@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace RiaServicesContrib
 {
-    public partial class EntityGraph<TEntity, TValidationResult> : IDisposable
+    public partial class EntityGraph<TEntity> : IDisposable
     {
         public void Dispose() {
             var type = this.GetType();

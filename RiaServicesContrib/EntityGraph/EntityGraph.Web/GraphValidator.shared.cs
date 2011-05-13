@@ -1,149 +1,65 @@
-﻿using System;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using RiaServicesContrib.Validation;
+using RiaServicesContrib.DataValidation;
 
 namespace RiaServicesContrib
 {
-    public partial class EntityGraph<TEntity, TValidationResult>
+    public partial class EntityGraph<TEntity>
     {
-        private ValidationEngine<TEntity, TValidationResult> Validator;
-
-        private static IValidationRulesProvider<TValidationResult> _defaultRulesProvider;
-        /// <summary>
-        /// Gets or sets the default validation rules provider for all entity graph instances.
-        /// </summary>
-        public static IValidationRulesProvider<TValidationResult> DefaultRulesProvider
+        private IValidationEngine<TEntity> _validator;
+        public IValidationEngine<TEntity> Validator
         {
             get
             {
-                if(_defaultRulesProvider == null)
-                {
-                    DefaultRulesProvider = new MEFValidationRulesProvider<TValidationResult>();
-                }
-                return _defaultRulesProvider;
+                return _validator;
             }
             set
             {
-                if(_defaultRulesProvider != value)
+                if(_validator != value)
                 {
-                    _defaultRulesProvider = value;
-                }
-            }
-        }
-        /// <summary>
-        /// Gets or sets the validation rules provider for this entity graph instance.
-        /// </summary>
-        public IValidationRulesProvider<TValidationResult> RulesProvider
-        {
-            get
-            {
-                return Validator.RulesProvider;
-            }
-            set
-            {
-                if(Validator.RulesProvider != value)
-                {
-                    Validator.RulesProvider = value;
-                    Validator.Validate(this);
+                    if(_validator != null)
+                    {
+                        ClearValidatorEventHandlers();
+                        _validator.CollectionChanged -= _validator_CollectionChanged;
+                    }
+                    _validator = value;
+                    if(_validator != null)
+                    {
+                        SetValidatorEventHandlers();
+                        _validator.CollectionChanged += _validator_CollectionChanged;
+                        _validator.Validate(this);
+                    }
                 }
             }
         }
 
-        /// <summary>
-        /// Initialization method.
-        /// </summary>
-        [Initialize]
-        internal void InitGraphValidation()
+        void _validator_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            var rulesProvider = new MEFValidationRulesProvider<TValidationResult>();
-            Validator = new ValidationEngine<TEntity, TValidationResult>(rulesProvider);
-            Validator.ValidationResultChanged += Validator_ValidationResultChanged;
-
-            this.EntityRelationGraphResetted += ValidatorRefresh;
-
+            _validator.Validate(this);
+        }
+        private void SetValidatorEventHandlers()
+        {
             this.CollectionChanged += Validator_CollectionChanged;
             this.PropertyChanged += Validator_PropertyChanged;
-
-            Validator.Validate(this);
+        }
+        private void ClearValidatorEventHandlers(){
+            this.CollectionChanged -= Validator_CollectionChanged;
+            this.PropertyChanged -= Validator_PropertyChanged;
         }
 
         /// <summary>
         /// Dispose method
         /// </summary>
         [Dispose]
-        internal void CleanGraphValidation()
+        internal void DisposeGraphValidation()
         {
-            this.Validator.ValidationResultChanged -= Validator_ValidationResultChanged;
-            this.EntityRelationGraphResetted -= ValidatorRefresh;
-            Validator.Dispose();
-            this.CollectionChanged -= Validator_CollectionChanged;
-            this.PropertyChanged -= Validator_PropertyChanged;
-        }
-
-        /// <summary>
-        /// Method that checks if the entity has a validation error for the given set of members.
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="membersInError"></param>
-        /// <param name="validationResult"></param>
-        /// <returns></returns>
-        protected abstract bool HasValidationResult(TEntity entity, string[] membersInError, TValidationResult validationResult);
-        /// <summary>
-        /// Method that clears the validation result of the given entity, for the given members.
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="membersInError"></param>
-        /// <param name="validationResult"></param>
-        protected abstract void ClearValidationResult(TEntity entity, string[] membersInError, TValidationResult validationResult);
-        /// <summary>
-        /// Method that sets a validation error for the given memebrs of the given entity.
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="membersInError"></param>
-        /// <param name="validationResult"></param>
-        protected abstract void SetValidationResult(TEntity entity, string[] membersInError, TValidationResult validationResult);
-
-        /// <summary>
-        /// callback method that is called when the entity graph has been reset. In that case 
-        /// all validation rules have to be evaluated.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        private void ValidatorRefresh(object sender, EventArgs args)
-        {
-            Validator.Validate(this);
-        }
-        /// <summary>
-        /// Callback method that is called when a ValidationResultChanged event is received from the
-        /// validation rule engine. In this method we distribute the validation results over
-        /// the involved entities. These are the target owner objects of InputOutput rule depdenencies.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Validator_ValidationResultChanged(object sender, ValidationResultChangedEventArgs<TValidationResult> e)
-        {
-            var rule = (ValidationRule<TValidationResult>)sender;
-
-            var bindingGroups = from binding in rule.RuleBinding.DependencyBindings
-                                where
-                                binding.ValidationRuleDependency.InputOnly == false &&
-                                binding.TargetOwnerObject is TEntity
-                                group binding by binding.TargetOwnerObject;
-
-            foreach(var bindingGroup in bindingGroups)
+            if(Validator != null)
             {
-                var entity = bindingGroup.Key as TEntity;
-                var membersInError = bindingGroup.Select(binding => binding.ValidationRuleDependency.TargetProperty.Name).Distinct().ToArray();
-
-                if(HasValidationResult(entity, membersInError, e.OldValidationResult))
-                    ClearValidationResult(entity, membersInError, e.OldValidationResult);
-                if(HasValidationResult(entity, membersInError, e.ValidationResult) == false)
-                    SetValidationResult(entity, membersInError, e.ValidationResult);
+                Validator.Dispose();
+                Validator = null;
             }
         }
+
         /// <summary>
         /// Callback method that is called when a CollectionChanged event is received from the entity graph.
         /// We obtain the node and edge in the entity graph for this collection and then call the Validate
@@ -153,14 +69,16 @@ namespace RiaServicesContrib
         /// <param name="args"></param>
         private void Validator_CollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
         {
-            var senderType = sender.GetType();
-            var nodeEdge = (from n in EntityRelationGraph.Nodes
-                               from edge in n.ListEdges
-                               where
-                                 edge.Key.PropertyType == senderType &&
-                                 edge.Key.GetValue(n.Node, null) == sender
-                               select new { node = n.Node, edge = edge.Key.Name }).Single();
-            Validator.Validate(nodeEdge.node, nodeEdge.edge, this);
+            if(args.Action == NotifyCollectionChangedAction.Reset)
+            {
+                Validator.Validate(this);
+            }
+            else
+            {
+                var senderType = sender.GetType();
+                var owningInfo = this.GetCollectionOwnerInfo((INotifyCollectionChanged)sender);
+                Validator.Validate(owningInfo.Owner, owningInfo.Edge.Name, this);
+            }
         }
         /// <summary>
         /// Callback method that is called when a PropertyChanged event is received from the entity graph.

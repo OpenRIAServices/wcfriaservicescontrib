@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace RiaServicesContrib.Validation
+namespace RiaServicesContrib.DataValidation
 {
     /// <summary>
     /// Extension class that provides an aggregate method on linq expressions

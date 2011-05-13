@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace RiaServicesContrib.Validation
+namespace RiaServicesContrib.DataValidation
 {
     /// <summary>
     /// Class that implements a validation rule provider as a list of validation rules.

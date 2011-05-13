@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace RiaServicesContrib.Validation
+namespace RiaServicesContrib.DataValidation
 {
     /// <summary>
     /// Interface for attribute-based validation.

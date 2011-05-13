@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 using System.Reflection;
-using RiaServicesContrib.Validation;
+using RiaServicesContrib.DataValidation;
 
-namespace RiaServicesContrib.DomainServices.Client.Validation
+namespace RiaServicesContrib.DomainServices.Client.DataValidation
 {
     /// <summary>
     /// Abstract base class that implements attribute-based validation.

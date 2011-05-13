@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using RiaServicesContrib.Validation;
+using RiaServicesContrib.DataValidation;
 
-namespace RiaServicesContrib.DomainServices.Client.Validation
+namespace RiaServicesContrib.DomainServices.Client.DataValidation
 {
     /// <summary>
     /// WCF DomainServices.Client services specific instantiation of the RiaServicesContrib.EntityGraph.Validation.ValidationRule class.

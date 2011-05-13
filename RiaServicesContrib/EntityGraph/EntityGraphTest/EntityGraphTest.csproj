@@ -136,6 +136,10 @@
     <None Include="Properties\AppManifest.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\DataValidationFramework\DataValidationFramework\DataValidationFramework.csproj">
+      <Project>{E4232D70-AF05-4F20-AEB0-703E3B3F96BE}</Project>
+      <Name>DataValidationFramework %28DataValidationFramework\DataValidationFramework%29</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EntityGraph\EntityGraph.csproj">
       <Project>{32DF13C4-B558-4A27-B29A-E69CD6AAFC0B}</Project>
       <Name>EntityGraph %28EntityGraph\EntityGraph%29</Name>

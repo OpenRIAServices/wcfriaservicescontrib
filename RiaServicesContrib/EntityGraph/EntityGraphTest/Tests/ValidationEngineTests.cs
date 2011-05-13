@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.ServiceModel.DomainServices.Client;
-using RiaServicesContrib.Validation;
 using EntityGraphTest.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Linq;
+using RiaServicesContrib.DataValidation;
+using RiaServicesContrib.DomainServices.Client.DataValidation;
 
 namespace EntityGraphTest.Tests
 {
@@ -104,7 +105,7 @@ namespace EntityGraphTest.Tests
         {
             AValidator.TestResult = ValidationResult.Success;
             b.name = "hello";
-            var validator = new ValidationEngine<Entity, ValidationResult>(new MEFValidationRulesProvider<ValidationResult>());
+            var validator = new ValidationEngine { RulesProvider = new MEFValidationRulesProvider<ValidationResult>() };
             validator.Validate(b, "name", new List<Entity> { a, b, c, d });
             Assert.IsFalse(AValidator.TestResult == ValidationResult.Success);
         }
@@ -113,7 +114,7 @@ namespace EntityGraphTest.Tests
         {
             AValidator.TestResult = ValidationResult.Success;
             b.name = "hello";
-            var validator = new ValidationEngine<Entity, ValidationResult>(new MEFValidationRulesProvider<ValidationResult>());
+            var validator = new ValidationEngine { RulesProvider = new MEFValidationRulesProvider<ValidationResult>() };
             validator.Validate(b, "name", new List<Entity> { a, b, c, d });
             Assert.IsFalse(AValidator.TestResult == ValidationResult.Success);
             c.name = b.name;
@@ -127,7 +128,7 @@ namespace EntityGraphTest.Tests
         {
             var a1 = new A();
             var a2 = new A();
-            var validator = new ValidationEngine<Entity, ValidationResult>(new SimpleValidationRulesProvider<ValidationResult>{ new PermutationsOneParameterValidator() });
+            var validator = new ValidationEngine { RulesProvider = new SimpleValidationRulesProvider<ValidationResult> { new PermutationsOneParameterValidator() } };
             PermutationsOneParameterValidator.Bindings = new List<RuleBinding<ValidationResult>>();
             validator.Validate(new List<Entity> { a1, a2 });
             Assert.IsTrue(PermutationsOneParameterValidator.Bindings.Count == 2);
@@ -140,7 +141,7 @@ namespace EntityGraphTest.Tests
         {
             var a1 = new A();
             var a2 = new A();
-            var validator = new ValidationEngine<Entity, ValidationResult>(new SimpleValidationRulesProvider<ValidationResult> { new PermutationsTwoParameterValidator() });
+            var validator = new ValidationEngine { RulesProvider = new SimpleValidationRulesProvider<ValidationResult> { new PermutationsTwoParameterValidator() } };
             PermutationsTwoParameterValidator.Bindings = new List<RuleBinding<ValidationResult>>();
             validator.Validate(new List<Entity> { a1, a2 });
             Assert.IsTrue(PermutationsTwoParameterValidator.Bindings.Count == 2);
@@ -153,7 +154,7 @@ namespace EntityGraphTest.Tests
         {
             var a1 = new A();
             var a2 = new A();
-            var validator = new ValidationEngine<Entity, ValidationResult>(new SimpleValidationRulesProvider<ValidationResult> { new PermutationsTwoParameterNamesValidator() });
+            var validator = new ValidationEngine { RulesProvider = new SimpleValidationRulesProvider<ValidationResult> { new PermutationsTwoParameterNamesValidator() } };
             PermutationsTwoParameterNamesValidator.Bindings = new List<RuleBinding<ValidationResult>>();
 
             validator.Validate(new List<Entity> { a1, a2 });
@@ -173,7 +174,7 @@ namespace EntityGraphTest.Tests
         {
             var a1 = new A();
             var a2 = new A();
-            var validator = new ValidationEngine<Entity, ValidationResult>(new SimpleValidationRulesProvider<ValidationResult> { new PermutationsThreeParameterNamesValidator() });
+            var validator = new ValidationEngine { RulesProvider = new SimpleValidationRulesProvider<ValidationResult> { new PermutationsThreeParameterNamesValidator() } };
             PermutationsThreeParameterNamesValidator.Bindings = new List<RuleBinding<ValidationResult>>();
             validator.Validate(new List<Entity> { a1, a2 });
             Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Count == 0);
@@ -185,7 +186,7 @@ namespace EntityGraphTest.Tests
             var a1 = new A();
             var a2 = new A();
             var a3 = new A();
-            var validator = new ValidationEngine<Entity, ValidationResult>(new SimpleValidationRulesProvider<ValidationResult> { new PermutationsThreeParameterNamesValidator() });
+            var validator = new ValidationEngine { RulesProvider = new SimpleValidationRulesProvider<ValidationResult> { new PermutationsThreeParameterNamesValidator() } };
             PermutationsThreeParameterNamesValidator.Bindings = new List<RuleBinding<ValidationResult>>();
             validator.Validate(new List<Entity> { a1, a2, a3 });
             Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Count == 6);
@@ -224,7 +225,7 @@ namespace EntityGraphTest.Tests
         [TestMethod]
         public void SingleEntityValidation1()
         {
-            var validator = new ValidationEngine<Entity, ValidationResult>(new SimpleValidationRulesProvider<ValidationResult> { new AValidator() });
+            var validator = new ValidationEngine { RulesProvider = new SimpleValidationRulesProvider<ValidationResult> { new AValidator() } };
             AValidator.TestResult = ValidationResult.Success;
             validator.Validate(a, "name");
             Assert.IsTrue(AValidator.TestResult == ValidationResult.Success);            
@@ -233,7 +234,7 @@ namespace EntityGraphTest.Tests
         public void SingleEntityValidation2()
         {
             PermutationsOneParameterValidator.Bindings = new List<RuleBinding<ValidationResult>>();
-            var validator = new ValidationEngine<Entity, ValidationResult>(new SimpleValidationRulesProvider<ValidationResult> { new PermutationsOneParameterValidator() });
+            var validator = new ValidationEngine { RulesProvider = new SimpleValidationRulesProvider<ValidationResult> { new PermutationsOneParameterValidator() } };
             AValidator.TestResult = ValidationResult.Success;
             validator.Validate(a, "name");
             Assert.IsTrue(PermutationsOneParameterValidator.Bindings.Count() == 1);

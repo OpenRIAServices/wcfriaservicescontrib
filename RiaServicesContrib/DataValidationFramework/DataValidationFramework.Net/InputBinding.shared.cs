@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace RiaServicesContrib.Validation
+namespace RiaServicesContrib.DataValidation
 {
     /// <summary>
     /// Class that represent a binding for a validation rule dependency

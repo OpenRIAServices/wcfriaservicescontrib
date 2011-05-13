@@ -3,11 +3,11 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.ServiceModel.DomainServices.Client;
-using RiaServicesContrib;
-using RiaServicesContrib.DomainServices.Client;
-using RiaServicesContrib.DomainServices.Client.Validation;
-using RiaServicesContrib.Validation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RiaServicesContrib;
+using RiaServicesContrib.DataValidation;
+using RiaServicesContrib.DomainServices.Client;
+using RiaServicesContrib.DomainServices.Client.DataValidation;
 
 namespace EntityGraphTest.Tests
 {

@@ -5,18 +5,18 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{32DF13C4-B558-4A27-B29A-E69CD6AAFC0B}</ProjectGuid>
+    <ProjectGuid>{E4232D70-AF05-4F20-AEB0-703E3B3F96BE}</ProjectGuid>
     <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EntityGraph</RootNamespace>
-    <AssemblyName>EntityGraph</AssemblyName>
+    <RootNamespace>DataValidationFramework</RootNamespace>
+    <AssemblyName>DataValidationFramework</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
     <SilverlightApplication>false</SilverlightApplication>
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
-    <LinkedServerProject>..\EntityGraph.Web\EntityGraph.Web.csproj</LinkedServerProject>
+    <LinkedServerProject>..\DataValidationFramework.Net\DataValidationFramework.Net.csproj</LinkedServerProject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -28,8 +28,6 @@
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <NoWarn>1591</NoWarn>
-    <DocumentationFile>Bin\Debug\EntityGraph.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -58,31 +56,15 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="contrib\EntityStateSet.cs" />
-    <Compile Include="contrib\ExtractType.cs" />
-    <Compile Include="contrib\RiaServicesExtensions.cs" />
-    <Compile Include="RIA\Clone.cs" />
-    <Compile Include="RIA\CloneComparer.cs" />
-    <Compile Include="RIA\Copy.cs" />
-    <Compile Include="RIA\CopyComparer.cs" />
-    <Compile Include="RIA\EntityChangeSet.cs" />
-    <Compile Include="RIA\EntityGraph.cs" />
-    <Compile Include="RIA\EntityGraphChangeSet.cs" />
-    <Compile Include="RIA\EntitySet.cs" />
-    <Compile Include="RIA\Graphvalidator.cs" />
-    <Compile Include="RIA\HasChanges.cs" />
-    <Compile Include="RIA\IEDitableObject.cs" />
-    <Compile Include="RIA\Proxies.cs" />
+    <Compile Include="AttributeValidator.cs" />
+    <Compile Include="EntityValidator.cs" />
+    <Compile Include="MandatoryAttribute.cs" />
+    <Compile Include="NoDuplicatesAttribute.cs" />
+    <Compile Include="PatternAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="RIA\Validation\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\DataValidationFramework\DataValidationFramework\DataValidationFramework.csproj">
-      <Project>{E4232D70-AF05-4F20-AEB0-703E3B3F96BE}</Project>
-      <Name>DataValidationFramework %28DataValidationFramework\DataValidationFramework%29</Name>
-    </ProjectReference>
+    <Compile Include="ValidationAttribute.cs" />
+    <Compile Include="ValidationEngine.cs" />
+    <Compile Include="ValidationRule.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>

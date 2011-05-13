@@ -13,9 +13,8 @@ namespace RiaServicesContrib
     {
     }
 
-    public abstract partial class EntityGraph<TEntity, TValidationResult>
+    public partial class EntityGraph<TEntity>
         where TEntity : class
-        where TValidationResult : class
     {
         public TEntity Source { get; private set; }
         private IEntityGraphShape GraphShape { get; set; }
@@ -26,7 +25,7 @@ namespace RiaServicesContrib
             this.GraphShape = graphShape;
 
             var type = this.GetType();
-            var flags = BindingFlags.Instance | BindingFlags.NonPublic;
+            var flags = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public;
             var constructors = type.GetMethods(flags).Where(m => m.IsDefined(typeof(InitializeAttribute), true));
 
             foreach(var constructor in constructors)

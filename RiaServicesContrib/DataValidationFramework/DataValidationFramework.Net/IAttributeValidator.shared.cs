@@ -1,4 +1,4 @@
-﻿namespace RiaServicesContrib.Validation
+﻿namespace RiaServicesContrib.DataValidation
 {
     /// <summary>
     /// Interface for attribute validators. They have a validate method with a fixed signature.

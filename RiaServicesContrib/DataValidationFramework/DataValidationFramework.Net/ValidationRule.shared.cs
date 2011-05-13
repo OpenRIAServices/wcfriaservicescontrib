@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Linq.Expressions;
 
-namespace RiaServicesContrib.Validation
+namespace RiaServicesContrib.DataValidation
 {
     /// <summary>
     /// Class that forms the abstract base for all cross-entity validation rules.

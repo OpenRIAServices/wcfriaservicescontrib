@@ -3,9 +3,8 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("EntityGraphtest")]
-
-namespace RiaServicesContrib.Validation
+[assembly: InternalsVisibleTo("EntityGraphTest")]
+namespace RiaServicesContrib.DataValidation
 {
     /// <summary>
     /// Class that represents a validation rule dependency of a validation rule.

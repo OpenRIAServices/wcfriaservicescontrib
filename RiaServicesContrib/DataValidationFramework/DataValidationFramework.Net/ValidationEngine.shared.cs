@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ComponentModel.Composition;
+using System.Collections.Specialized;
 
-namespace RiaServicesContrib.Validation
+namespace RiaServicesContrib.DataValidation
 {
     /// <summary>
     /// Class that implements cross-entity validation.
@@ -17,7 +19,8 @@ namespace RiaServicesContrib.Validation
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TResult"></typeparam>
-    public class ValidationEngine<TEntity, TResult> : IDisposable
+    public abstract class ValidationEngine<TEntity, TResult> : IValidationEngine<TEntity>
+        where TEntity : class
         where TResult : class
     {
         private IValidationRulesProvider<TResult> _rulesProvider;
@@ -56,17 +59,27 @@ namespace RiaServicesContrib.Validation
                     observedProperties = ValidationRules.SelectMany(
                         rule => rule.Signature.Select(dep => dep.TargetProperty.Name)).ToArray();
                 }
+                if(CollectionChanged != null)
+                {
+                    CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                }
+            }
+        }
+        /// <summary>
+        /// gets the number of registered validation rules.
+        /// </summary>
+        public int Count
+        {
+            get
+            {
+                if(RulesProvider != null)
+                {
+                    return RulesProvider.ValidationRules.Count();
+                }
+                return 0;
             }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the ValidationEngine class.
-        /// </summary>
-        /// <param name="rulesProvider"></param>
-        public ValidationEngine(IValidationRulesProvider<TResult> rulesProvider)
-        {
-            RulesProvider = rulesProvider;
-        }
         /// <summary>
         /// Method that invokes all matching validation rules for the given object and 
         /// property name.
@@ -87,7 +100,7 @@ namespace RiaServicesContrib.Validation
         }
         /// <summary>
         /// Method that invokes all matching validation rules for all possible bindings given
-        /// a collection of objects, an object 'obj' that should be presentin any bindings, and a 
+        /// a collection of objects, an object 'obj' that should be present in any bindings, and a 
         /// (changed) property with name 'propertyName' that should be part in any signature.
         /// </summary>
         /// <param name="obj"></param>
@@ -124,7 +137,7 @@ namespace RiaServicesContrib.Validation
         /// <summary>
         /// Event handler that is called when the parameterObjectBindings of any of the validation rules changes.
         /// </summary>
-        internal event EventHandler<ValidationResultChangedEventArgs<TResult>> ValidationResultChanged;
+        public event EventHandler<ValidationResultChangedEventArgs<TResult>> ValidationResultChanged;
         /// <summary>
         /// Returns a collection of validation rules that have 'propertyName' as one of the target properties in
         /// any of their validation rule dependencies.
@@ -150,7 +163,7 @@ namespace RiaServicesContrib.Validation
         /// <returns></returns>
         private bool Skip(string propertyName)
         {
-            return observedProperties.Contains(propertyName) == false;
+            return observedProperties == null || observedProperties.Contains(propertyName) == false;
         }
         /// <summary>
         /// Given a validation rule with dependency expressions and a collection of objects
@@ -289,6 +302,10 @@ namespace RiaServicesContrib.Validation
         /// <param name="obj"></param>
         private void ValidateRules(IEnumerable<ValidationRule<TResult>> rules, IEnumerable<TEntity> objects, object obj)
         {
+            if(rules == null)
+            {
+                return;
+            }
             foreach(var rule in rules)
             {
                 var objectBindings = GetRuleArgumentObjectBindings(rule, objects);
@@ -300,6 +317,7 @@ namespace RiaServicesContrib.Validation
                 }
             }
         }
+
         /// <summary>
         /// Callback method that is called when the result of a validation rule has changed.
         /// </summary>
@@ -307,11 +325,54 @@ namespace RiaServicesContrib.Validation
         /// <param name="e"></param>
         private void ValidationResultChangedCallback(object sender, ValidationResultChangedEventArgs<TResult> e)
         {
+            var rule = (ValidationRule<TResult>)sender;
+
+            var bindingGroups = from binding in rule.RuleBinding.DependencyBindings
+                                where
+                                binding.ValidationRuleDependency.InputOnly == false &&
+                                binding.TargetOwnerObject is TEntity
+                                group binding by binding.TargetOwnerObject;
+
+            foreach(var bindingGroup in bindingGroups)
+            {
+                var entity = bindingGroup.Key as TEntity;
+                var membersInError = bindingGroup.Select(binding => binding.ValidationRuleDependency.TargetProperty.Name).Distinct().ToArray();
+
+                if(HasValidationResult(entity, membersInError, e.OldValidationResult))
+                    ClearValidationResult(entity, membersInError, e.OldValidationResult);
+                if(HasValidationResult(entity, membersInError, e.ValidationResult) == false)
+                    SetValidationResult(entity, membersInError, e.ValidationResult);
+            }
+            
             if(ValidationResultChanged != null)
             {
                 ValidationResultChanged(sender, e);
             }
         }
+
+        /// <summary>
+        /// Method that checks if the entity has a validation error for the given set of members.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="membersInError"></param>
+        /// <param name="validationResult"></param>
+        /// <returns></returns>
+        protected abstract bool HasValidationResult(TEntity entity, string[] membersInError, TResult validationResult);
+        /// <summary>
+        /// Method that clears the validation result of the given entity, for the given members.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="membersInError"></param>
+        /// <param name="validationResult"></param>
+        protected abstract void ClearValidationResult(TEntity entity, string[] membersInError, TResult validationResult);
+        /// <summary>
+        /// Method that sets a validation error for the given memebrs of the given entity.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="membersInError"></param>
+        /// <param name="validationResult"></param>
+        protected abstract void SetValidationResult(TEntity entity, string[] membersInError, TResult validationResult);
+
         private string[] observedProperties;
 
         /// <summary>
@@ -344,5 +405,7 @@ namespace RiaServicesContrib.Validation
                 return hashCode;
             }
         }
+
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
     }
 }

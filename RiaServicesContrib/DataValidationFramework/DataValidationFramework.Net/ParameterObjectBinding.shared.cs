@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RiaServicesContrib.Validation
+namespace RiaServicesContrib.DataValidation
 {
     /// <summary>
     /// Class that represents a binding between a dependency parameter and an object.

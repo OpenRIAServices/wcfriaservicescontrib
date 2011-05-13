@@ -1,6 +1,7 @@
 ﻿using RiaServicesContrib.DomainServices.Client;
 using EntityGraphTest.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.ServiceModel.DomainServices.Client;
 
 namespace EntityGraphTest.Tests
 {

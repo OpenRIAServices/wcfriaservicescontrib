@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace RiaServicesContrib.Validation
+namespace RiaServicesContrib.DataValidation
 {
     /// <summary>
     /// Class that is used to notify that the result of a validation rule has changed. 
     /// </summary>
     /// <typeparam name="TResult"></typeparam>
-	internal class ValidationResultChangedEventArgs<TResult> : EventArgs
+	public class ValidationResultChangedEventArgs<TResult> : EventArgs
     {
         /// <summary>
         /// Gets the last result of the validation rule.

@@ -1,23 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.ServiceModel.DomainServices.Client;
-using RiaServicesContrib.Validation;
+using RiaServicesContrib.DataValidation;
 
-namespace RiaServicesContrib.DomainServices.Client.Validation
+namespace RiaServicesContrib.DomainServices.Client.DataValidation
 {
-    /// <summary>
-    /// WCF DomainServices.Client services-specific instantiation of the RiaServicesContrib.EntityGraph.Validation.EntityValidator class.
-    /// </summary>
-    public class EntityValidator : EntityValidator<Entity, ValidationResult>
+    public class ValidationEngine : ValidationEngine<Entity, ValidationResult>
     {
-        /// <summary>
-        /// Initializes a new instance of the EntityValidator class.
-        /// </summary>
-        /// <param name="entity"></param>
-        public EntityValidator(Entity entity)
-            : base(entity)
-        {
-        }
         /// <summary>
         /// Method that clears the validation result of the given entity, for the given members.
         /// </summary>

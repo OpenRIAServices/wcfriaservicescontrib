@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
 
-namespace RiaServicesContrib.Validation
+namespace RiaServicesContrib.DataValidation
 {
     /// <summary>
     /// Represents a collection of validation rules.
     /// </summary>
     /// <typeparam name="TResult"></typeparam>
+    [InheritedExport]
     public interface IValidationRulesProvider<TResult> where TResult : class
     {
         /// <summary>

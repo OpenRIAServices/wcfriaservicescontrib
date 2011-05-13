@@ -1,5 +1,5 @@
 ﻿
-namespace RiaServicesContrib.Validation
+namespace RiaServicesContrib.DataValidation
 {
     /// <summary>
     /// Class that represents a collection of dependency bindings for a validation rule.

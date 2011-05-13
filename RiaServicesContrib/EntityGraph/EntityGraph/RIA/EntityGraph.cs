@@ -3,7 +3,7 @@ using System.ServiceModel.DomainServices.Client;
 
 namespace RiaServicesContrib.DomainServices.Client
 {
-    public partial class EntityGraph : EntityGraph<Entity, ValidationResult>
+    public partial class EntityGraph : EntityGraph<Entity>
     {
         /// <summary>
         /// Extension method that returns an entity graph object, defined by the provided entitygraph attribute shape

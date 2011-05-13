@@ -6,7 +6,7 @@ using System.ComponentModel.Composition.ReflectionModel;
 using System.Linq;
 using System.Reflection;
 
-namespace RiaServicesContrib.Validation
+namespace RiaServicesContrib.DataValidation
 {
     /// <summary>
     /// Class that holds the singleton AggregateCatalog for storing entity validation rules 
@@ -81,7 +81,8 @@ namespace RiaServicesContrib.Validation
         /// <summary>
         /// Creates a new instance of the MEFValidationRulesProvider
         /// </summary>
-        public MEFValidationRulesProvider() {
+        public MEFValidationRulesProvider()
+        {
             //Create the CompositionContainer with the parts in the catalog
             container = new CompositionContainer(MEFValidationRules.Catalog);
 

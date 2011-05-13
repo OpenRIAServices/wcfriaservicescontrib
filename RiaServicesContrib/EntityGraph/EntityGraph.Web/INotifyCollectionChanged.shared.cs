@@ -1,13 +1,32 @@
 ﻿using System.Collections.Specialized;
+using System.Reflection;
+using RiaServicesContrib.DeveloperUtilities;
+using System.Linq;
 
+namespace RiaServicesContrib.DeveloperUtilities
+{
+    public class CollectionOwnerInfo<TEntity>
+        where TEntity : class
+    {
+        public TEntity Owner { get; set; }
+        public PropertyInfo Edge { get; set; }
+    }
+}
 namespace RiaServicesContrib
 {
-    public partial class EntityGraph<TEntity, TValidationResult> : INotifyCollectionChanged 
+    public partial class EntityGraph<TEntity> : INotifyCollectionChanged 
     {
         [Initialize]
         internal void SetupINotifyCollectionChanged() {
             this.EntityRelationGraphResetting += (sender, args) => RemoveNotifyCollectionChangedHandlers();
-            this.EntityRelationGraphResetted += (sender, args) => SetupNotifyCollectionChangedHandlers();
+            this.EntityRelationGraphResetted += (sender, args) =>
+            {
+                SetupNotifyCollectionChangedHandlers();
+                if(CollectionChanged != null)
+                {
+                    CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                }
+            };
             SetupNotifyCollectionChangedHandlers();
         }
         [Dispose]
@@ -59,5 +78,25 @@ namespace RiaServicesContrib
         /// Handler to receive collection changed events
         /// </summary>
         public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+        /// <summary>
+        /// Method that returns an CollectionOwnerInfo object that containes the owning
+        /// entity of the given collection, and the property name for that collection.
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <returns></returns>
+        public CollectionOwnerInfo<TEntity> GetCollectionOwnerInfo(INotifyCollectionChanged collection)
+        {
+            var senderType = collection.GetType();
+            var CollectionOwnerInfo =
+                from node in this.EntityRelationGraph.Nodes
+                from edge in node.ListEdges
+                where
+                    edge.Key.PropertyType == senderType &&
+                    edge.Key.GetValue(node.Node, null) == collection
+                select
+                    new CollectionOwnerInfo<TEntity> { Owner = node.Node, Edge = edge.Key };
+            return CollectionOwnerInfo.Single();
+        }
     }
 }

@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using RiaServicesContrib;
-using RiaServicesContrib.Validation;
+using RiaServicesContrib.DataValidation;
 
-namespace RiaServicesContrib.DomainServices.Client.Validation
+namespace RiaServicesContrib.DomainServices.Client.DataValidation
 {
     /// <summary>
     /// This class is similar (but simpler) to System.ComponentModel.DataAnnotations.RequiredAttribute.

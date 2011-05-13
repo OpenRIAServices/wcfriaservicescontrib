@@ -2,7 +2,7 @@
 
 namespace RiaServicesContrib
 {
-    public partial class EntityGraph<TEntity, TValidationResult> : IEnumerable<TEntity>
+    public partial class EntityGraph<TEntity> : IEnumerable<TEntity>
     {
         public IEnumerator<TEntity> GetEnumerator() {
             return EntityRelationGraph.GetEnumerator();

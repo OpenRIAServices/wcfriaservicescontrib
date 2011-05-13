@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{DCCBB9AE-C321-42DB-A49A-73A0529D4D6B}</ProjectGuid>
+    <ProjectGuid>{E1F14354-89AF-4282-8E56-5D4B00A78150}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EntityGraph.Web</RootNamespace>
-    <AssemblyName>EntityGraph.Web</AssemblyName>
+    <RootNamespace>RiaServicesContrib.DataValidation</RootNamespace>
+    <AssemblyName>DataValidationFramework.Net</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -21,8 +21,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\EntityGraph.Web.XML</DocumentationFile>
-    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,7 +33,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -44,25 +41,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EntityGraph.shared.cs" />
-    <Compile Include="EntityGraphAttribute.shared.cs" />
-    <Compile Include="EntityGraphAttributeShape.shared.cs" />
-    <Compile Include="EntityGraphComparer.shared.cs" />
-    <Compile Include="EntityGraphShape.shared.cs" />
-    <Compile Include="EntityRelationGraph.shared.cs" />
-    <Compile Include="GraphValidator.shared.cs" />
-    <Compile Include="IDisposable.shared.cs" />
-    <Compile Include="IEntityGraphShape.shared.cs" />
-    <Compile Include="IEnumerable.shared.cs" />
-    <Compile Include="INotifyCollectionChanged.shared.cs" />
-    <Compile Include="INotifyPropertyChanged.shared.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\DataValidationFramework\DataValidationFramework.Net\DataValidationFramework.Net.csproj">
-      <Project>{E1F14354-89AF-4282-8E56-5D4B00A78150}</Project>
-      <Name>DataValidationFramework.Net</Name>
-    </ProjectReference>
+    <Compile Include="AttributeValidator.shared.cs" />
+    <Compile Include="ClassValidationRulesProvider.shared.cs" />
+    <Compile Include="EntityValidator.shared.cs" />
+    <Compile Include="ExpressionAggregator.shared.cs" />
+    <Compile Include="IAttributeValidator.shared.cs" />
+    <Compile Include="InputBinding.shared.cs" />
+    <Compile Include="IValidationAttribute.shared.cs" />
+    <Compile Include="IValidationEngine.shared.cs" />
+    <Compile Include="IValidationRulesProvider.shared.cs" />
+    <Compile Include="MEFValidationRulesProvider.shared.cs" />
+    <Compile Include="ParameterObjectBinding.shared.cs" />
+    <Compile Include="RuleBinding.shared.cs" />
+    <Compile Include="Signature.shared.cs" />
+    <Compile Include="SimpleValidationRulesProvider.shared.cs" />
+    <Compile Include="ValidateMethodAttribute.shared.cs" />
+    <Compile Include="ValidationEngine.shared.cs" />
+    <Compile Include="ValidationResultChangedEventArgs.shared.cs" />
+    <Compile Include="ValidationRule.shared.cs" />
+    <Compile Include="ValidationRuleDependency.shared.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

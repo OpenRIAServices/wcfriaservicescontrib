@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RiaServicesContrib.Validation
+namespace RiaServicesContrib.DataValidation
 {
     /// <summary>
     /// Attribute that marks a method as a validation method.

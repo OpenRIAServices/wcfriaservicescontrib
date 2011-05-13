@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using RiaServicesContrib.Validation;
+using RiaServicesContrib.DataValidation;
 
-namespace RiaServicesContrib.DomainServices.Client.Validation
+namespace RiaServicesContrib.DomainServices.Client.DataValidation
 {
     /// <summary>
     /// Abstract base class for attribute validators.

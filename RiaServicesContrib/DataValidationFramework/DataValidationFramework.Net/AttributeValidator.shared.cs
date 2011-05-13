@@ -1,4 +1,4 @@
-﻿namespace RiaServicesContrib.Validation
+﻿namespace RiaServicesContrib.DataValidation
 {
     /// <summary>
     /// Abstract base class for attribute validators.

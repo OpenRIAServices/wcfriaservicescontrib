@@ -1,7 +1,7 @@
-﻿using System.ServiceModel.DomainServices.Client;
+﻿using System.Collections.ObjectModel;
+using System.ServiceModel.DomainServices.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.ObjectModel;
-using RiaServicesContrib.DomainServices.Client.Validation;
+using RiaServicesContrib.DomainServices.Client.DataValidation;
 
 namespace EntityGraphTest.Tests
 {
