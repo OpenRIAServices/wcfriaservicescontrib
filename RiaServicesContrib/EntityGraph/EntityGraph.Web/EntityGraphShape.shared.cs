@@ -7,6 +7,23 @@ using System.Reflection;
 
 namespace RiaServicesContrib
 {
+    class EntityGraphEdgeComparer : IEqualityComparer<EntityGraphEdge>
+    {
+        public bool Equals(EntityGraphEdge x, EntityGraphEdge y)
+        {
+            if(x == y)
+                return true;
+            return
+                x.FromType.Equals(y.FromType) &&
+                x.EdgeInfo.Equals(y.EdgeInfo);
+        }
+
+        public int GetHashCode(EntityGraphEdge obj)
+        {
+            return obj.FromType.GetHashCode() ^ obj.EdgeInfo.GetHashCode();
+        }
+    }
+
     public class EntityGraphEdge
     {
         public Type FromType { get; set; }
@@ -85,6 +102,22 @@ namespace RiaServicesContrib
             if(entityType != null && propInfo != null)
                 edges.Add(new EntityGraphEdge { FromType = entityType, EdgeInfo = propInfo });
             return this;
+        }
+        /// <summary>
+        /// Produces the set union of two entity graph shapes by using the default equality comparer.
+        /// </summary>
+        /// <param name="shape"></param>
+        /// <returns></returns>
+        public EntityGraphShape Union(EntityGraphShape shape)
+        {
+            var union = new EntityGraphShape();
+            var edges = ((IEnumerable<EntityGraphEdge>)this).Union(shape, new EntityGraphEdgeComparer());
+
+            foreach(var edge in edges)
+            {
+                union.edges.Add(edge);
+            }
+            return union;
         }
         /// <summary>
         /// Returns an IEnumerable that iterates over the out edges of the given entity

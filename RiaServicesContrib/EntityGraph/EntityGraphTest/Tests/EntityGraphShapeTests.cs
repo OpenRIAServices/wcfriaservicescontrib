@@ -109,5 +109,24 @@ namespace EntityGraphTest.Tests
             }
             Assert.IsFalse(isValidExpression);
         }
+        [TestMethod]
+        public void EntitiyGraphShapeUnionTest()
+        {
+            var shape1 = new EntityGraphShape()
+                .Edge<A, D>(A => A.DSet)
+                .Edge<A, B>(A => A.B);
+            var shape2 = new EntityGraphShape()
+                .Edge<A, D>(A => A.DSet)
+                .Edge<A, B>(A => A.B)
+                .Edge<C, D>(C => C.D);
+            var shape3 = shape1.Union(shape2);
+
+
+            Assert.IsTrue(shape1.All(edge => shape3.Contains(edge)));
+            Assert.IsTrue(shape2.All(edge => shape2.Contains(edge)));
+
+            Assert.IsFalse(shape3.Any(edge => shape1.Contains(edge) == false && shape2.Contains(edge) == false));
+            Assert.IsTrue(shape3.Count() == 3);
+        }
     }
 }
