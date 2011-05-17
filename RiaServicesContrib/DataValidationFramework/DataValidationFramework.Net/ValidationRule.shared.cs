@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Reflection;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace RiaServicesContrib.DataValidation
 {
@@ -14,49 +14,14 @@ namespace RiaServicesContrib.DataValidation
     [InheritedExport]
     public abstract class ValidationRule<TResult> where TResult : class
     {
-        //public static Signature InputOutput<TSource, TTarget>(Expression<Func<TSource, TTarget>> dependency)
-        //{
-        //    return new Signature().InputOutput<TSource, TTarget>(dependency);
-        //}
         /// <summary>
         /// Gets the signature of the validation rule
         /// </summary>
         public Signature Signature { get; private set; }
         /// <summary>
-        /// Gets the validation result for this validation rule.
-        /// </summary>
-        public TResult Result
-        {
-            get
-            {
-                return _result;
-            }
-            protected set
-            {
-                if(_result != value)
-                {
-                    TResult old = _result;
-                    _result = value;
-                    if(ResultChanged != null)
-                    {
-                        ResultChanged(this, new ValidationResultChangedEventArgs<TResult>(old, value));
-                    }
-                }
-            }
-        }
-        /// <summary>
-        /// Event handler that is called when the result of this validation rule changes.
-        /// </summary>
-        internal event EventHandler<ValidationResultChangedEventArgs<TResult>> ResultChanged;
-        /// <summary>
         /// Holds the MethodInfo for the validation method of this validation rule.
         /// </summary>
-        internal MethodInfo ValidationMethod { get; set; }
-        /// <summary>
-        /// Holds the RuleBinding that is the result of synthesizing an invocation of the Validate
-        /// method of this validatino rule. Note, this is not thread safe.
-        /// </summary>
-        internal RuleBinding<TResult> RuleBinding { get; set; }
+        private MethodInfo ValidationMethod { get; set; }
         /// <summary>
         /// Creates a new instance of the ValidationRule class.
         /// </summary>
@@ -67,7 +32,7 @@ namespace RiaServicesContrib.DataValidation
             ValidationMethod = this.GetValidateMethod();
         }
         /// <summary>
-        /// Gets the list of dependency rule parameters of this validation  rule.
+        /// Gets the list of dependency rule parameters of this validation rule.
         /// </summary>
         /// <returns></returns>
         internal IEnumerable<ParameterObjectBinding> GetValidationRuleDependencyParameters()
@@ -80,15 +45,13 @@ namespace RiaServicesContrib.DataValidation
                             };
             return oBindings.Distinct();
         }
-
-        private TResult _result;
-
         /// <summary>
         /// Method that checks if bindings are correct for the validation method of this Validation rule
         /// and then invokes teh validation method.
         /// </summary>
         /// <param name="binding"></param>
-        internal void Evaluate(RuleBinding<TResult> binding)
+        /// <returns></returns>
+        internal TResult Evaluate(RuleBinding<TResult> binding)
         {
             var type = GetType();
 
@@ -104,8 +67,9 @@ namespace RiaServicesContrib.DataValidation
                 var dBinding = binding.DependencyBindings[i];
                 bindings[i] = dBinding.ValidationRuleDependency.TargetProperty.GetValue(dBinding.TargetOwnerObject, null);
             }
-            RuleBinding = binding;
-            ValidationMethod.Invoke(binding.ValidationRule, bindings);
+//            RuleBinding = binding;
+            var result = ValidationMethod.Invoke(binding.ValidationRule, bindings);
+            return (TResult)result;
         }
         /// <summary>
         /// This method tries to find a method which has the name "Validate" (or is annotated
@@ -155,7 +119,7 @@ namespace RiaServicesContrib.DataValidation
                 {
                     continue;
                 }
-                if(method.ReturnType != typeof(void))
+                if(method.ReturnType != typeof(TResult))
                 {
                     continue;
                 }

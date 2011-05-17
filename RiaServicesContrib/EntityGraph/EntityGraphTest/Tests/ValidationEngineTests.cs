@@ -24,60 +24,58 @@ namespace EntityGraphTest.Tests
             public static ValidationResult TestResult { get; set; }
 
             [ValidateMethod]
-            public void ValidateMe(string nameOfB, string nameOfC)
+            public ValidationResult ValidateMe(string nameOfB, string nameOfC)
             {
                 if(nameOfB != nameOfC)
                 {
                     TestResult = new ValidationResult("Invalid names");
+                    return ValidationResult.Success;
                 }
                 else
                 {
                     TestResult = ValidationResult.Success;
+                    return ValidationResult.Success;
                 }
             }
         }
         public class PermutationsOneParameterValidator : ValidationRule<ValidationResult>
         {
-            internal static List<RuleBinding<ValidationResult>> Bindings { get; set; }
             public PermutationsOneParameterValidator() :
                 base(InputOutput<A, string>(A => A.name)) 
             { }
-            public void Validate(string arg)
+            public ValidationResult Validate(string arg)
             {
-                Bindings.Add(RuleBinding);
+                return new ValidationResult(arg);
             }
         }
         public class PermutationsTwoParameterValidator : ValidationRule<ValidationResult>
         {
-            internal static List<RuleBinding<ValidationResult>> Bindings { get; set; }
             public PermutationsTwoParameterValidator() :
                 base(                
                     InputOutput<A, string>(A => A.name),
                     InputOutput<A, string>(A => A.lastName)
                 ) 
             { }
-            public void Validate(string arg1, string arg2)
+            public ValidationResult Validate(string arg1, string arg2)
             {
-                Bindings.Add(RuleBinding);
+                return new ValidationResult(arg1);
             }
         }
         public class PermutationsTwoParameterNamesValidator : ValidationRule<ValidationResult>
         {
-            internal static List<RuleBinding<ValidationResult>> Bindings { get; set; }
             public PermutationsTwoParameterNamesValidator() :
                 base(
                     InputOutput<A, string>(A => A.name),
                     InputOutput<A, string>(B => B.name)
                 ) 
             { }
-            public void Validate(string arg1, string arg2)
+            public ValidationResult Validate(string arg1, string arg2)
             {
-                Bindings.Add(RuleBinding);
+                return new ValidationResult(arg1 + arg2);
             }
         }
         public class PermutationsThreeParameterNamesValidator : ValidationRule<ValidationResult>
         {
-            internal static List<RuleBinding<ValidationResult>> Bindings { get; set; }
             public PermutationsThreeParameterNamesValidator() :
                 base(
                     InputOutput<A, string>(A => A.name),
@@ -85,9 +83,9 @@ namespace EntityGraphTest.Tests
                     InputOutput<A, string>(C => C.name)
                 ) 
             { }
-            public void Validate(string arg1, string arg2, string arg3)
+            public ValidationResult Validate(string arg1, string arg2, string arg3)
             {
-                Bindings.Add(RuleBinding);
+                return new ValidationResult(arg1 + arg2 + arg3);
             }
         }
         public override void TestSetup()
@@ -126,101 +124,70 @@ namespace EntityGraphTest.Tests
         [TestMethod]
         public void PermutationsOneParameterValidatorTest()
         {
-            var a1 = new A();
-            var a2 = new A();
+            var a1 = new A { name = "a1" };
+            var a2 = new A { name = "a2" };
             var validator = new ValidationEngine { RulesProvider = new SimpleValidationRulesProvider<ValidationResult> { new PermutationsOneParameterValidator() } };
-            PermutationsOneParameterValidator.Bindings = new List<RuleBinding<ValidationResult>>();
             validator.Validate(new List<Entity> { a1, a2 });
-            Assert.IsTrue(PermutationsOneParameterValidator.Bindings.Count == 2);
-            Assert.IsTrue(PermutationsOneParameterValidator.Bindings.Any(b => b.DependencyBindings[0].TargetOwnerObject == a1));
-            Assert.IsTrue(PermutationsOneParameterValidator.Bindings.Any(b => b.DependencyBindings[0].TargetOwnerObject == a2));
+            Assert.IsTrue(a1.ValidationErrors.Count == 1);
+            Assert.IsTrue(a2.ValidationErrors.Count == 1);
         }
         [Description("Test that a validation rule is invoked for any matching object. Should't make a difference in case of two parameters with the same name")]
         [TestMethod]
         public void PermutationsTwoParameterValidatorTest()
         {
-            var a1 = new A();
-            var a2 = new A();
+            var a1 = new A { name = "a1" };
+            var a2 = new A { name = "a2" };
             var validator = new ValidationEngine { RulesProvider = new SimpleValidationRulesProvider<ValidationResult> { new PermutationsTwoParameterValidator() } };
-            PermutationsTwoParameterValidator.Bindings = new List<RuleBinding<ValidationResult>>();
             validator.Validate(new List<Entity> { a1, a2 });
-            Assert.IsTrue(PermutationsTwoParameterValidator.Bindings.Count == 2);
-            Assert.IsTrue(PermutationsTwoParameterValidator.Bindings.Any(b => b.DependencyBindings[0].TargetOwnerObject == a1));
-            Assert.IsTrue(PermutationsTwoParameterValidator.Bindings.Any(b => b.DependencyBindings[0].TargetOwnerObject == a2));
+            Assert.IsTrue(a1.ValidationErrors.Count == 1);
+            Assert.IsTrue(a2.ValidationErrors.Count == 1);
         }
         [Description("Test permutations in case of two different parameter names")]
         [TestMethod]
         public void PermutationsTwoParameterNamesValidatorTest()
         {
-            var a1 = new A();
-            var a2 = new A();
+            var a1 = new A { name = "a1" };
+            var a2 = new A { name = "a2" };
             var validator = new ValidationEngine { RulesProvider = new SimpleValidationRulesProvider<ValidationResult> { new PermutationsTwoParameterNamesValidator() } };
-            PermutationsTwoParameterNamesValidator.Bindings = new List<RuleBinding<ValidationResult>>();
 
             validator.Validate(new List<Entity> { a1, a2 });
-            Assert.IsTrue(PermutationsTwoParameterNamesValidator.Bindings.Count == 2);
-            Assert.IsTrue(PermutationsTwoParameterNamesValidator.Bindings.Any(
-                b => b.DependencyBindings[0].TargetOwnerObject == a1 &&
-                     b.DependencyBindings[1].TargetOwnerObject == a2
-                ));
-            Assert.IsTrue(PermutationsTwoParameterNamesValidator.Bindings.Any(
-                b => b.DependencyBindings[0].TargetOwnerObject == a2 &&
-                     b.DependencyBindings[1].TargetOwnerObject == a1
-                ));
+            Assert.IsTrue(a1.ValidationErrors.Count == 2);
+            Assert.IsTrue(a1.ValidationErrors.Any(e => e.ErrorMessage == "a1a2"));
+            Assert.IsTrue(a1.ValidationErrors.Any(e => e.ErrorMessage == "a2a1"));
+            Assert.IsTrue(a2.ValidationErrors.Count == 2);
+            Assert.IsTrue(a2.ValidationErrors.Any(e => e.ErrorMessage == "a1a2"));
+            Assert.IsTrue(a2.ValidationErrors.Any(e => e.ErrorMessage == "a2a1"));
         }
         [Description("Test permutations in case of three different parameter names with two objects")]
         [TestMethod]
         public void PermutationsThreeParameterNamesValidatorTest1()
         {
-            var a1 = new A();
-            var a2 = new A();
+            var a1 = new A { name = "a1" };
+            var a2 = new A { name = "a2" };
             var validator = new ValidationEngine { RulesProvider = new SimpleValidationRulesProvider<ValidationResult> { new PermutationsThreeParameterNamesValidator() } };
-            PermutationsThreeParameterNamesValidator.Bindings = new List<RuleBinding<ValidationResult>>();
             validator.Validate(new List<Entity> { a1, a2 });
-            Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Count == 0);
+            Assert.IsTrue(a1.ValidationErrors.Count == 0);
+            Assert.IsTrue(a2.ValidationErrors.Count == 0);
         }
         [Description("Test permutations in case of three different parameter names with three objects")]
         [TestMethod]
         public void PermutationsThreeParameterNamesValidatorTest2()
         {
-            var a1 = new A();
-            var a2 = new A();
-            var a3 = new A();
+            var a1 = new A { name = "a1" };
+            var a2 = new A { name = "a2" };
+            var a3 = new A { name = "a3" };
             var validator = new ValidationEngine { RulesProvider = new SimpleValidationRulesProvider<ValidationResult> { new PermutationsThreeParameterNamesValidator() } };
-            PermutationsThreeParameterNamesValidator.Bindings = new List<RuleBinding<ValidationResult>>();
             validator.Validate(new List<Entity> { a1, a2, a3 });
-            Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Count == 6);
-
-            Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Any(
-                b => b.DependencyBindings[0].TargetOwnerObject == a1 &&
-                     b.DependencyBindings[1].TargetOwnerObject == a2 &&
-                     b.DependencyBindings[2].TargetOwnerObject == a3
-                ));
-            Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Any(
-                b => b.DependencyBindings[0].TargetOwnerObject == a1 &&
-                     b.DependencyBindings[1].TargetOwnerObject == a3 &&
-                     b.DependencyBindings[2].TargetOwnerObject == a2
-                ));
-            Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Any(
-                b => b.DependencyBindings[0].TargetOwnerObject == a2 &&
-                     b.DependencyBindings[1].TargetOwnerObject == a1 &&
-                     b.DependencyBindings[2].TargetOwnerObject == a3
-                ));
-            Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Any(
-                b => b.DependencyBindings[0].TargetOwnerObject == a2 &&
-                     b.DependencyBindings[1].TargetOwnerObject == a3 &&
-                     b.DependencyBindings[2].TargetOwnerObject == a1
-                ));
-            Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Any(
-                b => b.DependencyBindings[0].TargetOwnerObject == a3 &&
-                     b.DependencyBindings[1].TargetOwnerObject == a1 &&
-                     b.DependencyBindings[2].TargetOwnerObject == a2
-                ));
-            Assert.IsTrue(PermutationsThreeParameterNamesValidator.Bindings.Any(
-                b => b.DependencyBindings[0].TargetOwnerObject == a3 &&
-                     b.DependencyBindings[1].TargetOwnerObject == a2 &&
-                     b.DependencyBindings[2].TargetOwnerObject == a1
-                ));
+            Assert.IsTrue(a1.ValidationErrors.Count == 6);
+            Assert.IsTrue(a1.ValidationErrors.Any(e => e.ErrorMessage == "a1a2a3"));
+            Assert.IsTrue(a1.ValidationErrors.Any(e => e.ErrorMessage == "a1a3a2"));
+            Assert.IsTrue(a1.ValidationErrors.Any(e => e.ErrorMessage == "a2a1a3"));
+            Assert.IsTrue(a1.ValidationErrors.Any(e => e.ErrorMessage == "a2a3a1"));
+            Assert.IsTrue(a1.ValidationErrors.Any(e => e.ErrorMessage == "a3a1a2"));
+            Assert.IsTrue(a1.ValidationErrors.Any(e => e.ErrorMessage == "a3a2a1"));
+            
+            Assert.IsTrue(a2.ValidationErrors.Count == 6);
+            Assert.IsTrue(a3.ValidationErrors.Count == 6);
         }
         [TestMethod]
         public void SingleEntityValidation1()
@@ -228,16 +195,16 @@ namespace EntityGraphTest.Tests
             var validator = new ValidationEngine { RulesProvider = new SimpleValidationRulesProvider<ValidationResult> { new AValidator() } };
             AValidator.TestResult = ValidationResult.Success;
             validator.Validate(a, "name");
-            Assert.IsTrue(AValidator.TestResult == ValidationResult.Success);            
+            Assert.IsTrue(AValidator.TestResult == ValidationResult.Success);
         }
         [TestMethod]
         public void SingleEntityValidation2()
         {
-            PermutationsOneParameterValidator.Bindings = new List<RuleBinding<ValidationResult>>();
+            var a = new A();
             var validator = new ValidationEngine { RulesProvider = new SimpleValidationRulesProvider<ValidationResult> { new PermutationsOneParameterValidator() } };
             AValidator.TestResult = ValidationResult.Success;
             validator.Validate(a, "name");
-            Assert.IsTrue(PermutationsOneParameterValidator.Bindings.Count() == 1);
+            Assert.IsTrue(a.ValidationErrors.Count() == 1);
         }
     }
 }

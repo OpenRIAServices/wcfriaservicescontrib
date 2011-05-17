@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ComponentModel.Composition;
 using System.Collections.Specialized;
+using System.Diagnostics;
 
 namespace RiaServicesContrib.DataValidation
 {
@@ -37,13 +38,6 @@ namespace RiaServicesContrib.DataValidation
             {
                 if(_rulesProvider != value)
                 {
-                    if(_rulesProvider != null)
-                    {
-                        foreach(var rule in ValidationRules)
-                        {
-                            rule.ResultChanged -= ValidationResultChangedCallback;
-                        }
-                    }
                     ValidationRules = null;
                     observedProperties = null;
                 }
@@ -51,11 +45,6 @@ namespace RiaServicesContrib.DataValidation
                 if(_rulesProvider != null)
                 {
                     ValidationRules = _rulesProvider.ValidationRules;
-
-                    foreach(var rule in ValidationRules)
-                    {
-                        rule.ResultChanged += ValidationResultChangedCallback;
-                    }
                     observedProperties = ValidationRules.SelectMany(
                         rule => rule.Signature.Select(dep => dep.TargetProperty.Name)).ToArray();
                 }
@@ -79,7 +68,10 @@ namespace RiaServicesContrib.DataValidation
                 return 0;
             }
         }
-
+        /// <summary>
+        /// Occurs when the collection changes.. 
+        /// </summary>
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
         /// <summary>
         /// Method that invokes all matching validation rules for the given object and 
         /// property name.
@@ -120,7 +112,7 @@ namespace RiaServicesContrib.DataValidation
         }
         /// <summary>
         /// Method that invokes all matching validation rules for all possible bindings given a 
-        /// collection of validation rules.
+        /// collection of entities.
         /// </summary>
         /// <param name="objects"></param>
         public void Validate(IEnumerable<TEntity> objects)
@@ -313,7 +305,8 @@ namespace RiaServicesContrib.DataValidation
                 var filteredBindings = FilterRuleBindings(ruleBindings, obj);
                 foreach(var binding in filteredBindings)
                 {
-                    rule.Evaluate(binding);
+                    TResult result = binding.ValidationRule.Evaluate(binding);
+                    ProcessValidationResult(binding, result);
                 }
             }
         }
@@ -323,33 +316,60 @@ namespace RiaServicesContrib.DataValidation
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ValidationResultChangedCallback(object sender, ValidationResultChangedEventArgs<TResult> e)
+        private void ProcessValidationResult(RuleBinding<TResult>ruleBinding, TResult validationResult)
         {
-            var rule = (ValidationRule<TResult>)sender;
+            var rule = ruleBinding.ValidationRule;
 
-            var bindingGroups = from binding in rule.RuleBinding.DependencyBindings
+            var bindingGroups = from depBinding in ruleBinding.DependencyBindings
                                 where
-                                binding.ValidationRuleDependency.InputOnly == false &&
-                                binding.TargetOwnerObject is TEntity
-                                group binding by binding.TargetOwnerObject;
+                                depBinding.ValidationRuleDependency.InputOnly == false &&
+                                depBinding.TargetOwnerObject is TEntity
+                                group depBinding by depBinding.TargetOwnerObject as TEntity;
 
+            TResult oldValidationResult = null;
+            if(ValidationResults.ContainsKey(ruleBinding))
+            {
+                oldValidationResult = ValidationResults[ruleBinding];
+            }
+            TEntity entity;
             foreach(var bindingGroup in bindingGroups)
             {
-                var entity = bindingGroup.Key as TEntity;
+                entity = bindingGroup.Key;
                 var membersInError = bindingGroup.Select(binding => binding.ValidationRuleDependency.TargetProperty.Name).Distinct().ToArray();
-
-                if(HasValidationResult(entity, membersInError, e.OldValidationResult))
-                    ClearValidationResult(entity, membersInError, e.OldValidationResult);
-                if(HasValidationResult(entity, membersInError, e.ValidationResult) == false)
-                    SetValidationResult(entity, membersInError, e.ValidationResult);
+                if(HasValidationResult(entity, membersInError, oldValidationResult))
+                    ClearValidationResult(entity, membersInError, oldValidationResult);
+                if(HasValidationResult(entity, membersInError, validationResult) == false)
+                    SetValidationResult(entity, membersInError, validationResult);
             }
-            
+            if(IsValidationSuccess(validationResult) && oldValidationResult != null)
+            {
+                ValidationResults.Remove(ruleBinding);
+            }
+            else
+            {
+                ValidationResults[ruleBinding] = validationResult;
+            }
             if(ValidationResultChanged != null)
             {
-                ValidationResultChanged(sender, e);
+                ValidationResultChanged(this, new ValidationResultChangedEventArgs<TResult>(validationResult));
             }
         }
 
+        private Dictionary<RuleBinding<TResult>, TResult> _validationResults;
+        /// <summary>
+        /// Gets a dictionary of validation rule bindings and the corresponding validation results.
+        /// </summary>
+        private Dictionary<RuleBinding<TResult>, TResult> ValidationResults
+        {
+            get
+            {
+                if(_validationResults == null)
+                {
+                    _validationResults = new Dictionary<RuleBinding<TResult>,TResult>();
+                }
+                return _validationResults;
+            }
+        }
         /// <summary>
         /// Method that checks if the entity has a validation error for the given set of members.
         /// </summary>
@@ -372,9 +392,14 @@ namespace RiaServicesContrib.DataValidation
         /// <param name="membersInError"></param>
         /// <param name="validationResult"></param>
         protected abstract void SetValidationResult(TEntity entity, string[] membersInError, TResult validationResult);
+        /// <summary>
+        /// Method that checks if the given validation result indicates a successful validation.
+        /// </summary>
+        /// <param name="validationResult"></param>
+        /// <returns></returns>
+        protected abstract bool IsValidationSuccess(TResult validationResult);
 
         private string[] observedProperties;
-
         /// <summary>
         /// This class tests for equality between ValidationRuleDependencyBinding objects.
         /// Two ValidationRuleDependencyBinding objects are equal if the target properties 
@@ -405,7 +430,5 @@ namespace RiaServicesContrib.DataValidation
                 return hashCode;
             }
         }
-
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
     }
 }

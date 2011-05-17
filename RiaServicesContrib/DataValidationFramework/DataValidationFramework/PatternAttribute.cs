@@ -94,23 +94,18 @@ namespace RiaServicesContrib.DomainServices.Client.DataValidation
         /// The validation method.
         /// </summary>
         /// <param name="value"></param>
-        public override void Validate(object value)
+        public override ValidationResult Validate(object value)
         {
+            if(value is string)
             {
-                if(value is string)
+                string input = (string)value;
+                Match m = _regex.Match(input);
+                if(m.Length != input.Length)
                 {
-                    string input = (string)value;
-                    Match m = _regex.Match(input);
-                    if(m.Length != input.Length)
-                    {
-                        Result = new ValidationResult(Message);
-                    }
-                    else
-                    {
-                        Result = ValidationResult.Success;
-                    }
+                    return new ValidationResult(Message);
                 }
             }
+            return ValidationResult.Success;
         }
     }
 }

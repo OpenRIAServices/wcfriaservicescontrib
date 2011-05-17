@@ -25,15 +25,15 @@ namespace EntityGraphTest.Tests
             public static bool IsValidated = false;
 
             [ValidateMethod]
-            public void ValidateMe(string nameOfB, string nameOfC)
+            public ValidationResult ValidateMe(string nameOfB, string nameOfC)
             {
                 IsValidated = true;
                 if(nameOfB != nameOfC)
                 {
-                    this.Result = new ValidationResult("Invalid names");
+                    return new ValidationResult("Invalid names");
                 }
                 else
-                    this.Result = ValidationResult.Success;
+                    return ValidationResult.Success;
             }
         }
         public class MultiPropertyValidator : ValidationRule
@@ -45,15 +45,15 @@ namespace EntityGraphTest.Tests
                 )
             { }
 
-            public void Validate(string name, string lastName)
+            public ValidationResult Validate(string name, string lastName)
             {
                 if(name == lastName)
                 {
-                    this.Result = new ValidationResult("Name and LastName cannot be the same", new string[] { "dummy", "members" });
+                    return new ValidationResult("Name and LastName cannot be the same", new string[] { "dummy", "members" });
                 }
                 else
                 {
-                    this.Result = ValidationResult.Success;
+                    return ValidationResult.Success;
                 }
             }
         }
@@ -65,15 +65,15 @@ namespace EntityGraphTest.Tests
                     InputOnly<A, string>(A => A.lastName)
                 )
             { }
-            public void Validate(string name, string lastName)
+            public ValidationResult Validate(string name, string lastName)
             {
                 if(name == lastName)
                 {
-                    this.Result = new ValidationResult("Name and LastName cannot be the same", new string[] { "dummy", "members" });
+                    return new ValidationResult("Name and LastName cannot be the same", new string[] { "dummy", "members" });
                 }
                 else
                 {
-                    this.Result = ValidationResult.Success;
+                    return ValidationResult.Success;
                 }
             }
         }

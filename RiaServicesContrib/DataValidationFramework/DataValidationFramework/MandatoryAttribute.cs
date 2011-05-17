@@ -57,15 +57,15 @@ namespace RiaServicesContrib.DomainServices.Client.DataValidation
         /// The validation method.
         /// </summary>
         /// <param name="value"></param>
-        public override void Validate(object value)
+        public override ValidationResult Validate(object value)
         {
             if(value == null)
             {
-                Result = new ValidationResult(Message);
+                return new ValidationResult(Message);
             }
             else
             {
-                Result = ValidationResult.Success;
+                return ValidationResult.Success;
             }
         }
     }

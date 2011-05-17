@@ -9,23 +9,16 @@ namespace RiaServicesContrib.DataValidation
 	public class ValidationResultChangedEventArgs<TResult> : EventArgs
     {
         /// <summary>
-        /// Gets the last result of the validation rule.
-        /// </summary>
-        public TResult OldValidationResult { get; private set; }
-        /// <summary>
         /// gets the new result of the validation rule.
         /// </summary>
         public TResult ValidationResult { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the ValidationResultChangedEventArgs class with given old and new 
-        /// validation results.
+        /// Initializes a new instance of the ValidationResultChangedEventArgs class
         /// </summary>
-        /// <param name="OldValidationResult"></param>
         /// <param name="ValidationResult"></param>
-        internal ValidationResultChangedEventArgs(TResult OldValidationResult, TResult ValidationResult)
+        internal ValidationResultChangedEventArgs(TResult ValidationResult)
         {
-            this.OldValidationResult = OldValidationResult;
             this.ValidationResult = ValidationResult;
         }
 	}

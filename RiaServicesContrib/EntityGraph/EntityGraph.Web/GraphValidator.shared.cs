@@ -1,5 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
 using RiaServicesContrib.DataValidation;
 
 namespace RiaServicesContrib
@@ -42,7 +43,8 @@ namespace RiaServicesContrib
             this.CollectionChanged += Validator_CollectionChanged;
             this.PropertyChanged += Validator_PropertyChanged;
         }
-        private void ClearValidatorEventHandlers(){
+        private void ClearValidatorEventHandlers()
+        {
             this.CollectionChanged -= Validator_CollectionChanged;
             this.PropertyChanged -= Validator_PropertyChanged;
         }
@@ -76,8 +78,16 @@ namespace RiaServicesContrib
             else
             {
                 var senderType = sender.GetType();
-                var owningInfo = this.GetCollectionOwnerInfo((INotifyCollectionChanged)sender);
-                Validator.Validate(owningInfo.Owner, owningInfo.Edge.Name, this);
+                var collectionOwnerInfo = (
+                    from node in this.EntityRelationGraph.Nodes
+                    from edge in node.ListEdges
+                    where
+                        edge.Key.PropertyType == senderType &&
+                        edge.Key.GetValue(node.Node, null) == sender
+                    select
+                        new { Owner = node.Node, Edge = edge.Key }
+                        ).Single();
+                Validator.Validate(collectionOwnerInfo.Owner, collectionOwnerInfo.Edge.Name, this);
             }
         }
         /// <summary>

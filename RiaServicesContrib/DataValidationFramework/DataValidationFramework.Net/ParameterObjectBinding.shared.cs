@@ -29,7 +29,11 @@ namespace RiaServicesContrib.DataValidation
         /// Represents the name of the parameter 'A' of a valudation rule dependency 'A => A.some.path.p'.
         /// </summary>
         public string ParameterName { get; set; }
-
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public bool Equals(ParameterObjectBinding other)
         {
             if(Object.ReferenceEquals(other, null)) return false;
@@ -42,6 +46,10 @@ namespace RiaServicesContrib.DataValidation
                 && ParameterObjectType == other.ParameterObjectType
                 && ParameterName == other.ParameterName;
         }
+        /// <summary>
+        /// Serves as a hash function for a particular type.
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode()
         {
             int hashParameterObject = ParameterObject == null ? 0 : ParameterObject.GetHashCode();

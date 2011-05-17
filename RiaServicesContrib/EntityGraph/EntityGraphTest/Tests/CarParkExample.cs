@@ -132,15 +132,15 @@ namespace EntityGraphTest.Tests
             )
         { }
 
-        public void Validate(string carId1, string carId2)
+        public ValidationResult Validate(string carId1, string carId2)
         {
             if(carId1 == carId2)
             {
-                Result = new ValidationResult("Car ids should be uniqe");
+                return new ValidationResult("Car ids should be uniqe");
             }
             else
             {
-                Result = ValidationResult.Success;
+                return ValidationResult.Success;
             }
         }
     }
@@ -150,15 +150,15 @@ namespace EntityGraphTest.Tests
             base(InputOutput<Truck, IEnumerable<Door>>(Truck => Truck.Doors)) 
         { }
 
-        public void Validate(IEnumerable<Door> doors)
+        public ValidationResult Validate(IEnumerable<Door> doors)
         {
             if(doors.Count() > 2)
             {
-                Result = new ValidationResult("Truck has max 2 doors."); return;
+                return new ValidationResult("Truck has max 2 doors.");
             }
             else
             {
-                Result = ValidationResult.Success;
+                return ValidationResult.Success;
             }
         }
     }
@@ -171,15 +171,15 @@ namespace EntityGraphTest.Tests
             ) 
         { }
 
-        public void Validate(Engine engine, EngineType engineType)
+        public ValidationResult Validate(Engine engine, EngineType engineType)
         {
             if(engineType != EngineType.Diesel)
             {
-                Result = new ValidationResult("Truck should have a diesel engine."); return;
+                return new ValidationResult("Truck should have a diesel engine."); 
             }
             else
             {
-                Result = ValidationResult.Success;
+                return ValidationResult.Success;
             }
         }
     }
@@ -190,13 +190,13 @@ namespace EntityGraphTest.Tests
             ) 
         { }
 
-        public void Validate(IEnumerable<Wheel> wheels)
+        public ValidationResult Validate(IEnumerable<Wheel> wheels)
         {
             if(wheels.Count() <= 4)
             {
-                Result = new ValidationResult("Truck should have at least 4 wheels."); return;
+                return new ValidationResult("Truck should have at least 4 wheels.");
             }
-            Result = ValidationResult.Success;
+            return ValidationResult.Success;
         }
     }
     public class TruckTrailerValidator : ValidationRule
@@ -207,15 +207,15 @@ namespace EntityGraphTest.Tests
             InputOutput<Truck, Trailer>(Truck2 => Truck2.Trailer)
             )
         { }
-        public void Validate(Trailer trailer1, Trailer trailer2)
+        public ValidationResult Validate(Trailer trailer1, Trailer trailer2)
         {
             if(trailer1 != null && trailer1 == trailer2)
             {
-                Result = new ValidationResult("A trailer can be attached to a single truck only");
+                return new ValidationResult("A trailer can be attached to a single truck only");
             }
             else
             {
-                Result = ValidationResult.Success;
+                return ValidationResult.Success;
             }
         }
     }

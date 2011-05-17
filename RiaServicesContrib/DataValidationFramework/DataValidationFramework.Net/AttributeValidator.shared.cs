@@ -4,7 +4,7 @@
     /// Abstract base class for attribute validators.
     /// </summary>
     /// <typeparam name="TResult"></typeparam>
-    public abstract class AttributeValidator<TResult> : ValidationRule<TResult>, IAttributeValidator
+    public abstract class AttributeValidator<TResult> : ValidationRule<TResult>, IAttributeValidator<TResult>
         where TResult : class
     {
         /// <summary>
@@ -16,6 +16,6 @@
         /// Invokes this validator on the given object
         /// </summary>
         /// <param name="value"></param>
-        public abstract void Validate(object value);
+        public abstract TResult Validate(object value);
     }
 }

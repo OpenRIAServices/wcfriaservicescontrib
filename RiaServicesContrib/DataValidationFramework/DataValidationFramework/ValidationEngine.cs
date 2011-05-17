@@ -52,5 +52,14 @@ namespace RiaServicesContrib.DomainServices.Client.DataValidation
             var validationError = entity.ValidationErrors.SingleOrDefault(ve => ve.ErrorMessage == validationResult.ErrorMessage && ve.MemberNames.SequenceEqual(membersInError));
             return validationError != null;
         }
+        /// <summary>
+        /// Method that checks if the given validation result indicates a successful validation.
+        /// </summary>
+        /// <param name="validationResult"></param>
+        /// <returns></returns>
+        protected override bool IsValidationSuccess(ValidationResult validationResult)
+        {
+            return validationResult == ValidationResult.Success;
+        }
     }
 }

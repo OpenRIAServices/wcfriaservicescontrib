@@ -14,7 +14,7 @@ namespace RiaServicesContrib.DataValidation
         where TEntity : class
         where TResult : class
     {
-        protected IValidationEngine<TEntity> _validator;
+        private IValidationEngine<TEntity> _validator;
         protected IValidationEngine<TEntity> Validator
         {
             get
@@ -104,7 +104,7 @@ namespace RiaServicesContrib.DataValidation
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void EntityValidator_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void EntityValidator_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             var senderType = sender.GetType();
             foreach(var propInfo in Entity.GetType().GetProperties())
@@ -126,7 +126,7 @@ namespace RiaServicesContrib.DataValidation
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void EntityValidator_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void EntityValidator_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             Validator.Validate((TEntity)sender, e.PropertyName);
         }

@@ -56,24 +56,23 @@ namespace RiaServicesContrib.DomainServices.Client.DataValidation
         /// Validation method for the class.
         /// </summary>
         /// <param name="value"></param>
-        public override void Validate(object value)
+        public override ValidationResult Validate(object value)
         {
             var collection = (IEnumerable)value;
             if(collection == null)
             {
-                return;
+                return ValidationResult.Success;
             }
             List<object> list = new List<object>();
             foreach(var element in collection)
             {
                 if(list.Contains(element))
                 {
-                    Result = new ValidationResult(Message);
-                    return;
+                    return new ValidationResult(Message);
                 }
                 list.Add(element);
             }
-            Result = ValidationResult.Success;
+            return ValidationResult.Success;
         }
     }
 }

@@ -18,9 +18,10 @@ namespace EntityGraphTest.Tests
                 base(InputOutput<A, B>(A => A.B))
             { }
             public static bool visited = false;
-            public void Validate(B b)
+            public ValidationResult Validate(B b)
             {
                 visited = true;
+                return ValidationResult.Success;
             }
         }
 
