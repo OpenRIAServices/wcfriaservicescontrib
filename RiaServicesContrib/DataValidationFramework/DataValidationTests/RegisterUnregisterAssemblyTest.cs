@@ -1,16 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ServiceModel.DomainServices.Client;
-using EntityGraphTest.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RiaServicesContrib.DomainServices.Client;
 using RiaServicesContrib.DataValidation;
 using RiaServicesContrib.DomainServices.Client.DataValidation;
 
-namespace EntityGraphTest.Tests
+namespace DataValidationTests
 {
     [TestClass]
-    public class RegisterUnregisterTest : EntityGraphTest
+    public class RegisterUnregisterTest : DataValidationTest
     {
         public class RegisterUnregisterValidation : ValidationRule<ValidationResult>
         {

@@ -102,7 +102,6 @@
     <Compile Include="IDFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests.cs" />
-    <Compile Include="Tests\AsyncValidationTests.cs" />
     <Compile Include="Tests\CarParkExample.cs" />
     <Compile Include="Tests\CloneComparerTests.cs" />
     <Compile Include="Tests\CopyComparerTests.cs" />
@@ -117,15 +116,12 @@
     <Compile Include="Tests\GraphValidatorTests.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Tests\ValidationAttributeTests.cs" />
-    <Compile Include="Tests\ValidationEngineTests.cs" />
     <Compile Include="Tests\HasChangesTests.cs" />
     <Compile Include="Tests\IDisposableTests.cs" />
     <Compile Include="Tests\INotifyCollectionChangedTests.cs" />
     <Compile Include="Tests\IEditableObjectTests.cs" />
     <Compile Include="Tests\IEnumerableTests.cs" />
     <Compile Include="Tests\INotifyPropertyChangedTests.cs" />
-    <Compile Include="Tests\RegisterUnregisterAssemblyTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -140,6 +136,10 @@
     <ProjectReference Include="..\..\DataValidationFramework\DataValidationFramework\DataValidationFramework.csproj">
       <Project>{E4232D70-AF05-4F20-AEB0-703E3B3F96BE}</Project>
       <Name>DataValidationFramework %28DataValidationFramework\DataValidationFramework%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DataValidationFramework\DataValidationTests\DataValidationTests.csproj">
+      <Project>{A544D429-A22F-4B0E-8A44-1B1EB03087DA}</Project>
+      <Name>DataValidationTests</Name>
     </ProjectReference>
     <ProjectReference Include="..\EntityGraph\EntityGraph.csproj">
       <Project>{32DF13C4-B558-4A27-B29A-E69CD6AAFC0B}</Project>

@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataValidationFramework", "
 		{E1F14354-89AF-4282-8E56-5D4B00A78150} = {E1F14354-89AF-4282-8E56-5D4B00A78150}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataValidationTests", "..\DataValidationFramework\DataValidationTests\DataValidationTests.csproj", "{A544D429-A22F-4B0E-8A44-1B1EB03087DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -111,6 +113,16 @@ Global
 		{E4232D70-AF05-4F20-AEB0-703E3B3F96BE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E4232D70-AF05-4F20-AEB0-703E3B3F96BE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E4232D70-AF05-4F20-AEB0-703E3B3F96BE}.Release|x86.ActiveCfg = Release|Any CPU
+		{A544D429-A22F-4B0E-8A44-1B1EB03087DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A544D429-A22F-4B0E-8A44-1B1EB03087DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A544D429-A22F-4B0E-8A44-1B1EB03087DA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A544D429-A22F-4B0E-8A44-1B1EB03087DA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A544D429-A22F-4B0E-8A44-1B1EB03087DA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A544D429-A22F-4B0E-8A44-1B1EB03087DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A544D429-A22F-4B0E-8A44-1B1EB03087DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A544D429-A22F-4B0E-8A44-1B1EB03087DA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A544D429-A22F-4B0E-8A44-1B1EB03087DA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A544D429-A22F-4B0E-8A44-1B1EB03087DA}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -122,5 +134,6 @@ Global
 		{32DF13C4-B558-4A27-B29A-E69CD6AAFC0B} = {608E6050-2682-4E6C-86EF-DF98F9A21C1C}
 		{E1F14354-89AF-4282-8E56-5D4B00A78150} = {FA66F274-3086-44F0-B6EC-4C77C4806E7F}
 		{E4232D70-AF05-4F20-AEB0-703E3B3F96BE} = {FA66F274-3086-44F0-B6EC-4C77C4806E7F}
+		{A544D429-A22F-4B0E-8A44-1B1EB03087DA} = {FA66F274-3086-44F0-B6EC-4C77C4806E7F}
 	EndGlobalSection
 EndGlobal

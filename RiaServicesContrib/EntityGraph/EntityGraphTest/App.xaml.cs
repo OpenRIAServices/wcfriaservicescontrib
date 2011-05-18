@@ -1,6 +1,13 @@
 ﻿using System;
 using System.Windows;
 using Microsoft.Silverlight.Testing;
+using System.Reflection;
+using System.Net;
+using System.Xml;
+using System.Collections.Generic;
+using System.Windows.Resources;
+using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace EntityGraphTest
 {
@@ -15,10 +22,44 @@ namespace EntityGraphTest
 
             InitializeComponent();
         }
+        public static IEnumerable<Assembly> CurrentAssemblies
+        {
+            get
+            {
+                var assemblies = new List<Assembly>();
+
+                // While this may seem like somewhat of a hack, walking the AssemblyParts in the active 
+                // deployment object is the only way to get the list of assemblies loaded by the initial XAP. 
+                foreach(AssemblyPart ap in Deployment.Current.Parts)
+                {
+                    StreamResourceInfo sri = Application.GetResourceStream(new Uri(ap.Source, UriKind.Relative));
+                    if(sri != null)
+                    {
+                        // Keep in mind that calling Load on an assembly that is already loaded will
+                        // be a no-op and simply return the already loaded assembly object.
+                        Assembly assembly = ap.Load(sri.Stream);
+                        assemblies.Add(assembly);
+                    }
+                }
+
+                return assemblies;
+            }
+        }
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            RootVisual = UnitTestSystem.CreateTestPage();
+            var settings = UnitTestSystem.CreateDefaultSettings();
+            settings.TestAssemblies.Clear();
+
+            Func<Type, bool> IsTestClass = type => type.IsDefined(typeof(TestClassAttribute), true);
+            var testAssemblies = CurrentAssemblies.Where(ass => ass.GetTypes().Any(IsTestClass));
+
+            // Add all assemblies containing test classes to the unit test system.
+            foreach(var assembly in testAssemblies)
+            {
+                settings.TestAssemblies.Add(assembly);
+            }
+            RootVisual = UnitTestSystem.CreateTestPage(settings);
         }
 
         private void Application_Exit(object sender, EventArgs e)

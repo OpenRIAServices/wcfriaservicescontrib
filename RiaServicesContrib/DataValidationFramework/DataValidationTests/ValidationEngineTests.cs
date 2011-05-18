@@ -2,15 +2,15 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.ServiceModel.DomainServices.Client;
-using EntityGraphTest.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RiaServicesContrib.DataValidation;
 using RiaServicesContrib.DomainServices.Client.DataValidation;
 
-namespace EntityGraphTest.Tests
+namespace DataValidationTests
 {
+
     [TestClass]
-    public class ValidationEngineTests : EntityGraphTest
+    public class ValidationEngineTests : DataValidationTest
     {
         public class AValidator : ValidationRule<ValidationResult>
         {

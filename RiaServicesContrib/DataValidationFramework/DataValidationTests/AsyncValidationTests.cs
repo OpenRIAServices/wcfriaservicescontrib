@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.ServiceModel.DomainServices.Client;
-using EntityGraphTest.Web;
+using System.Windows.Threading;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RiaServicesContrib.DataValidation;
 using RiaServicesContrib.DomainServices.Client.DataValidation;
 
-namespace EntityGraphTest.Tests
+namespace DataValidationTests
 {
     public class AsyncValidator : AsyncValidationRule
     {
@@ -20,20 +20,20 @@ namespace EntityGraphTest.Tests
         public ValidationOperation Validate(string name)
         {
             var operation = new ValidationOperation();
-            System.Windows.Threading.DispatcherTimer myDispatcherTimer = new System.Windows.Threading.DispatcherTimer();
-            myDispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 100); // 100 Milliseconds 
-            myDispatcherTimer.Tick += (s, e) =>
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = new TimeSpan(0, 0, 0, 0, 100); // 100 Milliseconds 
+            timer.Tick += (s, e) =>
             {
-                myDispatcherTimer.Stop();
+                timer.Stop();
                 operation.Result = new ValidationResult(name);
             };
-            myDispatcherTimer.Start();
+            timer.Start();
 
             return operation;
         }
     }
     [TestClass]
-    public class AsyncValidationTests : EntityGraphTest
+    public class AsyncValidationTests : DataValidationTest
     {
         [Asynchronous]
         [TestMethod]

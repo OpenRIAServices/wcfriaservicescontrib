@@ -3,10 +3,10 @@ using System.ServiceModel.DomainServices.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RiaServicesContrib.DomainServices.Client.DataValidation;
 
-namespace EntityGraphTest.Tests
+namespace DataValidationTests
 {
     [TestClass]
-    public class ValidationAttributeTests : EntityGraphTest
+    public class ValidationAttributeTests : DataValidationTest
     {
         public class MyTestClass : Entity
         {
