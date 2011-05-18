@@ -5,6 +5,11 @@ using RiaServicesContrib.DataValidation;
 
 namespace RiaServicesContrib.DomainServices.Client.DataValidation
 {
+    /// <summary>
+    /// Class that implements cross-entity validation.
+    /// This is a WCF DomainServices.Client services-specific instantiation of the 
+    /// RiaServicesContrib.DataValidation.ValidationEngine class.
+    /// </summary>
     public class ValidationEngine : ValidationEngine<Entity, ValidationResult>
     {
         /// <summary>

@@ -10,7 +10,7 @@ namespace RiaServicesContrib.DomainServices.Client.DataValidation
     /// Abstract base class that implements attribute-based validation.
     /// 
     /// This is a WCF DomainServices.Client services-specific implementation of the 
-    /// RiaServicesContrib.EntityGraph.Validation.IValidationAttribute interface.
+    /// RiaServicesContrib.DataValidation.IValidationAttribute interface.
     /// 
     /// Notes:
     /// This class derives from Attribute. Since we don't have multiple inheritance,

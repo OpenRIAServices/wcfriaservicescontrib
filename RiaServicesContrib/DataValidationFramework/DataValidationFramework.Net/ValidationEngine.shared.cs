@@ -42,36 +42,22 @@ namespace RiaServicesContrib.DataValidation
                     observedProperties = null;
                 }
                 _rulesProvider = value;
-                if(_rulesProvider != null)
+                if(value != null)
                 {
                     ValidationRules = _rulesProvider.ValidationRules;
                     observedProperties = ValidationRules.SelectMany(
                         rule => rule.Signature.Select(dep => dep.TargetProperty.Name)).ToArray();
                 }
-                if(CollectionChanged != null)
+                else
                 {
-                    CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                    ValidationRules = null;
+                }
+                if(ValidationRuleSetChanged != null)
+                {
+                    ValidationRuleSetChanged(ValidationRules, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
                 }
             }
         }
-        /// <summary>
-        /// gets the number of registered validation rules.
-        /// </summary>
-        public int Count
-        {
-            get
-            {
-                if(RulesProvider != null)
-                {
-                    return RulesProvider.ValidationRules.Count();
-                }
-                return 0;
-            }
-        }
-        /// <summary>
-        /// Occurs when the collection changes.. 
-        /// </summary>
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
         /// <summary>
         /// Method that invokes all matching validation rules for the given object and 
         /// property name.
@@ -129,7 +115,7 @@ namespace RiaServicesContrib.DataValidation
         /// <summary>
         /// Event handler that is called when the parameterObjectBindings of any of the validation rules changes.
         /// </summary>
-        public event EventHandler<ValidationResultChangedEventArgs<TResult>> ValidationResultChanged;
+        public event EventHandler<ValidationResultChangedEventArgs<TEntity,TResult>> ValidationResultChanged;
         /// <summary>
         /// Returns a collection of validation rules that have 'propertyName' as one of the target properties in
         /// any of their validation rule dependencies.
@@ -146,7 +132,25 @@ namespace RiaServicesContrib.DataValidation
         /// <summary>
         /// Gets or sets the collection of validation rules for this validation engine.
         /// </summary>
-        private IEnumerable<ValidationRule<TResult>> ValidationRules { get; set; }
+        private IEnumerable<ValidationRule<TResult>> _validationRules;
+        private IEnumerable<ValidationRule<TResult>> ValidationRules
+        {
+            get
+            {
+                if(_validationRules == null)
+                {
+                    _validationRules = new List<ValidationRule<TResult>>();
+                }
+                return _validationRules;
+            }
+            set
+            {
+                if(_validationRules != value)
+                {
+                    _validationRules = value;
+                }
+            }
+        }
         /// <summary>
         /// This method implements a quick to check if validation should continue,
         /// by looking up if a property plays a role in a validation rule.
@@ -305,8 +309,17 @@ namespace RiaServicesContrib.DataValidation
                 var filteredBindings = FilterRuleBindings(ruleBindings, obj);
                 foreach(var binding in filteredBindings)
                 {
-                    TResult result = binding.ValidationRule.Evaluate(binding);
-                    ProcessValidationResult(binding, result);
+                    if(rule is AsyncValidationRule<TResult>)
+                    {
+                        var asyncRule = (AsyncValidationRule<TResult>)rule;
+                        var validationOperation = asyncRule.EvaluateAsync(binding);
+                        validationOperation.Completed += (s, a) => ProcessValidationResult(binding, validationOperation.Result);
+                    }
+                    else
+                    {
+                        TResult result = rule.Evaluate(binding);
+                        ProcessValidationResult(binding, result);
+                    }
                 }
             }
         }
@@ -331,10 +344,9 @@ namespace RiaServicesContrib.DataValidation
             {
                 oldValidationResult = ValidationResults[ruleBinding];
             }
-            TEntity entity;
             foreach(var bindingGroup in bindingGroups)
             {
-                entity = bindingGroup.Key;
+                var entity = bindingGroup.Key;
                 var membersInError = bindingGroup.Select(binding => binding.ValidationRuleDependency.TargetProperty.Name).Distinct().ToArray();
                 if(HasValidationResult(entity, membersInError, oldValidationResult))
                     ClearValidationResult(entity, membersInError, oldValidationResult);
@@ -344,17 +356,34 @@ namespace RiaServicesContrib.DataValidation
             if(IsValidationSuccess(validationResult) && oldValidationResult != null)
             {
                 ValidationResults.Remove(ruleBinding);
+                if(EntitiesInErrorChanged != null)
+                {
+                    EntitiesInErrorChanged(EntitiesInError, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                }
             }
             else
             {
                 ValidationResults[ruleBinding] = validationResult;
+                if(EntitiesInErrorChanged != null)
+                {
+                    EntitiesInErrorChanged(EntitiesInError, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                }
             }
             if(ValidationResultChanged != null)
             {
-                ValidationResultChanged(this, new ValidationResultChangedEventArgs<TResult>(validationResult));
+                ValidationResultChanged(this, new ValidationResultChangedEventArgs<TEntity, TResult>(validationResult, bindingGroups.Select(g=>g.Key)));
             }
         }
-
+        /// <summary>
+        /// Returns the collection of entities that have validation errors.
+        /// </summary>
+        public IEnumerable<TEntity> EntitiesInError
+        {
+            get
+            {
+                return ValidationResults.Keys.SelectMany(rb => rb.DependencyBindings.Select(db => db.TargetOwnerObject)).OfType<TEntity>();
+            }
+        }
         private Dictionary<RuleBinding<TResult>, TResult> _validationResults;
         /// <summary>
         /// Gets a dictionary of validation rule bindings and the corresponding validation results.
@@ -429,6 +458,23 @@ namespace RiaServicesContrib.DataValidation
                     hashCode ^= db.TargetOwnerObject.GetHashCode();
                 return hashCode;
             }
+        }
+        /// <summary>
+        /// Occurs when the collection of validation rules changes. 
+        /// Only the NotifyCollectionChangedAction.Reset action is supported
+        /// </summary>
+        public event NotifyCollectionChangedEventHandler ValidationRuleSetChanged;
+        /// <summary>
+        /// Occurs when the collection of entities in error changes. 
+        /// Only the NotifyCollectionChangedAction.Reset action is supported
+        /// </summary>
+        public event NotifyCollectionChangedEventHandler EntitiesInErrorChanged;
+        /// <summary>
+        /// Returns the collection of registered validation rules.
+        /// </summary>
+        System.Collections.IEnumerable IValidationEngine<TEntity>.ValidationRules
+        {
+            get { return ValidationRules;}
         }
     }
 }

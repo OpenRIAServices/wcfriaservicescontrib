@@ -6,7 +6,7 @@ namespace RiaServicesContrib.DomainServices.Client.DataValidation
     /// <summary>
     /// Abstract base class for attribute validators.
     /// This is a WCF DomainServices.Client services-specific instantation of the 
-    /// RiaServicesContrib.EntityGraph.Validation.AttributeValidator class.
+    /// RiaServicesContrib.DataValidation.AttributeValidator class.
     /// </summary>
     public abstract class AttributeValidator : AttributeValidator<ValidationResult>
     {

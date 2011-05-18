@@ -1,12 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Collections;
 
 namespace RiaServicesContrib.DataValidation
 {
-    public interface IValidationEngine<TEntity> : INotifyCollectionChanged, IDisposable
+    public interface IValidationEngine<TEntity> : IDisposable
         where TEntity : class
     {
+        /// <summary>
+        /// Occurs when the collection of validation rules changes. 
+        /// </summary>
+        event NotifyCollectionChangedEventHandler ValidationRuleSetChanged;
+        /// <summary>
+        /// Occurs when the collection of entities in error changes. 
+        /// </summary>
+        event NotifyCollectionChangedEventHandler EntitiesInErrorChanged;
+        /// <summary>
+        /// Returns the collection of registered validation rules.
+        /// </summary>
+        IEnumerable ValidationRules { get; }
+        /// <summary>
+        /// Returns the collection of entities for which a validation rule has failed.
+        /// </summary>
+        IEnumerable<TEntity> EntitiesInError { get; }
         /// <summary>
         /// Method that invokes all matching validation rules for the given object
         /// </summary>
@@ -34,9 +51,5 @@ namespace RiaServicesContrib.DataValidation
         /// </summary>
         /// <param name="objects"></param>
         void Validate(IEnumerable<TEntity> objects);
-        /// <summary>
-        /// Gets the number of registered validation rules.
-        /// </summary>
-        int Count { get; }
     }
 }

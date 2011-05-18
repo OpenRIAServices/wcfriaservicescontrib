@@ -21,7 +21,7 @@ namespace RiaServicesContrib.DataValidation
         /// <summary>
         /// Holds the MethodInfo for the validation method of this validation rule.
         /// </summary>
-        private MethodInfo ValidationMethod { get; set; }
+        protected MethodInfo ValidationMethod { get; set; }
         /// <summary>
         /// Creates a new instance of the ValidationRule class.
         /// </summary>
@@ -53,6 +53,18 @@ namespace RiaServicesContrib.DataValidation
         /// <returns></returns>
         internal TResult Evaluate(RuleBinding<TResult> binding)
         {
+            var bindings = MakeArgumentBindings(binding);
+            var result = ValidationMethod.Invoke(binding.ValidationRule, bindings);
+            return (TResult)result;
+        }
+        /// <summary>
+        /// Returns an array of objects that form the actual parameter bindings
+        /// for the validation method call.
+        /// </summary>
+        /// <param name="binding"></param>
+        /// <returns></returns>
+        internal object[] MakeArgumentBindings(RuleBinding<TResult> binding)
+        {
             var type = GetType();
 
             if(Signature.Count != binding.DependencyBindings.Count())
@@ -67,9 +79,7 @@ namespace RiaServicesContrib.DataValidation
                 var dBinding = binding.DependencyBindings[i];
                 bindings[i] = dBinding.ValidationRuleDependency.TargetProperty.GetValue(dBinding.TargetOwnerObject, null);
             }
-//            RuleBinding = binding;
-            var result = ValidationMethod.Invoke(binding.ValidationRule, bindings);
-            return (TResult)result;
+            return bindings;
         }
         /// <summary>
         /// This method tries to find a method which has the name "Validate" (or is annotated
@@ -109,7 +119,7 @@ namespace RiaServicesContrib.DataValidation
         /// <param name="methods"></param>
         /// <param name="signature"></param>
         /// <returns></returns>
-        private static MethodInfo[] GetMatchingValidationMethods(MethodInfo[] methods, Signature signature)
+        private MethodInfo[] GetMatchingValidationMethods(MethodInfo[] methods, Signature signature)
         {
             List<MethodInfo> matchingMethods = new List<MethodInfo>();
             foreach(var method in methods)
@@ -119,7 +129,12 @@ namespace RiaServicesContrib.DataValidation
                 {
                     continue;
                 }
-                if(method.ReturnType != typeof(TResult))
+                Type requiredReturnType = typeof(TResult);
+                if(this is AsyncValidationRule<TResult>)
+                {
+                    requiredReturnType = typeof(ValidationOperation<TResult>);
+                }
+                if(requiredReturnType.IsAssignableFrom(method.ReturnType) == false)
                 {
                     continue;
                 }

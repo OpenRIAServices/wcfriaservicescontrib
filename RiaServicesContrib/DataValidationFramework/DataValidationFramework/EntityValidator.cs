@@ -5,7 +5,9 @@ using RiaServicesContrib.DataValidation;
 namespace RiaServicesContrib.DomainServices.Client.DataValidation
 {
     /// <summary>
-    /// WCF DomainServices.Client services-specific instantiation of the RiaServicesContrib.EntityGraph.Validation.EntityValidator class.
+    /// Class that implements signature-based validation for single entities.
+    /// This is a WCF DomainServices.Client services-specific instantiation of the 
+    /// RiaServicesContrib.DataValidation.EntityValidator class.
     /// </summary>
     public class EntityValidator : EntityValidator<Entity, ValidationResult>
     {

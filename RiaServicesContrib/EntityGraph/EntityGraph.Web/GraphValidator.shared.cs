@@ -21,20 +21,20 @@ namespace RiaServicesContrib
                     if(_validator != null)
                     {
                         ClearValidatorEventHandlers();
-                        _validator.CollectionChanged -= _validator_CollectionChanged;
+                        _validator.ValidationRuleSetChanged-= _validator_ValidationRuleSetChanged;
                     }
                     _validator = value;
                     if(_validator != null)
                     {
                         SetValidatorEventHandlers();
-                        _validator.CollectionChanged += _validator_CollectionChanged;
+                        _validator.ValidationRuleSetChanged += _validator_ValidationRuleSetChanged;
                         _validator.Validate(this);
                     }
                 }
             }
         }
 
-        void _validator_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        void _validator_ValidationRuleSetChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             _validator.Validate(this);
         }
