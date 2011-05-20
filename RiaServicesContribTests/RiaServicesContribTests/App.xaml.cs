@@ -21,7 +21,7 @@ namespace RiaServicesContribTests
             InitializeComponent();
         }
 
-        public static IEnumerable<Assembly> CurrentAssemblies
+        private static IEnumerable<Assembly> CurrentAssemblies
         {
             get
             {
