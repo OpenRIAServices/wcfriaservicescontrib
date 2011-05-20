@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityTools", "EntityTools\EntityTools.csproj", "{D25E1363-AEA2-485F-A1B5-ED145D7EEF4F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EntityToolsTests", "EntityToolsTests", "{83567A2E-B7B7-4597-BDE7-B2E37287288F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityToolsTests.Web", "EntityToolsTests.Web\EntityToolsTests.Web.csproj", "{7C0C75B1-3E49-4345-A162-5D62D2FBBBA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityToolsTests", "EntityToolsTests\EntityToolsTests.csproj", "{B7383841-EF3F-41E9-BB78-D6C53171C477}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7C0C75B1-3E49-4345-A162-5D62D2FBBBA1} = {7C0C75B1-3E49-4345-A162-5D62D2FBBBA1}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D25E1363-AEA2-485F-A1B5-ED145D7EEF4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D25E1363-AEA2-485F-A1B5-ED145D7EEF4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D25E1363-AEA2-485F-A1B5-ED145D7EEF4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D25E1363-AEA2-485F-A1B5-ED145D7EEF4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C0C75B1-3E49-4345-A162-5D62D2FBBBA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C0C75B1-3E49-4345-A162-5D62D2FBBBA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C0C75B1-3E49-4345-A162-5D62D2FBBBA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C0C75B1-3E49-4345-A162-5D62D2FBBBA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7383841-EF3F-41E9-BB78-D6C53171C477}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7383841-EF3F-41E9-BB78-D6C53171C477}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7383841-EF3F-41E9-BB78-D6C53171C477}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7383841-EF3F-41E9-BB78-D6C53171C477}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7C0C75B1-3E49-4345-A162-5D62D2FBBBA1} = {83567A2E-B7B7-4597-BDE7-B2E37287288F}
+		{B7383841-EF3F-41E9-BB78-D6C53171C477} = {83567A2E-B7B7-4597-BDE7-B2E37287288F}
+	EndGlobalSection
+EndGlobal

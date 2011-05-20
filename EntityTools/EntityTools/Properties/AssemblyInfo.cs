@@ -1,17 +1,16 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("RiaServicesContrib")]
+[assembly: AssemblyTitle("EntityTools")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("RiaServicesContrib")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyCompany("Philips")]
+[assembly: AssemblyProduct("EntityTools")]
+[assembly: AssemblyCopyright("Copyright © Philips 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -21,7 +20,7 @@ using System;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("80d5ce49-27d1-4a2e-99b3-5cb2101b2c36")]
+[assembly: Guid("b7f7b6b7-ff94-46c0-a410-0d8605b5027e")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -34,4 +33,3 @@ using System;
 // by using the '*' as shown below:
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: CLSCompliantAttribute(true)]
