@@ -15,18 +15,14 @@ namespace RiaServicesContrib.DomainServices.Client
             return GraphMap(CloneDataMembers);
         }
 
-        private TClone CloneDataMembers<TClone>(TClone entity) where TClone: Entity
+        private TClone CloneDataMembers<TClone>(TClone source) where TClone: Entity
         {
             // Create new object of type T (or subtype) using reflection and inspecting the concrete 
             // type of the entity to copy.
-            TClone clone = (TClone)Activator.CreateInstance(entity.GetType());
-
+            TClone clone = (TClone)Activator.CreateInstance(source.GetType());
+            var dataMembers = GetDataMembers(source, true);
             // Copy DataMember properties
-            foreach (PropertyInfo currentPropertyInfo in GetDataMembers(entity, true))
-            {
-                object currentObject = currentPropertyInfo.GetValue(entity, null);
-                currentPropertyInfo.SetValue(clone, currentObject, null);
-            }
+            ApplyState(clone, source, dataMembers);
             return clone;
         }
     }

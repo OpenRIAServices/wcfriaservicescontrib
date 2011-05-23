@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.ServiceModel.DomainServices.Client;
+using System.Collections.Generic;
 
 namespace RiaServicesContrib.DomainServices.Client
 {
@@ -18,19 +19,30 @@ namespace RiaServicesContrib.DomainServices.Client
             return GraphMap(CopyDataMembers);
         }
 
-        private TCopy CopyDataMembers<TCopy>(TCopy entity) where TCopy : Entity
+        private TCopy CopyDataMembers<TCopy>(TCopy source) where TCopy : Entity
         {
             // Create new object of type T (or subtype) using reflection and inspecting the concrete 
             // type of the entity to copy.
-            TCopy copy = (TCopy)Activator.CreateInstance(entity.GetType());
-
+            TCopy copy = (TCopy)Activator.CreateInstance(source.GetType());
+            var dataMembers = GetDataMembers(source, false);
             // Copy DataMember properties
-            foreach (PropertyInfo currentPropertyInfo in GetDataMembers(entity, false))
-            {
-                object currentObject = currentPropertyInfo.GetValue(entity, null);
-                currentPropertyInfo.SetValue(copy, currentObject, null);
-            }
+            ApplyState(copy, source, dataMembers);
             return copy;
+        }
+        /// <summary>
+        /// Copies the values form the properties in dataMembers from sourceEntity to targetEntity.
+        /// </summary>
+        /// <param name="sourceEntity"></param>
+        /// <param name="targetEntity"></param>
+        /// <param name="dataMembers"></param>
+        private static void ApplyState(object targetEntity, object sourceEntity, IEnumerable<PropertyInfo> dataMembers)
+        {
+            // Copy DataMember properties
+            foreach(PropertyInfo currentPropertyInfo in dataMembers)
+            {
+                object currentObject = currentPropertyInfo.GetValue(sourceEntity, null);
+                currentPropertyInfo.SetValue(targetEntity, currentObject, null);
+            }
         }
         /// <summary>
         /// Returns an array of PropertyInfo objects for properties which have the "DataMemberAttribute"
@@ -45,7 +57,7 @@ namespace RiaServicesContrib.DomainServices.Client
                       where
                         p.IsDefined(typeof(DataMemberAttribute), true)
                       && (includeKeys || p.IsDefined(typeof(KeyAttribute), true) == false)
-                      && p.GetSetMethod() != null
+                      && p.CanWrite
                       select p;
             return qry.ToArray();
         }
