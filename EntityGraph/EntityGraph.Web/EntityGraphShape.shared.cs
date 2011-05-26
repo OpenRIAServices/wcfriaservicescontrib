@@ -7,23 +7,6 @@ using System.Reflection;
 
 namespace RiaServicesContrib
 {
-    class EntityGraphEdgeComparer : IEqualityComparer<EntityGraphEdge>
-    {
-        public bool Equals(EntityGraphEdge x, EntityGraphEdge y)
-        {
-            if(x == y)
-                return true;
-            return
-                x.FromType.Equals(y.FromType) &&
-                x.EdgeInfo.Equals(y.EdgeInfo);
-        }
-
-        public int GetHashCode(EntityGraphEdge obj)
-        {
-            return obj.FromType.GetHashCode() ^ obj.EdgeInfo.GetHashCode();
-        }
-    }
-
     public class EntityGraphEdge
     {
         public Type FromType { get; set; }
@@ -55,6 +38,34 @@ namespace RiaServicesContrib
         {
             return String.Format("{0}->{1}", FromType.Name, ToType.Name);
         }
+        public override bool Equals(object obj)
+        {
+            if(this == obj)
+            {
+                return true;
+            }
+            if(obj is EntityGraphEdge == false)
+            {
+                return false;
+            }
+            EntityGraphEdge edge = (EntityGraphEdge)obj;
+            return this.FromType == edge.FromType &&
+                this.EdgeInfo == edge.EdgeInfo;
+        }
+        public override int GetHashCode()
+        {
+            int hashCode = 0;
+            if(FromType != null)
+            {
+                hashCode ^= FromType.GetHashCode();
+            }
+            if(EdgeInfo != null)
+            {
+                hashCode ^= EdgeInfo.GetHashCode();
+            }
+
+            return hashCode;
+        }
     }
 
     public class EntityGraphShape : IEntityGraphShape, IEnumerable<EntityGraphEdge>
@@ -62,7 +73,7 @@ namespace RiaServicesContrib
         public delegate TTo EdgeType<in TFrom, out TTo>(TFrom from);
         public delegate IEnumerable<TTo> EdgeEnumType<in TFrom, TTo>(TFrom from);
 
-        private List<EntityGraphEdge> edges = new List<EntityGraphEdge>();
+        internal List<EntityGraphEdge> edges = new List<EntityGraphEdge>();
         public EntityGraphShape Edge<TLHS, TRHS>(Expression<EdgeType<TLHS, TRHS>> edge)
         {
             var entityType = edge.Parameters.Single().Type;
@@ -79,7 +90,9 @@ namespace RiaServicesContrib
             }
             var propInfo = mexpr.Member as PropertyInfo;
             if(entityType != null && propInfo != null)
+            {
                 edges.Add(new EntityGraphEdge { FromType = entityType, EdgeInfo = propInfo });
+            }
             return this;
         }
         // We can't use TEntity as the return type of EdgeEnumType, because IEnumerable<T> is not 
@@ -100,24 +113,10 @@ namespace RiaServicesContrib
             }
             var propInfo = mexpr.Member as PropertyInfo;
             if(entityType != null && propInfo != null)
-                edges.Add(new EntityGraphEdge { FromType = entityType, EdgeInfo = propInfo });
-            return this;
-        }
-        /// <summary>
-        /// Produces the set union of two entity graph shapes by using the default equality comparer.
-        /// </summary>
-        /// <param name="shape"></param>
-        /// <returns></returns>
-        public EntityGraphShape Union(EntityGraphShape shape)
-        {
-            var union = new EntityGraphShape();
-            var edges = ((IEnumerable<EntityGraphEdge>)this).Union(shape, new EntityGraphEdgeComparer());
-
-            foreach(var edge in edges)
             {
-                union.edges.Add(edge);
+                edges.Add(new EntityGraphEdge { FromType = entityType, EdgeInfo = propInfo });
             }
-            return union;
+            return this;
         }
         /// <summary>
         /// Returns an IEnumerable that iterates over the out edges of the given entity
@@ -172,6 +171,26 @@ namespace RiaServicesContrib
         public virtual IEnumerable GetNodes(object entity, PropertyInfo edge)
         {
             return (IEnumerable)edge.GetValue(entity, null);
+        }
+    }
+    public static class EntityGraphShapeExtensions
+    {
+        /// <summary>
+        /// Produces the set union of two entity graph shapes by using the default equality comparer.
+        /// </summary>
+        /// <param name="shape"></param>
+        /// <returns></returns>
+        public static TEntityGraphShape Union<TEntityGraphShape>(this TEntityGraphShape current, EntityGraphShape shape) 
+            where TEntityGraphShape : EntityGraphShape
+        {
+            foreach(var edge in shape)
+            {
+                if(current.Contains(edge) == false)
+                {
+                    current.edges.Add(edge);
+                }
+            }
+            return current;
         }
     }
 }
