@@ -103,17 +103,17 @@
     <None Include="Properties\AppManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\DataValidationFramework\DataValidationTests\DataValidationTests.csproj">
-      <Project>{A544D429-A22F-4B0E-8A44-1B1EB03087DA}</Project>
-      <Name>DataValidationTests</Name>
+    <ProjectReference Include="..\..\DataValidationFramework\DataValidationFrameworkTests.Silverlight\DataValidationFrameworkTests\DataValidationFrameworkTests.csproj">
+      <Project>{7D86DC6C-960F-4E88-BE05-D2A39A1CB5BF}</Project>
+      <Name>DataValidationFrameworkTests</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\EntityGraph\EntityGraphTest\EntityGraphTest.csproj">
+    <ProjectReference Include="..\..\EntityGraph\EntityGraphTests.Silverlight\EntityGraphTests\EntityGraphTests.csproj">
       <Project>{1D79F315-BDF3-4F3B-9C68-B307CA95DC1C}</Project>
-      <Name>EntityGraphTest %28EntityGraph\EntityGraphTest\EntityGraphTest%29</Name>
+      <Name>EntityGraphTests</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\EntityTools\EntityToolsTests\EntityToolsTests.csproj">
       <Project>{B7383841-EF3F-41E9-BB78-D6C53171C477}</Project>
-      <Name>EntityToolsTests %28EntityTools\EntityToolsTests\EntityToolsTests%29</Name>
+      <Name>EntityToolsTests</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />

@@ -73,6 +73,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DataValidationFramework.Silverlight, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="EntityGraph.Silverlight, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Silverlight.Testing">
       <HintPath>$(MSBuildExtensionsPath)\..\Microsoft SDKs\Silverlight\v4.0\Toolkit\Apr10\Testing\Microsoft.Silverlight.Testing.dll</HintPath>
     </Reference>
@@ -131,16 +133,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AppManifest.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\DataValidationFramework\DataValidationFramework.Silverlight\DataValidationFramework.Silverlight.csproj">
-      <Project>{E4232D70-AF05-4F20-AEB0-703E3B3F96BE}</Project>
-      <Name>DataValidationFramework %28DataValidationFramework\DataValidationFramework%29</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\EntityGraph.Silverlight\EntityGraph.Silverlight.csproj">
-      <Project>{32DF13C4-B558-4A27-B29A-E69CD6AAFC0B}</Project>
-      <Name>EntityGraph %28EntityGraph\EntityGraph%29</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <Import Condition="$(SilverlightVersion)=='v3.0'" Project="$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SilverlightToolkit\Tools\v3.0)Microsoft.Silverlight.Toolkit.Build.targets" />

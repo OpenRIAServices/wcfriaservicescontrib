@@ -72,9 +72,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\EntityGraph\EntityGraphTest.Web\EntityGraphTest.Web.csproj">
+    <ProjectReference Include="..\..\EntityGraph\EntityGraphTests.Silverlight\EntityGraphTests.Web\EntityGraphTests.Web.csproj">
       <Project>{8F76C20D-56AB-41CB-9B78-10B4726543E6}</Project>
-      <Name>EntityGraphTest.Web</Name>
+      <Name>EntityGraphTests.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\EntityTools\EntityToolsTests.Web\EntityToolsTests.Web.csproj">
       <Project>{7C0C75B1-3E49-4345-A162-5D62D2FBBBA1}</Project>
@@ -89,7 +89,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>1753</DevelopmentServerPort>
+          <DevelopmentServerPort>4186</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>
