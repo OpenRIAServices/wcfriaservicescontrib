@@ -5,10 +5,10 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("DataValidationFramework.Net")]
+[assembly: AssemblyTitle("EntityGraph.Net")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyProduct("DataValidationFramework.Net")]
+[assembly: AssemblyProduct("EntityGraph.Net")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -18,7 +18,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("80069b60-ad82-4551-a942-39c122f4d736")]
+[assembly: Guid("dd93c0d6-ec7f-4299-96d7-e9a09163a38f")]
 
 // Version information for an assembly consists of the following four values:
 //
