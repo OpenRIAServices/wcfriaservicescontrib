@@ -76,9 +76,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="RIA\Validation\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\DataValidationFramework\DataValidationFramework.Silverlight\DataValidationFramework.Silverlight.csproj">
       <Project>{E4232D70-AF05-4F20-AEB0-703E3B3F96BE}</Project>
       <Name>DataValidationFramework %28DataValidationFramework\DataValidationFramework%29</Name>
