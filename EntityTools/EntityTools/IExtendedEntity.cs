@@ -5,10 +5,10 @@ namespace RiaServicesContrib
 {
     public interface IExtendedEntity
     {
-        EntitySet EntitySet {get; set;}
+        EntitySet EntitySet {get; }
     }
    public interface IExtendedEntity<T> where T : Entity, new()
     {
-         EntitySet<T>  EntitySet { get; set; }
+         EntitySet<T>  EntitySet { get; }
     }
 }
