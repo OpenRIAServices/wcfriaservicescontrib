@@ -88,6 +88,21 @@ namespace DataValidationTests
                 return new ValidationResult(arg1 + arg2 + arg3);
             }
         }
+        public class SignatureValidator : ValidationRule<ValidationResult>
+        {
+            public SignatureValidator() :
+                base(
+                InputOutput<A, string>(A => A.lastName),
+                InputOutput<B, string>(B => B.name)
+                )
+            {
+            }
+            public ValidationResult Validate(string lastName, string name)
+            {
+                return new ValidationResult("Visited");
+            }
+        }
+        
         public override void TestSetup()
         {
             base.TestSetup();
@@ -205,6 +220,20 @@ namespace DataValidationTests
             AValidator.TestResult = ValidationResult.Success;
             validator.Validate(a, "name");
             Assert.IsTrue(a.ValidationErrors.Count() == 1);
+        }
+        [TestMethod]
+        public void SignatureMatchTest()
+        {
+            var a = new A();
+            a.B = new B();
+            var validator = new ValidationEngine
+            {
+                RulesProvider = new SimpleValidationRulesProvider<ValidationResult>{
+                new SignatureValidator()}
+            };
+            validator.Validate(a, "name");
+            Assert.IsFalse(a.HasValidationErrors);
+            
         }
     }
 }

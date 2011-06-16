@@ -4,6 +4,7 @@ using System.Linq;
 using System.ComponentModel.Composition;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace RiaServicesContrib.DataValidation
 {
@@ -91,9 +92,7 @@ namespace RiaServicesContrib.DataValidation
                 return;
             }
             var type = obj.GetType();
-            var rules = from rule in GetRulesByPropertyName(propertyName)
-                        where rule.Signature.Any(dep => dep.TargetPropertyOwnerType.IsAssignableFrom(type))
-                        select rule;
+            var rules = GetRulesByTypeAndPropertyName(type, propertyName);
             ValidateRules(rules, objects, obj);
         }
         /// <summary>
@@ -117,18 +116,19 @@ namespace RiaServicesContrib.DataValidation
         /// </summary>
         public event EventHandler<ValidationResultChangedEventArgs<TEntity,TResult>> ValidationResultChanged;
         /// <summary>
-        /// Returns a collection of validation rules that have 'propertyName' as one of the target properties in
-        /// any of their validation rule dependencies.
+        /// Returns a collection of validation rules for which a target of a dependency has the given name and
+        /// is assignable to the given type.
         /// </summary>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        private IEnumerable<ValidationRule<TResult>> GetRulesByPropertyName(string propertyName)
+        private IEnumerable<ValidationRule<TResult>> GetRulesByTypeAndPropertyName(Type type, string propertyName)
         {
             return from rule in ValidationRules
-                   where rule.Signature.Any(dep => dep.TargetProperty.Name == propertyName)
+                   where rule.Signature.Any(dep => 
+                       dep.TargetPropertyOwnerType.IsAssignableFrom(type) && 
+                       dep.TargetProperty.Name == propertyName)
                    select rule;
         }
-
         /// <summary>
         /// Gets or sets the collection of validation rules for this validation engine.
         /// </summary>
