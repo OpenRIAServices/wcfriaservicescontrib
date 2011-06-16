@@ -9,11 +9,11 @@ namespace RiaServicesContrib
         public void Dispose() {
             var type = this.GetType();
             var flags = BindingFlags.Instance | BindingFlags.NonPublic;
-            var destructors = type.GetMethods(flags).Where(m => m.IsDefined(typeof(DisposeAttribute), true));
+            var disposers = type.GetMethods(flags).Where(m => m.IsDefined(typeof(DisposeAttribute), true));
 
-            foreach(var destructor in destructors)
+            foreach(var disposer in disposers)
             {
-                destructor.Invoke(this, new object[] { });
+                disposer.Invoke(this, new object[] { });
             }
         }
     }

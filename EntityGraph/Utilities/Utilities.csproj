@@ -58,7 +58,7 @@
   <ItemGroup>
     <ProjectReference Include="..\EntityGraph.Net\EntityGraph.Net.csproj">
       <Project>{DCCBB9AE-C321-42DB-A49A-73A0529D4D6B}</Project>
-      <Name>EntityGraph.Web</Name>
+      <Name>EntityGraph.Net</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
