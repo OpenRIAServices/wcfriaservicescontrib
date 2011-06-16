@@ -110,6 +110,7 @@
     <Compile Include="Tests\EntityGraphAttributeShapeTests.cs" />
     <Compile Include="Tests\EntityGraphComparerTests.cs" />
     <Compile Include="EntityGraphs.cs" />
+    <Compile Include="Tests\EntityGraphConstructorTests.cs" />
     <Compile Include="Tests\EntityGraphShapeTests.cs" />
     <Compile Include="Tests\EntityGraphTests.cs" />
     <Compile Include="Tests\EntitySetTests.cs" />

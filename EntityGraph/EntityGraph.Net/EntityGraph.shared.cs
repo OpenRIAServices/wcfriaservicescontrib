@@ -19,9 +19,17 @@ namespace RiaServicesContrib
         public TEntity Source { get; private set; }
         private IEntityGraphShape GraphShape { get; set; }
 
-        public EntityGraph(TEntity Source, IEntityGraphShape graphShape)
+        public EntityGraph(TEntity source, IEntityGraphShape graphShape)
         {
-            this.Source = Source;
+            if(source == null)
+            {
+                throw new ArgumentNullException("source", "The cosntructor argument 'source' can't be null");
+            }
+            if(graphShape == null)
+            {
+                throw new ArgumentNullException("graphShape", "The constructor argument 'graphShape' can't be null");
+            }
+            this.Source = source;
             this.GraphShape = graphShape;
 
             var type = this.GetType();
