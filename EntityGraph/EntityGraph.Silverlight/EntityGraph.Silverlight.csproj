@@ -9,7 +9,7 @@
     <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EntityGraph.Silverlight</RootNamespace>
+    <RootNamespace>RiaServicesContrib.DomainServices.Client</RootNamespace>
     <AssemblyName>EntityGraph.Silverlight</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
@@ -68,6 +68,7 @@
     <Compile Include="RIA\EntityChangeSet.cs" />
     <Compile Include="RIA\EntityGraph.cs" />
     <Compile Include="RIA\EntityGraphChangeSet.cs" />
+    <Compile Include="RIA\EntityGraphFactory.cs" />
     <Compile Include="RIA\EntitySet.cs" />
     <Compile Include="RIA\Graphvalidator.cs" />
     <Compile Include="RIA\HasChanges.cs" />

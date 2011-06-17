@@ -16,9 +16,16 @@ namespace RiaServicesContrib
     public partial class EntityGraph<TEntity>
         where TEntity : class
     {
+        /// <summary>
+        /// Gets the source entity of this entity graph.
+        /// </summary>
         public TEntity Source { get; private set; }
         private IEntityGraphShape GraphShape { get; set; }
-
+        /// <summary>
+        /// Initializes a new instance of the EntityGraph class with given shape for given source entity.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="graphShape"></param>
         public EntityGraph(TEntity source, IEntityGraphShape graphShape)
         {
             if(source == null)
