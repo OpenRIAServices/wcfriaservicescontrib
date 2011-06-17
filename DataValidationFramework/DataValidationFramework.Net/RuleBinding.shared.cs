@@ -12,11 +12,11 @@ namespace RiaServicesContrib.DataValidation
         /// <summary>
         /// Gets or sets the collection of validation rule dependency bindings for this rule binding.
         /// </summary>
-        public ValidationRuleDependencyBinding[] DependencyBindings { get; set; }
+        public ValidationRuleDependencyBinding[] DependencyBindings { get; internal set; }
         /// <summary>
         /// Gets or sets the validation rule for this validation rule binding.
         /// </summary>
-        public ValidationRule<TResult> ValidationRule { get; set; }
+        public ValidationRule<TResult> ValidationRule { get; internal set; }
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>

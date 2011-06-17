@@ -21,7 +21,7 @@ namespace RiaServicesContrib.DataValidation
         /// <summary>
         /// Holds the MethodInfo for the validation method of this validation rule.
         /// </summary>
-        protected MethodInfo ValidationMethod { get; set; }
+        protected MethodInfo ValidationMethod { get; private set; }
         /// <summary>
         /// Creates a new instance of the ValidationRule class.
         /// </summary>

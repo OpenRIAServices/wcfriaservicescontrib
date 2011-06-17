@@ -12,7 +12,7 @@ namespace RiaServicesContrib.DataValidation
     ///    var a = new A { B = new B() };
     /// 
     /// ParameterObject equals a.
-    /// ParamterObjectType equals A (i.e., the type of parameter A)
+    /// ParameterObjectType equals A (i.e., the type of parameter A)
     /// ParameterName equals 'A'
     /// </summary>
     internal class ParameterObjectBinding : IEquatable<ParameterObjectBinding>
@@ -20,15 +20,15 @@ namespace RiaServicesContrib.DataValidation
         /// <summary>
         /// Represents the object that is bound to the parameter 'A' of a valudation rule dependency 'A => A.some.path.p'.
         /// </summary>
-        public object ParameterObject { get; set; }
+        public object ParameterObject { get; internal set; }
         /// <summary>
         /// Represents the type of the parameter 'A' of a valudation rule dependency 'A => A.some.path.p'.
         /// </summary>
-        public Type ParameterObjectType { get; set; }
+        public Type ParameterObjectType { get; internal set; }
         /// <summary>
         /// Represents the name of the parameter 'A' of a valudation rule dependency 'A => A.some.path.p'.
         /// </summary>
-        public string ParameterName { get; set; }
+        public string ParameterName { get; internal set; }
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>

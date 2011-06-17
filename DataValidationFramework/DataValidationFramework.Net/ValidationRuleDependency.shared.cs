@@ -63,7 +63,7 @@ namespace RiaServicesContrib.DataValidation
         /// </summary>
         public PropertyInfo TargetProperty { get; private set; }
         /// <summary>
-        /// Gets the type of the property 'B' (i.e., the owning proeprty of 'c') of a 
+        /// Gets the type of the property 'B' (i.e., the owning property of 'c') of a 
         /// validation rule dependency 'A => A.B.c'.
         /// </summary>
         public Type TargetPropertyOwnerType { get; private set; }
