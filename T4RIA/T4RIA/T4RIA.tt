@@ -306,7 +306,7 @@ namespace <#= Namespace #>.Models
 			XAttribute maxLength = property.Attribute("MaxLength");
 			if (type == "String" && maxLength != null && maxLength.Value != "Max")
 			{
-				WriteLine("[StringLength({0}, ErrorMessageResourceName = \"ValidationError{1}Length\", ErrorMessageResourceType = typeof(ValidationErrorResources))]", maxLength.Value, name);
+				WriteLine("[StringLength({0}, ErrorMessageResourceName = \"ValidationError{1}Length\", ErrorMessageResourceType = typeof(ValidationError{2}Resources))]", maxLength.Value, name, ServiceName);
 			}
 
 			XAttribute nullable = property.Attribute("Nullable");
