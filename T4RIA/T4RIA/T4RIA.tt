@@ -572,7 +572,7 @@ public abstract class EntityGenerator : Generator
 		var mappings = Mapping.Elements(csns + "EntitySetMapping").Select(e => e.Element(csns + "EntityTypeMapping"));
 		foreach (dynamic type in EntityTypes)
 		{
-			var mapping = mappings.SingleOrDefault((XElement e) => e.Attribute("TypeName").Value.EndsWith(type.Name));
+			var mapping = mappings.SingleOrDefault((XElement e) => e.Attribute("TypeName").Value.Split('.').Last() == type.Name);
 			if (mapping != null)
 			{
 				type.Mapping = ToObject(mapping.Element(csns + "MappingFragment"));
