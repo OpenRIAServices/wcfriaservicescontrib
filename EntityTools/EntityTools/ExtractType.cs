@@ -11,6 +11,9 @@ using System.Windows.Shapes;
 
 namespace RiaServicesContrib
 {
+    /// <summary>
+    /// The type of Extract
+    /// </summary>
     public enum ExtractType
     {
         OriginalState, ModifiedState, ChangesOnlyState

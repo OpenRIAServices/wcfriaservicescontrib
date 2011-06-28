@@ -10,6 +10,9 @@ using System.ServiceModel.DomainServices.Client;
 
 namespace RiaServicesContrib.Extensions
 {
+    /// <summary>
+    /// Extension methods for WCF RIA Services related objects
+    /// </summary>
     public static class RiaServicesExtensions
     {
         /// <summary>
