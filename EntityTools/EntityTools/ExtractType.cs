@@ -13,6 +13,6 @@ namespace RiaServicesContrib
 {
     public enum ExtractType
     {
-        OriginalState, ModifiedState
+        OriginalState, ModifiedState, ChangesOnlyState
     };
 }

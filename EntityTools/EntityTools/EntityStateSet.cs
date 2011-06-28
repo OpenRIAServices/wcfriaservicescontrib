@@ -20,5 +20,7 @@ namespace RiaServicesContrib
         [DataMember]
         public object ModifiedKey { get; set; }
 
+        [DataMember]
+        public string EntityType { get; set; }
     }
 }

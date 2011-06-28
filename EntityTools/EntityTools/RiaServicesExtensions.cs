@@ -21,6 +21,9 @@ namespace RiaServicesContrib.Extensions
         public static IDictionary<string, object> ExtractState(this Entity entity, ExtractType extractType)
         {
             if (entity == null) throw new ArgumentNullException("entity");
+
+            if (extractType == ExtractType.ChangesOnlyState) return ExtractChangedState(entity);
+
             Entity extractEntity;
             if (extractType == ExtractType.OriginalState && entity.HasChanges)
                 extractEntity = entity.GetOriginalForced();
@@ -33,6 +36,31 @@ namespace RiaServicesContrib.Extensions
                 object currentObject = currentPropertyInfo.GetValue(extractEntity, null);
                 returnDictionary[currentPropertyInfo.Name] = currentObject;
             }
+            return returnDictionary;
+        }
+        /// <summary>
+        /// Extracts modified DataMember properties of an Entity
+        /// </summary>
+        /// <param name="entity">Target of extraction</param>
+        private static IDictionary<string, object> ExtractChangedState(this Entity entity)
+        {
+            if (entity == null) throw new ArgumentNullException("entity");
+            if (!entity.HasChanges) return new Dictionary<string, object>();
+
+            Entity originalEntity = entity.GetOriginal();
+
+            Dictionary<string, object> returnDictionary = new Dictionary<string, object>();
+            foreach (PropertyInfo currentPropertyInfo in GetDataMembers(entity))
+            {
+                object originalObject = originalEntity != null ? currentPropertyInfo.GetValue(originalEntity, null) : null;
+                object currentObject = currentPropertyInfo.GetValue(entity, null);
+
+                if (originalObject == null && currentObject == null) continue;
+                if (currentObject != null && currentObject.Equals(originalObject)) continue;
+
+                returnDictionary[currentPropertyInfo.Name] = currentObject;
+            }
+
             return returnDictionary;
         }
         /// <summary>
@@ -88,6 +116,241 @@ namespace RiaServicesContrib.Extensions
             }
             //Call OnDeserializaed to enable validation
             entity.OnDeserialized(dummy);
+        }
+        /// <summary>
+        /// Applies extracted state of data members to entity
+        /// </summary>
+        /// <param name="entity">Target entity</param>
+        /// <param name="state">IDictionary<string,object> of DataMembers keyed by DataMember name </param>
+        /// <param name="stateType">EntityStateType of state to be applied</param>
+        public static void ApplyState(this Entity entity, IDictionary<string, object> state, ExtractType stateType)
+        {
+            if (entity == null) throw new ArgumentNullException("entity");
+
+            StreamingContext dummy = new StreamingContext();
+            //Call OnDeserializing to temporarily disable validation
+            entity.OnDeserializing(dummy);
+
+            List<PropertyInfo> dataMembers = GetDataMembers(entity);
+
+            ApplyState(entity, state, dataMembers);
+
+            if (stateType == ExtractType.OriginalState)
+            {
+                ((IChangeTracking)entity).AcceptChanges();
+            }
+
+            //Call OnDeserializaed to enable validation
+            entity.OnDeserialized(dummy);
+        }
+        /// <summary>
+        /// Extracts the changed state for all changed entities in the DomainContext
+        /// </summary>
+        /// <param name="context">The DomainContext to query for changes</param>
+        /// <returns>The changes for all context controlled entities, in suitable format for ApplyChangedState</returns>
+        /// <remarks>
+        /// WARNING:  Changes to the DomainContext where Key() values are changed will NOT be
+        /// accurately reflected when ApplyChangedState is called.  In fact, changes to key
+        /// values will result in phantom additions to the domain context.  This is a known
+        /// limitation, so DO NOT use these routines unless key values are assigned at the
+        /// client, or where you expect to change primary key values for the Entities.
+        /// </remarks>
+        public static List<EntityStateSet> ExtractChangedState(this DomainContext context)
+        {
+            List<EntityStateSet> contextChanges = new List<EntityStateSet>();
+
+            EntityChangeSet changeSet = context.EntityContainer.GetChanges();
+
+            foreach (Entity entity in changeSet.AddedEntities)
+            {
+                contextChanges.Add(entity.Export());
+            }
+
+            foreach (Entity entity in changeSet.ModifiedEntities)
+            {
+                contextChanges.Add(entity.Export());
+            }
+
+            foreach (Entity entity in changeSet.RemovedEntities)
+            {
+                contextChanges.Add(entity.Export());
+            }
+
+            return contextChanges;
+        }
+        /// <summary>
+        /// Applies previously extracted state to the specified context
+        /// </summary>
+        /// <param name="context">The context to apply the changed state to</param>
+        /// <param name="changedState">The changed state to apply [retrieved from ExtractChangedState]</param>
+        /// <remarks>
+        /// NOTE: This routine will also 'fixup' any EntityCollection<>(s) that are referenced
+        /// by added Entity derivatives where the added child has a bidirectional reference
+        /// with the parent Entity.  Other non-directly referenced collections may need manual fixup.
+        /// 
+        /// For Example: 
+        /// Parent -> EntityCollection<Child>
+        /// Child -> Parent
+        /// </remarks>
+        public static void ApplyChangedState(this DomainContext context, List<EntityStateSet> changedState)
+        {
+            ApplyChangedState(context, changedState, true);
+        }
+        /// <summary>
+        /// Applies previously extracted state to the specified context
+        /// </summary>
+        /// <param name="context">The context to apply the changed state to</param>
+        /// <param name="changedState">The changed state to apply [retrieved from ExtractChangedState]</param>
+        /// <param name="doBasicFixup">
+        /// Performs basic fixup of any bi-directional EntityCollection<>s for
+        /// newly added entities.
+        /// </param>
+        /// <remarks>
+        /// NOTE: This routine will also 'fixup' any EntityCollection<>(s) that are referenced
+        /// by added Entity derivatives where the added child has a bidirectional reference
+        /// with the parent Entity.  Other non-directly referenced collections may need manual fixup.
+        /// 
+        /// For Example: 
+        /// Parent -> EntityCollection<Child>
+        /// Child -> Parent
+        /// </remarks>
+        public static void ApplyChangedState(this DomainContext context, List<EntityStateSet> changedState, bool doBasicFixup)
+        {
+            if (changedState == null) throw new ArgumentException("Changed State is required");
+
+            Dictionary<string, EntityStateSet> identityMap = new Dictionary<string, EntityStateSet>();
+
+            changedState.ForEach(change => identityMap.Add((change.ModifiedKey ?? change.OriginalKey).ToString(), change));
+
+            // process update/delete entries
+            foreach (EntitySet set in context.EntityContainer.EntitySets)
+            {
+                foreach (Entity entity in set.OfType<Entity>().ToList())
+                {
+                    string identity = entity.GetIdentity().ToString();
+                    if (identityMap.ContainsKey(identity))
+                    {
+                        EntityStateSet theSet = identityMap[identity];
+
+                        if (theSet.IsDelete)
+                        {
+                            set.Remove(entity);
+                        }
+                        else
+                        {
+                            ApplyState(entity, theSet.ModifiedState, ExtractType.ModifiedState);
+                        }
+
+                        identityMap.Remove(identity);
+                    }
+                }
+            }
+
+            // now do adds
+            List<Entity> addedEntities = new List<Entity>();
+            foreach (string key in identityMap.Keys)
+            {
+                EntityStateSet theState = identityMap[key];
+                if (theState.IsDelete) continue; // handle this 'just in case'
+
+                Entity newEntity = Activator.CreateInstance(Type.GetType(theState.EntityType)) as Entity;
+                ApplyState(newEntity, theState.ModifiedState, ExtractType.ModifiedState);
+
+                // find an appropriate EntitySet to stick the entity into
+                EntitySet theSet = null;
+                if (context.EntityContainer.TryGetEntitySet(newEntity.GetType(), out theSet))
+                {
+                    theSet.Add(newEntity);
+                    addedEntities.Add(newEntity);
+                }
+
+                // do we care if we couldn't find a place to put the add?
+                //if (!added)
+                //{
+                //    throw new InvalidOperationException("Could not find destination EntitySet for new Entity");
+                //}
+            }
+
+            if (doBasicFixup)
+            {
+                DoBasicAssociationFixup(addedEntities);
+            }
+        }
+        /// <summary>
+        /// Performs 'basic' fixup of EntityCollection<> references for newly
+        /// added entities in the DomainContext.
+        /// </summary>
+        /// <param name="addedEntities">The entities that have been added to DomainContext.</param>
+        private static void DoBasicAssociationFixup(List<Entity> addedEntities)
+        {
+            // now, need to fixup collection references by manually adding entity to that collection
+            Type entityColType = typeof(EntityCollection<>);
+            Dictionary<Type, PropertyInfo[]> reflectionCache = new Dictionary<Type, PropertyInfo[]>();
+            Dictionary<Type, MethodInfo> collectionAddMethods = new Dictionary<Type, MethodInfo>();
+            Dictionary<PropertyInfo, AssociationAttribute> associationAttributes = new Dictionary<PropertyInfo, AssociationAttribute>();
+
+            foreach (Entity newEntity in addedEntities)
+            {
+                Type entityType = newEntity.GetType();
+                if (!reflectionCache.ContainsKey(entityType))
+                {
+                    reflectionCache[entityType] = entityType.GetProperties(BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Public);
+                }
+
+                PropertyInfo[] props = reflectionCache[entityType];
+                foreach (PropertyInfo prop in props.Where(p => typeof(Entity).IsAssignableFrom(p.PropertyType)))
+                {
+                    if (!associationAttributes.ContainsKey(prop))
+                    {
+                        associationAttributes[prop] = prop.GetCustomAttributes(typeof(AssociationAttribute), false).OfType<AssociationAttribute>().FirstOrDefault();
+                    }
+
+                    AssociationAttribute assocAttr = associationAttributes[prop];
+                    if (assocAttr != null)
+                    {
+                        Entity pkEntity = prop.GetValue(newEntity, null) as Entity;
+
+                        if (pkEntity != null)
+                        {
+                            // look through the referenced entity for properties that are EntityCollection<newEntity.GetType()>
+                            if (!reflectionCache.ContainsKey(prop.PropertyType))
+                            {
+                                reflectionCache[prop.PropertyType] = prop.PropertyType.GetProperties(BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Public);
+                            }
+
+                            PropertyInfo[] refProps = reflectionCache[prop.PropertyType];
+                            foreach (PropertyInfo refProp in refProps)
+                            {
+                                if (refProp.PropertyType.IsGenericType &&
+                                    refProp.PropertyType.GetGenericTypeDefinition() == entityColType &&
+                                    refProp.PropertyType.GetGenericArguments().First().IsAssignableFrom(entityType))
+                                {
+                                    PropertyInfo pkProp = refProps.Where(p => p.Name == assocAttr.OtherKey).First();
+                                    PropertyInfo fkProp = props.Where(p => p.Name == assocAttr.ThisKey).First();
+
+                                    object pkValue = pkProp.GetValue(pkEntity, null);
+                                    object fkValue = fkProp.GetValue(newEntity, null);
+
+                                    if (pkValue != null && fkValue != null && pkValue.Equals(fkValue))
+                                    {
+                                        if (!collectionAddMethods.ContainsKey(entityType))
+                                        {
+                                            collectionAddMethods[entityType] = entityColType.MakeGenericType(entityType).GetMethod("Add");
+                                        }
+
+                                        // we have a match, and should add this to the collection
+                                        MethodInfo addMethod = collectionAddMethods[entityType];
+                                        if (addMethod != null)
+                                        {
+                                            addMethod.Invoke(refProp.GetValue(pkEntity, null), new object[] { newEntity });
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
         /// <summary>
         /// Imports an a list of EntityStateSet objects into the target
@@ -352,6 +615,54 @@ namespace RiaServicesContrib.Extensions
                 stateList.Add(newStateSet);
             }
             return stateList;
+        }
+        /// <summary>
+        /// Exports the entity into an EntityStateSet
+        /// </summary>
+        /// <param name="entity">The entity to extract</param>
+        /// <returns>NOTE:  For modified entities, only changed state is exported, not all state</returns>
+        public static EntityStateSet Export(this Entity entity)
+        {
+            if (entity == null) throw new ArgumentException("entity");
+
+            EntityStateSet theSet = new EntityStateSet()
+            {
+                EntityType = entity.GetType().AssemblyQualifiedName
+            };
+
+            object entityKey = entity.GetIdentity();
+            switch (entity.EntityState)
+            {
+                case EntityState.Deleted:
+                    theSet.IsDelete = true;
+                    theSet.OriginalKey = entityKey;
+                    theSet.ModifiedKey = entityKey;
+                    break;
+
+                case EntityState.New:
+                    theSet.ModifiedKey = entityKey;
+                    theSet.ModifiedState = ExtractState(entity, ExtractType.ModifiedState);
+                    break;
+
+                case EntityState.Modified:
+                    theSet.OriginalKey = entityKey;
+                    theSet.OriginalState = ExtractState(entity, ExtractType.OriginalState);
+                    theSet.ModifiedKey = entityKey;
+                    theSet.ModifiedState = ExtractChangedState(entity);
+                    break;
+
+                case EntityState.Unmodified:
+                    theSet.OriginalKey = entityKey;
+                    // yes, it's modified state, but that's purely for performance reasons, 
+                    // since the entity is unchanged
+                    theSet.OriginalState = ExtractState(entity, ExtractType.ModifiedState);
+                    break;
+
+                default:
+                    throw new ArgumentException("Cannot export detached entities");
+            }
+
+            return theSet;
         }
         /// <summary>
         /// Applies IDictionary of state to an enity
