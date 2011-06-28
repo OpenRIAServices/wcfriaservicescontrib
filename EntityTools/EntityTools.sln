@@ -13,6 +13,23 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityToolsTests", "EntityT
 	EndProjectSection
 EndProject
 Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 4
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs10
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = EntityTools\\EntityTools.csproj
+		SccProjectName1 = EntityTools
+		SccLocalPath1 = EntityTools
+		SccProjectUniqueName2 = EntityToolsTests.Web\\EntityToolsTests.Web.csproj
+		SccProjectTopLevelParentUniqueName2 = EntityTools.sln
+		SccProjectName2 = EntityToolsTests.Web
+		SccLocalPath2 = EntityToolsTests.Web
+		SccProjectUniqueName3 = EntityToolsTests\\EntityToolsTests.csproj
+		SccProjectTopLevelParentUniqueName3 = EntityTools.sln
+		SccProjectName3 = EntityToolsTests
+		SccLocalPath3 = EntityToolsTests
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
