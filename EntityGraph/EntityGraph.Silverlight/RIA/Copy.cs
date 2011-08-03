@@ -33,15 +33,34 @@ namespace RiaServicesContrib.DomainServices.Client
         /// Copies the values form the properties in dataMembers from sourceEntity to targetEntity.
         /// </summary>
         /// <param name="sourceEntity"></param>
-        /// <param name="targetEntity"></param>
+        /// <param name="targetObject"></param>
         /// <param name="dataMembers"></param>
-        private static void ApplyState(object targetEntity, object sourceEntity, IEnumerable<PropertyInfo> dataMembers)
+        private static void ApplyState(object targetObject, object sourceEntity, IEnumerable<PropertyInfo> dataMembers)
         {
-            // Copy DataMember properties
+            if(targetObject == null)
+            {
+                return;
+            }
+            StreamingContext dummy = new StreamingContext();
+            Entity entityObject = targetObject as Entity;
+
+            //Call OnDeserializing to temporarily disable validation
+            if(entityObject != null)
+            {
+                entityObject.OnDeserializing(dummy);
+            }
+
+            // Copy DataMember properties            
             foreach(PropertyInfo currentPropertyInfo in dataMembers)
             {
                 object currentObject = currentPropertyInfo.GetValue(sourceEntity, null);
-                currentPropertyInfo.SetValue(targetEntity, currentObject, null);
+                currentPropertyInfo.SetValue(targetObject, currentObject, null);
+            }
+
+            //Call OnDeserializaed to enable validation
+            if(entityObject != null)
+            {
+                entityObject.OnDeserialized(dummy);
             }
         }
         /// <summary>
