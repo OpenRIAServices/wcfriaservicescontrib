@@ -79,13 +79,13 @@ namespace RiaServicesContrib
             var entityType = edge.Parameters.Single().Type;
             if(edge.Body is MemberExpression == false)
             {
-                var msg = String.Format("Edge expression '{0}' is invalid; it should have the form 'A => A.B'", edge.ToString());
+                var msg = String.Format("Edge expression '{0}' is invalid: it should have the form 'A => A.B'", edge.ToString());
                 throw new Exception(msg);
             }
             var mexpr = (MemberExpression)edge.Body;
             if(mexpr.Expression is ParameterExpression == false)
             {
-                var msg = String.Format("Edge expression '{0}' is invalid; it should have the form 'A => A.B'", edge.ToString());
+                var msg = String.Format("Edge expression '{0}' is invalid: it should have the form 'A => A.B'", edge.ToString());
                 throw new Exception(msg);
             }
             var propInfo = mexpr.Member as PropertyInfo;
@@ -100,15 +100,32 @@ namespace RiaServicesContrib
         public EntityGraphShape Edge<TLHS, TRHS>(Expression<EdgeEnumType<TLHS, TRHS>> edge)
         {
             var entityType = edge.Parameters.Single().Type;
-            if(edge.Body is MemberExpression == false)
+            Expression body;
+            if(edge.Body is UnaryExpression)
             {
-                var msg = String.Format("Edge expression '{0}' is invalid; it should have the form 'A => A.B'", edge.ToString());
+                if(((UnaryExpression)edge.Body).NodeType == ExpressionType.Convert)
+                {
+                    body = ((UnaryExpression)edge.Body).Operand;
+                }
+                else
+                {
+                    var msg = String.Format("Edge expression '{0}' is invalid: the lamda expression has an unsupported format.");
+                    throw new Exception(msg);
+                }
+            }
+            else
+            {
+                body = edge.Body;
+            }
+            if(body is MemberExpression == false)
+            {
+                var msg = String.Format("Edge expression '{0}' is invalid: it should have the form 'A => A.B'", edge.ToString());
                 throw new Exception(msg);
             }
-            var mexpr = (MemberExpression)edge.Body;
+            var mexpr = (MemberExpression)body;
             if(mexpr.Expression is ParameterExpression == false)
             {
-                var msg = String.Format("Edge expression '{0}' is invalid; it should have the form 'A => A.B'", edge.ToString());
+                var msg = String.Format("Edge expression '{0}' is invalid: it should have the form 'A => A.B'", edge.ToString());
                 throw new Exception(msg);
             }
             var propInfo = mexpr.Member as PropertyInfo;
