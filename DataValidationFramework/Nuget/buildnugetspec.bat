@@ -1,4 +1,4 @@
-set PKG=EntityGraph
+set PKG=DataValidationFramework
 mkdir lib\sl4
 mkdir lib\net40
 
