@@ -6,8 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("EntityGraph.Net")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Entitygraph library for DotNet.")]
 [assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("Merijn de Jonge")]
 [assembly: AssemblyProduct("EntityGraph.Net")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

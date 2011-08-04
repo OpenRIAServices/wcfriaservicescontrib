@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>EntityGraph</id>
+    <version>1.0.$WCREV$.0</version>
+    <authors>Merijn de Jonge</authors>
+    <licenseUrl>http://riaservicescontrib.codeplex.com/license</licenseUrl>
+    <projectUrl>http://riaservicescontrib.codeplex.com/</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>A technology to separate generic operations (such as cloning, iterating, validating) from your data model.</description>
+    <tags>WCF RIA Services, Entity FrameWork, .Net</tags>
+	<dependencies>
+      <dependency id="DataValidationFramework" />
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.ServiceModel.DomainServices.Client" targetFramework="sl4" />
+      <frameworkAssembly assemblyName="System" targetFramework="net40" />
+    </frameworkAssemblies>
+  </metadata>
+</package>

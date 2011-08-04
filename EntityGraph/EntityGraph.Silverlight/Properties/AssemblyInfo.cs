@@ -6,8 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("EntityGraph.Silverlight")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("EntityGraph library for Silverlight/WCF RIA Services.")]
 [assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("Merijn de Jonge")]
 [assembly: AssemblyProduct("EntityGraph.Silverlight")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
