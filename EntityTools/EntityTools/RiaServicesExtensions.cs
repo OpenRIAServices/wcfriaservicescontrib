@@ -214,7 +214,7 @@ namespace RiaServicesContrib.Extensions
         /// with the parent Entity.  Other non-directly referenced collections may need manual fixup.
         /// 
         /// For Example: 
-        /// Parent -> EntityCollection<Child>
+        /// Parent -> EntityCollection Child
         /// Child -> Parent
         /// </remarks>
         public static void ApplyChangedState(this DomainContext context, List<EntityStateSet> changedState, bool doBasicFixup)
