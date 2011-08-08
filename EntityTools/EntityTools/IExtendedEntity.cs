@@ -11,6 +11,9 @@ namespace RiaServicesContrib
     /// </summary>
     public interface IExtendedEntity
     {
+        /// <summary>
+        /// EntitySet that tracks this entity.
+        /// </summary>
         EntitySet EntitySet {get; }
     }
     /// <summary>
@@ -21,6 +24,9 @@ namespace RiaServicesContrib
     /// </summary>
    public interface IExtendedEntity<T> where T : Entity, new()
     {
+       /// <summary>
+       /// EntitySet that tracks this entity
+       /// </summary>
          EntitySet<T>  EntitySet { get; }
     }
 }

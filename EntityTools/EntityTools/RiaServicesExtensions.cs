@@ -20,7 +20,7 @@ namespace RiaServicesContrib.Extensions
         /// </summary>
         /// <param name="entity">Target of extraction</param>
         /// <param name="extractType">Type of extraction</param>
-        /// <returns>IDictionary<string,object> of DataMember values keyed by DataMember name</returns>
+        /// <returns>IDictionary of DataMember values keyed by DataMember name</returns>
         public static IDictionary<string, object> ExtractState(this Entity entity, ExtractType extractType)
         {
             if (entity == null) throw new ArgumentNullException("entity");
@@ -96,8 +96,8 @@ namespace RiaServicesContrib.Extensions
         /// Applies extracted state of data members to entity
         /// </summary>
         /// <param name="entity">Target entity</param>
-        /// <param name="originalState">IDictionary<string,object> of OriginalState DataMembers keyed by DataMember name </param>
-        /// <param name="modifiedState">IDictionary<string,object> of modified (aka current) state DataMembers keyed by DataMember name</param>
+        /// <param name="originalState">IDictionary of OriginalState DataMembers keyed by DataMember name </param>
+        /// <param name="modifiedState">IDictionary of modified (aka current) state DataMembers keyed by DataMember name</param>
         public static void ApplyState(this Entity entity, IDictionary<string, object> originalState, IDictionary<string, object> modifiedState)
         {
             if (entity == null) throw new ArgumentNullException("entity");
@@ -124,7 +124,7 @@ namespace RiaServicesContrib.Extensions
         /// Applies extracted state of data members to entity
         /// </summary>
         /// <param name="entity">Target entity</param>
-        /// <param name="state">IDictionary<string,object> of DataMembers keyed by DataMember name </param>
+        /// <param name="state">IDictionary of DataMembers keyed by DataMember name </param>
         /// <param name="stateType">EntityStateType of state to be applied</param>
         public static void ApplyState(this Entity entity, IDictionary<string, object> state, ExtractType stateType)
         {
@@ -187,12 +187,12 @@ namespace RiaServicesContrib.Extensions
         /// <param name="context">The context to apply the changed state to</param>
         /// <param name="changedState">The changed state to apply [retrieved from ExtractChangedState]</param>
         /// <remarks>
-        /// NOTE: This routine will also 'fixup' any EntityCollection<>(s) that are referenced
+        /// NOTE: This routine will also 'fixup' any EntityCollection(s) that are referenced
         /// by added Entity derivatives where the added child has a bidirectional reference
         /// with the parent Entity.  Other non-directly referenced collections may need manual fixup.
         /// 
         /// For Example: 
-        /// Parent -> EntityCollection<Child>
+        /// Parent -> EntityCollection Child
         /// Child -> Parent
         /// </remarks>
         public static void ApplyChangedState(this DomainContext context, List<EntityStateSet> changedState)
@@ -205,11 +205,11 @@ namespace RiaServicesContrib.Extensions
         /// <param name="context">The context to apply the changed state to</param>
         /// <param name="changedState">The changed state to apply [retrieved from ExtractChangedState]</param>
         /// <param name="doBasicFixup">
-        /// Performs basic fixup of any bi-directional EntityCollection<>s for
+        /// Performs basic fixup of any bi-directional EntityCollections for
         /// newly added entities.
         /// </param>
         /// <remarks>
-        /// NOTE: This routine will also 'fixup' any EntityCollection<>(s) that are referenced
+        /// NOTE: This routine will also 'fixup' any EntityCollection(s) that are referenced
         /// by added Entity derivatives where the added child has a bidirectional reference
         /// with the parent Entity.  Other non-directly referenced collections may need manual fixup.
         /// 
@@ -280,7 +280,7 @@ namespace RiaServicesContrib.Extensions
             }
         }
         /// <summary>
-        /// Performs 'basic' fixup of EntityCollection<> references for newly
+        /// Performs 'basic' fixup of EntityCollection references for newly
         /// added entities in the DomainContext.
         /// </summary>
         /// <param name="addedEntities">The entities that have been added to DomainContext.</param>
@@ -429,7 +429,7 @@ namespace RiaServicesContrib.Extensions
         /// The resulting EntityState of the targetEntity is not guaranteed
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="originalEntity"></param>
+        /// <param name="sourceEntity"></param>
         /// <param name="targetEntity"></param>
         public static void Clone<T>(this T sourceEntity, T targetEntity) where T:Entity
         {
@@ -687,7 +687,7 @@ namespace RiaServicesContrib.Extensions
         /// <summary>
         /// Applies current state of sourceEntity to current state of entity
         /// </summary>
-        /// <param name="entity">Entity having state copied to</param>
+        /// <param name="targetEntity">Entity having state copied to</param>
         /// <param name="sourceEntity">Entity being copied from</param>
         /// <param name="dataMembers">List of properties being copied</param>
         private static void ApplyState<T>(T targetEntity, T sourceEntity, List<PropertyInfo> dataMembers) where T:Entity
@@ -743,7 +743,6 @@ namespace RiaServicesContrib.Extensions
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="entity"></param>
-        /// <param name="compareEntity"></param>
         /// <returns>true if duplicate</returns>
         private static T GetOriginalForced<T>(this T entity) where T : Entity
         {

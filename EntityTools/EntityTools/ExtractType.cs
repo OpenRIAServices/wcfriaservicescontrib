@@ -16,6 +16,17 @@ namespace RiaServicesContrib
     /// </summary>
     public enum ExtractType
     {
-        OriginalState, ModifiedState, ChangesOnlyState
+        /// <summary>
+        /// Extracts the original state of the entity, if the entity is unmodified then this is also the current state.
+        /// </summary>
+        OriginalState, 
+        /// <summary>
+        /// Extracts the current state of the entity
+        /// </summary>
+        ModifiedState, 
+        /// <summary>
+        /// Extracts only the properties with modified properties
+        /// </summary>
+        ChangesOnlyState
     };
 }
