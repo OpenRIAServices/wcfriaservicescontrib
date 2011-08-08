@@ -1,0 +1,62 @@
+<#@ Template Language="C#" HostSpecific="True" Inherits="DynamicTransform" #>
+<#@ Output Extension="cs" #>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.ServiceModel.DomainServices.EntityFramework;
+using System.ServiceModel.DomainServices.Hosting;
+using System.Data.Entity.Infrastructure;
+using System.Data;
+
+namespace <#= Model.Namespace #>.Services
+{ 
+    [EnableClientAccess]
+    public partial class <#= Model.DbDomainService #> : DbDomainService<<#= Model.DbContextType #>>
+    {
+        #region Scaffolded CRUD for <#= Model.EntityTypeName #>
+
+        // TODO:
+        // Consider constraining the results of your query method.  If you need additional input you can
+        // add parameters to this method or create additional query methods with different names.
+        // To support paging you will need to add ordering to the 'DeckTypes' query.
+        public IQueryable<<#= Model.EntityTypeName #>> Get<#= Model.EntityTypeNamePluralized #>()
+        {
+            return this.DbContext.<#= Model.EntityTypeNamePluralized #>;
+        }
+
+		public void Insert<#= Model.EntityTypeName #>(<#= Model.EntityTypeName #> entity)
+        {
+            DbEntityEntry<<#= Model.EntityTypeName #>> entityEntry = this.DbContext.Entry(entity);
+            if ((entityEntry.State != EntityState.Detached))
+            {
+                entityEntry.State = EntityState.Added;
+            }
+            else
+            {
+                this.DbContext.<#= Model.EntityTypeNamePluralized #>.Add(entity);
+            }
+        }
+
+        public void Update<#= Model.EntityTypeName #>(<#= Model.EntityTypeName #> current<#= Model.EntityTypeName #>)
+        {
+            this.DbContext.<#= Model.EntityTypeNamePluralized #>.AttachAsModified(current<#= Model.EntityTypeName #>, this.ChangeSet.GetOriginal(current<#= Model.EntityTypeName #>), this.DbContext);
+        }
+
+        public void Delete<#= Model.EntityTypeName #>(<#= Model.EntityTypeName #> entity)
+        {
+            DbEntityEntry<<#= Model.EntityTypeName #>> entityEntry = this.DbContext.Entry(entity);
+            if ((entityEntry.State != EntityState.Deleted))
+            {
+                entityEntry.State = EntityState.Deleted;
+            }
+            else
+            {
+                this.DbContext.<#= Model.EntityTypeNamePluralized #>.Attach(entity);
+                this.DbContext.<#= Model.EntityTypeNamePluralized #>.Remove(entity);
+            }
+        }
+
+        #endregion Scaffolded CRUD for <#= Model.EntityTypeName #>
+	}
+}
