@@ -3,23 +3,23 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Package", "Package", "{52E5BFFE-A296-4C8B-918E-76DB023D702F}"
 	ProjectSection(SolutionItems) = preProject
-		Package\RiaServices.EntityFramework.Scaffolding.0.1.nuspec = Package\RiaServices.EntityFramework.Scaffolding.0.1.nuspec
+		Package\RiaServicesContrib.EntityFramework.Scaffolding.nuspec = Package\RiaServicesContrib.EntityFramework.Scaffolding.nuspec
 	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{0DB174F7-0C4D-41C6-9836-128AAA838A16}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{3FC70A7E-6F84-4389-B7DA-51D59CA902F4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EntityFramework", "EntityFramework", "{5532C4FD-29E8-4D7C-B2A1-3835FB366796}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RiaContribEFDomainService", "RiaContribEFDomainService", "{2AA0B294-DB22-41A1-AE9B-83CB5520B488}"
 	ProjectSection(SolutionItems) = preProject
-		Package\content\EntityFramework\DbContextExtensions.cs = Package\content\EntityFramework\DbContextExtensions.cs
+		Package\tools\RiaContribEFDomainService\RiaContribEFDomainService.ps1 = Package\tools\RiaContribEFDomainService\RiaContribEFDomainService.ps1
+		Package\tools\RiaContribEFDomainService\RiaContribEFDomainServiceMember.cs.t4 = Package\tools\RiaContribEFDomainService\RiaContribEFDomainServiceMember.cs.t4
+		Package\tools\RiaContribEFDomainService\RiaContribEFDomainServiceTemplate.cs.t4 = Package\tools\RiaContribEFDomainService\RiaContribEFDomainServiceTemplate.cs.t4
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RiaEFDomainService", "RiaEFDomainService", "{2AA0B294-DB22-41A1-AE9B-83CB5520B488}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Content", "Content", "{04F08ED5-3C83-46CC-B23A-A7EA4FA1A4E3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RiaContribEFDomainService", "RiaContribEFDomainService", "{7FC7A83E-0E95-4F58-93EE-D8CE734EFC33}"
 	ProjectSection(SolutionItems) = preProject
-		Package\tools\RiaEFDomainService\RiaEFDomainService.ps1 = Package\tools\RiaEFDomainService\RiaEFDomainService.ps1
-		Package\tools\RiaEFDomainService\RiaEFDomainServiceMember.cs.t4 = Package\tools\RiaEFDomainService\RiaEFDomainServiceMember.cs.t4
-		Package\tools\RiaEFDomainService\RiaEFDomainServiceTemplate.cs.t4 = Package\tools\RiaEFDomainService\RiaEFDomainServiceTemplate.cs.t4
+		Package\content\RiaContribEFDomainService\Dummy7D62A6D1.cs = Package\content\RiaContribEFDomainService\Dummy7D62A6D1.cs
 	EndProjectSection
 EndProject
 Global
@@ -33,9 +33,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{0DB174F7-0C4D-41C6-9836-128AAA838A16} = {52E5BFFE-A296-4C8B-918E-76DB023D702F}
 		{3FC70A7E-6F84-4389-B7DA-51D59CA902F4} = {52E5BFFE-A296-4C8B-918E-76DB023D702F}
-		{5532C4FD-29E8-4D7C-B2A1-3835FB366796} = {0DB174F7-0C4D-41C6-9836-128AAA838A16}
+		{04F08ED5-3C83-46CC-B23A-A7EA4FA1A4E3} = {52E5BFFE-A296-4C8B-918E-76DB023D702F}
 		{2AA0B294-DB22-41A1-AE9B-83CB5520B488} = {3FC70A7E-6F84-4389-B7DA-51D59CA902F4}
+		{7FC7A83E-0E95-4F58-93EE-D8CE734EFC33} = {04F08ED5-3C83-46CC-B23A-A7EA4FA1A4E3}
 	EndGlobalSection
 EndGlobal
