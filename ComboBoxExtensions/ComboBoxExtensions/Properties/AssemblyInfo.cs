@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ComboBoxExtensions")]
+[assembly: AssemblyTitle("RiaServicesContrib.ComboBoxExtensions")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Philips")]
-[assembly: AssemblyProduct("ComboBoxExtensions")]
-[assembly: AssemblyCopyright("Copyright © Philips 2011")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("RiaServicesContrib.ComboBoxExtensions")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
