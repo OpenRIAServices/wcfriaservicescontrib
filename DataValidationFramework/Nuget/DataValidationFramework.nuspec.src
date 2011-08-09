@@ -8,6 +8,6 @@
     <projectUrl>http://riaservicescontrib.codeplex.com</projectUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>A generic validation framework supporting cross-entity data validation.</description>
-    <tags>Silverlight, WCF RIA Services, .NET, Data validation</tags>
+    <tags>Silverlight, RIAServices, .NET, DataValidation</tags>
   </metadata>
 </package>
