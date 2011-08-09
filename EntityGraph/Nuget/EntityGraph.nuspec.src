@@ -8,7 +8,7 @@
     <projectUrl>http://riaservicescontrib.codeplex.com/</projectUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>A technology to separate generic operations (such as cloning, iterating, validating) from your data model.</description>
-    <tags>RIAServices, EntityFrameWork, .Net</tags>
+    <tags>RIAServices EntityFrameWork .Net</tags>
 	<dependencies>
       <dependency id="DataValidationFramework" />
     </dependencies>
