@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<HelpKI>
+
+  <HelpKINode Title="ApplyChangedState method" Url="html/29bb3f15-b989-8ba6-cdb4-18e85d08e08a.htm" />
+  <HelpKINode Title="ApplyState method" Url="html/8c498b5e-e37b-68b2-cfca-8b47761ae874.htm" />
+  <HelpKINode Title="ChangesOnlyState enumeration member" Url="html/b8d461db-8bb1-11e2-3090-06572ef06ce8.htm" />
+  <HelpKINode Title="Clone method" Url="html/a92fb993-8feb-c624-0080-5b4de58441be.htm" />
+  <HelpKINode Title="EntitySet property" Url="html/623d8252-7c69-e5e7-6ba4-38ad5448dc53.htm" />
+  <HelpKINode Title="EntitySet property" Url="html/851e8569-3190-e2ba-375a-3e21bfb60d95.htm" />
+  <HelpKINode Title="EntityStateSet class" Url="html/62a232bc-a7f0-a4b8-e93f-be4c326df593.htm" />
+  <HelpKINode Title="EntityStateSet class" Url="html/f6b0b767-3709-3b04-b422-26a0cd6baf48.htm" />
+  <HelpKINode Title="EntityStateSet class">
+    <HelpKINode Title="about EntityStateSet class" Url="html/62a232bc-a7f0-a4b8-e93f-be4c326df593.htm" />
+    <HelpKINode Title="all members" Url="html/f6b0b767-3709-3b04-b422-26a0cd6baf48.htm" />
+    <HelpKINode Title="constructor" Url="html/d97dd113-920a-b56b-cf95-66c4704a4941.htm" />
+    <HelpKINode Title="methods" Url="html/22ae9216-8aef-1244-eea8-ab671c8a8a01.htm" />
+    <HelpKINode Title="properties" Url="html/c657d6f4-6ccf-1c34-7ec7-44394c6367c8.htm" />
+  </HelpKINode>
+  <HelpKINode Title="EntityStateSet.EntityStateSet constructor" Url="html/d97dd113-920a-b56b-cf95-66c4704a4941.htm" />
+  <HelpKINode Title="EntityStateSet.EntityType property" Url="html/3217e5a8-49a4-e5b7-20c2-30f8ddb26a1c.htm" />
+  <HelpKINode Title="EntityStateSet.IsDelete property" Url="html/c9474633-8f8e-dd3a-1816-e42be3b6a398.htm" />
+  <HelpKINode Title="EntityStateSet.ModifiedKey property" Url="html/e8ca29c7-5529-f1e8-3374-2c47ba6d6490.htm" />
+  <HelpKINode Title="EntityStateSet.ModifiedState property" Url="html/6aa55d73-7212-d1c3-6e18-db5d6096b949.htm" />
+  <HelpKINode Title="EntityStateSet.OriginalKey property" Url="html/bb0fe155-119f-9310-633a-999154a77f92.htm" />
+  <HelpKINode Title="EntityStateSet.OriginalState property" Url="html/0b12d686-16b3-8d9c-8ed0-f4030406b498.htm" />
+  <HelpKINode Title="EntityType property" Url="html/3217e5a8-49a4-e5b7-20c2-30f8ddb26a1c.htm" />
+  <HelpKINode Title="Export method" Url="html/bafc509c-ef25-5381-7fa7-9b3831d33091.htm" />
+  <HelpKINode Title="ExtractChangedState method" Url="html/ada39ed1-b671-d7fc-4eab-5beac43c136f.htm" />
+  <HelpKINode Title="ExtractState method" Url="html/9d524ead-089a-cdca-e1cf-dbe8bedcc2b0.htm" />
+  <HelpKINode Title="ExtractType enumeration" Url="html/b8d461db-8bb1-11e2-3090-06572ef06ce8.htm" />
+  <HelpKINode Title="IExtendedEntity interface" Url="html/1609b1a1-cb91-057e-b820-5f5c66a9a07d.htm" />
+  <HelpKINode Title="IExtendedEntity interface" Url="html/cf525d4d-95b7-d5ca-42c4-d0470e3dab78.htm" />
+  <HelpKINode Title="IExtendedEntity interface">
+    <HelpKINode Title="about IExtendedEntity interface" Url="html/cf525d4d-95b7-d5ca-42c4-d0470e3dab78.htm" />
+    <HelpKINode Title="all members" Url="html/1609b1a1-cb91-057e-b820-5f5c66a9a07d.htm" />
+    <HelpKINode Title="properties" Url="html/b0443b44-45e4-89ed-52fe-7b34c60a97fe.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IExtendedEntity(Of T) interface" Url="html/3ecf74b5-bef0-9f39-6420-070930af0781.htm" />
+  <HelpKINode Title="IExtendedEntity(Of T) interface" Url="html/d22c51f3-e403-f58a-7747-7aaf9bba43ac.htm" />
+  <HelpKINode Title="IExtendedEntity(Of T) interface">
+    <HelpKINode Title="about IExtendedEntity(Of T) interface" Url="html/d22c51f3-e403-f58a-7747-7aaf9bba43ac.htm" />
+    <HelpKINode Title="all members" Url="html/3ecf74b5-bef0-9f39-6420-070930af0781.htm" />
+    <HelpKINode Title="properties" Url="html/5c5434c6-a5c7-e6c2-8565-3dbce3deffae.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IExtendedEntity(Of T).EntitySet property" Url="html/623d8252-7c69-e5e7-6ba4-38ad5448dc53.htm" />
+  <HelpKINode Title="IExtendedEntity.EntitySet property" Url="html/851e8569-3190-e2ba-375a-3e21bfb60d95.htm" />
+  <HelpKINode Title="IExtendedEntity&lt;T&gt; interface" Url="html/3ecf74b5-bef0-9f39-6420-070930af0781.htm" />
+  <HelpKINode Title="IExtendedEntity&lt;T&gt; interface" Url="html/d22c51f3-e403-f58a-7747-7aaf9bba43ac.htm" />
+  <HelpKINode Title="IExtendedEntity&lt;T&gt; interface">
+    <HelpKINode Title="about IExtendedEntity&lt;T&gt; interface" Url="html/d22c51f3-e403-f58a-7747-7aaf9bba43ac.htm" />
+    <HelpKINode Title="all members" Url="html/3ecf74b5-bef0-9f39-6420-070930af0781.htm" />
+    <HelpKINode Title="properties" Url="html/5c5434c6-a5c7-e6c2-8565-3dbce3deffae.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IExtendedEntity&lt;T&gt;.EntitySet property" Url="html/623d8252-7c69-e5e7-6ba4-38ad5448dc53.htm" />
+  <HelpKINode Title="Import method" Url="html/977ca91d-212c-4a8e-da7c-8816f7e523d9.htm" />
+  <HelpKINode Title="IsDelete property" Url="html/c9474633-8f8e-dd3a-1816-e42be3b6a398.htm" />
+  <HelpKINode Title="IsDuplicate(Of T) method" Url="html/94bfc025-829c-6124-4cbd-ad1dddb50a8f.htm" />
+  <HelpKINode Title="IsDuplicate&lt;T&gt; method" Url="html/94bfc025-829c-6124-4cbd-ad1dddb50a8f.htm" />
+  <HelpKINode Title="ModifiedKey property" Url="html/e8ca29c7-5529-f1e8-3374-2c47ba6d6490.htm" />
+  <HelpKINode Title="ModifiedState enumeration member" Url="html/b8d461db-8bb1-11e2-3090-06572ef06ce8.htm" />
+  <HelpKINode Title="ModifiedState property" Url="html/6aa55d73-7212-d1c3-6e18-db5d6096b949.htm" />
+  <HelpKINode Title="OriginalKey property" Url="html/bb0fe155-119f-9310-633a-999154a77f92.htm" />
+  <HelpKINode Title="OriginalState enumeration member" Url="html/b8d461db-8bb1-11e2-3090-06572ef06ce8.htm" />
+  <HelpKINode Title="OriginalState property" Url="html/0b12d686-16b3-8d9c-8ed0-f4030406b498.htm" />
+  <HelpKINode Title="RiaServicesContrib namespace" Url="html/271b49fe-cf47-eb42-2095-a8a44138009e.htm" />
+  <HelpKINode Title="RiaServicesContrib.EntityStateSet class" Url="html/62a232bc-a7f0-a4b8-e93f-be4c326df593.htm" />
+  <HelpKINode Title="RiaServicesContrib.EntityStateSet class" Url="html/f6b0b767-3709-3b04-b422-26a0cd6baf48.htm" />
+  <HelpKINode Title="RiaServicesContrib.Extensions namespace" Url="html/6eb06d6f-d8e2-00fe-8af9-40a21aeeff24.htm" />
+  <HelpKINode Title="RiaServicesContrib.Extensions.RiaServicesExtensions class" Url="html/a584a492-3282-26fb-c7ef-25c3b1669cd7.htm" />
+  <HelpKINode Title="RiaServicesContrib.Extensions.RiaServicesExtensions class" Url="html/b4ad592d-554c-5c75-586a-18171b7dbc9d.htm" />
+  <HelpKINode Title="RiaServicesContrib.ExtractType enumeration" Url="html/b8d461db-8bb1-11e2-3090-06572ef06ce8.htm" />
+  <HelpKINode Title="RiaServicesContrib.IExtendedEntity interface" Url="html/1609b1a1-cb91-057e-b820-5f5c66a9a07d.htm" />
+  <HelpKINode Title="RiaServicesContrib.IExtendedEntity interface" Url="html/cf525d4d-95b7-d5ca-42c4-d0470e3dab78.htm" />
+  <HelpKINode Title="RiaServicesContrib.IExtendedEntity(Of T) interface" Url="html/3ecf74b5-bef0-9f39-6420-070930af0781.htm" />
+  <HelpKINode Title="RiaServicesContrib.IExtendedEntity(Of T) interface" Url="html/d22c51f3-e403-f58a-7747-7aaf9bba43ac.htm" />
+  <HelpKINode Title="RiaServicesContrib.IExtendedEntity&lt;T&gt; interface" Url="html/3ecf74b5-bef0-9f39-6420-070930af0781.htm" />
+  <HelpKINode Title="RiaServicesContrib.IExtendedEntity&lt;T&gt; interface" Url="html/d22c51f3-e403-f58a-7747-7aaf9bba43ac.htm" />
+  <HelpKINode Title="RiaServicesExtensions class" Url="html/a584a492-3282-26fb-c7ef-25c3b1669cd7.htm" />
+  <HelpKINode Title="RiaServicesExtensions class" Url="html/b4ad592d-554c-5c75-586a-18171b7dbc9d.htm" />
+  <HelpKINode Title="RiaServicesExtensions class">
+    <HelpKINode Title="about RiaServicesExtensions class" Url="html/b4ad592d-554c-5c75-586a-18171b7dbc9d.htm" />
+    <HelpKINode Title="all members" Url="html/a584a492-3282-26fb-c7ef-25c3b1669cd7.htm" />
+    <HelpKINode Title="methods" Url="html/5784278c-8508-4650-734c-7e8a7f42231c.htm" />
+  </HelpKINode>
+  <HelpKINode Title="RiaServicesExtensions.ApplyChangedState method" Url="html/29bb3f15-b989-8ba6-cdb4-18e85d08e08a.htm" />
+  <HelpKINode Title="RiaServicesExtensions.ApplyState method" Url="html/8c498b5e-e37b-68b2-cfca-8b47761ae874.htm" />
+  <HelpKINode Title="RiaServicesExtensions.Clone method" Url="html/a92fb993-8feb-c624-0080-5b4de58441be.htm" />
+  <HelpKINode Title="RiaServicesExtensions.Export method" Url="html/bafc509c-ef25-5381-7fa7-9b3831d33091.htm" />
+  <HelpKINode Title="RiaServicesExtensions.ExtractChangedState method" Url="html/ada39ed1-b671-d7fc-4eab-5beac43c136f.htm" />
+  <HelpKINode Title="RiaServicesExtensions.ExtractState method" Url="html/9d524ead-089a-cdca-e1cf-dbe8bedcc2b0.htm" />
+  <HelpKINode Title="RiaServicesExtensions.Import method" Url="html/977ca91d-212c-4a8e-da7c-8816f7e523d9.htm" />
+  <HelpKINode Title="RiaServicesExtensions.IsDuplicate(Of T) method" Url="html/94bfc025-829c-6124-4cbd-ad1dddb50a8f.htm" />
+  <HelpKINode Title="RiaServicesExtensions.IsDuplicate&lt;T&gt; method" Url="html/94bfc025-829c-6124-4cbd-ad1dddb50a8f.htm" />
+  <HelpKINode Title="RiaServicesExtensions.ToEntities(Of T) method" Url="html/5eea533c-f3ce-ac7a-89d4-bf85afa2ae4a.htm" />
+  <HelpKINode Title="RiaServicesExtensions.ToEntities&lt;T&gt; method" Url="html/5eea533c-f3ce-ac7a-89d4-bf85afa2ae4a.htm" />
+  <HelpKINode Title="ToEntities(Of T) method" Url="html/5eea533c-f3ce-ac7a-89d4-bf85afa2ae4a.htm" />
+  <HelpKINode Title="ToEntities&lt;T&gt; method" Url="html/5eea533c-f3ce-ac7a-89d4-bf85afa2ae4a.htm" />
+</HelpKI>

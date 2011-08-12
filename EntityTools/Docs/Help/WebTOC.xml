@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<HelpTOC>
+
+  <HelpTOCNode Id="0f180fb4-29f5-4ea5-93ca-ceef0b5ca5fe" Title="RiaServicesContrib Namespace" Url="html/271b49fe-cf47-eb42-2095-a8a44138009e.htm">
+    <HelpTOCNode Id="d680ebca-fcb1-4c69-a1ea-0c512170d7c9" Title="EntityStateSet Class" Url="html/62a232bc-a7f0-a4b8-e93f-be4c326df593.htm">
+      <HelpTOCNode Title="EntityStateSet Members" Url="html/f6b0b767-3709-3b04-b422-26a0cd6baf48.htm" />
+      <HelpTOCNode Title="EntityStateSet Constructor " Url="html/d97dd113-920a-b56b-cf95-66c4704a4941.htm" />
+      <HelpTOCNode Title="EntityStateSet Methods" Url="html/22ae9216-8aef-1244-eea8-ab671c8a8a01.htm" />
+      <HelpTOCNode Id="c14d244c-8e1e-44d1-bcce-c5a4fae8eb1c" Title="EntityStateSet Properties" Url="html/c657d6f4-6ccf-1c34-7ec7-44394c6367c8.htm">
+        <HelpTOCNode Title="EntityType Property " Url="html/3217e5a8-49a4-e5b7-20c2-30f8ddb26a1c.htm" />
+        <HelpTOCNode Title="IsDelete Property " Url="html/c9474633-8f8e-dd3a-1816-e42be3b6a398.htm" />
+        <HelpTOCNode Title="ModifiedKey Property " Url="html/e8ca29c7-5529-f1e8-3374-2c47ba6d6490.htm" />
+        <HelpTOCNode Title="ModifiedState Property " Url="html/6aa55d73-7212-d1c3-6e18-db5d6096b949.htm" />
+        <HelpTOCNode Title="OriginalKey Property " Url="html/bb0fe155-119f-9310-633a-999154a77f92.htm" />
+        <HelpTOCNode Title="OriginalState Property " Url="html/0b12d686-16b3-8d9c-8ed0-f4030406b498.htm" />
+      </HelpTOCNode>
+    </HelpTOCNode>
+    <HelpTOCNode Title="ExtractType Enumeration" Url="html/b8d461db-8bb1-11e2-3090-06572ef06ce8.htm" />
+    <HelpTOCNode Id="a2f34e22-bab1-4568-83c9-64af50257713" Title="IExtendedEntity Interface" Url="html/cf525d4d-95b7-d5ca-42c4-d0470e3dab78.htm">
+      <HelpTOCNode Title="IExtendedEntity Members" Url="html/1609b1a1-cb91-057e-b820-5f5c66a9a07d.htm" />
+      <HelpTOCNode Id="59ab583e-b6e7-4f9b-a06c-23cfe0fcec56" Title="IExtendedEntity Properties" Url="html/b0443b44-45e4-89ed-52fe-7b34c60a97fe.htm">
+        <HelpTOCNode Title="EntitySet Property " Url="html/851e8569-3190-e2ba-375a-3e21bfb60d95.htm" />
+      </HelpTOCNode>
+    </HelpTOCNode>
+    <HelpTOCNode Id="6964ac67-e362-4c3b-9a78-4b83779c85c4" Title="IExtendedEntity(T) Interface" Url="html/d22c51f3-e403-f58a-7747-7aaf9bba43ac.htm">
+      <HelpTOCNode Title="IExtendedEntity(T) Members" Url="html/3ecf74b5-bef0-9f39-6420-070930af0781.htm" />
+      <HelpTOCNode Id="8f5fa20d-b74e-44ee-8da6-2a8913358297" Title="IExtendedEntity(T) Properties" Url="html/5c5434c6-a5c7-e6c2-8565-3dbce3deffae.htm">
+        <HelpTOCNode Title="EntitySet Property " Url="html/623d8252-7c69-e5e7-6ba4-38ad5448dc53.htm" />
+      </HelpTOCNode>
+    </HelpTOCNode>
+  </HelpTOCNode>
+  <HelpTOCNode Id="cf8453c7-5625-4417-9ea4-df397e34bc4f" Title="RiaServicesContrib.Extensions Namespace" Url="html/6eb06d6f-d8e2-00fe-8af9-40a21aeeff24.htm">
+    <HelpTOCNode Id="7b9001a8-fee4-4760-a3d9-efe51c9a23ba" Title="RiaServicesExtensions Class" Url="html/b4ad592d-554c-5c75-586a-18171b7dbc9d.htm">
+      <HelpTOCNode Title="RiaServicesExtensions Members" Url="html/a584a492-3282-26fb-c7ef-25c3b1669cd7.htm" />
+      <HelpTOCNode Id="fcf9b799-639c-4afd-8ce8-83df7236437b" Title="RiaServicesExtensions Methods" Url="html/5784278c-8508-4650-734c-7e8a7f42231c.htm">
+        <HelpTOCNode Id="66a92598-34ef-47f3-8f01-15f91d83ee39" Title="ApplyChangedState Method " Url="html/29bb3f15-b989-8ba6-cdb4-18e85d08e08a.htm">
+          <HelpTOCNode Title="ApplyChangedState Method (, List(EntityStateSet))" Url="html/983871ae-fae4-e7c1-aa52-e0decd99ee21.htm" />
+          <HelpTOCNode Title="ApplyChangedState Method (, List(EntityStateSet), Boolean)" Url="html/c4a18278-0489-a376-25e7-e97dd8dbb444.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="ccd900fd-63d7-4948-8486-28fd6811f73b" Title="ApplyState Method " Url="html/8c498b5e-e37b-68b2-cfca-8b47761ae874.htm">
+          <HelpTOCNode Title="ApplyState(T) Method (T, T)" Url="html/ee1f7e99-442e-7c61-4cde-838e6fd87130.htm" />
+          <HelpTOCNode Title="ApplyState Method (, IDictionary(String, Object), ExtractType)" Url="html/b816e899-1923-f3ce-8e1a-be51e806920c.htm" />
+          <HelpTOCNode Title="ApplyState Method (, IDictionary(String, Object), IDictionary(String, Object))" Url="html/b05d2240-0242-551b-1c67-f8bc9656fe37.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="333565c8-f9bb-47f4-9989-67472a66f4f6" Title="Clone Method " Url="html/a92fb993-8feb-c624-0080-5b4de58441be.htm">
+          <HelpTOCNode Title="Clone(T) Method ((T), T)" Url="html/da0849e3-2900-3445-87af-bfaf21ff3d0a.htm" />
+          <HelpTOCNode Title="Clone(T) Method (T, T)" Url="html/8c7f52b2-af27-be12-6bac-358b5ce7e5ed.htm" />
+          <HelpTOCNode Title="Clone(T) Method ((T), IEnumerable(T), )" Url="html/6338467b-f66f-6981-abaf-abf8edd9790c.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="d4dce4fd-6734-4f5e-b719-a3733edf6537" Title="Export Method " Url="html/bafc509c-ef25-5381-7fa7-9b3831d33091.htm">
+          <HelpTOCNode Title="Export(T) Method (IEnumerable(T))" Url="html/9a001ff3-b70a-97c6-5486-e81ff9d6031e.htm" />
+          <HelpTOCNode Title="Export Method ()" Url="html/5cd7dc76-9634-dd4f-ce3d-c7a94c0fea2a.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Title="ExtractChangedState Method " Url="html/ada39ed1-b671-d7fc-4eab-5beac43c136f.htm" />
+        <HelpTOCNode Title="ExtractState Method " Url="html/9d524ead-089a-cdca-e1cf-dbe8bedcc2b0.htm" />
+        <HelpTOCNode Id="8a8820d9-9f3c-483e-bbf0-f793491e6bcb" Title="Import Method " Url="html/977ca91d-212c-4a8e-da7c-8816f7e523d9.htm">
+          <HelpTOCNode Title="Import(T) Method ((T), IList(EntityStateSet))" Url="html/b0133c23-0435-7c72-f002-2223d0c1dcb5.htm" />
+          <HelpTOCNode Title="Import(T) Method ((T), IList(EntityStateSet), )" Url="html/65b70222-764e-1956-09b3-8363adc9e799.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Title="IsDuplicate(T) Method " Url="html/94bfc025-829c-6124-4cbd-ad1dddb50a8f.htm" />
+        <HelpTOCNode Title="ToEntities(T) Method " Url="html/5eea533c-f3ce-ac7a-89d4-bf85afa2ae4a.htm" />
+      </HelpTOCNode>
+    </HelpTOCNode>
+  </HelpTOCNode>
+</HelpTOC>

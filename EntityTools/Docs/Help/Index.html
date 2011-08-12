@@ -1,0 +1,233 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<head>
+<title>RIA Services Contrib Entity Tools - Table of Content</title>
+<link rel="stylesheet" href="TOC.css">
+<link rel="shortcut icon" href="favicon.ico"/>
+<script type="text/javascript" src="TOC.js"></script>
+</head>
+
+<body onload="javascript: Initialize();" onresize="javascript: ResizeTree();">
+<form id="IndexForm" runat="server">
+
+<div id="TOCDiv" class="TOCDiv">
+
+<div id="divSearchOpts" class="SearchOpts" style="height: 100px; display: none;">
+<img class="TOCLink" onclick="javascript: ShowHideSearch(false);"
+    src="CloseSearch.png" height="16" width="16" alt="Hide search" style="float: right;"/>
+Keyword(s) for which to search:
+<input id="txtSearchText" type="text" style="width: 100%;"
+  onkeypress="javascript: return OnSearchTextKeyPress(event);" /><br />
+<input id="chkSortByTitle" type="checkbox" /><label for="chkSortByTitle">&nbsp;Sort results by title</label><br />
+<input type="button" value="Search" onclick="javascript: return PerformSearch();" />
+</div>
+
+<div id="divIndexOpts" class="IndexOpts" style="height: 25px; display: none;">
+<img class="TOCLink" onclick="javascript: ShowHideIndex(false);"
+    src="CloseSearch.png" height="17" width="17" alt="Hide index" style="float: right;"/>
+Keyword Index
+</div>
+
+<div id="divNavOpts" class="NavOpts" style="height: 20px;">
+    <img class="TOCLink" onclick="javascript: SyncTOC();" src="SyncTOC.gif"
+        height="16" width="16" alt="Sync to TOC"/>
+    <img class="TOCLink" onclick="javascript: ExpandOrCollapseAll(true);"
+        src="ExpandAll.bmp" height="16" width="16" alt="Expand all "/>
+    <img class="TOCLink" onclick="javascript: ExpandOrCollapseAll(false);"
+        src="CollapseAll.bmp" height="16" width="16" alt="Collapse all" />
+</div>
+
+<div class="Tree" id="divSearchResults" style="display: none;"
+    onselectstart="javascript: return false;">
+</div>
+
+<div class="Tree" id="divIndexResults" style="display: none;"
+    onselectstart="javascript: return false;">
+</div>
+
+<div class="Tree" id="divTree" onselectstart="javascript: return false;">
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.gif"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/271b49fe-cf47-eb42-2095-a8a44138009e.htm" target="TopicContent">RiaServicesContrib Namespace</a>
+<div class="Hidden">
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.gif"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/62a232bc-a7f0-a4b8-e93f-be4c326df593.htm" target="TopicContent">EntityStateSet Class</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/f6b0b767-3709-3b04-b422-26a0cd6baf48.htm" target="TopicContent">EntityStateSet Members</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/d97dd113-920a-b56b-cf95-66c4704a4941.htm" target="TopicContent">EntityStateSet Constructor </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/22ae9216-8aef-1244-eea8-ab671c8a8a01.htm" target="TopicContent">EntityStateSet Methods</a>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.gif"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/c657d6f4-6ccf-1c34-7ec7-44394c6367c8.htm" target="TopicContent">EntityStateSet Properties</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/3217e5a8-49a4-e5b7-20c2-30f8ddb26a1c.htm" target="TopicContent">EntityType Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/c9474633-8f8e-dd3a-1816-e42be3b6a398.htm" target="TopicContent">IsDelete Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/e8ca29c7-5529-f1e8-3374-2c47ba6d6490.htm" target="TopicContent">ModifiedKey Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/6aa55d73-7212-d1c3-6e18-db5d6096b949.htm" target="TopicContent">ModifiedState Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/bb0fe155-119f-9310-633a-999154a77f92.htm" target="TopicContent">OriginalKey Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/0b12d686-16b3-8d9c-8ed0-f4030406b498.htm" target="TopicContent">OriginalState Property </a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/b8d461db-8bb1-11e2-3090-06572ef06ce8.htm" target="TopicContent">ExtractType Enumeration</a>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.gif"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/cf525d4d-95b7-d5ca-42c4-d0470e3dab78.htm" target="TopicContent">IExtendedEntity Interface</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/1609b1a1-cb91-057e-b820-5f5c66a9a07d.htm" target="TopicContent">IExtendedEntity Members</a>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.gif"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/b0443b44-45e4-89ed-52fe-7b34c60a97fe.htm" target="TopicContent">IExtendedEntity Properties</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/851e8569-3190-e2ba-375a-3e21bfb60d95.htm" target="TopicContent">EntitySet Property </a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.gif"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/d22c51f3-e403-f58a-7747-7aaf9bba43ac.htm" target="TopicContent">IExtendedEntity(T) Interface</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/3ecf74b5-bef0-9f39-6420-070930af0781.htm" target="TopicContent">IExtendedEntity(T) Members</a>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.gif"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/5c5434c6-a5c7-e6c2-8565-3dbce3deffae.htm" target="TopicContent">IExtendedEntity(T) Properties</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/623d8252-7c69-e5e7-6ba4-38ad5448dc53.htm" target="TopicContent">EntitySet Property </a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.gif"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/6eb06d6f-d8e2-00fe-8af9-40a21aeeff24.htm" target="TopicContent">RiaServicesContrib.Extensions Namespace</a>
+<div class="Hidden">
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.gif"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/b4ad592d-554c-5c75-586a-18171b7dbc9d.htm" target="TopicContent">RiaServicesExtensions Class</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/a584a492-3282-26fb-c7ef-25c3b1669cd7.htm" target="TopicContent">RiaServicesExtensions Members</a>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.gif"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/5784278c-8508-4650-734c-7e8a7f42231c.htm" target="TopicContent">RiaServicesExtensions Methods</a>
+<div class="Hidden">
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.gif"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/29bb3f15-b989-8ba6-cdb4-18e85d08e08a.htm" target="TopicContent">ApplyChangedState Method </a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/983871ae-fae4-e7c1-aa52-e0decd99ee21.htm" target="TopicContent">ApplyChangedState Method (, List(EntityStateSet))</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/c4a18278-0489-a376-25e7-e97dd8dbb444.htm" target="TopicContent">ApplyChangedState Method (, List(EntityStateSet), Boolean)</a>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.gif"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/8c498b5e-e37b-68b2-cfca-8b47761ae874.htm" target="TopicContent">ApplyState Method </a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/ee1f7e99-442e-7c61-4cde-838e6fd87130.htm" target="TopicContent">ApplyState(T) Method (T, T)</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/b816e899-1923-f3ce-8e1a-be51e806920c.htm" target="TopicContent">ApplyState Method (, IDictionary(String, Object), ExtractType)</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/b05d2240-0242-551b-1c67-f8bc9656fe37.htm" target="TopicContent">ApplyState Method (, IDictionary(String, Object), IDictionary(String, Object))</a>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.gif"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/a92fb993-8feb-c624-0080-5b4de58441be.htm" target="TopicContent">Clone Method </a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/da0849e3-2900-3445-87af-bfaf21ff3d0a.htm" target="TopicContent">Clone(T) Method ((T), T)</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/8c7f52b2-af27-be12-6bac-358b5ce7e5ed.htm" target="TopicContent">Clone(T) Method (T, T)</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/6338467b-f66f-6981-abaf-abf8edd9790c.htm" target="TopicContent">Clone(T) Method ((T), IEnumerable(T), )</a>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.gif"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/bafc509c-ef25-5381-7fa7-9b3831d33091.htm" target="TopicContent">Export Method </a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/9a001ff3-b70a-97c6-5486-e81ff9d6031e.htm" target="TopicContent">Export(T) Method (IEnumerable(T))</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/5cd7dc76-9634-dd4f-ce3d-c7a94c0fea2a.htm" target="TopicContent">Export Method ()</a>
+</div>
+</div>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/ada39ed1-b671-d7fc-4eab-5beac43c136f.htm" target="TopicContent">ExtractChangedState Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/9d524ead-089a-cdca-e1cf-dbe8bedcc2b0.htm" target="TopicContent">ExtractState Method </a>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.gif"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/977ca91d-212c-4a8e-da7c-8816f7e523d9.htm" target="TopicContent">Import Method </a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/b0133c23-0435-7c72-f002-2223d0c1dcb5.htm" target="TopicContent">Import(T) Method ((T), IList(EntityStateSet))</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/65b70222-764e-1956-09b3-8363adc9e799.htm" target="TopicContent">Import(T) Method ((T), IList(EntityStateSet), )</a>
+</div>
+</div>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/94bfc025-829c-6124-4cbd-ad1dddb50a8f.htm" target="TopicContent">IsDuplicate(T) Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/5eea533c-f3ce-ac7a-89d4-bf85afa2ae4a.htm" target="TopicContent">ToEntities(T) Method </a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+
+</div>
+
+<div id="TOCSizer" class="TOCSizer" onmousedown="OnMouseDown(event)" onselectstart="javascript: return false;"></div>
+
+<iframe id="TopicContent" name="TopicContent" class="TopicContent" src="html/271b49fe-cf47-eb42-2095-a8a44138009e.htm">
+This page uses an IFRAME but your browser does not support it.
+</iframe>
+
+</form>
+
+</body>
+
+</html>
