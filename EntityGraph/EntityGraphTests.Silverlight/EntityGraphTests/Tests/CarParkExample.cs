@@ -57,6 +57,10 @@ namespace EntityGraphTests.Tests
         public ObservableCollection<Wheel> Wheels { get; set; }
         public ObservableCollection<Door> Doors { get; set; }
         public Engine Engine { get; set; }
+        public Owner Owner { get; set; }
+    }
+    class Owner
+    {
     }
     public class Trailer : Entity
     {
