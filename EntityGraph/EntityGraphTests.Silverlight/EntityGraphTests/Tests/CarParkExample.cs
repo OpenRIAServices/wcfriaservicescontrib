@@ -59,7 +59,7 @@ namespace EntityGraphTests.Tests
         public Engine Engine { get; set; }
         public Owner Owner { get; set; }
     }
-    class Owner
+    public class Owner
     {
     }
     public class Trailer : Entity

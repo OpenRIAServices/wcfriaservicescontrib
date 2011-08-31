@@ -30,6 +30,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>datavalidationframework.net.key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -63,6 +69,9 @@
     <Compile Include="ValidationResultChangedEventArgs.shared.cs" />
     <Compile Include="ValidationRule.shared.cs" />
     <Compile Include="ValidationRuleDependency.shared.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="datavalidationframework.net.key.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -3,7 +3,6 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("EntityGraphTest")]
 namespace RiaServicesContrib.DataValidation
 {
     /// <summary>
