@@ -43,6 +43,7 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -50,6 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EntityGraphShape.Union.shared.cs" />
+    <Compile Include="EntityGraphShape.CopyTo.shared.cs" />
     <Compile Include="EntityGraph.shared.cs" />
     <Compile Include="EntityGraphAttribute.shared.cs" />
     <Compile Include="EntityGraphAttributeShape.shared.cs" />
