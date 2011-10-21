@@ -121,11 +121,11 @@ namespace RiaServicesContrib
             var fromEntityType = fromEntity.GetType();
             var toEntityType = typeMapper.Map(fromEntityType);
             var toEntity = (TTo)Activator.CreateInstance(toEntityType);
-            foreach (var prop in GetDataMembers(fromEntity, true))
+            foreach (var prop in GetDataMembers(toEntity, true))
             {
-                var propInfo = toEntityType.GetProperty(prop.Name);
-                var value = prop.GetValue(fromEntity, null);
-                propInfo.SetValue(toEntity, value, null);
+                var propInfo = fromEntityType.GetProperty(prop.Name);
+                var value = propInfo.GetValue(fromEntity, null);
+                prop.SetValue(toEntity, value, null);
             }
             return toEntity;
         }
