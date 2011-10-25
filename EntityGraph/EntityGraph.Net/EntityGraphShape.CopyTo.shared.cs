@@ -74,9 +74,14 @@ namespace RiaServicesContrib
             {
                 var fromPropInfo = fromType.GetProperty(edge.Name);
                 var toPropInfo = toType.GetProperty(edge.Name);
+                var fromPropvalue = fromPropInfo.GetValue(fromEntity, null);
+                if (fromPropvalue == null)
+                {
+                    continue;
+                }
                 if (typeof(IEnumerable).IsAssignableFrom(edge.PropertyType))
                 {
-                    var fromChildren = (IEnumerable)fromPropInfo.GetValue(fromEntity, null);
+                    var fromChildren = (IEnumerable)fromPropvalue;
 
                     IEnumerable toList = (IEnumerable)toPropInfo.GetValue(toEntity, null);
                     // If the IEnumerable is null, lets try to allocate one
@@ -95,7 +100,7 @@ namespace RiaServicesContrib
                 }
                 else
                 {
-                    var fromChild = (TFrom)fromPropInfo.GetValue(fromEntity, null);
+                    var fromChild = (TFrom)fromPropvalue;
                     var toChild = shape.CopyTo<TFrom, TTo>(fromChild, typeMapper);
                     edge.SetValue(toEntity, toChild, null);
                 }
