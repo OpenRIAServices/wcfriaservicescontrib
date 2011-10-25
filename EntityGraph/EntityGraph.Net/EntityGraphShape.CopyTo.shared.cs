@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.IO;
 
 namespace RiaServicesContrib
 {
@@ -121,13 +122,43 @@ namespace RiaServicesContrib
             var fromEntityType = fromEntity.GetType();
             var toEntityType = typeMapper.Map(fromEntityType);
             var toEntity = (TTo)Activator.CreateInstance(toEntityType);
-            foreach (var prop in GetDataMembers(toEntity, true))
-            {
-                var propInfo = fromEntityType.GetProperty(prop.Name);
-                var value = propInfo.GetValue(fromEntity, null);
-                prop.SetValue(toEntity, value, null);
-            }
+            
+            CopyDataMembers(fromEntity, toEntity);
             return toEntity;
+        }
+        /// <summary>
+        /// Copies properties annotated with the DataMemberAttribute from fromObject to toObject.
+        /// If property types are not assignable, consider them as complex types and call CopyDataMembers
+        /// recursively on their values.
+        /// </summary>
+        /// <param name="fromObject"></param>
+        /// <param name="toObject"></param>
+        private static void CopyDataMembers(object fromObject, object toObject)
+        {
+            var fromObjectType = fromObject.GetType();
+            foreach (var prop in GetDataMembers(toObject, true))
+            {
+                var propInfo = fromObjectType.GetProperty(prop.Name);
+                var value = propInfo.GetValue(fromObject, null);
+                if (value == null)
+                {
+                    continue;
+                }
+                if (prop.PropertyType.IsAssignableFrom(propInfo.PropertyType))
+                {
+                    prop.SetValue(toObject, value, null);
+                }
+                else
+                {
+                    var obj = prop.GetValue(toObject, null);
+                    if (obj == null)
+                    {
+                        obj = Activator.CreateInstance(prop.PropertyType);
+                    } 
+                    prop.SetValue(toObject, obj, null);
+                    CopyDataMembers(value, obj);
+                }
+            }
         }
         #endregion
     }
