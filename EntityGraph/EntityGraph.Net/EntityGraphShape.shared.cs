@@ -180,14 +180,15 @@ namespace RiaServicesContrib
             return edge.GetValue(entity, null);
         }
         /// <summary>
-        /// Returns the collection og objects that is reachable from entity via the given edge.
+        /// Returns the collection of objects that is reachable from entity via the given edge.
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="edge"></param>
         /// <returns></returns>
         public virtual IEnumerable GetNodes(object entity, PropertyInfo edge)
         {
-            return (IEnumerable)edge.GetValue(entity, null);
+            var nodes = (IEnumerable)edge.GetValue(entity, null);
+            return nodes == null ? new List<object> { } : nodes;
         }
     }
 }

@@ -107,6 +107,10 @@ namespace RiaServicesContrib
                 if(typeof(IEnumerable).IsAssignableFrom(edge.PropertyType))
                 {
                     var assocList = GraphShape.GetNodes(entity, edge);
+                    if (assocList == null)
+                    {
+                        continue;
+                    }
                     node.ListEdges.Add(edge, new List<TEntity>());
                     foreach(TEntity e in assocList)
                     {

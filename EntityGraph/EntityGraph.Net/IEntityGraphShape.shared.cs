@@ -29,7 +29,7 @@ namespace RiaServicesContrib
         /// <returns></returns>
         object GetNode(object entity, PropertyInfo edge);
         /// <summary>
-        /// Returns the collection og objects that is reachable from entity via the given edge.
+        /// Returns the collection of objects that is reachable from entity via the given edge.
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="edge"></param>
