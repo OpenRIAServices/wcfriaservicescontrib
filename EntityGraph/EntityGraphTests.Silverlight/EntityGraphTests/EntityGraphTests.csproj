@@ -122,6 +122,7 @@
     <Compile Include="Tests\EntityGraphTests.cs" />
     <Compile Include="Tests\EntitySetTests.cs" />
     <Compile Include="Tests\FactoryTests.cs" />
+    <Compile Include="Tests\FullEntityGraphShapeTests.cs" />
     <Compile Include="Tests\GraphValidatorTests.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -76,6 +76,7 @@
     <Compile Include="RIA\EntityGraphChangeSet.cs" />
     <Compile Include="RIA\EntityGraphFactory.cs" />
     <Compile Include="RIA\EntitySet.cs" />
+    <Compile Include="RIA\FullEntityGraphShape.cs" />
     <Compile Include="RIA\Graphvalidator.cs" />
     <Compile Include="RIA\HasChanges.cs" />
     <Compile Include="RIA\IEDitableObject.cs" />
