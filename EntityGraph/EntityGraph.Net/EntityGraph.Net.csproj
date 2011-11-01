@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DynamicGraphShape.shared.cs" />
     <Compile Include="EntityGraphShape.Union.shared.cs" />
     <Compile Include="EntityGraphShape.CopyTo.shared.cs" />
     <Compile Include="EntityGraph.shared.cs" />
