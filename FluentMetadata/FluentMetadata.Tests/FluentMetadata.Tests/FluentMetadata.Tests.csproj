@@ -5,12 +5,12 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{9BB2DB17-3DDC-4C8F-A5E9-D713A687886F}</ProjectGuid>
+    <ProjectGuid>{3DFBD959-C1DD-445E-98BA-3C7256FC1789}</ProjectGuid>
     <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RiaServicesContribTests</RootNamespace>
-    <AssemblyName>RiaServicesContribTests</AssemblyName>
+    <RootNamespace>FluentMetadata.Tests</RootNamespace>
+    <AssemblyName>FluentMetadata.Tests</AssemblyName>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
@@ -18,9 +18,9 @@
     <SupportedCultures />
     <XapOutputs>true</XapOutputs>
     <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
-    <XapFilename>RiaServicesContribTests.xap</XapFilename>
+    <XapFilename>FluentMetadata.Tests.xap</XapFilename>
     <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
-    <SilverlightAppEntry>RiaServicesContribTests.App</SilverlightAppEntry>
+    <SilverlightAppEntry>FluentMetadata.Tests.App</SilverlightAppEntry>
     <TestPageFileName>TestPage.html</TestPageFileName>
     <CreateTestPage>true</CreateTestPage>
     <ValidateXaml>true</ValidateXaml>
@@ -28,7 +28,7 @@
     <OutOfBrowserSettingsFile>Properties\OutOfBrowserSettings.xml</OutOfBrowserSettingsFile>
     <UsePlatformExtensions>false</UsePlatformExtensions>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
-    <LinkedServerProject />
+    <LinkedServerProject>..\FluentMetadata.Tests.Web\FluentMetadata.Tests.Web.csproj</LinkedServerProject>
   </PropertyGroup>
   <!--
   //
@@ -79,6 +79,12 @@
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight">
       <HintPath>$(MSBuildExtensionsPath)\..\Microsoft SDKs\Silverlight\v4.0\Toolkit\Apr10\Testing\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll</HintPath>
     </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations, Version=2.0.5.0, Culture=neutral, PublicKeyToken=ddd0da4d3e678217, processorArchitecture=MSIL" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.DomainServices.Client, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.ServiceModel.DomainServices.Client.Web, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.ServiceModel.Web.Extensions, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Windows" />
     <Reference Include="mscorlib" />
     <Reference Include="system" />
@@ -92,6 +98,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -101,24 +108,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AppManifest.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\DataValidationFramework\DataValidationFrameworkTests.Silverlight\DataValidationFrameworkTests\DataValidationFrameworkTests.csproj">
-      <Project>{7D86DC6C-960F-4E88-BE05-D2A39A1CB5BF}</Project>
-      <Name>DataValidationFrameworkTests</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\EntityGraph\EntityGraphTests.Silverlight\EntityGraphTests\EntityGraphTests.csproj">
-      <Project>{1D79F315-BDF3-4F3B-9C68-B307CA95DC1C}</Project>
-      <Name>EntityGraphTests</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\EntityTools\EntityToolsTests\EntityToolsTests.csproj">
-      <Project>{B7383841-EF3F-41E9-BB78-D6C53171C477}</Project>
-      <Name>EntityToolsTests</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\FluentMetadata\FluentMetadata.Tests\FluentMetadata.Tests\FluentMetadata.Tests.csproj">
-      <Project>{3DFBD959-C1DD-445E-98BA-3C7256FC1789}</Project>
-      <Name>FluentMetadata.Tests</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <Import Condition="$(SilverlightVersion)=='v3.0'" Project="$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SilverlightToolkit\Tools\v3.0)Microsoft.Silverlight.Toolkit.Build.targets" />

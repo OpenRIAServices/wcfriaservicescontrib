@@ -6,15 +6,15 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{567077E6-6A19-48CB-AB62-F2BBB2B8248B}</ProjectGuid>
+    <ProjectGuid>{8C60165B-84A9-4CB1-9D0C-590F36B205A3}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RiaServicesContribTests.Web</RootNamespace>
-    <AssemblyName>RiaServicesContribTests.Web</AssemblyName>
+    <RootNamespace>FluentMetadata.Tests.Web</RootNamespace>
+    <AssemblyName>FluentMetadata.Tests.Web</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <UseIISExpress>false</UseIISExpress>
-    <SilverlightApplicationList>{9BB2DB17-3DDC-4C8F-A5E9-D713A687886F}|..\RiaServicesContribTests\RiaServicesContribTests.csproj|ClientBin|False</SilverlightApplicationList>
+    <SilverlightApplicationList>{3DFBD959-C1DD-445E-98BA-3C7256FC1789}|..\FluentMetadata.Tests\FluentMetadata.Tests.csproj|ClientBin|False</SilverlightApplicationList>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -56,9 +56,9 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ClientBin\RiaServicesContribTests.xap" />
-    <Content Include="RiaServicesContribTestsTestPage.aspx" />
-    <Content Include="RiaServicesContribTestsTestPage.html" />
+    <Content Include="ClientBin\FluentMetadata.Tests.xap" />
+    <Content Include="FluentMetadata.TestsTestPage.aspx" />
+    <Content Include="FluentMetadata.TestsTestPage.html" />
     <Content Include="Silverlight.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -69,20 +69,16 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FluentMetadataConfiguration.cs" />
+    <Compile Include="FluentMetadataTestDomainService.cs" />
+    <Compile Include="Model\Foo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\..\EntityGraph\EntityGraphTests.Silverlight\EntityGraphTests.Web\EntityGraphTests.Web.csproj">
-      <Project>{8F76C20D-56AB-41CB-9B78-10B4726543E6}</Project>
-      <Name>EntityGraphTests.Web</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\EntityTools\EntityToolsTests.Web\EntityToolsTests.Web.csproj">
-      <Project>{7C0C75B1-3E49-4345-A162-5D62D2FBBBA1}</Project>
-      <Name>EntityToolsTests.Web</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\FluentMetadata\FluentMetadata.Tests\FluentMetadata.Tests.Web\FluentMetadata.Tests.Web.csproj">
-      <Project>{8C60165B-84A9-4CB1-9D0C-590F36B205A3}</Project>
-      <Name>FluentMetadata.Tests.Web</Name>
+    <ProjectReference Include="..\..\FluentMetadata\FluentMetadata.csproj">
+      <Project>{085F2A42-8CCC-41B7-BCCB-92728E43A352}</Project>
+      <Name>FluentMetadata</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -93,7 +89,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>4186</DevelopmentServerPort>
+          <DevelopmentServerPort>58843</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>
