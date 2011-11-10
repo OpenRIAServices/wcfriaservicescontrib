@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.IO;
 
 namespace RiaServicesContrib
 {
@@ -59,65 +60,113 @@ namespace RiaServicesContrib
             where TFrom : class
             where TTo : class
         {
+            if(fromEntity == null)
+            {
+                throw new ArgumentNullException("fromEntity");
+            }
+            if(typeMapper == null)
+            {
+                throw new ArgumentNullException("typeMapper");
+            }
+            return CopyTo<TFrom, TTo>(shape, fromEntity, typeMapper, new List<TFrom>());
+        }
+
+
+        private static TTo CopyTo<TFrom, TTo>(this IEntityGraphShape shape, TFrom fromEntity, ITypeMapper typeMapper, IList visited)
+            where TFrom : class
+            where TTo : class
+        {
             var toEntity = CopyFromTo<TFrom, TTo>(fromEntity, typeMapper);
+            Debug.Assert(visited.Contains(fromEntity) == false);
+            visited.Add(fromEntity);
 
             // Determine if provided shape is defined for fromEntity or for toEntity.
             var outEdges = shape.OutEdges(fromEntity);
-            if (outEdges.Count() == 0)
+            if(outEdges.Count() == 0)
             {
                 outEdges = shape.OutEdges(toEntity);
             }
             var fromType = fromEntity.GetType();
             var toType = toEntity.GetType();
 
-            foreach (var edge in outEdges)
+            foreach(var edge in outEdges)
             {
                 var fromPropInfo = fromType.GetProperty(edge.Name);
                 var toPropInfo = toType.GetProperty(edge.Name);
                 var fromPropvalue = fromPropInfo.GetValue(fromEntity, null);
-                if (fromPropvalue == null)
+                if(fromPropvalue == null)
                 {
                     continue;
                 }
-                if (typeof(IEnumerable).IsAssignableFrom(edge.PropertyType))
+                if(typeof(IEnumerable).IsAssignableFrom(fromPropInfo.PropertyType))
                 {
                     var fromChildren = (IEnumerable)fromPropvalue;
 
                     IEnumerable toList = (IEnumerable)toPropInfo.GetValue(toEntity, null);
                     // If the IEnumerable is null, lets try to allocate one
-                    if (toList == null)
+                    if(toList == null)
                     {
                         var constr = toPropInfo.PropertyType.GetConstructor(new Type[] { });
                         toList = (IEnumerable)constr.Invoke(new object[] { });
                         toPropInfo.SetValue(toEntity, toList, null);
                     }
                     var addMethod = toPropInfo.PropertyType.GetMethod("Add");
-                    foreach (var fromChild in fromChildren)
+                    foreach(var fromChild in fromChildren)
                     {
-                        var toChild = shape.CopyTo<TFrom, TTo>((TFrom)fromChild, typeMapper);
-                        addMethod.Invoke(toList, new object[] { toChild });
+                        if(visited.Contains(fromChild) == false)
+                        {
+                            var toChild = shape.CopyTo<TFrom, TTo>((TFrom)fromChild, typeMapper, visited);
+                            addMethod.Invoke(toList, new object[] { toChild });
+                        }
                     }
                 }
                 else
                 {
                     var fromChild = (TFrom)fromPropvalue;
-                    var toChild = shape.CopyTo<TFrom, TTo>(fromChild, typeMapper);
-                    edge.SetValue(toEntity, toChild, null);
+                    if(visited.Contains(fromChild) == false)
+                    {
+                        var toChild = shape.CopyTo<TFrom, TTo>(fromChild, typeMapper, visited);
+                        toPropInfo.SetValue(toEntity, toChild, null);
+                    }
                 }
             }
             return toEntity;
         }
         #region Helper functions
-        private static PropertyInfo[] GetDataMembers(object obj, bool includeKeys)
+        /// <summary>
+        /// This method returns an array of ProperTypeInfo objects which from the data member (I.e., non-naviagion) properties 
+        /// that must be copied.
+        /// The list is determined as follows:
+        /// 1) A property must have the DataMemberAttribute defined on both the fromObjectType and the toObjectType.
+        /// 2) If includeKeys==false, the KeyAttribute should not be defined on both types
+        /// 3) The property must be readable on fromObjectType
+        /// 4) The property must be writable on toObjectType
+        /// The returnd list consists of ProperTypeInfo objects for type toObjectType.
+        /// </summary>
+        /// <param name="fromObjectType"></param>
+        /// <param name="toObjectType"></param>
+        /// <param name="includeKeys"></param>
+        /// <returns></returns>
+        private static PropertyInfo[] GetDataMembers(Type fromObjectType, Type toObjectType, bool includeKeys)
         {
             BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.Instance;
-            var qry = from p in obj.GetType().GetProperties(bindingAttr)
-                      where
-                        p.IsDefined(typeof(DataMemberAttribute), true)
-                      && (includeKeys || p.IsDefined(typeof(KeyAttribute), true) == false)
-                      && p.CanWrite
-                      select p;
-            return qry.ToArray();
+            var qryToObject = from p in toObjectType.GetProperties(bindingAttr)
+                              where
+                              p.IsDefined(typeof(DataMemberAttribute), true)
+                              && (includeKeys || p.IsDefined(typeof(KeyAttribute), true) == false)
+                              && p.CanWrite
+                              select p;
+            var qryFromObject = from p in fromObjectType.GetProperties(bindingAttr)
+                                where
+                                 p.IsDefined(typeof(DataMemberAttribute), true)
+                                && (includeKeys || p.IsDefined(typeof(KeyAttribute), true) == false)
+                                && p.CanRead
+                                select p;
+            var result = from propToObject in qryToObject
+                         from propFromObject in qryFromObject
+                         where propToObject.Name == propFromObject.Name
+                         select propToObject;
+            return result.ToArray();
         }
 
         private static TTo CopyFromTo<TFrom, TTo>(TFrom fromEntity, ITypeMapper typeMapper)
@@ -127,7 +176,7 @@ namespace RiaServicesContrib
             var fromEntityType = fromEntity.GetType();
             var toEntityType = typeMapper.Map(fromEntityType);
             var toEntity = (TTo)Activator.CreateInstance(toEntityType);
-            
+
             CopyDataMembers(fromEntity, toEntity);
             return toEntity;
         }
@@ -141,27 +190,28 @@ namespace RiaServicesContrib
         private static void CopyDataMembers(object fromObject, object toObject)
         {
             var fromObjectType = fromObject.GetType();
-            foreach (var prop in GetDataMembers(toObject, true))
+            foreach(var prop in GetDataMembers(fromObjectType, toObject.GetType(), true))
             {
                 var propInfo = fromObjectType.GetProperty(prop.Name);
                 var value = propInfo.GetValue(fromObject, null);
-                if (value == null)
+                if(value == null)
                 {
                     continue;
                 }
-                if (prop.PropertyType.IsAssignableFrom(propInfo.PropertyType))
+                if(prop.PropertyType.IsAssignableFrom(propInfo.PropertyType))
                 {
                     prop.SetValue(toObject, value, null);
                 }
-                else
+                else // Complex type
                 {
-                    var obj = prop.GetValue(toObject, null);
-                    if (obj == null)
+                    var propValue = prop.GetValue(toObject, null);
+                    var propType = prop.PropertyType;
+                    if(propValue == null)
                     {
-                        obj = Activator.CreateInstance(prop.PropertyType);
-                    } 
-                    prop.SetValue(toObject, obj, null);
-                    CopyDataMembers(value, obj);
+                        propValue = Activator.CreateInstance(propType);
+                    }
+                    prop.SetValue(toObject, propValue, null);
+                    CopyDataMembers(value, propValue);
                 }
             }
         }
