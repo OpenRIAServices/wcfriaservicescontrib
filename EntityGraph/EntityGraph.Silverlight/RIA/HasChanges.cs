@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Linq;
 using System.ServiceModel.DomainServices.Client;
+using System;
 
 namespace RiaServicesContrib.DomainServices.Client
 {
@@ -9,15 +10,30 @@ namespace RiaServicesContrib.DomainServices.Client
         [Initialize]
         internal void SetupHasChanges()
         {
-            this.PropertyChanged += EntityGraph_PropertyChanged;
+            this.PropertyChanged += EntityGraphHasChanges_PropertyChanged;
+            this.EntityRelationGraphResetted += EntityGraphHasChanges_EntityRelationGraphResetted;
+            DetectHasChanges();
         }
         [Dispose]
         internal void CleanHasChanges()
         {
-            this.PropertyChanged -= EntityGraph_PropertyChanged;
+            this.PropertyChanged -= EntityGraphHasChanges_PropertyChanged;
+            this.EntityRelationGraphResetted -= EntityGraphHasChanges_EntityRelationGraphResetted;
         }
 
-        void EntityGraph_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        void EntityGraphHasChanges_EntityRelationGraphResetted(object sender, EventArgs e)
+        {
+            DetectHasChanges();
+        }
+        private void DetectHasChanges()
+        {
+            Func<Entity, bool> hasChanges = entity =>
+                entity.HasChanges |
+                entity.EntityState == EntityState.New |
+                entity.EntityState == EntityState.Deleted;
+            HasChanges = EntityRelationGraph.Aggregate(false, (result, entity) => result |= hasChanges(entity));
+        }
+        void EntityGraphHasChanges_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if(sender != this)
             {
@@ -26,9 +42,8 @@ namespace RiaServicesContrib.DomainServices.Client
                     HasChanges = true;
                 }
                 else
-                if(HasChanges == true)
                 {
-                    HasChanges = EntityRelationGraph.Aggregate(false, (result, entity) => result |= entity.HasChanges);
+                    DetectHasChanges();
                 }
             }
         }

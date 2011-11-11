@@ -20,7 +20,7 @@ namespace RiaServicesContrib
             SetupNotifyCollectionChangedHandlers();
         }
         [Dispose]
-        internal void DisploseINotifyCollectionChanged()
+        internal void DisposeINotifyCollectionChanged()
         {
             RemoveNotifyCollectionChangedHandlers();
         }

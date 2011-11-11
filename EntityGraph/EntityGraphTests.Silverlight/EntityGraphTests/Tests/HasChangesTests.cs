@@ -10,6 +10,17 @@ namespace EntityGraphTests.Tests
     [TestClass]
     public class HasChangesTests : EntityGraphTest
     {
+        [TestMethod]
+        public void AddNewEntityMakesHasChangesTrue()
+        {
+            EntityGraphTestsDomainContext ctx = new EntityGraphTestsDomainContext();
+            var gr = a.EntityGraph(EntityGraphs.CircularGraphFull);
+            Assert.IsFalse(gr.HasChanges);
+
+            ctx.As.Add(a);
+
+            Assert.IsTrue(gr.HasChanges);
+        }
         [Asynchronous]
         [TestMethod]
         public void HasChangesTest() {
@@ -20,9 +31,10 @@ namespace EntityGraphTests.Tests
                 () =>
                 {
                     var gr = a.EntityGraph(EntityGraphs.CircularGraphFull);
+                    Assert.IsFalse(gr.HasChanges);
                     B existingB = loadOp.Entities.SingleOrDefault();
                     a.BSet.Add(existingB);
-                    Assert.IsFalse(gr.HasChanges);
+                    Assert.IsTrue(gr.HasChanges);
 
                     existingB.name = "Some Name";
                     Assert.IsTrue(gr.HasChanges);
