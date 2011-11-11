@@ -82,7 +82,7 @@ namespace RiaServicesContrib
                     from node in this.EntityRelationGraph.Nodes
                     from edge in node.ListEdges
                     where
-                        edge.Key.PropertyType == senderType &&
+                        edge.Key.PropertyType.IsAssignableFrom(senderType) &&
                         edge.Key.GetValue(node.Node, null) == sender
                     select
                         new { Owner = node.Node, Edge = edge.Key }
