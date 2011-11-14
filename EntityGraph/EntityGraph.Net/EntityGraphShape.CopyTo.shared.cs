@@ -93,6 +93,10 @@ namespace RiaServicesContrib
             {
                 var fromPropInfo = fromType.GetProperty(edge.Name);
                 var toPropInfo = toType.GetProperty(edge.Name);
+                if(fromPropInfo == null || toPropInfo == null)
+                {
+                    continue;
+                }
                 var fromPropvalue = fromPropInfo.GetValue(fromEntity, null);
                 if(fromPropvalue == null)
                 {
