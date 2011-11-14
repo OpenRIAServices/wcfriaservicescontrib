@@ -12,6 +12,16 @@ namespace EntityGraphTests.Tests
     [TestClass]
     public class CopyTests : EntityGraphTest
     {
+        public override void TestSetup()
+        {
+            base.TestSetup();
+            IDFactory.AutoGenerateKeys = true;
+        }
+        public override void TestCleanup()
+        {
+            base.TestCleanup();
+            IDFactory.AutoGenerateKeys = false;
+        }
         [TestMethod]
         public void CopyTest()
         {

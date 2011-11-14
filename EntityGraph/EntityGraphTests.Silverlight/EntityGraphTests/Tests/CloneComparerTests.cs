@@ -8,6 +8,16 @@ namespace EntityGraphTests.Tests
     [TestClass]
     public class CloneComparerTests : EntityGraphTest
     {
+        public override void TestSetup()
+        {
+            base.TestSetup();
+            IDFactory.AutoGenerateKeys = true;
+        }
+        public override void TestCleanup()
+        {
+            base.TestCleanup();
+            IDFactory.AutoGenerateKeys = false;
+        }
         /// <summary>
         /// Checks that an entitygraph can never be a clone of it self
         /// </summary>
@@ -28,12 +38,14 @@ namespace EntityGraphTests.Tests
             var cloneOfA = a.Clone(EntityGraphs.CircularGraphFull);
             Assert.IsTrue(gr.IsCloneOf(cloneOfA.EntityGraph(EntityGraphs.CircularGraphFull)));
         }
+        // The primary keys of a copy differ, therefore a copy can never be a clone
         [TestMethod]
         public void CopyIsNotACloneTest()
         {
             var gr = a.EntityGraph(EntityGraphs.CircularGraphFull);
             var copyOfA = a.Copy(EntityGraphs.CircularGraphFull);
-            Assert.IsFalse(gr.IsCloneOf(copyOfA.EntityGraph(EntityGraphs.CircularGraphFull)));
+            var copyGr = copyOfA.EntityGraph(EntityGraphs.CircularGraphFull);
+            Assert.IsFalse(gr.IsCloneOf(copyGr));
         }
         [TestMethod]
         public void CloneIsACopyTest()

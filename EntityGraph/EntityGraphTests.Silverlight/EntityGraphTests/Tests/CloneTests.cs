@@ -16,7 +16,7 @@ namespace EntityGraphTests.Tests
             EntityGraphTestsDomainContext ctx = new EntityGraphTestsDomainContext();
             EntityGraphTestsDomainContext ctxNew = new EntityGraphTestsDomainContext();
             ctx.As.Attach(a);
-            var gr = new EntityGraph(a, EntityGraphs.CircularGraphFull);
+            var gr = new EntityGraph(a, new FullEntityGraphShape());
             var clone = gr.Clone(ctxNew);
             Assert.IsTrue(a.EntityState == EntityState.Unmodified);
             Assert.IsTrue(clone.EntityState == EntityState.Unmodified);
@@ -25,22 +25,22 @@ namespace EntityGraphTests.Tests
         public void CloneIntoPreservesEntityStateModifiedTest()
         {
             EntityGraphTestsDomainContext ctx = new EntityGraphTestsDomainContext();
-            EntityGraphTestsDomainContext ctxNew = new EntityGraphTestsDomainContext(); 
+            EntityGraphTestsDomainContext ctxNew = new EntityGraphTestsDomainContext();
             ctx.As.Attach(a);
             a.name = "Hello World";
 
-            var gr = new EntityGraph(a, EntityGraphs.CircularGraphFull);
+            var gr = new EntityGraph(a, new FullEntityGraphShape());
             var clone = gr.Clone(ctxNew);
             Assert.IsTrue(a.EntityState == EntityState.Modified);
-            Assert.IsTrue(clone.EntityState == EntityState.Modified);            
+            Assert.IsTrue(clone.EntityState == EntityState.Modified);
         }
         [TestMethod]
         public void CloneIntoPreservesEntityStateNewTest()
         {
             EntityGraphTestsDomainContext ctx = new EntityGraphTestsDomainContext();
-            EntityGraphTestsDomainContext ctxNew = new EntityGraphTestsDomainContext(); 
+            EntityGraphTestsDomainContext ctxNew = new EntityGraphTestsDomainContext();
             ctx.As.Add(a);
-            var gr = new EntityGraph(a, EntityGraphs.CircularGraphFull);
+            var gr = new EntityGraph(a, new FullEntityGraphShape());
             var clone = gr.Clone(ctxNew);
             Assert.IsTrue(a.EntityState == EntityState.New);
             Assert.IsTrue(clone.EntityState == EntityState.New);
@@ -57,7 +57,7 @@ namespace EntityGraphTests.Tests
                 {
                     EntityGraphTestsDomainContext ctxNew = new EntityGraphTestsDomainContext();
                     B existingB = loadOp.Entities.SingleOrDefault();
-                    var gr = existingB.EntityGraph(EntityGraphs.CircularGraphFull);
+                    var gr = existingB.EntityGraph(new FullEntityGraphShape());
                     var clone = gr.Clone(ctxNew);
                     Assert.IsTrue(((B)clone).Id == existingB.Id);
                 });
@@ -69,16 +69,33 @@ namespace EntityGraphTests.Tests
             EntityGraphTestsDomainContext ctx = new EntityGraphTestsDomainContext();
             EntityGraphTestsDomainContext ctxNew = new EntityGraphTestsDomainContext();
             ctx.As.Add(a);
-            var gr = new EntityGraph(a, EntityGraphs.CircularGraphFull);
+            var gr = new EntityGraph(a, new FullEntityGraphShape());
             var clone = gr.Clone(ctxNew);
             var result =
                 from source in gr
-                from cloned in new EntityGraph(clone, EntityGraphs.CircularGraphFull)
+                from cloned in new EntityGraph(clone, new FullEntityGraphShape())
                 where source.GetType() == cloned.GetType()
                 where source.EntityState == cloned.EntityState
                 select cloned;
 
             Assert.IsTrue(result.Count() == gr.Count());
+        }
+        [TestMethod]
+        public void CloneIntoDoesNotYieldKeyAlreadyExistsException()
+        {
+            EntityGraphTestsDomainContext context = new EntityGraphTestsDomainContext();
+            var a = new A { Id = 1 };
+            context.As.Attach(a);
+            context.Bs.Attach(new B { Id = 1, AId = 1 });
+            context.Bs.Attach(new B { Id = 2, AId = 1 });
+
+            a.name = "Modified Task 1";
+
+            EntityGraphTestsDomainContext tempContext = new EntityGraphTestsDomainContext();
+
+            var shape = new FullEntityGraphShape();
+            // Clone should not raise an exception when instances of B are attached to tmpContext
+            a.Clone(tempContext, shape);
         }
     }
 }

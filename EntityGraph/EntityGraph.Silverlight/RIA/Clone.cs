@@ -38,15 +38,21 @@ namespace RiaServicesContrib.DomainServices.Client
             // type of the entity to copy.
             TClone clone = (TClone)Activator.CreateInstance(source.GetType());
             var entitySet = context.EntityContainer.GetEntitySet(source.GetType());
-            if(source.EntityState == EntityState.Unmodified || source.EntityState == EntityState.Modified)
-            {
-                entitySet.Attach(clone);
-            }
+
             var originalState = source.ExtractState(ExtractType.OriginalState);
             var modifiedState = source.ExtractState(ExtractType.ModifiedState);
 
-            clone.ApplyState(originalState, modifiedState);
+            clone.ApplyState(originalState, null);
 
+            if(source.EntityState == EntityState.Unmodified)
+            {
+                entitySet.Attach(clone);
+            }
+            if(source.EntityState == EntityState.Modified)
+            {
+                entitySet.Attach(clone);
+                clone.ApplyState(originalState, modifiedState);
+            }
             if(source.EntityState == EntityState.New)
             {
                 entitySet.Add(clone);
