@@ -128,6 +128,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tests\HasChangesTests.cs" />
+    <Compile Include="Tests\IChangeTrackingTests.cs" />
     <Compile Include="Tests\IDisposableTests.cs" />
     <Compile Include="Tests\INotifyCollectionChangedTests.cs" />
     <Compile Include="Tests\IEditableObjectTests.cs" />

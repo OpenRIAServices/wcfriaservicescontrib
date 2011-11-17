@@ -63,6 +63,7 @@
     <Compile Include="EntityGraphFactory.shared.cs" />
     <Compile Include="GraphMap.shared.cs" />
     <Compile Include="GraphValidator.shared.cs" />
+    <Compile Include="IChangeTracking.shared.cs" />
     <Compile Include="IDisposable.shared.cs" />
     <Compile Include="IEntityGraphShape.shared.cs" />
     <Compile Include="IEnumerable.shared.cs" />
