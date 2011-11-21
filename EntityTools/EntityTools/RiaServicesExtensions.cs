@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.ServiceModel.DomainServices.Client;
+using System.Collections;
 
 namespace RiaServicesContrib.Extensions
 {
@@ -752,6 +753,344 @@ namespace RiaServicesContrib.Extensions
             else
                 return returnEntity;
         }
- 
+
+
+        /// <summary>
+        /// Extension method which yields all child entities from a certain parent entity.  Set includeDirectChildrenOfEntityBaseType
+        /// to true to include direct Entity-inheriting properties (instead of just the EntityCollections)
+        /// </summary>
+        /// <param name="parent">The parent</param>
+        /// <param name="changeSet">The changeset in which to look for entities</param>
+        /// <param name="includeDirectChildrenOfEntityBaseType">Defines if direct entity-inheriting properties should be included</param>
+        /// <returns></returns>
+        public static IEnumerable YieldChildEntities(this Entity parent, EntityChangeSet changeSet,
+         bool includeDirectChildrenOfEntityBaseType = false)
+        {
+            IEnumerable entityCollectionProperties = from p in parent.GetType().GetProperties()
+                                                     where
+                                                         p.PropertyType.IsGenericType
+                                                         && (p.PropertyType.GetGenericTypeDefinition() == typeof(EntityCollection<>)
+                                                         )
+                                                     select p;
+
+            if (includeDirectChildrenOfEntityBaseType)
+            {
+                IEnumerable entityProperties = from p in parent.GetType().GetProperties()
+                                               where p.PropertyType.BaseType == typeof(Entity)
+                                               select p;
+
+                // Get the entities that inherit from "Entity"
+                foreach (PropertyInfo property in entityProperties)
+                {
+                    var entity = (Entity)property.GetValue(parent, null);
+                    if (entity != null)
+                    {
+                        // is this entity in the changeset?
+                        if (changeSet.GetEntitiesOfType<Entity>(true, true, true).Contains(entity))
+                            yield return entity;
+                    }
+                }
+            }
+
+            // Get the entities from each child collection
+            foreach (PropertyInfo property in entityCollectionProperties)
+            {
+                var collectionType = property.PropertyType.GetGenericArguments()[0];
+
+                var entityCollection = (IEnumerable)property.GetValue(parent, null);
+                foreach (Entity entity in entityCollection)
+                {
+                    foreach (Entity childEntity in entity.YieldChildEntities(changeSet))
+                    {
+                        yield return childEntity;
+                    }
+
+                    if (entity != null)
+                    {
+                        // is this entity in the changeset?
+                        if (changeSet.GetEntitiesOfType<Entity>(true, true, true).Contains(entity))
+                            yield return entity;
+                    }
+                }
+            }
+
+        }
+
+        
+        /// <summary>
+        /// Extension method which yields all child entities from a certain parent entity.  Set includeDirectChildrenOfEntityBaseType
+        /// to true to include direct Entity-inheriting properties (instead of just the EntityCollections)
+        /// </summary>
+        /// <param name="parent">The parent</param>
+        /// <param name="container">The container in which to look for entities</param>
+        /// <param name="includeDirectChildrenOfEntityBaseType">Defines if direct entity-inheriting properties should be included</param>
+        /// <returns></returns>
+        public static IEnumerable YieldChildEntities(this Entity parent, EntityContainer container,
+            bool includeDirectChildrenOfEntityBaseType = false)
+        {
+            IEnumerable entityCollectionProperties = from p in parent.GetType().GetProperties()
+                                                     where
+                                                         p.PropertyType.IsGenericType
+                                                         && (p.PropertyType.GetGenericTypeDefinition() == typeof(EntityCollection<>)
+                                                         )
+                                                     select p;
+
+            if (includeDirectChildrenOfEntityBaseType)
+            {
+                IEnumerable entityProperties = from p in parent.GetType().GetProperties()
+                                               where p.PropertyType.BaseType == typeof(Entity)
+                                               select p;
+
+                // Get the entities that inherit from "Entity"
+                foreach (PropertyInfo property in entityProperties)
+                {
+                    // check if an entityset of this type exists in the current container 
+                    // (if not, ignore by continuing with the next property)
+                    EntitySet set;
+                    if (!container.TryGetEntitySet(property.PropertyType, out set))
+                    {
+                        continue;
+                    }
+
+                    var entity = (Entity)property.GetValue(parent, null);
+                    if (entity != null)
+                        yield return entity;
+                }
+            }
+
+            // Get the entities from each child collection
+            foreach (PropertyInfo property in entityCollectionProperties)
+            {
+                var collectionType = property.PropertyType.GetGenericArguments()[0];
+                EntitySet set;
+                if (!container.TryGetEntitySet(collectionType, out set))
+                {
+                    continue;
+                }
+                var entityCollection = (IEnumerable)property.GetValue(parent, null);
+                foreach (Entity entity in entityCollection)
+                {
+                    foreach (Entity childEntity in entity.YieldChildEntities(container))
+                    {
+                        yield return childEntity;
+                    }
+
+                    if (entity != null)
+                        yield return entity;
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Extension method which deletes all child entities of a certain parent entity from the provided EntityContainer.  
+        /// Set includeDirectChildrenOfEntityBaseType to true to include direct Entity-inheriting properties 
+        /// (instead of just the children in EntityCollections)
+        /// </summary>
+        /// <param name="parent">The parent</param>
+        /// <param name="container">The container in which to look for entities</param>
+        /// <param name="includeDirectChildrenOfEntityBaseType">Defines if direct entity-inheriting properties should be included</param>
+        public static void DeleteChildEntities(this Entity parent, EntityContainer container,
+            bool includeDirectChildrenOfEntityBaseType = false)
+        {
+            foreach (var child in parent.YieldChildEntities(container, includeDirectChildrenOfEntityBaseType))
+            {
+                container.GetEntitySet(child.GetType()).Remove((Entity)child);
+            }
+        }
+
+        /// <summary>
+        /// Extension method which detaches all child entities of a certain parent entity from the provided EntityContainer.  
+        /// Set includeDirectChildrenOfEntityBaseType to true to include direct Entity-inheriting properties 
+        /// (instead of just the children in EntityCollections)
+        /// </summary>
+        /// <param name="parent">The parent</param>
+        /// <param name="container">The container in which to look for entities</param>
+        /// <param name="includeDirectChildrenOfEntityBaseType">Defines if direct entity-inheriting properties should be included</param>
+        public static void DetachChildEntities(this Entity parent, EntityContainer container,
+            bool includeDirectChildrenOfEntityBaseType = false)
+        {
+            foreach (var child in parent.YieldChildEntities(container, includeDirectChildrenOfEntityBaseType))
+            {
+                container.GetEntitySet(child.GetType()).Detach((Entity)child);
+            }
+        }
+
+
+        /// <summary>
+        /// Extension method which rejects all changes on all child entities of a certain parent entity from the provided EntityContainer.  
+        /// Set includeDirectChildrenOfEntityBaseType to true to include direct Entity-inheriting properties 
+        /// (instead of just the children in EntityCollections)
+        /// </summary>
+        /// <param name="parent">The parent</param>
+        /// <param name="container">The container in which to look for entities</param>
+        /// <param name="includeDirectChildrenOfEntityBaseType">Defines if direct entity-inheriting properties should be included</param>
+        public static void RejectChangesOnChildEntities(this Entity parent, EntityContainer container,
+            bool includeDirectChildrenOfEntityBaseType = false)
+        {
+            foreach (var child in parent.YieldChildEntities(container, includeDirectChildrenOfEntityBaseType))
+            {
+                if (child is IRevertibleChangeTracking)
+                {
+                    ((IRevertibleChangeTracking)child).RejectChanges();
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Extension method which rejects all changes on all child entities of a certain parent entity which are available in the provided ChangeSet.  
+        /// Set includeDirectChildrenOfEntityBaseType to true to include direct Entity-inheriting properties 
+        /// (instead of just the children in EntityCollections)
+        /// </summary>
+        /// <param name="parent">The parent</param>
+        /// <param name="changeSet">The container in which to look for entities</param>
+        /// <param name="includeDirectChildrenOfEntityBaseType">Defines if direct entity-inheriting properties should be included</param>
+        public static void RejectChangesOnChildEntities(this Entity parent, EntityChangeSet changeSet,
+            bool includeDirectChildrenOfEntityBaseType = false)
+        {
+            foreach (var child in parent.YieldChildEntities(changeSet, includeDirectChildrenOfEntityBaseType))
+            {
+                if (child is IRevertibleChangeTracking)
+                {
+                    ((IRevertibleChangeTracking)child).RejectChanges();
+                }
+            }
+        }
+
+
+
+        /// <summary>
+        /// Extension method to attach a range of entities to an EntitySet
+        /// </summary>
+        /// <typeparam name="T">The type of Entity to attach</typeparam>
+        /// <param name="entitySet">The EntitySet to attach the entities to</param>
+        /// <param name="entitiesToAttach">The entities to attach</param>
+        public static void AttachRange<T>(this EntitySet<T> entitySet, IEnumerable<T> entitiesToAttach) where T : Entity
+        {
+            entitiesToAttach.ToList<T>().ForEach(e => entitySet.Attach(e));
+        }
+
+        /// <summary>
+        /// Extension method to get entities of a certain type from an EntityChangeSet, across added, modified
+        /// and/or deleted entities
+        /// </summary>
+        /// <typeparam name="T">The type of the entities to get</typeparam>
+        /// <param name="changeSet">The EntityChangeSet to get the entities from</param>
+        /// <param name="includeAddedEntites">Defines if added entities should be included</param>
+        /// <param name="includeModifiedEntities">Defines if modified entities should be included</param>
+        /// <param name="includeDeletedEntities">Defines if deleted entities should be included</param>
+        /// <returns></returns>
+        public static IEnumerable<T> GetEntitiesOfType<T>(this EntityChangeSet changeSet, bool includeAddedEntites = true,
+            bool includeModifiedEntities = true, bool includeDeletedEntities = false) where T : Entity
+        {
+            List<T> returnList = new List<T>();
+
+            if (includeAddedEntites)
+            {
+                var subList = changeSet.AddedEntities.OfType<T>();
+                returnList.AddRange(subList);
+            }
+
+            if (includeModifiedEntities)
+            {
+                var subList = changeSet.ModifiedEntities.OfType<T>();
+                returnList.AddRange(subList);
+            }
+
+            if (includeDeletedEntities)
+            {
+                var subList = changeSet.RemovedEntities.OfType<T>();
+                returnList.AddRange(subList);
+            }
+
+            return returnList;
+        }
+
+        /// <summary>
+        /// Extension method to check for validation errors on a submit operation (can be used instead of looping
+        /// through the EntitiesInError collection when you need to execute certain actions when validation errors occur)
+        /// </summary>
+        /// <param name="submitOperation">The SubmitOperation</param>
+        /// <returns></returns>
+        public static bool HasValidationErrors(this System.ServiceModel.DomainServices.Client.SubmitOperation submitOperation)
+        {
+            if (submitOperation.HasError)
+            {
+                foreach (var entityInError in submitOperation.EntitiesInError)
+                {
+                    if (entityInError.HasValidationErrors)
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Extension method to check for validation errors on an entity of a provided type T on a submit operation (can be used instead of looping
+        /// through the EntitiesInError collection when you need to execute certain actions when validation errors occur)
+        /// </summary>
+        /// <param name="submitOperation">The SubmitOperation</param>
+        /// <returns></returns>
+        public static bool HasValidationErrors<T>(this System.ServiceModel.DomainServices.Client.SubmitOperation submitOperation) where T:Entity
+        {
+            if (submitOperation.HasError)
+            {
+                foreach (var entityInError in submitOperation.EntitiesInError.OfType<T>())
+                {
+                    if (entityInError.HasValidationErrors)
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Extension method to get all validation errors (can be used instead of looping
+        /// through the EntitiesInError collection)
+        /// </summary>
+        /// <param name="submitOperation">The SubmitOperation</param>
+        /// <returns></returns>
+        public static IEnumerable<ValidationResult> GetAllValidationErrors(this System.ServiceModel.DomainServices.Client.SubmitOperation submitOperation)
+        {
+            List<ValidationResult> valResults = new List<ValidationResult>();
+
+            if (submitOperation.HasError)
+            {
+                foreach (var entityInError in submitOperation.EntitiesInError)
+                {
+                    if (entityInError.HasValidationErrors)
+                        (entityInError.ValidationErrors as List<ValidationResult>).ForEach((vr) => valResults.Add(vr));
+                }
+            }
+
+            return valResults;
+        }
+                
+        /// <summary>
+        /// Extension method to get all validation errors that occurred on entities of a provided type T (can be used instead of looping
+        /// through the EntitiesInError collection)
+        /// </summary>
+        /// <typeparam name="T">The entity type</typeparam>
+        /// <param name="submitOperation">The SubmitOperation</param>
+        /// <returns></returns>
+        public static IEnumerable<ValidationResult> GetAllValidationErrors<T>(this System.ServiceModel.DomainServices.Client.SubmitOperation submitOperation) where T:Entity
+        {
+            List<ValidationResult> valResults = new List<ValidationResult>();
+
+            if (submitOperation.HasError)
+            {
+                foreach (var entityInError in submitOperation.EntitiesInError.OfType<T>())
+                {
+                    if (entityInError.HasValidationErrors)
+                        (entityInError.ValidationErrors as List<ValidationResult>).ForEach((vr) => valResults.Add(vr));
+                }
+            }
+
+            return valResults;
+        }
+
     }
 }
