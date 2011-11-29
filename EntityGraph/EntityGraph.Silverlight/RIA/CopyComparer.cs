@@ -44,7 +44,7 @@ namespace RiaServicesContrib.DomainServices.Client
             var zip = stateE1.Zip(stateE2, (a, b) => new { name = a.Key, a = a.Value, b = b.Value });
             foreach(var v in zip)
             {
-                if(v.a != v.b && v.a.Equals(v.b) == false)
+                if(v.a != v.b && v.a != null && v.a.Equals(v.b) == false)
                 {
                     if(checkKeys == false)
                     {
