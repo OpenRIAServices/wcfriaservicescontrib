@@ -2,7 +2,8 @@
 using EntityGraphTests.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RiaServicesContrib.DomainServices.Client;
-
+using Microsoft.Silverlight.Testing;
+using System.Linq;
 namespace EntityGraphTests.Tests
 {
     [TestClass]
@@ -31,19 +32,22 @@ namespace EntityGraphTests.Tests
             Assert.IsTrue(graph.IsChanged);
 
             var clone = graph.Clone(tempContext);
-            Assert.IsTrue(clone.HasChanges);
+            var cloneGraph = new EntityGraph(clone, shape);
+
+            Assert.IsTrue(cloneGraph.HasChanges);
             Assert.IsTrue(((IChangeTracking)clone).IsChanged);
             Assert.IsTrue(tempContext.HasChanges);
-
-            graph.AcceptChanges();
+            
+            cloneGraph.AcceptChanges();
+            graph.Synchronize(cloneGraph);
 
             Assert.IsFalse(context.HasChanges);
             Assert.IsFalse(graph.HasChanges);
             Assert.IsFalse(graph.IsChanged);
 
-            Assert.IsTrue(clone.HasChanges);
-            Assert.IsTrue(((IChangeTracking)clone).IsChanged);
-            Assert.IsTrue(tempContext.HasChanges);
+            Assert.IsFalse(cloneGraph.HasChanges);
+            Assert.IsFalse(((IChangeTracking)clone).IsChanged);
+            Assert.IsFalse(tempContext.HasChanges);
         }
     }
 }
