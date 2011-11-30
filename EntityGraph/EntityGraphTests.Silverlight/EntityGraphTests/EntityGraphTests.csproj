@@ -135,6 +135,7 @@
     <Compile Include="Tests\IEnumerableTests.cs" />
     <Compile Include="Tests\INotifyPropertyChangedTests.cs" />
     <Compile Include="Tests\PartialSaveTests.cs" />
+    <Compile Include="Tests\SynchronizeTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
