@@ -11,12 +11,13 @@ namespace RiaServicesContrib.DomainServices.Client
     public partial class EntityGraph 
     {
         /// <summary>
-        /// Method that copies an entity and, recursively, all its associations that are included in the entity graph
+        /// Method that makes a copy of an entitygraph by copying entities that are included in the entity graph.
         /// </summary>
         /// <returns></returns>
-        public Entity Copy() 
+        public EntityGraph Copy() 
         {
-            return GraphMap(CopyDataMembers);
+            var copiedEntity = GraphMap(CopyDataMembers);
+            return new EntityGraph(copiedEntity, GraphShape);
         }
 
         private TCopy CopyDataMembers<TCopy>(TCopy source) where TCopy : Entity

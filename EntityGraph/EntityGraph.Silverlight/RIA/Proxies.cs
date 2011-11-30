@@ -27,7 +27,7 @@ namespace RiaServicesContrib.DomainServices.Client
         /// <returns></returns>
         public static TEntity Copy<TEntity>(this TEntity entity, IEntityGraphShape shape) where TEntity : Entity
         {
-            return (TEntity)entity.EntityGraph(shape).Copy();
+            return (TEntity)entity.EntityGraph(shape).Copy().Source;
         }
         /// <summary>
         /// Extension method that clones the given entity and all associated entities in the entity graph defined by the given 
@@ -39,7 +39,7 @@ namespace RiaServicesContrib.DomainServices.Client
         /// <returns></returns>
         public static TEntity Clone<TEntity>(this TEntity entity, IEntityGraphShape shape) where TEntity : Entity
         {
-            return (TEntity)entity.EntityGraph(shape).Clone();
+            return (TEntity)entity.EntityGraph(shape).Clone().Source;
         }
         /// <summary>
         /// Extension method that clones the given entity and all associated entities in the entity graph defined by the given 
@@ -53,7 +53,7 @@ namespace RiaServicesContrib.DomainServices.Client
         /// <returns></returns>
         public static TEntity Clone<TEntity>(this TEntity entity, DomainContext context, IEntityGraphShape shape) where TEntity : Entity
         {
-            return (TEntity)entity.EntityGraph(shape).Clone(context);
+            return (TEntity)entity.EntityGraph(shape).Clone(context).Source;
         }
     }
 }

@@ -20,7 +20,7 @@ namespace RiaServicesContrib
         /// Gets the source entity of this entity graph.
         /// </summary>
         public TEntity Source { get; private set; }
-        private IEntityGraphShape GraphShape { get; set; }
+        protected IEntityGraphShape GraphShape { get; set; }
         /// <summary>
         /// Initializes a new instance of the EntityGraph class with given shape for given source entity.
         /// </summary>

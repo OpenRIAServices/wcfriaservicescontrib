@@ -19,7 +19,7 @@ namespace EntityGraphTests.Tests
             var gr = new EntityGraph(a, new FullEntityGraphShape());
             var clone = gr.Clone(ctxNew);
             Assert.IsTrue(a.EntityState == EntityState.Unmodified);
-            Assert.IsTrue(clone.EntityState == EntityState.Unmodified);
+            Assert.IsTrue(clone.Source.EntityState == EntityState.Unmodified);
         }
         [TestMethod]
         public void CloneIntoPreservesEntityStateModifiedTest()
@@ -32,7 +32,7 @@ namespace EntityGraphTests.Tests
             var gr = new EntityGraph(a, new FullEntityGraphShape());
             var clone = gr.Clone(ctxNew);
             Assert.IsTrue(a.EntityState == EntityState.Modified);
-            Assert.IsTrue(clone.EntityState == EntityState.Modified);
+            Assert.IsTrue(clone.Source.EntityState == EntityState.Modified);
         }
         [TestMethod]
         public void CloneIntoPreservesEntityStateNewTest()
@@ -43,7 +43,7 @@ namespace EntityGraphTests.Tests
             var gr = new EntityGraph(a, new FullEntityGraphShape());
             var clone = gr.Clone(ctxNew);
             Assert.IsTrue(a.EntityState == EntityState.New);
-            Assert.IsTrue(clone.EntityState == EntityState.New);
+            Assert.IsTrue(clone.Source.EntityState == EntityState.New);
         }
         [Asynchronous]
         [TestMethod]
@@ -59,7 +59,7 @@ namespace EntityGraphTests.Tests
                     B existingB = loadOp.Entities.SingleOrDefault();
                     var gr = existingB.EntityGraph(new FullEntityGraphShape());
                     var clone = gr.Clone(ctxNew);
-                    Assert.IsTrue(((B)clone).Id == existingB.Id);
+                    Assert.IsTrue(((B)clone.Source).Id == existingB.Id);
                 });
             EnqueueTestComplete();
         }
@@ -73,7 +73,7 @@ namespace EntityGraphTests.Tests
             var clone = gr.Clone(ctxNew);
             var result =
                 from source in gr
-                from cloned in new EntityGraph(clone, new FullEntityGraphShape())
+                from cloned in clone
                 where source.GetType() == cloned.GetType()
                 where source.EntityState == cloned.EntityState
                 select cloned;

@@ -32,22 +32,21 @@ namespace EntityGraphTests.Tests
             Assert.IsTrue(graph.IsChanged);
 
             var clone = graph.Clone(tempContext);
-            var cloneGraph = new EntityGraph(clone, shape);
 
-            Assert.IsTrue(cloneGraph.HasChanges);
-            Assert.IsTrue(((IChangeTracking)clone).IsChanged);
             Assert.IsTrue(tempContext.HasChanges);
+            Assert.IsTrue(clone.HasChanges);
+            Assert.IsTrue(clone.IsChanged);
             
-            cloneGraph.AcceptChanges();
-            graph.Synchronize(cloneGraph);
+            clone.AcceptChanges();
+            graph.Synchronize(clone);
 
             Assert.IsFalse(context.HasChanges);
             Assert.IsFalse(graph.HasChanges);
             Assert.IsFalse(graph.IsChanged);
 
-            Assert.IsFalse(cloneGraph.HasChanges);
-            Assert.IsFalse(((IChangeTracking)clone).IsChanged);
             Assert.IsFalse(tempContext.HasChanges);
+            Assert.IsFalse(clone.HasChanges);
+            Assert.IsFalse(clone.IsChanged);
         }
     }
 }
