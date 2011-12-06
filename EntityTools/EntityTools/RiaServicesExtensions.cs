@@ -883,6 +883,20 @@ namespace RiaServicesContrib.Extensions
         }
 
         /// <summary>
+        /// Extension method which yields all child entities from a certain parent IExtendedEntity.  Set includeDirectChildrenOfEntityBaseType
+        /// to true to include direct Entity-inheriting properties (instead of just the EntityCollections)
+        /// </summary>
+        /// <param name="parent">The parent</param>
+        /// <param name="includeDirectChildrenOfEntityBaseType">Defines if direct entity-inheriting properties should be included</param>
+        /// <returns></returns>
+        public static IEnumerable YieldChildEntities(this IExtendedEntity parent,
+            bool includeDirectChildrenOfEntityBaseType = false)
+        {
+            Entity entityParent = parent as Entity;
+            return entityParent.YieldChildEntities(parent.EntitySet.EntityContainer, includeDirectChildrenOfEntityBaseType);            
+        }
+
+        /// <summary>
         /// Extension method which deletes all child entities of a certain parent entity from the provided EntityContainer.  
         /// Set includeDirectChildrenOfEntityBaseType to true to include direct Entity-inheriting properties 
         /// (instead of just the children in EntityCollections)
@@ -900,6 +914,21 @@ namespace RiaServicesContrib.Extensions
         }
 
         /// <summary>
+        /// Extension method which deletes all child entities of a certain parent IExtendedEntity from the provided EntityContainer.  
+        /// Set includeDirectChildrenOfEntityBaseType to true to include direct Entity-inheriting properties 
+        /// (instead of just the children in EntityCollections)
+        /// </summary>
+        /// <param name="parent">The parent</param>
+        /// <param name="includeDirectChildrenOfEntityBaseType">Defines if direct entity-inheriting properties should be included</param>
+        public static void DeleteChildEntities(this IExtendedEntity parent,
+            bool includeDirectChildrenOfEntityBaseType = false)
+        {
+            Entity parentEntity = parent as Entity;
+            parentEntity.DeleteChildEntities(parent.EntitySet.EntityContainer, includeDirectChildrenOfEntityBaseType);
+            
+        }
+
+        /// <summary>
         /// Extension method which detaches all child entities of a certain parent entity from the provided EntityContainer.  
         /// Set includeDirectChildrenOfEntityBaseType to true to include direct Entity-inheriting properties 
         /// (instead of just the children in EntityCollections)
@@ -914,6 +943,22 @@ namespace RiaServicesContrib.Extensions
             {
                 container.GetEntitySet(child.GetType()).Detach((Entity)child);
             }
+        }
+
+        /// <summary>
+        /// Extension method which detaches all child entities of a certain parent IExtendedEntity from the provided EntityContainer.  
+        /// Set includeDirectChildrenOfEntityBaseType to true to include direct Entity-inheriting properties 
+        /// (instead of just the children in EntityCollections)
+        /// </summary>
+        /// <param name="parent">The parent</param>
+        /// <param name="container">The container in which to look for entities</param>
+        /// <param name="includeDirectChildrenOfEntityBaseType">Defines if direct entity-inheriting properties should be included</param>
+        public static void DetachChildEntities(this IExtendedEntity parent, EntityContainer container,
+            bool includeDirectChildrenOfEntityBaseType = false)
+        {
+            Entity parentEntity = parent as Entity;
+            parentEntity.DetachChildEntities(parent.EntitySet.EntityContainer, includeDirectChildrenOfEntityBaseType);
+            
         }
 
 
@@ -935,6 +980,21 @@ namespace RiaServicesContrib.Extensions
                     ((IRevertibleChangeTracking)child).RejectChanges();
                 }
             }
+        }
+
+        /// <summary>
+        /// Extension method which rejects all changes on all child entities of a certain parent IExtendedEntity from the provided EntityContainer.  
+        /// Set includeDirectChildrenOfEntityBaseType to true to include direct Entity-inheriting properties 
+        /// (instead of just the children in EntityCollections)
+        /// </summary>
+        /// <param name="parent">The parent</param>
+        /// <param name="container">The container in which to look for entities</param>
+        /// <param name="includeDirectChildrenOfEntityBaseType">Defines if direct entity-inheriting properties should be included</param>
+        public static void RejectChangesOnChildEntities(this IExtendedEntity parent, EntityContainer container,
+            bool includeDirectChildrenOfEntityBaseType = false)
+        {
+            Entity entityParent = parent as Entity;
+            entityParent.RejectChangesOnChildEntities(parent.EntitySet.EntityContainer, includeDirectChildrenOfEntityBaseType);
         }
 
 
