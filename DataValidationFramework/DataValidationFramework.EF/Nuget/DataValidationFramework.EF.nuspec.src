@@ -10,7 +10,7 @@
     <description>A generic validation framework supporting cross-entity data validation.</description>
     <tags>Entity Framework .NET DataValidation</tags>
 	<dependencies>
-      <dependency id="EntityFramework" />
+      <dependency id="EntityFramework" version="4.1.10715.0"/>
     </dependencies>
   </metadata>
 </package>
