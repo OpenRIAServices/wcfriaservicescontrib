@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>DataValidationFramework.EF</id>
+    <version>1.0.$WCREV$.0</version>
+    <authors>Merijn de Jonge</authors>
+    <licenseUrl>http://entitygraph.codeplex.com/license</licenseUrl>
+    <projectUrl>http://entitygraph.codeplex.com</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>A generic validation framework supporting cross-entity data validation.</description>
+    <tags>Entity Framework .NET DataValidation</tags>
+  </metadata>
+</package>
