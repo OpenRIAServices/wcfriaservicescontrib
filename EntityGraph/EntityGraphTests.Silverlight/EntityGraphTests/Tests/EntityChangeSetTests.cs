@@ -4,12 +4,26 @@ using EntityGraphTests.Web;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RiaServicesContrib.DomainServices.Client;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace EntityGraphTests.Tests
 {
     [TestClass]
     public class EntityChangeSetTests : EntityGraphTest
     {
+        [TestMethod]
+        public void ChangeSetIsEmptyTest()
+        {
+            var cs = new EntityGraphChangeSet();
+            Assert.IsTrue(cs.IsEmpty);
+
+            cs.RemovedEntities = new ReadOnlyCollection<Entity>(new List<Entity>());
+            Assert.IsTrue(cs.IsEmpty);
+
+            cs.AddedEntities = new ReadOnlyCollection<Entity>(new List<Entity> { a });
+            Assert.IsFalse(cs.IsEmpty);
+        }
         [Asynchronous]
         [TestMethod]
         public void ChangeSetTest() {
