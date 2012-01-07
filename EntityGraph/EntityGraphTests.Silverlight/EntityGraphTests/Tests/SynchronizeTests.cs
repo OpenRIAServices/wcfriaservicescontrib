@@ -118,5 +118,21 @@ namespace EntityGraphTests.Tests
             gr.Synchronize(clone);
             Assert.IsTrue(a.EntityState == EntityState.Unmodified);
         }
+        [TestMethod]
+        public void SynchronizeWithMergeIntoCurrentTest()
+        {
+            EntityGraphTestsDomainContext ctx = new EntityGraphTestsDomainContext();
+            EntityGraphTestsDomainContext ctxNew = new EntityGraphTestsDomainContext();
+            ctx.As.Attach(a);
+            var gr = new EntityGraph(a, new FullEntityGraphShape());
+            var clone = gr.Clone();
+            ctxNew.As.Attach(clone.Source);
+            ((A)clone.Source).name = "Some name";
+            a.lastName = "Some last name";
+            Assert.IsTrue(a.EntityState == EntityState.Modified);
+            gr.Synchronize(clone, LoadBehavior.MergeIntoCurrent);
+            Assert.IsTrue(a.name== "Some name");
+            Assert.IsTrue(a.lastName == "Some last name");
+        }
     }
 }
