@@ -5,7 +5,7 @@
     <version>1.0.$WCREV$.0</version>
     <authors>Merijn de Jonge</authors>
     <licenseUrl>http://riaservicescontrib.codeplex.com/license</licenseUrl>
-    <projectUrl>http://riaservicescontrib.codeplex.com/wikipage?title=EntityGraphs/</projectUrl>
+    <projectUrl>http://riaservicescontrib.codeplex.com/wikipage?title=EntityGraphs</projectUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>A technology to separate generic operations (such as cloning, iterating, validating) from your data model.</description>
     <tags>RIAServices EntityFrameWork .Net</tags>
