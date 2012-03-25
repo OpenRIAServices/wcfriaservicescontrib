@@ -1,15 +1,14 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Reflection;
-using System.Runtime.Serialization;
-using System.ServiceModel.DomainServices.Client;
-using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
-
-namespace RiaServicesContrib.Extensions
+﻿namespace RiaServicesContrib.DomainServices.Client.contrib
 {
+    using System;
+    using System.Linq;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Reflection;
+    using System.Runtime.Serialization;
+    using System.ServiceModel.DomainServices.Client;
+    using System.Collections.ObjectModel;
+
     public static class RiaServicesExtensions
     {
 

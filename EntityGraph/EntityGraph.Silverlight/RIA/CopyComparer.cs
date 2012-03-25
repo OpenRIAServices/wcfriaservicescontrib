@@ -2,11 +2,13 @@
 using System.Linq;
 using System.ServiceModel.DomainServices.Client;
 using RiaServicesContrib;
-using RiaServicesContrib.Extensions;
+
 using System.Collections.Generic;
 
 namespace RiaServicesContrib.DomainServices.Client
 {
+    using RiaServicesContrib.DomainServices.Client.contrib;
+
     public partial class EntityGraph
     {
         /// <summary>

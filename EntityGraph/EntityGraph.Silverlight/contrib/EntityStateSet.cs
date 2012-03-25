@@ -1,8 +1,8 @@
-﻿
-using System.Runtime.Serialization;
-using System.Collections.Generic;
-namespace RiaServicesContrib
+﻿namespace RiaServicesContrib.DomainServices.Client.contrib
 {
+    using System.Runtime.Serialization;
+    using System.Collections.Generic;
+
     public class EntityStateSet
     {
         [DataMember]
