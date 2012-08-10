@@ -39,8 +39,9 @@ namespace RiaServicesContrib
         public Type Map(Type fromType)
         {
             var assembly = typeof(ToType).Assembly;
-            var nameSpaceName = typeof(ToType).Namespace;
-            return assembly.GetType(nameSpaceName + "." + fromType.Name);
+            var types = assembly.GetExportedTypes();
+            var toType = types.SingleOrDefault(type => type.Name.Equals(fromType.Name));
+            return toType;
         }
     }
 
@@ -179,6 +180,12 @@ namespace RiaServicesContrib
         {
             var fromEntityType = fromEntity.GetType();
             var toEntityType = typeMapper.Map(fromEntityType);
+
+            if(toEntityType == null)
+            {
+                throw new Exception(String.Format("EntityGraphShape.Copy: Can't find a mapping for type {0}.",
+                                                  fromEntityType.FullName));
+            }
             var toEntity = (TTo)Activator.CreateInstance(toEntityType);
 
             CopyDataMembers(fromEntity, toEntity);
