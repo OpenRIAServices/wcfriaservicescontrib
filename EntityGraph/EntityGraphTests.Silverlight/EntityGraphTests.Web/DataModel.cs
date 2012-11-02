@@ -57,6 +57,11 @@ namespace EntityGraphTests.Web
         public H H { get; set; }
 
     }
+    public enum GEnum
+    {
+        V1, V2
+    }
+
     public class G
     {
         [DataMember]
@@ -65,6 +70,9 @@ namespace EntityGraphTests.Web
         [Association("G_GH", "Id", "GId")]
         [XmlIgnore]
         public List<GH> GHSet { get; set; }
+
+        [DataMember]
+        public GEnum GEnum { get; set; }
     }
 
     public class H

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.ServiceModel.DomainServices.Client;
 using EntityGraphTests.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -30,18 +31,28 @@ namespace Test
 
         public int HId { get; set; }
         public H H { get; set; }
-
+    }
+    public enum GEnum
+    {
+        V1, V2
     }
     public class G
     {
+        [DataMember]
+        public GEnum GEnum { get; set; }
+        [DataMember]
         public int Id { get; set; }
+        [DataMember]
         public List<GH> GHSet { get; set; }
     }
 
     public class H
     {
+        [DataMember]
         public int Id { get; set; }
+        [DataMember]
         public List<GH> GHSet { get; set; }
+        [DataMember]
         public string Name { get; set; }
     }
 }

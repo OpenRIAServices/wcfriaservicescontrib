@@ -39,7 +39,7 @@ namespace RiaServicesContrib
         public Type Map(Type fromType)
         {
             var assembly = typeof(ToType).Assembly;
-            var types = assembly.GetExportedTypes();
+            var types = assembly.GetExportedTypes().Where(t =>t != fromType);
             var toType = types.SingleOrDefault(type => type.Name.Equals(fromType.Name));
             return toType;
         }
@@ -82,10 +82,10 @@ namespace RiaServicesContrib
             visited.Add(fromEntity);
 
             // Determine if provided shape is defined for fromEntity or for toEntity.
-            var outEdges = shape.OutEdges(fromEntity);
-            if(outEdges.Count() == 0)
+            var outEdges = shape.OutEdges(fromEntity).ToList();
+            if(!outEdges.Any())
             {
-                outEdges = shape.OutEdges(toEntity);
+                outEdges = shape.OutEdges(toEntity).ToList();
             }
             var fromType = fromEntity.GetType();
             var toType = toEntity.GetType();
@@ -107,7 +107,7 @@ namespace RiaServicesContrib
                 {
                     var fromChildren = (IEnumerable)fromPropvalue;
 
-                    IEnumerable toList = (IEnumerable)toPropInfo.GetValue(toEntity, null);
+                    var toList = (IEnumerable)toPropInfo.GetValue(toEntity, null);
                     // If the IEnumerable is null, lets try to allocate one
                     if(toList == null)
                     {
@@ -154,7 +154,7 @@ namespace RiaServicesContrib
         /// <returns></returns>
         private static PropertyInfo[] GetDataMembers(Type fromObjectType, Type toObjectType, bool includeKeys)
         {
-            BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.Instance;
+            const BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.Instance;
             var qryToObject = from p in toObjectType.GetProperties(bindingAttr)
                               where
                               p.IsDefined(typeof(DataMemberAttribute), true)
@@ -192,6 +192,16 @@ namespace RiaServicesContrib
             return toEntity;
         }
         /// <summary>
+        /// Generic Cast method
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="o"></param>
+        /// <returns></returns>
+        private static T Cast<T>(object o)
+        {
+            return (T)o;
+        }
+        /// <summary>
         /// Copies properties annotated with the DataMemberAttribute from fromObject to toObject.
         /// If property types are not assignable, consider them as complex types and call CopyDataMembers
         /// recursively on their values.
@@ -201,31 +211,47 @@ namespace RiaServicesContrib
         private static void CopyDataMembers(object fromObject, object toObject)
         {
             var fromObjectType = fromObject.GetType();
-            foreach(var prop in GetDataMembers(fromObjectType, toObject.GetType(), true))
+            foreach(var toProperty in GetDataMembers(fromObjectType, toObject.GetType(), true))
             {
-                var propInfo = fromObjectType.GetProperty(prop.Name);
-                var value = propInfo.GetValue(fromObject, null);
-                if(value == null)
+                var fromProperty = fromObjectType.GetProperty(toProperty.Name);
+                var fromValue = fromProperty.GetValue(fromObject, null);
+                if(fromValue == null)
                 {
                     continue;
                 }
-                if(prop.PropertyType.IsAssignableFrom(propInfo.PropertyType))
+                if(toProperty.PropertyType.IsAssignableFrom(fromProperty.PropertyType))
                 {
-                    prop.SetValue(toObject, value, null);
+                    toProperty.SetValue(toObject, fromValue, null);
+                }
+                else if(typeof(Enum).IsAssignableFrom(toProperty.PropertyType) && typeof(Enum).IsAssignableFrom(fromProperty.PropertyType))
+                {
+                    var toEnumPropertyType = Enum.GetUnderlyingType(toProperty.PropertyType);
+                    var fromEnumPropertyType = Enum.GetUnderlyingType(fromProperty.PropertyType);
+                    if(toEnumPropertyType.IsAssignableFrom(fromEnumPropertyType) == false)
+                    {
+                        throw new Exception("Incompatible enum types encountered: " + toProperty.PropertyType.Name + " " +
+                                            fromProperty.PropertyType.Name);
+                    }
+                    // Cast the enum value fromValue to its target enum value using the generic Cast method.
+                    var castMethod = typeof(EntityGraphShapeExtensions).GetMethod("Cast", BindingFlags.Static|BindingFlags.NonPublic);
+                    var castMethodGeneric = castMethod.MakeGenericMethod(toEnumPropertyType);
+                    var convertedValue = castMethodGeneric.Invoke(null, new[] { fromValue });
+                    toProperty.SetValue(toObject, convertedValue, null);
                 }
                 else // Complex type
                 {
-                    var propValue = prop.GetValue(toObject, null);
-                    var propType = prop.PropertyType;
+                    var propValue = toProperty.GetValue(toObject, null);
+                    var propType = toProperty.PropertyType;
                     if(propValue == null)
                     {
                         propValue = Activator.CreateInstance(propType);
                     }
-                    prop.SetValue(toObject, propValue, null);
-                    CopyDataMembers(value, propValue);
+                    toProperty.SetValue(toObject, propValue, null);
+                    CopyDataMembers(fromValue, propValue);
                 }
             }
         }
+
         #endregion
     }
 }
