@@ -87,7 +87,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\DataValidationFramework\DataValidationFramework.Silverlight\DataValidationFramework.Silverlight.csproj">
       <Project>{E4232D70-AF05-4F20-AEB0-703E3B3F96BE}</Project>
-      <Name>DataValidationFramework %28DataValidationFramework\DataValidationFramework%29</Name>
+      <Name>DataValidationFramework.Silverlight</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

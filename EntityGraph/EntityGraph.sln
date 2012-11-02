@@ -1,9 +1,9 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityGraphTests.Web", "EntitygraphTests.Silverlight\EntityGraphTests.Web\EntityGraphTests.Web.csproj", "{8F76C20D-56AB-41CB-9B78-10B4726543E6}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EntityGraphTests", "EntitygraphTests.Silverlight\EntityGraphTests", "{195DCDAF-3CE3-4963-8DEA-D1E85AEA8C6E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EntityGraphTests", "EntityGraphTests", "{195DCDAF-3CE3-4963-8DEA-D1E85AEA8C6E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityGraphTests", "EntitygraphTests.Silverlight\EntityGraphTests\EntityGraphTests.csproj", "{1D79F315-BDF3-4F3B-9C68-B307CA95DC1C}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -28,7 +28,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataValidationFramework.Silverlight", "..\DataValidationFramework\DataValidationFramework.Silverlight\DataValidationFramework.Silverlight.csproj", "{E4232D70-AF05-4F20-AEB0-703E3B3F96BE}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E1F14354-89AF-4282-8E56-5D4B00A78150} = {E1F14354-89AF-4282-8E56-5D4B00A78150}
-		{E1F14354-89AF-4282-8E56-5D4B00A78150} = {E1F14354-89AF-4282-8E56-5D4B00A78150}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{31D4D82A-5640-41B0-A034-EECF43C14C00}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
 Global
@@ -111,16 +117,6 @@ Global
 		{E4232D70-AF05-4F20-AEB0-703E3B3F96BE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E4232D70-AF05-4F20-AEB0-703E3B3F96BE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E4232D70-AF05-4F20-AEB0-703E3B3F96BE}.Release|x86.ActiveCfg = Release|Any CPU
-		{A544D429-A22F-4B0E-8A44-1B1EB03087DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A544D429-A22F-4B0E-8A44-1B1EB03087DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A544D429-A22F-4B0E-8A44-1B1EB03087DA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{A544D429-A22F-4B0E-8A44-1B1EB03087DA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{A544D429-A22F-4B0E-8A44-1B1EB03087DA}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{A544D429-A22F-4B0E-8A44-1B1EB03087DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A544D429-A22F-4B0E-8A44-1B1EB03087DA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A544D429-A22F-4B0E-8A44-1B1EB03087DA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{A544D429-A22F-4B0E-8A44-1B1EB03087DA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{A544D429-A22F-4B0E-8A44-1B1EB03087DA}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -132,6 +128,5 @@ Global
 		{32DF13C4-B558-4A27-B29A-E69CD6AAFC0B} = {608E6050-2682-4E6C-86EF-DF98F9A21C1C}
 		{E1F14354-89AF-4282-8E56-5D4B00A78150} = {FA66F274-3086-44F0-B6EC-4C77C4806E7F}
 		{E4232D70-AF05-4F20-AEB0-703E3B3F96BE} = {FA66F274-3086-44F0-B6EC-4C77C4806E7F}
-		{A544D429-A22F-4B0E-8A44-1B1EB03087DA} = {FA66F274-3086-44F0-B6EC-4C77C4806E7F}
 	EndGlobalSection
 EndGlobal
