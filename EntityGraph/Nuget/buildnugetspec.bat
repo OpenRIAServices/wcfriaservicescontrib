@@ -8,4 +8,4 @@ msbuild ..\%PKG%.Silverlight\%PKG%.Silverlight.csproj /p:Configuration=Release
 copy ..\%PKG%.Net\Bin\Release\%PKG%.Net.dll lib\net40
 copy ..\%PKG%.Silverlight\Bin\Release\%PKG%.Silverlight.dll lib\sl4
 
-subwcrev .. %PKG%.nuspec.src %PKG%.nuspec
+"C:\Program Files\TortoiseSVN\bin\subwcrev.exe" .. %PKG%.nuspec.src %PKG%.nuspec
