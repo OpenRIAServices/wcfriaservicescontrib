@@ -1,13 +1,13 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataValidationFrameworkTests", "DataValidationFrameworkTests", "{627B9229-FCBC-4096-9328-77A142847E9D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataValidationFramework", "DataValidationFramework", "{FA66F274-3086-44F0-B6EC-4C77C4806E7F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataValidationFrameworkTests.Web", "DataValidationFrameworkTests.Silverlight\DataValidationFrameworkTests.Web\DataValidationFrameworkTests.Web.csproj", "{5406D7C4-35A7-474E-A28A-7810AA6E62E0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataValidationFrameworkTests", "DataValidationFrameworkTests.Silverlight\DataValidationFrameworkTests\DataValidationFrameworkTests.csproj", "{7D86DC6C-960F-4E88-BE05-D2A39A1CB5BF}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataValidationFramework", "DataValidationFramework", "{FA66F274-3086-44F0-B6EC-4C77C4806E7F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataValidationFramework.Net", "DataValidationFramework.Net\DataValidationFramework.Net.csproj", "{E1F14354-89AF-4282-8E56-5D4B00A78150}"
 EndProject
@@ -17,6 +17,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataValidationFramework.Sil
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataValidationFramework.EF", "DataValidationFramework.EF\DataValidationFramework.EF.csproj", "{46CAE1ED-1289-47CE-A3F1-468CB13A9CEC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{070DE160-C9FF-44A0-82D2-A91B05BFB6EE}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
