@@ -21,27 +21,71 @@ namespace RiaServicesContrib
         /// <returns></returns>
         Type Map(Type fromType);
     }
+
     /// <summary>
-    /// Class that maps a given type 'TFrom' to a type 'TTo' where 'TTo' has the same name as `TFrom' but is
-    /// defined in the namespace/assembly of the generic type parameter 'ToType'.
-    /// from the assembly and namespace 
+    /// Class that maps a given type 'TFrom' to an equally named type defined in the given assemblies.
     /// </summary>
-    /// <typeparam name="ToType"></typeparam>
-    public class AssemblyTypeMapper<ToType> : ITypeMapper
-        where ToType : class
+    public class AssembliesTypeMapper : ITypeMapper
+    {
+        private readonly IEnumerable<Assembly> _assemblies;
+        /// <summary>
+        /// Initializes a new instance of the AssemblyTypeMapper class.
+        /// </summary>
+        /// <param name="types">a list of types of which the containing assemblies are searched for the type mapping.</param>
+        public AssembliesTypeMapper(params Type[] types)
+        {
+            _assemblies = types.Select(x => x.Assembly).ToList();
+        }
+
+        #region Implementation of ITypeMapper
+
+        public Type Map(Type fromType)
+        {
+            foreach(var assembly in _assemblies)
+            {
+                var types = assembly.GetExportedTypes().Where(t => t != fromType);
+                var toType = types.SingleOrDefault(type => type.Name.Equals(fromType.Name));
+                if(toType != null)
+                {
+                    return toType;                    
+                }
+            }
+            throw new Exception("Can't map type " + fromType.FullName);
+        }
+
+        #endregion
+    }
+    /// <summary>
+    /// Class that maps a given type 'TFrom' to an equally named type defined in the assembly that contains type 'TTo'.
+    /// </summary>
+    /// <typeparam name="TTo"></typeparam>
+    public class AssemblyTypeMapper<TTo> : AssembliesTypeMapper
+        where TTo : class
     {
         /// <summary>
         /// Initializes a new instance of the AssemblyTypeMapper class.
         /// </summary>
         public AssemblyTypeMapper()
+            : base(typeof(TTo))
         {
         }
-        public Type Map(Type fromType)
+    }
+
+    /// <summary>
+    /// Class that maps a given type 'TFrom' to a type defined in the assembly that contains type 'TTo1' or 'TTo2'.
+    /// </summary>
+    /// <typeparam name="TTo1"></typeparam>
+    /// <typeparam name="TTo2"></typeparam>
+    public class AssemblyTypeMapper<TTo1, TTo2> : AssembliesTypeMapper
+        where TTo1 : class
+        where TTo2 : class
+    {
+        /// <summary>
+        /// Initializes a new instance of the AssemblyTypeMapper class.
+        /// </summary>
+        public AssemblyTypeMapper()
+            : base(typeof(TTo1), typeof(TTo2))
         {
-            var assembly = typeof(ToType).Assembly;
-            var types = assembly.GetExportedTypes().Where(t =>t != fromType);
-            var toType = types.SingleOrDefault(type => type.Name.Equals(fromType.Name));
-            return toType;
         }
     }
 
@@ -191,16 +235,7 @@ namespace RiaServicesContrib
             CopyDataMembers(fromEntity, toEntity);
             return toEntity;
         }
-        /// <summary>
-        /// Generic Cast method
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="o"></param>
-        /// <returns></returns>
-        private static T Cast<T>(object o)
-        {
-            return (T)o;
-        }
+
         /// <summary>
         /// Copies properties annotated with the DataMemberAttribute from fromObject to toObject.
         /// If property types are not assignable, consider them as complex types and call CopyDataMembers
