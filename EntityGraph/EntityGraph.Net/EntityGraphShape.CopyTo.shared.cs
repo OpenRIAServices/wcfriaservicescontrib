@@ -235,7 +235,16 @@ namespace RiaServicesContrib
             CopyDataMembers(fromEntity, toEntity);
             return toEntity;
         }
-
+        /// <summary>
+        /// Generic Cast method
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="o"></param>
+        /// <returns></returns>
+        private static T Cast<T>(object o)
+        {
+            return (T)o;
+        }
         /// <summary>
         /// Copies properties annotated with the DataMemberAttribute from fromObject to toObject.
         /// If property types are not assignable, consider them as complex types and call CopyDataMembers
