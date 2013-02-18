@@ -95,6 +95,9 @@ namespace EntityGraphTests.Web
 
         [DataMember]
         public List<double> X { get; set; }
+
+        [DataMember]
+        public string AString { get; set; }
     }
 
     #endregion

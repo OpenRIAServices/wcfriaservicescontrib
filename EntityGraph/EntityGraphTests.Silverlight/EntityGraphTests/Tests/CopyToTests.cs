@@ -61,7 +61,9 @@ namespace Test
         [DataMember]
         public int Id { get; set; }
         [DataMember]
-        public double[] X { get; set; }
+        public List<double> X { get; set; }
+        [DataMember]
+        public string AString { get; set; }
     }
 }
 
@@ -104,7 +106,7 @@ namespace EntityGraphTests.Tests
         {
             var shape = new FullEntityGraphShape();
 
-            var i = new I {X = new [] {1.1, 2.2, 3.3}};
+            var i = new I {X = new [] {1.1, 2.2, 3.3}, AString = "Hello"};
             var result = shape.CopyTo<Entity, object>(i, new AssemblyTypeMapper<Test.I>());
             Assert.IsTrue(result != null);
             Assert.IsTrue(result is Test.I);

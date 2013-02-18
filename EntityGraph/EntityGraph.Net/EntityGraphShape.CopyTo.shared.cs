@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
@@ -282,7 +283,7 @@ namespace RiaServicesContrib
                     var convertedValue = castMethodGeneric.Invoke(null, new[] { fromValue });
                     toProperty.SetValue(toObject, convertedValue, null);
                 }
-                if (typeof(IEnumerable).IsAssignableFrom(toProperty.PropertyType) && typeof(IEnumerable).IsAssignableFrom(fromProperty.PropertyType))
+                if (IsGenericCollection(typeof(ICollection<>), toProperty.PropertyType) && IsGenericCollection(typeof(IEnumerable<>), fromProperty.PropertyType))
                 {
                     var fromEnumValues = (IEnumerable)fromValue;
 
@@ -316,6 +317,16 @@ namespace RiaServicesContrib
                     CopyDataMembers(fromValue, propValue);
                 }
             }
+        }
+
+        private static bool IsGenericCollection(Type genericType, Type type)
+        {
+            return type.IsGenericType && (
+                                             type.GetGenericTypeDefinition().IsAssignableFrom(genericType) ||
+                                             type.GetInterfaces()
+                                                 .Where(x => x.IsGenericType)
+                                                 .Any(x => x.GetGenericTypeDefinition().IsAssignableFrom(genericType))
+                                         );
         }
 
         #endregion
