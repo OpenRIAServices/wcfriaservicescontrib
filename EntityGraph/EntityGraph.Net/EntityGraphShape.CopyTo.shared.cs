@@ -155,8 +155,8 @@ namespace RiaServicesContrib
                     // If the IEnumerable is null, lets try to allocate one
                     if(toList == null)
                     {
-                        var constr = toPropInfo.PropertyType.GetConstructor(new Type[] { });
-                        toList = (IEnumerable)constr.Invoke(new object[] { });
+                        var constr = toPropInfo.PropertyType.GetConstructor(new Type[] {});
+                        toList = (IEnumerable)constr.Invoke(new object[] {});
                         toPropInfo.SetValue(toEntity, toList, null);
                     }
                     var addMethod = toPropInfo.PropertyType.GetMethod("Add");
@@ -165,7 +165,7 @@ namespace RiaServicesContrib
                         if(visited.Contains(fromChild) == false)
                         {
                             var toChild = shape.CopyTo<TFrom, TTo>((TFrom)fromChild, typeMapper, visited);
-                            addMethod.Invoke(toList, new object[] { toChild });
+                            addMethod.Invoke(toList, new object[] {toChild});
                         }
                     }
                 }
@@ -281,6 +281,28 @@ namespace RiaServicesContrib
                     var castMethodGeneric = castMethod.MakeGenericMethod(toEnumPropertyType);
                     var convertedValue = castMethodGeneric.Invoke(null, new[] { fromValue });
                     toProperty.SetValue(toObject, convertedValue, null);
+                }
+                if (typeof(IEnumerable).IsAssignableFrom(toProperty.PropertyType) && typeof(IEnumerable).IsAssignableFrom(fromProperty.PropertyType))
+                {
+                    var fromEnumValues = (IEnumerable)fromValue;
+
+                    var toList = (IEnumerable)toProperty.GetValue(toObject, null);
+                    // If the IEnumerable is null, lets try to allocate one
+                    if (toList == null)
+                    {
+                        var constr = toProperty.PropertyType.GetConstructor(new Type[] { });
+                        if(constr == null)
+                        {
+                            throw new InvalidCastException("No parameterless constructor defined for type: " + toProperty.PropertyType.FullName);
+                        }
+                        toList = (IEnumerable)constr.Invoke(new object[] { });
+                        toProperty.SetValue(toObject, toList, null);
+                    }
+                    var addMethod = toProperty.PropertyType.GetMethod("Add");
+                    foreach (var fromEnumValue in fromEnumValues)
+                    {
+                            addMethod.Invoke(toList, new object[] { fromEnumValue });
+                    }
                 }
                 else // Complex type
                 {

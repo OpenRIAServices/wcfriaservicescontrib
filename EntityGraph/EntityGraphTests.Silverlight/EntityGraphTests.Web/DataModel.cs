@@ -86,6 +86,17 @@ namespace EntityGraphTests.Web
         [DataMember]
         public string Name { get; set; }
     }
+
+    public class I
+    {
+        [DataMember]
+        [Key]
+        public int Id { get; set; }
+
+        [DataMember]
+        public List<double> X { get; set; }
+    }
+
     #endregion
 
     #region Circular associations

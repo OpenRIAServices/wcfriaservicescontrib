@@ -38,5 +38,6 @@ namespace EntityGraphTests.Web
         public IQueryable<GH> GetGHSet() { return null; }
         public void InsertGH(GH gh) { }
         public void UpdateGH(GH gh) { }
+        public IQueryable<I> GetISet() { return null; }
     }
 }

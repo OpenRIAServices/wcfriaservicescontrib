@@ -6,6 +6,7 @@ using System.ServiceModel.DomainServices.Client;
 using EntityGraphTests.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RiaServicesContrib;
+using RiaServicesContrib.DomainServices.Client;
 
 
 namespace Test
@@ -55,6 +56,13 @@ namespace Test
         [DataMember]
         public string Name { get; set; }
     }
+    public class I
+    {
+        [DataMember]
+        public int Id { get; set; }
+        [DataMember]
+        public double[] X { get; set; }
+    }
 }
 
 namespace EntityGraphTests.Tests
@@ -89,6 +97,18 @@ namespace EntityGraphTests.Tests
             Assert.IsTrue(result != null);
             Assert.IsTrue(result is Test.G);
             Assert.IsTrue(((Test.G)result).GHSet.Count() == g.GHSet.Count());
+        }
+        [TestMethod]
+        [Description("Tests if also arrays are copied by the CopyTo method.")]
+        public void CopyToArrayPropertyTest()
+        {
+            var shape = new FullEntityGraphShape();
+
+            var i = new I {X = new [] {1.1, 2.2, 3.3}};
+            var result = shape.CopyTo<Entity, object>(i, new AssemblyTypeMapper<Test.I>());
+            Assert.IsTrue(result != null);
+            Assert.IsTrue(result is Test.I);
+            Assert.IsTrue(((Test.I)result).X.Count() == i.X.Count());
         }
     }
 }

@@ -48,4 +48,11 @@
             this.Id = IDFactory.Assign;
         }
     }
+    public partial class I
+    {
+        partial void OnCreated()
+        {
+            this.Id = IDFactory.Assign;
+        }
+    }
 }
