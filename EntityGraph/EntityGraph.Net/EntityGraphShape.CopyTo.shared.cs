@@ -264,59 +264,61 @@ namespace RiaServicesContrib
                 {
                     continue;
                 }
-                if(toProperty.PropertyType.IsAssignableFrom(fromProperty.PropertyType))
-                {
-                    toProperty.SetValue(toObject, fromValue, null);
-                }
-                else if(typeof(Enum).IsAssignableFrom(toProperty.PropertyType) && typeof(Enum).IsAssignableFrom(fromProperty.PropertyType))
-                {
-                    var toEnumPropertyType = Enum.GetUnderlyingType(toProperty.PropertyType);
-                    var fromEnumPropertyType = Enum.GetUnderlyingType(fromProperty.PropertyType);
-                    if(toEnumPropertyType.IsAssignableFrom(fromEnumPropertyType) == false)
-                    {
-                        throw new Exception("Incompatible enum types encountered: " + toProperty.PropertyType.Name + " " +
-                                            fromProperty.PropertyType.Name);
-                    }
-                    // Cast the enum value fromValue to its target enum value using the generic Cast method.
-                    var castMethod = typeof(EntityGraphShapeExtensions).GetMethod("Cast", BindingFlags.Static|BindingFlags.NonPublic);
-                    var castMethodGeneric = castMethod.MakeGenericMethod(toEnumPropertyType);
-                    var convertedValue = castMethodGeneric.Invoke(null, new[] { fromValue });
-                    toProperty.SetValue(toObject, convertedValue, null);
-                }
-                if (IsGenericCollection(typeof(ICollection<>), toProperty.PropertyType) && IsGenericCollection(typeof(IEnumerable<>), fromProperty.PropertyType))
-                {
-                    var fromEnumValues = (IEnumerable)fromValue;
-
-                    var toList = (IEnumerable)toProperty.GetValue(toObject, null);
-                    // If the IEnumerable is null, lets try to allocate one
-                    if (toList == null)
-                    {
-                        var constr = toProperty.PropertyType.GetConstructor(new Type[] { });
-                        if(constr == null)
-                        {
-                            throw new InvalidCastException("No parameterless constructor defined for type: " + toProperty.PropertyType.FullName);
-                        }
-                        toList = (IEnumerable)constr.Invoke(new object[] { });
-                        toProperty.SetValue(toObject, toList, null);
-                    }
-                    var addMethod = toProperty.PropertyType.GetMethod("Add");
-                    foreach (var fromEnumValue in fromEnumValues)
-                    {
-                            addMethod.Invoke(toList, new object[] { fromEnumValue });
-                    }
-                }
-                else // Complex type
-                {
-                    var propValue = toProperty.GetValue(toObject, null);
-                    var propType = toProperty.PropertyType;
-                    if(propValue == null)
-                    {
-                        propValue = Activator.CreateInstance(propType);
-                    }
-                    toProperty.SetValue(toObject, propValue, null);
-                    CopyDataMembers(fromValue, propValue);
-                }
+                var toValue = CopyDataMember(toProperty.PropertyType, fromProperty.PropertyType, fromValue);
+                toProperty.SetValue(toObject, toValue, null);
             }
+        }
+
+        private static object CopyDataMember(Type toType, Type fromType, object fromValue)
+        {
+            if(toType.IsAssignableFrom(fromType))
+            {
+                return fromValue;
+                //                toProperty.SetValue(toObject, fromValue, null);
+            }
+            if(typeof(Enum).IsAssignableFrom(toType) &&
+               typeof(Enum).IsAssignableFrom(fromType))
+            {
+                var toEnumPropertyType = Enum.GetUnderlyingType(toType);
+                var fromEnumPropertyType = Enum.GetUnderlyingType(fromType);
+                if(toEnumPropertyType.IsAssignableFrom(fromEnumPropertyType) == false)
+                {
+                    throw new Exception("Incompatible enum types encountered: " + toType.Name + " " +
+                                        fromType.Name);
+                }
+                // Cast the enum value fromValue to its target enum value using the generic Cast method.
+                var castMethod = typeof(EntityGraphShapeExtensions).GetMethod("Cast",
+                                                                              BindingFlags.Static |
+                                                                              BindingFlags.NonPublic);
+                var castMethodGeneric = castMethod.MakeGenericMethod(toEnumPropertyType);
+                var convertedValue = castMethodGeneric.Invoke(null, new[] {fromValue});
+                return convertedValue;
+            }
+            if(IsGenericCollection(typeof(ICollection<>), toType) &&
+               IsGenericCollection(typeof(IEnumerable<>), fromType))
+            {
+                var fromEnumValues = (IEnumerable)fromValue;
+                var fromElementType = fromType.GetGenericArguments()[0];
+                var toElementType = toType.GetGenericArguments()[0];
+                var constr = toType.GetConstructor(new Type[] {});
+                if(constr == null)
+                {
+                    throw new InvalidCastException("No parameterless constructor defined for type: " +
+                                                   toType.FullName);
+                }
+                var toList = (IEnumerable)constr.Invoke(new object[] {});
+                var addMethod = toType.GetMethod("Add");
+                foreach(var fromEnumValue in fromEnumValues)
+                {
+                    var value = CopyDataMember(toElementType, fromElementType, fromEnumValue);
+                    addMethod.Invoke(toList, new[] {value});
+                }
+                return toList;
+            }
+            var propType = toType;
+            var propValue = Activator.CreateInstance(propType);
+            CopyDataMembers(fromValue, propValue);
+            return propValue;
         }
 
         private static bool IsGenericCollection(Type genericType, Type type)
